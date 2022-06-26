@@ -77,3 +77,11 @@ select {
   }
 }
 
+:root{
+    --clr-primary: #6200EE;
+    --clr-primary-variant: #3700b3;
+    --clr-secondarty: #03dac6;
+    --clr-secondary-variant: #018786;
+    --clr-error: #b00020;
+
+}

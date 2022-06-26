@@ -1,36 +1,40 @@
-<script>
+<script lang="ts">
+	import { goto } from '$app/navigation';
 	import Header from '$lib/header/Header.svelte';
 	import '../app.css';
+	import { userAuth, loading } from '$lib/Store.svelte';
+	import LoadingSpinner from '$lib/LoadingSpinner.svelte'
+import { onMount } from 'svelte';
+import isToken from '$lib/helper/isToken';
+if ($userAuth){ 
+				loading.set(false)
+			}
+	onMount(
+		()=>{
+			
+			if (!($userAuth)){
+				userAuth.set(isToken())
+			}
+			if ($userAuth){ 
+				loading.set(false)
+				return true
+			}
+			goto("/login")
+
+		}
+	)
+
+
 </script>
 
+<LoadingSpinner />
 <Header />
 
 <main>
 	<slot />
 </main>
 
-<footer>
-	
-</footer>
+<footer>Haurhi is a project by FlaminDemigod.</footer>
 
 <style>
-	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		box-sizing: border-box;
-	}
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 40px;
-	}
-	@media (min-width: 480px) {
-		footer {
-			padding: 40px 0;
-		}
-	}
 </style>
