@@ -1,3 +1,12 @@
+.cardLink:where(:hover, :focus) > .card{
+    transform: scale(1.05);
+}
+.card{
+    transition: transform 200ms ease;
+    transform-origin: bottom center;
+}
+
+
 .cardLink:where(:hover, :focus) > .card > div:first-of-type{
     transform: translateY(-100%);
     --tw-bg-opacity: 0.6;
