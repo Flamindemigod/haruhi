@@ -86,13 +86,14 @@ const ContinueWatching = () => {
 
         };
         getCurrentAiring();
+        // eslint-disable-next-line
     }, [user.userName]);
 
     return (
 
-        <><div className='text-2xl font-semibold'>Continue Watching</div>
+        <><div className='text-2xl font-semibold p-2'>Continue Watching</div>
 
-            <div className=' flex flex-row gap-4  overflow-x-scroll styled-scrollbars'>
+            <div className=' flex flex-row gap-4 p-2  overflow-x-scroll styled-scrollbars'>
                 {animeArray.map((media) => (<Link className="cardLink" key={media.media.id} to={`/anime/${media.media.id}`}><AnimeCard mediaCover={media.media.coverImage.large} mediaTitle={media.media.title.userPreferred} nextAiringEpisode={media.media.nextAiring ? media.media.nextAiring.node.episode : 0} timeUntilAiring={media.media.nextAiring ? media.media.nextAiring.node.timeUntilAiring : 0} episodes={media.media.episodes} progress={media.progress ? media.progress : 0}/></Link>))}
             </div>
         </>
