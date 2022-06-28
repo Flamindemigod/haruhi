@@ -8,15 +8,12 @@ import Header from './components/Header';
 const Routing = () => {
     return (
     
-    <><Header></Header>
+    <><Header />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/anime" element={<List />} />
                 <Route path="/anime/:id" element={<Anime />} />
                 <Route path="/calender" element={<Calender />} />
-
-
-
             </Routes>
         </>
     )

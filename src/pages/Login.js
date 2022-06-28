@@ -6,13 +6,15 @@ import getToken from "../misc/getToken";
 import makeQuery from "../misc/makeQuery"
 import { useDispatch } from 'react-redux';
 import { setUser } from "../features/user";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux"
+import { setLoading } from "../features/loading";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Login = () => {
-  let [_user, _setUser] = useState({});
-  let user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
+  dispatch(setLoading(true))
+  let user = useSelector((state) => state.user.value);
+  
   const getUserDetails = async () => {
     var query = `query {
                     Viewer {
@@ -26,11 +28,12 @@ const Login = () => {
     makeQuery(query).then((data) => {
       const user = data.data.Viewer;
 
-      _setUser({
+      dispatch(setUser({
         userAuth: true,
         userName: user.name,
-        userAvatar: user.avatar.medium
-      });
+        userAvatar: user.avatar.medium,
+        userToken: getToken()
+      }));
     });
   };
   useEffect(() => {
@@ -40,11 +43,10 @@ const Login = () => {
         getUserDetails();
       }
     }
+  dispatch(setLoading(false))        
+
   }, []);
-  useEffect(() => {
-    dispatch(setUser(_user))
-    
-  }, [_user])
+  
   return (
     <div className='fullscreen fixed inset-0 flex flex-col justify-center items-center text-black drop-shadow-md object-cover'>
       <div className="container p-8 flex flex-col gap-4 justify-center items-center bg-neutral-100 shadow-xl text-center">
