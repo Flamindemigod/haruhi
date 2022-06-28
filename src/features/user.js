@@ -7,16 +7,25 @@ export const userSlice = createSlice({
         value: {
             userAuth: false,
             userName: "",
-            userAvatar: ""
+            userAvatar: "",
+            userToken:""
         }
     },
     reducers: {
         setUser: (state, action) => {
             state.value = action.payload;
-        }
+        },
+        unsetUser: (state, action) => {
+            state.value = {
+                userAuth: false,
+                userName: "",
+                userAvatar: "",
+                userToken:""
+            };
+        },
     }
 });
 
-export const {setUser} = userSlice.actions;
+export const {setUser, unsetUser} = userSlice.actions;
 
 export default userSlice.reducer;

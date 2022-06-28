@@ -13,7 +13,6 @@ const makeQuery = async ( query, variables = { }, ) => {
       }
   
       function handleError(error) {
-        alert("Error, check console");
         console.error(error);
       }
   
