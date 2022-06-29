@@ -1,0 +1,73 @@
+.titleDescriptionContainer{
+    margin-block-start: 2rem;
+    margin-inline: auto;
+}
+
+
+
+.readMore{
+    max-height:10rem;
+    transition: max-height 200ms ease;
+  }
+  .readMore.open{
+    max-height:45rem;
+    
+  }
+
+  .Description{
+    position: relative;
+  }
+  .readMore > .DescriptionInner{
+    overflow: hidden;
+    max-height: 10rem;
+    transition: max-height 200ms ease;
+  }
+  .readMore.open > .DescriptionInner{
+    overflow: hidden;
+    max-height: 45rem;
+  }
+  div.readMore > .before{
+    position:absolute;
+    inset: 0;
+    /* background-color: red; */
+    background: linear-gradient(0deg, #2e2e2e 0%, rgba(255,255,255,0) 100%);
+  }
+.readMore.open > .before{
+    position:absolute;
+    inset: 0;
+    background: transparent;
+  }
+  .after{
+    display: none;
+  }
+
+  .Description.readMore > .after{
+    display: block;
+    position: absolute;
+    overflow: visible;
+    bottom:-5%;
+    left:50%;
+    transform: translate(-50%, 00%);
+    cursor: pointer;
+  }
+
+  .animeDescription.readMore.open > .after{
+    position: absolute;
+    overflow: visible;
+    bottom:0;
+    left:50%;
+    transform: translate(-50%, 100%);
+    cursor: pointer;
+  
+  }
+
+  .relatedShows{
+    order:-1
+  }
+  .relatedShowsFlex:empty + .relatedShows{
+    display: none;
+  }
+
+  .relatedShowsFlex:not(:empty) + .relatedShows{
+    display: block;
+  }

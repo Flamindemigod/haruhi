@@ -1,14 +1,15 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { Avatar } from '@mui/material'
+import { Avatar} from '@mui/material'
 import { useSelector, useDispatch } from "react-redux";
-import {unsetUser} from "../features/user"
+import { unsetUser } from "../features/user"
 import { ButtonBase } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Logout from '@mui/icons-material/Logout';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { styled, alpha } from '@mui/material/styles';
+import SearchAnime from './SearchAnime';
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -56,13 +57,15 @@ const StyledMenu = styled((props) => (
 
 
 
+
 const Header = () => {
 
-    const handleLogout = () =>{
-        document.cookie=document.cookie+";max-age=0";
+
+    const handleLogout = () => {
+        document.cookie = document.cookie + ";max-age=0";
         dispatch(unsetUser());
     }
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
     let user = useSelector((state) => state.user.value);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -75,12 +78,13 @@ const Header = () => {
     return (
         <>
             <header className='flex justify-around dark:bg-offWhite-700 dark:text-white'>
-                <nav className='grid grid-cols-3 gap-8 text-xl'>
-                    <ButtonBase className=' h-full w-full'><NavLink className='' to={"/"}>Home</NavLink></ButtonBase>
-                    <ButtonBase className='h-full w-full'><NavLink to={"/anime"} className='' >Lists</NavLink></ButtonBase>
-                    <ButtonBase className='h-full w-full'><NavLink to={"/calender"} className='' >Calender</NavLink></ButtonBase>
+                <nav className='grid grid-cols-3 gap-4 text-xl'>
+                    <NavLink className='' to={"/"}><ButtonBase className=' h-full w-full'>Home</ButtonBase></NavLink>
+                    <NavLink to={"/anime"} className='' ><ButtonBase className='h-full w-full'>Lists</ButtonBase></NavLink>
+                    <NavLink to={"/calender"} className='' >  <ButtonBase className='h-full w-full'>Calender</ButtonBase></NavLink>
                 </nav>
-                <div className="h-full p-4">
+                <div className="h-full p-4 flex gap-4">
+                    <SearchAnime/>
                     <Avatar onClick={handleClick} alt={`Avatar of user ${user.userName}`} src={user.userAvatar} />
                 </div>
             </header>

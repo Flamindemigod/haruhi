@@ -9,13 +9,15 @@ import getToken from "./misc/getToken";
 import makeQuery from "./misc/makeQuery"
 import { useDispatch } from 'react-redux';
 import { setUser } from "./features/user";
-import { setLoading } from "./features/loading";
+import { useEffect } from "react";
 
 
 function App() {
+  const token = getToken();
+
   let user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
-  dispatch(setLoading(true))
+  useEffect(()=>{
   
   const getUserDetails = async () => {
     var query = `query {
@@ -40,16 +42,15 @@ function App() {
     });
   };
   if (!user.userAuth) {
-    const token = getToken();
     if (token) {
       getUserDetails();
     }
-  }
+  }}, []);
 
   return (
     <Router>
       <Loader />
-      {(user.userAuth) ? (<Routhing />) : (<Login />)}
+      {(token) ? (<Routhing />) : (<Login />)}
       <Routes>
         <Route path="/callback" element={<Callback />} />
       </Routes>
