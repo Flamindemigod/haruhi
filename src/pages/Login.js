@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from '@mui/material/Button';
 import { ReactComponent as Logo } from '../assets/AnilistIcon.svg';
 import "../assets/Login.css"
-
+import { setLoading } from "../features/loading";
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
-  
-  
+  const dispatch = useDispatch();
+  useEffect(()=>{
+  dispatch(setLoading(false)) 
+  })
   return (
     <div className='fullscreen fixed inset-0 flex flex-col justify-center items-center text-black drop-shadow-md object-cover'>
       <div className="container p-8 flex flex-col gap-4 justify-center items-center bg-neutral-100 shadow-xl text-center">

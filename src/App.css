@@ -103,3 +103,7 @@ body{
 .styled-scrollbars::-webkit-scrollbar-track { /* Background */
   background: var(--scrollbar-background);
 }
+
+.margin-inline-auto{
+  margin-inline: auto;
+}
