@@ -175,7 +175,7 @@ const Anime = () => {
             <div className='text-md DescriptionInner' dangerouslySetInnerHTML={{ __html: anime.description }}></div>
             <div className="after text-md" onClick={toggleOpen}>{descriptionAfterText}</div>
           </div>
-          <AnimeVideoPlayer mediaMALid={anime.idMal} progress={anime.mediaListEntry} episodes={anime.episodes} nextAiringEpisode={anime.nextAiringEpisode} setVideoEndToast={setVideoEndToast}/>  
+          <AnimeVideoPlayer mediaId={anime.id} mediaMALid={anime.idMal} progress={anime.mediaListEntry} episodes={anime.episodes} nextAiringEpisode={anime.nextAiringEpisode} setVideoEndToast={setVideoEndToast}/>  
 
         </div>
         <div>

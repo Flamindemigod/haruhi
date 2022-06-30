@@ -100,7 +100,7 @@ const updateEpisode = async (id, episode) => {
     id: id,
     episode: episode,
   };
-  const response = await makeQuery(query, variables);
+ makeQuery(query, variables);
 };
 
 const DarkSelect = styled(Select)(({ theme }) => ({
@@ -125,7 +125,7 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 }));
 
 
-const AnimeVideoPlayer = ({ mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast }) => {
+const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast }) => {
   const [episodeLink, setEpisodeLink] = useState("");
   const [episodeToPlay, setEpisodeToPlay] = useState(1);
   const [videoProgress, setVideoProgress] = useState({
@@ -158,8 +158,8 @@ const AnimeVideoPlayer = ({ mediaMALid, progress, episodes, nextAiringEpisode, s
       const MalTitle = await getMALTitle(idMal);
       const animeID = await getAnimeID(MalTitle).then((data) => {
         return data.filter(item => !(item.animeId.includes("dub")))[0].animeId
-      })
-      const EL = await getVideoUrl(animeID, episode).then((data) => (data.sources[0].file))
+      }).then((data) =>{console.log(data); return data})
+      const EL = await getVideoUrl(animeID, episode).then((data) => { return data.sources[0].file})
       setEpisodeLink(EL)
     }
     getEpisodeLink(mediaMALid, episodeToPlay)
@@ -170,16 +170,11 @@ const AnimeVideoPlayer = ({ mediaMALid, progress, episodes, nextAiringEpisode, s
       console.log("Video Ended")
       setVideoEnd(true);
       setVideoEndToast(true);
-      updateEpisode(mediaMALid, episodeToPlay);
+      updateEpisode(mediaId, episodeToPlay);
     }
   }, [videoProgress]);
   return (
     <>
-      {/* <div>{`Malid ${mediaMALid}`}</div>
-      <div>{`Episode to play ${episodeToPlay}`}</div>
-      <div>{`Episodes ${episodes}`}</div>
-      <div>{`Progress ${JSON.stringify(progress)}`}</div>
-      <div>{`Next Airing ${JSON.stringify(nextAiringEpisode)}`}</div> */}
       <div className='text-2xl p-4'>Streaming</div>
       <div className="playerWrapper">
         <ReactPlayer
