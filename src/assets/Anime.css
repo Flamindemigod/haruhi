@@ -3,7 +3,10 @@
     margin-inline: auto;
 }
 
-
+.coverImage{
+  transform: translate(0, -50%);
+  margin-block-end: -5rem;
+}
 
 .readMore{
     max-height:10rem;

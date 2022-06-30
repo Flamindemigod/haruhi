@@ -63,6 +63,7 @@ const SearchAnime = () => {
                 open={dialogOpen}
                 onClose={() => { 
                     setSearchQuery("");
+                    setSearchResults({"data":{"Page":{"media":[]}}})
                     setDialogOpen(false);
                  }}
                 aria-labelledby="search-dialog"
@@ -77,7 +78,7 @@ const SearchAnime = () => {
                 </DialogTitle>
                 <DialogContent sx={{ backgroundColor: "#313131", color: "white" }}>
                     <ul className="flex flex-wrap gap-4 justify-center">
-                        {searchResults.data.Page.media.slice(0,11).map((media)=>(<Link to={`/anime/${media.id}`} key={media.id}><li className=' w-96 h-20'><ButtonBase sx={{justifyContent:"flex-start"}} className='flex text-xl gap-4 w-full bg-offWhite-600'><img className="h-20" src={media.coverImage.medium} /> <div className=''>{media.title.userPreferred}</div></ButtonBase></li></Link>))}
+                        {searchResults.data.Page.media.slice(0,12).map((media)=>(<Link to={`/anime/${media.id}`} key={media.id} onClick={() => {setDialogOpen(false); setSearchQuery("")}}><li className=' w-96 h-20'><ButtonBase sx={{justifyContent:"flex-start"}} className='flex text-xl gap-4 w-full bg-offWhite-600'><img className="h-20" src={media.coverImage.medium} /> <div className=''>{media.title.userPreferred}</div></ButtonBase></li></Link>))}
                     </ul>
                 </DialogContent>
             </Dialog>

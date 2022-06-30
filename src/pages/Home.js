@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "../assets/Home.css";
 import ContinueWatching from '../components/ContinueWatching';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,8 @@ import Recommended from '../components/Recommended';
 
 const Home = () => {
   const user = useSelector((state) => state.user.value)
+  useEffect(()=>{
+    document.title = "Haruhi - Home";}, [])
   return (
     <main>
       <div className='grid splashGrid'>
