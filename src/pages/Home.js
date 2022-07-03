@@ -14,7 +14,7 @@ const Home = () => {
       <div className='grid splashGrid'>
         <div className="text-3xl">Welcome Back {user.userName}</div>
         <div className=""></div>
-        <img className="homeImg" height="60px" src='./HomeSplash.jpg' />
+        <img className="homeImg" height="60px" src='./HomeSplash.jpg' alt="a girl saluting you" />
       </div>
       <div className=' w-11/12 containerHome'>
         <ContinueWatching></ContinueWatching>

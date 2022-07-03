@@ -100,7 +100,7 @@ const updateEpisode = async (id, episode) => {
     id: id,
     episode: episode,
   };
- makeQuery(query, variables);
+  makeQuery(query, variables);
 };
 
 const DarkSelect = styled(Select)(({ theme }) => ({
@@ -151,18 +151,26 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     if (progress) {
       setEpisodeToPlay(median([1, progress.progress + 1, nextAiringEpisode ? (nextAiringEpisode.episode - 1) : episodes]))
     }
+    // eslint-disable-next-line
   }, [mediaMALid])
 
   useEffect(() => {
     const getEpisodeLink = async (idMal, episode) => {
       const MalTitle = await getMALTitle(idMal);
-      const animeID = await getAnimeID(MalTitle).then((data) => {
+      const blacklist = {
+        40356: "tate-no-yuusha-no-nariagari-season-2",
+      }
+      let animeID = blacklist[idMal] ? blacklist[idMal] : await getAnimeID(MalTitle).then((data) => {
         return data.filter(item => !(item.animeId.includes("dub")))[0].animeId
-      }).then((data) =>{console.log(data); return data})
-      const EL = await getVideoUrl(animeID, episode).then((data) => { return data.sources[0].file})
+      }).then((data) => { console.log(data); return data })
+      console.log(idMal)
+
+
+      const EL = await getVideoUrl(animeID, episode).then((data) => { console.log(data); return data.sources[0].file })
       setEpisodeLink(EL)
     }
     getEpisodeLink(mediaMALid, episodeToPlay)
+    // eslint-disable-next-line
   }, [episodeToPlay, mediaMALid])
 
   useEffect(() => {
@@ -172,20 +180,22 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
       setVideoEndToast(true);
       updateEpisode(mediaId, episodeToPlay);
     }
+    // eslint-disable-next-line
   }, [videoProgress]);
   return (
-    <>
+    <>{episodeLink ? <>
       <div className='text-2xl p-4'>Streaming</div>
       <div className="playerWrapper">
         <ReactPlayer
           className="react-player"
           url={episodeLink}
           controls={true}
+          pip={true}
           onReady={() => {
             setVideoEnd(false);
           }}
           onProgress={(state) => {
-            setVideoProgress({...videoProgress, ...state});
+            setVideoProgress({ ...videoProgress, ...state });
           }}
           width="100%"
           height="100%"
@@ -243,7 +253,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           <SkipNext />
         </IconButton>
       </div>
-    </>
+    </> : <></>}</>
   )
 }
 
