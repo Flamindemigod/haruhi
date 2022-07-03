@@ -79,7 +79,7 @@ select {
 
 :root{
   --clr-primary: #42a5f5;
-  --clr-secondary: #26a69a;
+  --clr-secondary: #999;
 }
 
 body{
@@ -94,8 +94,8 @@ body{
   scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
 }
 .styled-scrollbars::-webkit-scrollbar {
-  width: 5px; /* Mostly for vertical scrollbars */
-  height: 5px; /* Mostly for horizontal scrollbars */
+  width: 7px; /* Mostly for vertical scrollbars */
+  height: 7px; /* Mostly for horizontal scrollbars */
 }
 .styled-scrollbars::-webkit-scrollbar-thumb { /* Foreground */
   background: var(--scrollbar-foreground);

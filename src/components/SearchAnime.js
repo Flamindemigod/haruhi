@@ -58,7 +58,8 @@ const SearchAnime = () => {
         <>
             <Button sx={{ color: "#fff", fontSize: "1.25rem", textTransform: "none", fontWeight: "normal", borderColor: "transparent", ":hover": { borderColor: "#fff" } }} variant='outlined' endIcon={<Search />} onClick={() => { setDialogOpen(true) }}> Search </Button>
             <Dialog
-                maxWidth={"xl"}
+            className='styled-scrollbars'
+                maxWidth={"3xl"}
                 fullWidth={true}
                 open={dialogOpen}
                 onClose={() => { 
@@ -76,9 +77,9 @@ const SearchAnime = () => {
                         <Search sx={{ color: '#fff', mr: 1, my: 0.5 }} />
                     </div>
                 </DialogTitle>
-                <DialogContent sx={{ backgroundColor: "#313131", color: "white" }}>
-                    <ul className="flex flex-wrap gap-4 justify-center">
-                        {searchResults.data.Page.media.slice(0,12).map((media)=>(<Link to={`/anime/${media.id}`} key={media.id} onClick={() => {setDialogOpen(false); setSearchQuery("")}}><li className=' w-96 h-20'><ButtonBase sx={{justifyContent:"flex-start"}} className='flex text-xl gap-4 w-full bg-offWhite-600'><img className="h-20" src={media.coverImage.medium} /> <div className=''>{media.title.userPreferred}</div></ButtonBase></li></Link>))}
+                <DialogContent className='styled-scrollbars' sx={{ backgroundColor: "#313131", color: "white" }}>
+                    <ul className="flex flex-wrap gap-8 justify-center ">
+                        {searchResults.data.Page.media.slice(0,12).map((media)=>(<Link to={`/anime/${media.id}`} key={media.id} onClick={() => {setDialogOpen(false); setSearchQuery("")}}><li className=' w-auto sm:w-96 h-20'><ButtonBase sx={{justifyContent:"flex-start"}} className='flex text-sm sm:text-md gap-4 w-full bg-offWhite-600'><img className="h-20" src={media.coverImage.medium} /> <div className=''>{media.title.userPreferred}</div></ButtonBase></li></Link>))}
                     </ul>
                 </DialogContent>
             </Dialog>

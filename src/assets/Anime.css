@@ -1,11 +1,27 @@
+.title-grid{
+  max-height: 25rem;
+}
+
+.bannerImage{
+  grid-column: 1/-1;
+  grid-row: 1/-1;
+  object-position: center;
+}
+
+.title-card{
+  grid-column: 1/-1;
+  grid-row: 2/-1;
+}
+
+@media (min-width: 1024px) {
+  .title-card{
+    grid-column: 2/5;
+  }
+}
+
 .titleDescriptionContainer{
     margin-block-start: 2rem;
     margin-inline: auto;
-}
-
-.coverImage{
-  transform: translate(0, -50%);
-  margin-block-end: -5rem;
 }
 
 .readMore{
@@ -22,7 +38,7 @@
   }
   .readMore > .DescriptionInner{
     overflow: hidden;
-    max-height: 10rem;
+    max-height: 7rem;
     transition: max-height 200ms ease;
   }
   .readMore.open > .DescriptionInner{
@@ -67,10 +83,12 @@
   .relatedShows{
     order:-1
   }
-  .relatedShowsFlex:empty + .relatedShows{
+  .relatedShowsFlex:empty + .relatedShows,
+  .relatedShowsFlex:empty{
     display: none;
   }
 
-  .relatedShowsFlex:not(:empty) + .relatedShows{
-    display: block;
+  .relatedShowsFlex:not(:empty) + .relatedShows,
+  .relatedShowsFlex:not(:empty){
+    display: flex;
   }
