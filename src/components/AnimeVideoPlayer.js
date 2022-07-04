@@ -6,7 +6,7 @@ import Select from "@mui/material/Select";
 import IconButton from "@mui/material/IconButton";
 import SkipNext from "@mui/icons-material/SkipNext";
 import SkipPrevious from "@mui/icons-material/SkipPrevious";
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/lazy';
 import { styled } from '@mui/material/styles';
 import makeQuery from '../misc/makeQuery';
 
