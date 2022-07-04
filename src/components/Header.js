@@ -1,6 +1,6 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { Avatar} from '@mui/material'
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { Avatar, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { useSelector, useDispatch } from "react-redux";
 import { unsetUser } from "../features/user"
 import { ButtonBase } from '@mui/material';
@@ -9,7 +9,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Logout from '@mui/icons-material/Logout';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { styled, alpha } from '@mui/material/styles';
+import MenuIcon from '@mui/icons-material/Menu';
 import SearchAnime from './SearchAnime';
+import { SwipeableDrawer, List, IconButton } from '@mui/material';
+import { Box } from '@mui/system';
+import {useMediaQuery} from '@mui/material';
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -57,9 +61,8 @@ const StyledMenu = styled((props) => (
 
 
 
-
 const Header = () => {
-
+    const matches = useMediaQuery('(min-width:425px)');
 
     const handleLogout = () => {
         document.cookie = document.cookie + ";max-age=0";
@@ -69,22 +72,86 @@ const Header = () => {
     let user = useSelector((state) => state.user.value);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+
+    const toggleDrawer = (open) => (event) => {
+        if (
+            event &&
+            event.type === 'keydown' &&
+            (event.key === 'Tab' || event.key === 'Shift')
+        ) {
+            return;
+        }
+
+        setDrawerOpen(open);
+    };
+
+
+
+    const list = () => (
+        <Box sx={{ width: 250 }}
+            role="presentation">
+
+            <List>
+                <ListItem disablePadding>
+                    <NavLink className='w-full' to={"/"}>
+                        <ListItemButton>
+                            <ListItemText primary={"Home"} />
+                        </ListItemButton> 
+                    </NavLink>
+                </ListItem>
+                <ListItem disablePadding>
+                    <NavLink className='w-full' to={"/anime"}>
+                        <ListItemButton>
+                            <ListItemText primary={"Lists"} />
+                        </ListItemButton> 
+                    </NavLink>
+                </ListItem>
+                <ListItem disablePadding>
+                    <NavLink className='w-full' to={"/calender"}>
+                        <ListItemButton>
+                            <ListItemText primary={"Calender"} />
+                        </ListItemButton> 
+                    </NavLink>
+                </ListItem>
+            </List>
+        </Box>
+    )
     return (
         <>
             <header className='flex justify-around dark:bg-offWhite-700 dark:text-white'>
-                <nav className='grid grid-cols-3 gap-4 text-xl'>
+            {!matches ? (<><IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer(true)}
+            edge="start"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon></MenuIcon>
+            </IconButton>
+                <SwipeableDrawer
+                    anchor={"left"}
+                    open={drawerOpen}
+                    onClose={toggleDrawer(false)}
+                    onOpen={toggleDrawer(true)}
+                >
+                    {list()}
+                </SwipeableDrawer></>):
+                (<nav className='grid grid-cols-3 gap-4 text-xl'>
                     <NavLink className='' to={"/"}><ButtonBase className=' h-full w-full'>Home</ButtonBase></NavLink>
                     <NavLink to={"/anime"} className='' ><ButtonBase className='h-full w-full'>Lists</ButtonBase></NavLink>
                     <NavLink to={"/calender"} className='' >  <ButtonBase className='h-full w-full'>Calender</ButtonBase></NavLink>
-                </nav>
+                </nav>)}
                 <div className="h-full p-4 flex gap-4">
-                    <SearchAnime/>
+                    <SearchAnime />
                     <Avatar onClick={handleClick} alt={`Avatar of user ${user.userName}`} src={user.userAvatar} />
                 </div>
             </header>
