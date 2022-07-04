@@ -58,11 +58,28 @@ const StyledMenu = styled((props) => (
 }));
 
 
+const StyledDrawer = styled(SwipeableDrawer)(({ theme }) => ({
+    '& .MuiPaper-root': {
+        marginTop: theme.spacing(1),
+        backgroundColor: "#2e2e2e",
+        align: "center",
+        color:
+            "#eee",
+        boxShadow:
+            'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+        '& .MuiMenu-list': {
+            padding: '4px 0',
+        },
+        
+    },
+}));
+
+
 
 
 
 const Header = () => {
-    const matches = useMediaQuery('(min-width:425px)');
+    const matches = useMediaQuery('(min-width:600px)');
 
     const handleLogout = () => {
         document.cookie = document.cookie + ";max-age=0";
@@ -70,7 +87,7 @@ const Header = () => {
     }
     const dispatch = useDispatch();
     let user = useSelector((state) => state.user.value);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -99,23 +116,22 @@ const Header = () => {
     const list = () => (
         <Box sx={{ width: 250 }}
             role="presentation">
-
-            <List>
-                <ListItem disablePadding>
+            <List onClick={toggleDrawer(false)}>
+                <ListItem>
                     <NavLink className='w-full' to={"/"}>
                         <ListItemButton>
                             <ListItemText primary={"Home"} />
                         </ListItemButton> 
                     </NavLink>
                 </ListItem>
-                <ListItem disablePadding>
+                <ListItem >
                     <NavLink className='w-full' to={"/anime"}>
                         <ListItemButton>
                             <ListItemText primary={"Lists"} />
                         </ListItemButton> 
                     </NavLink>
                 </ListItem>
-                <ListItem disablePadding>
+                <ListItem >
                     <NavLink className='w-full' to={"/calender"}>
                         <ListItemButton>
                             <ListItemText primary={"Calender"} />
@@ -137,14 +153,14 @@ const Header = () => {
           >
             <MenuIcon></MenuIcon>
             </IconButton>
-                <SwipeableDrawer
+                <StyledDrawer
                     anchor={"left"}
                     open={drawerOpen}
                     onClose={toggleDrawer(false)}
                     onOpen={toggleDrawer(true)}
                 >
                     {list()}
-                </SwipeableDrawer></>):
+                </StyledDrawer></>):
                 (<nav className='grid grid-cols-3 gap-4 text-xl'>
                     <NavLink className='' to={"/"}><ButtonBase className=' h-full w-full'>Home</ButtonBase></NavLink>
                     <NavLink to={"/anime"} className='' ><ButtonBase className='h-full w-full'>Lists</ButtonBase></NavLink>
