@@ -213,7 +213,7 @@ const Anime = () => {
           <Box className="flex md:flex-col gap-4 overflow-x-scroll md:overflow-auto styled-scrollbars rounded-xl p-4 bg-offWhite-600" sx={{ flex: "1 1 15%", width:"-webkit-fill-available" }}>
             <div className='flex flex-col '>
               <div className="font-semibold">Format</div>
-              <div style={{"textTransform":"capitalize"}}>{anime.format.replace("_", " ").toLowerCase()}</div>
+              <div >{anime.format}</div>
             </div>
             <div className='flex flex-col'>
               <div className="font-semibold">Episodes</div>
@@ -237,7 +237,7 @@ const Anime = () => {
             </div>
             <div className='flex flex-col'>
               <div className="font-semibold">Season</div>
-              <div style={{"textTransform":"capitalize"}}>{anime.season.replace("_", " ").toLowerCase()}</div>
+              <div style={{"textTransform":"capitalize"}}>{anime.season ? anime.season.replace("_", " ").toLowerCase(): ""}</div>
             </div>
             <div className='flex flex-col'>
               <div className="font-semibold">Average Score</div>
