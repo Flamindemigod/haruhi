@@ -60,7 +60,6 @@ const StyledMenu = styled((props) => (
 
 const StyledDrawer = styled(SwipeableDrawer)(({ theme }) => ({
     '& .MuiPaper-root': {
-        marginTop: theme.spacing(1),
         backgroundColor: "#2e2e2e",
         align: "center",
         color:

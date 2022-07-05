@@ -10,7 +10,7 @@ const AnimeRecommendations = ({media}) => {
   return (
     <Card sx={{ width:"19rem", height:"12rem"}}>
         <Box className='flex flex-row h-full'>
-            <CardContent className='dark:bg-offWhite-600 w-40 dark:text-white' sx={{flex: "1 0 auto", display:"flex", flexDirection:"column", justifyContent:"space-between"}}>
+            <CardContent className='bg-offWhite-600 w-40 text-white' sx={{flex: "1 0 auto", display:"flex", flexDirection:"column", justifyContent:"space-between"}}>
                 <div className='text-md '>{media.title.userPreferred}</div>
             </CardContent>
             <CardMedia sx={{width:"9rem",maxHeight:"12rem", objectFit:"cover"}} component="img" image={media.coverImage.large} alt={`Cover for ${media.title.userPreferred}`}/>
