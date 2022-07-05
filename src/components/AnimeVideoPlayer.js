@@ -9,7 +9,7 @@ import SkipPrevious from "@mui/icons-material/SkipPrevious";
 import ReactPlayer from 'react-player/lazy';
 import { styled } from '@mui/material/styles';
 import makeQuery from '../misc/makeQuery';
-
+import { useParams } from 'react-router-dom';
 //https://stackoverflow.com/questions/45309447/calculating-median-javascript
 function median(values) {
   if (values.length === 0) throw new Error("No inputs");
@@ -126,6 +126,7 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 
 
 const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast }) => {
+  const params = useParams();
   const [episodeLink, setEpisodeLink] = useState("");
   const [episodeToPlay, setEpisodeToPlay] = useState(1);
   const [videoProgress, setVideoProgress] = useState({
@@ -151,8 +152,11 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     if (progress) {
       setEpisodeToPlay(median([1, progress.progress + 1, nextAiringEpisode ? (nextAiringEpisode.episode - 1) : episodes]))
     }
+    else{
+    setEpisodeToPlay(1)
+    }
     // eslint-disable-next-line
-  }, [mediaMALid])
+  }, [mediaId])
 
   useEffect(() => {
     const getEpisodeLink = async (idMal, episode) => {
@@ -161,17 +165,17 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         40356: "tate-no-yuusha-no-nariagari-season-2",
       }
       let animeID = blacklist[idMal] ? blacklist[idMal] : await getAnimeID(MalTitle).then((data) => {
-        return data.filter(item => !(item.animeId.includes("dub")))[0].animeId
-      }).then((data) => { console.log(data); return data })
-      console.log(idMal)
+        if (data.length) { return data.filter(item => !(item.animeId.includes("dub")))[0].animeId } return ""
+      })
 
 
-      const EL = await getVideoUrl(animeID, episode).then((data) => { console.log(data); return data.sources[0].file })
+
+      const EL = animeID ? await getVideoUrl(animeID, episode).then((data) => { return data.sources[0].file }) : false
       setEpisodeLink(EL)
     }
     getEpisodeLink(mediaMALid, episodeToPlay)
     // eslint-disable-next-line
-  }, [episodeToPlay, mediaMALid])
+  }, [episodeToPlay, mediaId])
 
   useEffect(() => {
     if (videoProgress.played >= 0.9 && !videoEnd) {

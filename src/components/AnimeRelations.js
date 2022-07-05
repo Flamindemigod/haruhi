@@ -10,7 +10,7 @@ const AnimeRelations = ({media, relationship}) => {
   return (
     <Card sx={{ width:"19rem", height:"12rem"}}>
         <Box className='flex flex-row h-full'>
-            <CardContent className='dark:bg-offWhite-600 w-40 dark:text-white' sx={{flex: "1 0 auto", display:"flex", flexDirection:"column", justifyContent:"space-between"}}>
+            <CardContent className='bg-offWhite-600 w-40 text-white' sx={{flex: "1 0 auto", display:"flex", flexDirection:"column", justifyContent:"space-between"}}>
                 <div className='text-md '>{media.title.userPreferred}</div>
                 <div className='text-sm flex justify-around'>
                     <div>{media.type}</div>

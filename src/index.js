@@ -6,6 +6,8 @@ import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import userReducer from "./features/user"
 import loadingReducer from "./features/loading"
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
 const store = configureStore({
   reducer: {
@@ -16,9 +18,11 @@ const store = configureStore({
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <LocalizationProvider dateAdapter={AdapterDateFns}>
     <Provider store={store}>
       <App />
     </Provider>
+    </LocalizationProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
