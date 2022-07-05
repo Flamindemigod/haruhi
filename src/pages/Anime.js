@@ -4,7 +4,6 @@ import { useParams, Link } from "react-router-dom";
 import makeQuery from '../misc/makeQuery';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../features/loading';
-import "../assets/Anime.css"
 import AnimeRelations from "../components/AnimeRelations"
 import AnimeVideoPlayer from '../components/AnimeVideoPlayer';
 import AnimeListEditor from '../components/AnimeListEditor';
@@ -193,7 +192,7 @@ const Anime = () => {
 
   return (
     <>
-      <div className="grid grid-cols-5 grid-rows-2 title-grid">
+      <div className="grid grid-cols-5 grid-rows-2 h-80 w-full">
         {anime.bannerImage ? <img className="bannerImage object-cover h-full w-full" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <></>}
         <div className="flex title-card gap-4 bg-offWhite-800" style={{ "--tw-bg-opacity": 0.6 }}>
           {anime.coverImage.large ? <img className=" aspect-auto" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} /> : <></>}

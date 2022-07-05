@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import "../assets/Home.css";
 import ContinueWatching from '../components/ContinueWatching';
 import { useSelector } from 'react-redux';
 import Recommended from '../components/Recommended';
