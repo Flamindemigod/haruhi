@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import Button from '@mui/material/Button';
 import { ReactComponent as Logo } from '../assets/AnilistIcon.svg';
-import "../assets/Login.css"
 import { setLoading } from "../features/loading";
 import { useDispatch } from 'react-redux';
 

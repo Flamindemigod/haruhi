@@ -1,5 +1,4 @@
 import React from 'react'
-import "../assets/AnimeCard.css"
 import Countdown, { zeroPad } from "react-countdown";
 
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
