@@ -66,7 +66,7 @@ const Recommended = () => {
           const recommendationEdges = mediaArray[media].media.recommendations.edges
           for (const edge in recommendationEdges) {
            
-            RecommendationList = (mediaArray[media].media.recommendations.edges[edge].node.rating > 50) && (!mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation.mediaListEntry) ? [...RecommendationList, mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation] : RecommendationList
+            RecommendationList = (mediaArray[media].media.recommendations.edges[edge].node.rating > 25) && (!mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation.mediaListEntry) ? [...RecommendationList, mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation] : RecommendationList
           }
         }
       
