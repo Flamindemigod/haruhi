@@ -16,6 +16,7 @@ import { Box } from '@mui/material';
 
 const Anime = () => {
   const [anime, setAnime] = useState({ coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [] });
+  const [refresh, setRefresh] = useState(0);
   let [descriptionAfterText, setDescriptionAfterText] = useState("Read More")
   const [videoEndToast, setVideoEndToast] = useState(false)
   let description = createRef()
@@ -165,7 +166,7 @@ const Anime = () => {
     };
     getAnime();
     // eslint-disable-next-line
-  }, [params.id]);
+  }, [params.id, refresh]);
 
   useEffect(() => {
     document.title = anime.title.userPreferred;
@@ -210,7 +211,7 @@ const Anime = () => {
       <Box className='flex flex-wrap flex-col md:flex-row p-4 gap-2' >
         {/* sidebar */}
         <Box className='flex flex-col justify-center gap-4' sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
-          <AnimeListEditor mediaListEntry={anime.mediaListEntry} mediaID={anime.id} mediaTitle={anime.title.userPreferred}/>
+          <AnimeListEditor mediaListEntry={anime.mediaListEntry} mediaID={anime.id} mediaTitle={anime.title.userPreferred} setRefresh={setRefresh}/>
         <Box className="flex md:flex-col gap-4 overflow-x-scroll md:overflow-auto styled-scrollbars rounded-xl p-4 bg-offWhite-600" sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
 
           <div className='flex flex-col '>

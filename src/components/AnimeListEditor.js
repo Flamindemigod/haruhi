@@ -48,7 +48,7 @@ const DarkDialog = styled(Dialog)(({ theme }) => ({
   }));
 
 
-const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle }) => {
+const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) => {
     const [open, setOpen] = useState(false);
     const [mediaStatus, setMediaStatus] = useState("");
     const [mediaScore, setMediaScore] = useState(0);
@@ -250,6 +250,8 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle }) => {
                     <Button onClick={() => {
                         setOpen(false);
                         saveMediaEntry(mediaID);
+                        setRefresh((prevState) => (prevState+1));
+
                     }} autoFocus variant="contained">
                         Save
                     </Button>
@@ -257,6 +259,8 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle }) => {
                         onClick={() => {
                             setOpen(false);
                             deleteMediaEntry(mediaListEntry.id);
+                            setRefresh((prevState) => (prevState+1));
+
                         }}
                         autoFocus
                         variant="contained"
