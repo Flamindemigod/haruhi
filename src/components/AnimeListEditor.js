@@ -20,32 +20,32 @@ import { styled } from '@mui/material/styles';
 
 const DarkDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialog-container .MuiPaper-root': {
-      color: "white",
-      backgroundColor: "#2e2e2e",
-      transition: theme.transitions.create([
-        'box-shadow',
-      ]),
-      '& .MuiFormControl-root':{
-        '& .MuiInputLabel-root':{
-            color: "#eee"
-        },
-        "& .MuiInputBase-root":{
-            backgroundColor: "#3e3e3e",
-            color: "white"
-        },
-        "& .MuiSvgIcon-root":{
-            color:"#777"
-        },
-        "& .MuiRating-iconFilled > .MuiSvgIcon-root":{
-            color: "gold",
-        },
-        "& .MuiFormHelperText-root":{
-            color:"#eee"
+        color: "white",
+        backgroundColor: "#2e2e2e",
+        transition: theme.transitions.create([
+            'box-shadow',
+        ]),
+        '& .MuiFormControl-root': {
+            '& .MuiInputLabel-root': {
+                color: "#eee"
+            },
+            "& .MuiInputBase-root": {
+                backgroundColor: "#3e3e3e",
+                color: "white"
+            },
+            "& .MuiSvgIcon-root": {
+                color: "#777"
+            },
+            "& .MuiRating-iconFilled > .MuiSvgIcon-root": {
+                color: "gold",
+            },
+            "& .MuiFormHelperText-root": {
+                color: "#eee"
+            }
         }
-      }
     }
-  
-  }));
+
+}));
 
 
 const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) => {
@@ -84,6 +84,14 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
                 }
             }
             setMediaRewatches(mediaListEntry.repeat)
+        }
+        else {
+            setMediaStatus("")
+            setMediaScore(0)
+            setMediaProgress(0)
+            setMediaStartDate(null)
+            setMediaEndDate(null)
+            setMediaRewatches(0)
         }
     }, [mediaListEntry])
     const saveMediaEntry = async (mediaID) => {
@@ -168,7 +176,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className='grid sm:grid-cols-2 gap-4 justify-center items-cente'>
-                    <FormControl sx={{ mt: 1 , justifySelf:"center", placeSelf:"center", width:"100%"}}>
+                    <FormControl sx={{ mt: 1, justifySelf: "center", placeSelf: "center", width: "100%" }}>
                         <InputLabel id="mediaStatuslabel">Status</InputLabel>
                         <Select
                             labelId="mediaStatuslabel"
@@ -185,10 +193,10 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
                             <MenuItem value={"DROPPED"}>Dropped</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl sx={{ mt: 1 , width: "min-content", justifySelf:"center"}}>
+                    <FormControl sx={{ mt: 1, width: "min-content", justifySelf: "center" }}>
                         <Typography component="legend">Score</Typography>
                         <Rating
-                            sx={{width: "min-content"}}
+                            sx={{ width: "min-content" }}
                             name="mediaRating"
                             value={mediaScore / 2}
                             precision={0.5}
@@ -198,59 +206,59 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
                             }}
                         />
                     </FormControl>
-                        <TextField
-                            label="Episode Progress"
-                            id="mediaProgress"
-                            sx={{ m: 1 }}
-                            type="number"
-                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                            onInput={(e) => {
-                                e.target.value = Math.max(0, parseInt(e.target.value))
-                            }}
-                            value={mediaProgress}
-                            onChange={(e) => { setMediaProgress(e.target.value) }}
-                        />
-                        <TextField
+                    <TextField
+                        label="Episode Progress"
+                        id="mediaProgress"
+                        sx={{ m: 1 }}
+                        type="number"
+                        inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                        onInput={(e) => {
+                            e.target.value = Math.max(0, parseInt(e.target.value))
+                        }}
+                        value={mediaProgress}
+                        onChange={(e) => { setMediaProgress(e.target.value) }}
+                    />
+                    <TextField
 
-                            label="Number of Rewatches"
-                            id="mediaRewatches"
-                            sx={{ m: 1 }}
-                            type="number"
-                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                            onInput={(e) => {
-                                e.target.value = Math.max(0, parseInt(e.target.value))
-                            }}
-                            value={mediaRewatches}
-                            onChange={(e) => { setMediaRewatches(e.target.value) }}
-                        />
-                        <DatePicker
-                            disableFuture
-                            id="mediaStartDate"
-                            label="Start date"
-                            inputFormat="dd/MM/yyyy"
-                            value={mediaStartDate}
-                            onChange={(date) => { setMediaStartDate(date) }}
-                            renderInput={(params) => (
-                                <TextField {...params} helperText={params?.inputProps?.placeholder} />
-                            )}
-                        />
-                        <DatePicker
-                            disableFuture
-                            id="mediaEndDate"
-                            label="End date"
-                            inputFormat="dd/MM/yyyy"
-                            value={mediaEndDate}
-                            onChange={(date) => { setMediaEndDate(date) }}
-                            renderInput={(params) => (
-                                <TextField {...params} helperText={params?.inputProps?.placeholder} />
-                            )}
-                        />
+                        label="Number of Rewatches"
+                        id="mediaRewatches"
+                        sx={{ m: 1 }}
+                        type="number"
+                        inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                        onInput={(e) => {
+                            e.target.value = Math.max(0, parseInt(e.target.value))
+                        }}
+                        value={mediaRewatches}
+                        onChange={(e) => { setMediaRewatches(e.target.value) }}
+                    />
+                    <DatePicker
+                        disableFuture
+                        id="mediaStartDate"
+                        label="Start date"
+                        inputFormat="dd/MM/yyyy"
+                        value={mediaStartDate}
+                        onChange={(date) => { setMediaStartDate(date) }}
+                        renderInput={(params) => (
+                            <TextField {...params} helperText={params?.inputProps?.placeholder} />
+                        )}
+                    />
+                    <DatePicker
+                        disableFuture
+                        id="mediaEndDate"
+                        label="End date"
+                        inputFormat="dd/MM/yyyy"
+                        value={mediaEndDate}
+                        onChange={(date) => { setMediaEndDate(date) }}
+                        renderInput={(params) => (
+                            <TextField {...params} helperText={params?.inputProps?.placeholder} />
+                        )}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => {
                         setOpen(false);
                         saveMediaEntry(mediaID);
-                        setRefresh((prevState) => (prevState+1));
+                        setRefresh((prevState) => (prevState + 1));
 
                     }} autoFocus variant="contained">
                         Save
@@ -259,7 +267,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
                         onClick={() => {
                             setOpen(false);
                             deleteMediaEntry(mediaListEntry.id);
-                            setRefresh((prevState) => (prevState+1));
+                            setRefresh((prevState) => (prevState + 1));
 
                         }}
                         autoFocus
