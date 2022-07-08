@@ -89,16 +89,17 @@ const getAnimeID = async (title) => {
   return resp;
 };
 
-const updateEpisode = async (id, episode) => {
+const updateEpisode = async (id, episode, status) => {
   const query = `
-              mutation updateEpisode($id: Int=1, $episode: Int=1){
-                SaveMediaListEntry(mediaId: $id, progress:$episode){
+              mutation updateEpisode($id: Int=1, $episode: Int=1, $status: MediaListStatus=CURRENT){
+                SaveMediaListEntry(mediaId: $id, progress:$episode, status:$status){
                   id
                 }
               }`;
   const variables = {
     id: id,
     episode: episode,
+    status: status,
   };
   makeQuery(query, variables);
 };
@@ -182,7 +183,13 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
       console.log("Video Ended")
       setVideoEnd(true);
       setVideoEndToast(true);
-      updateEpisode(mediaId, episodeToPlay);
+      if (episodeToPlay === episodes){
+      updateEpisode(mediaId, episodeToPlay, "COMPLETED");
+      }
+      else{
+      updateEpisode(mediaId, episodeToPlay, "CURRENT");
+        
+      }
     }
     // eslint-disable-next-line
   }, [videoProgress]);
@@ -239,7 +246,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
               setEpisodeToPlay(e.target.value);
             }}
           >
-            {Array.from({ length: (nextAiringEpisode ? nextAiringEpisode.episode : episodes) }, (_, i) => i + 1).map(
+            {Array.from({ length: (nextAiringEpisode ? nextAiringEpisode.episode-1 : episodes) }, (_, i) => i + 1).map(
               (_episode) => (
                 <MenuItem key={_episode} value={_episode}>{`${_episode}`}</MenuItem>
               )
@@ -249,7 +256,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         <IconButton
           sx={{ color: "white" }}
           aria-label="Next Episode"
-          disabled={episodeToPlay === (nextAiringEpisode ? nextAiringEpisode.episode : episodes) ? true : false}
+          disabled={episodeToPlay === (nextAiringEpisode ? nextAiringEpisode.episode-1 : episodes) ? true : false}
           onClick={() => {
             setEpisodeToPlay(episodeToPlay + 1);
           }}
