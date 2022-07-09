@@ -15,7 +15,7 @@ import { Box } from '@mui/material';
 
 
 const Anime = () => {
-  const [anime, setAnime] = useState({ coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [] });
+  const [anime, setAnime] = useState({ coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [] });
   const [refresh, setRefresh] = useState(0);
   let [descriptionAfterText, setDescriptionAfterText] = useState("Read More")
   const [videoEndToast, setVideoEndToast] = useState(false)
@@ -161,10 +161,6 @@ const Anime = () => {
 
       setAnime(animeData.data.Media);
       dispatch(setLoading(false));
-
-
-
-
     };
     getAnime();
     // eslint-disable-next-line
@@ -285,7 +281,7 @@ const Anime = () => {
             </div>
             <div className='text-lg sm:text-2xl p-2 relatedShows'>Related Shows</div>
           </div>
-          <AnimeVideoPlayer mediaId={anime.id} mediaMALid={anime.idMal} progress={anime.mediaListEntry} episodes={anime.episodes} nextAiringEpisode={anime.nextAiringEpisode} setVideoEndToast={setVideoEndToast} />
+          <AnimeVideoPlayer mediaId={anime.id} mediaMALid={anime.idMal} progress={anime.mediaListEntry} episodes={anime.episodes} nextAiringEpisode={anime.nextAiringEpisode} setVideoEndToast={setVideoEndToast} mediaListStatus={anime.mediaListEntry ? anime.mediaListEntry.status : null} mediaListRewatches={anime.mediaListEntry ? anime.mediaListEntry.repeat : 0} />
           <div className='flex flex-col '>
             <div className=' flex gap-4 overflow-x-scroll styled-scrollbars relatedShowsFlex'>
               {anime.recommendations.edges.map((edge) => (
