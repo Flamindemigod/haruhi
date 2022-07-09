@@ -89,10 +89,10 @@ const getAnimeID = async (title) => {
   return resp;
 };
 
-const updateEpisode = async (id, episode, status) => {
+const updateEpisode = async (id, episode, status, rewatches=0) => {
   const query = `
-              mutation updateEpisode($id: Int=1, $episode: Int=1, $status: MediaListStatus=CURRENT){
-                SaveMediaListEntry(mediaId: $id, progress:$episode, status:$status){
+              mutation updateEpisode($id: Int=1, $episode: Int=1, $status: MediaListStatus=CURRENT, $rewatches: Int= 0){
+                SaveMediaListEntry(mediaId: $id, progress:$episode, status:$status, repeat: $rewatches){
                   id
                 }
               }`;
@@ -100,6 +100,7 @@ const updateEpisode = async (id, episode, status) => {
     id: id,
     episode: episode,
     status: status,
+    rewatches: rewatches
   };
   makeQuery(query, variables);
 };
@@ -126,7 +127,7 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 }));
 
 
-const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast }) => {
+const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches }) => {
   const params = useParams();
   const [episodeLink, setEpisodeLink] = useState("");
   const [episodeToPlay, setEpisodeToPlay] = useState(1);
@@ -183,13 +184,26 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
       console.log("Video Ended")
       setVideoEnd(true);
       setVideoEndToast(true);
+
+      if (episodeToPlay === 1){
+        if (mediaListStatus === "PLANNING"){
+          updateEpisode(mediaId, episodeToPlay, "CURRENT", mediaListRewatches);
+        }
+        else if (mediaListStatus === "COMPLETED"){
+          updateEpisode(mediaId, episodeToPlay, "CURRENT", mediaListRewatches + 1);
+
+        }
+      }
       if (episodeToPlay === episodes){
-      updateEpisode(mediaId, episodeToPlay, "COMPLETED");
+        if (episodeToPlay === 1){
+          updateEpisode(mediaId, episodeToPlay, "COMPLETED", mediaListRewatches + 1);
+        }
+        else{
+          updateEpisode(mediaId, episodeToPlay, "COMPLETED", mediaListRewatches);
+          
+        }
       }
-      else{
-      updateEpisode(mediaId, episodeToPlay, "CURRENT");
-        
-      }
+   
     }
     // eslint-disable-next-line
   }, [videoProgress]);
