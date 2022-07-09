@@ -87,20 +87,20 @@ body{
   color:white;
 }
 
-.styled-scrollbars {
+* {
   --scrollbar-foreground: var(--clr-primary);
   --scrollbar-background: var(--clr-secondary);
   /* Foreground, Background */
   scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
 }
-.styled-scrollbars::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 7px; /* Mostly for vertical scrollbars */
   height: 7px; /* Mostly for horizontal scrollbars */
 }
-.styled-scrollbars::-webkit-scrollbar-thumb { /* Foreground */
+*::-webkit-scrollbar-thumb { /* Foreground */
   background: var(--scrollbar-foreground);
 }
-.styled-scrollbars::-webkit-scrollbar-track { /* Background */
+*::-webkit-scrollbar-track { /* Background */
   background: var(--scrollbar-background);
 }
 
