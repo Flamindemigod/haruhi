@@ -170,7 +170,6 @@ const Anime = () => {
       };
       const animeData = await makeQuery(query, variables);
       const data = await animeData.data.Media
-      console.log(data)
       setAnime({type:"Set", payload: data});
 
 
@@ -185,10 +184,6 @@ const Anime = () => {
     // eslint-disable-next-line
   }, [anime])
 
-  useEffect(() => {
-    console.log(anime)
-    // eslint-disable-next-line
-  }, [anime])
 
 
 
