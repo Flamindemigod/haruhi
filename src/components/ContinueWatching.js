@@ -21,7 +21,7 @@ const ContinueWatching = () => {
                 hasNextPage
                 total
               }
-              mediaList(userName: $userName, type: ANIME, status:CURRENT, sort: [MEDIA_POPULARITY_DESC]) {
+              mediaList(userName: $userName, type: ANIME, status:CURRENT, sort: [UPDATED_TIME_DESC]) {
                 progress
                 media {
                   episodes
