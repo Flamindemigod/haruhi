@@ -89,7 +89,7 @@ const getAnimeID = async (title) => {
   return resp;
 };
 
-const updateEpisode = async (id, episode, status, rewatches=0) => {
+const updateEpisode = async (id, episode, status, rewatches = 0) => {
   const query = `
               mutation updateEpisode($id: Int=1, $episode: Int=1, $status: MediaListStatus=CURRENT, $rewatches: Int= 0){
                 SaveMediaListEntry(mediaId: $id, progress:$episode, status:$status, repeat: $rewatches){
@@ -154,8 +154,8 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     if (progress) {
       setEpisodeToPlay(median([1, progress.progress + 1, nextAiringEpisode ? (nextAiringEpisode.episode - 1) : episodes]))
     }
-    else{
-    setEpisodeToPlay(1)
+    else {
+      setEpisodeToPlay(1)
     }
     // eslint-disable-next-line
   }, [mediaId])
@@ -185,25 +185,28 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
       setVideoEnd(true);
       setVideoEndToast(true);
 
-      if (episodeToPlay === 1){
-        if (mediaListStatus === "PLANNING"){
-          updateEpisode(mediaId, episodeToPlay, "CURRENT", mediaListRewatches);
-        }
-        else if (mediaListStatus === "COMPLETED"){
+      if (episodeToPlay === 1) {
+        if (mediaListStatus === "COMPLETED") {
           updateEpisode(mediaId, episodeToPlay, "CURRENT", mediaListRewatches + 1);
 
         }
+        else {
+          updateEpisode(mediaId, episodeToPlay, "CURRENT", mediaListRewatches);
+
+        }
       }
-      if (episodeToPlay === episodes){
-        if (episodeToPlay === 1){
+      if (episodeToPlay === episodes) {
+        if (episodeToPlay === 1) {
           updateEpisode(mediaId, episodeToPlay, "COMPLETED", mediaListRewatches + 1);
         }
-        else{
+        else {
           updateEpisode(mediaId, episodeToPlay, "COMPLETED", mediaListRewatches);
-          
         }
       }
-   
+      else{
+        updateEpisode(mediaId, episodeToPlay, "CURRENT", mediaListRewatches);
+      }
+
     }
     // eslint-disable-next-line
   }, [videoProgress]);
@@ -260,7 +263,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
               setEpisodeToPlay(e.target.value);
             }}
           >
-            {Array.from({ length: (nextAiringEpisode ? nextAiringEpisode.episode-1 : episodes) }, (_, i) => i + 1).map(
+            {Array.from({ length: (nextAiringEpisode ? nextAiringEpisode.episode - 1 : episodes) }, (_, i) => i + 1).map(
               (_episode) => (
                 <MenuItem key={_episode} value={_episode}>{`${_episode}`}</MenuItem>
               )
@@ -270,7 +273,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         <IconButton
           sx={{ color: "white" }}
           aria-label="Next Episode"
-          disabled={episodeToPlay === (nextAiringEpisode ? nextAiringEpisode.episode-1 : episodes) ? true : false}
+          disabled={episodeToPlay === (nextAiringEpisode ? nextAiringEpisode.episode - 1 : episodes) ? true : false}
           onClick={() => {
             setEpisodeToPlay(episodeToPlay + 1);
           }}
