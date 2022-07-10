@@ -301,3 +301,12 @@ div.container{
   background: greenyellow;
   box-shadow: 0px 0px 4px greenyellow;
 }
+
+.playerControls, .playerControls[data-state=hidden]{
+  display: none
+}
+
+.playerWrapper:hover .playerControls, .playerControls[data-state=visible]{
+  display: block;
+}
+

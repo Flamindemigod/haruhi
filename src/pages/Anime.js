@@ -12,18 +12,29 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import AnimeRecommendations from '../components/AnimeRecommendations';
 import { Box } from '@mui/material';
-
+import { useReducer } from 'react';
 
 const Anime = () => {
-  const [anime, setAnime] = useState({ coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [] });
-  const [refresh, setRefresh] = useState(0);
+  const [anime, setAnime] = useReducer((state, action)=>{
+    if (action.type === "Set"){
+      return {...action.payload}
+    }
+  }, { coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [] });
+
+  const [refresh, setRefresh] = useReducer((state, action)=>{
+    switch(action.type){
+      case "refresh":
+        return state+1;
+      default:
+        throw new Error();
+    }
+
+  }, 0 );
   let [descriptionAfterText, setDescriptionAfterText] = useState("Read More")
   const [videoEndToast, setVideoEndToast] = useState(false)
   let description = createRef()
   const dispatch = useDispatch()
   const params = useParams();
-
-
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -80,6 +91,7 @@ const Anime = () => {
             edges {
               isMain
               node {
+                id
                 name
               }
             }
@@ -157,9 +169,11 @@ const Anime = () => {
         id: params.id,
       };
       const animeData = await makeQuery(query, variables);
- 
+      const data = await animeData.data.Media
+      console.log(data)
+      setAnime({type:"Set", payload: data});
 
-      setAnime(animeData.data.Media);
+
       dispatch(setLoading(false));
     };
     getAnime();
@@ -169,8 +183,14 @@ const Anime = () => {
   useEffect(() => {
     document.title = anime.title.userPreferred;
     // eslint-disable-next-line
-    console.log(anime)
   }, [anime])
+
+  useEffect(() => {
+    console.log(anime)
+    // eslint-disable-next-line
+  }, [anime])
+
+
 
   const toggleOpen = () => {
     if (description.current.classList.contains("open")) {
@@ -247,13 +267,13 @@ const Anime = () => {
             <div className='flex flex-col'>
               <div className="font-semibold">Studios</div>
               <ul>
-                {anime.studios.edges.map((edge) => (edge.isMain ? <li>{edge.node.name}</li> : (<></>)))}
+                {anime.studios.edges.map((edge) => (edge.isMain ? <li key={edge.node.id}>{edge.node.name}</li> : (<></>)))}
               </ul>
             </div>
             <div className='flex flex-col'>
               <div className="font-semibold">Producers</div>
               <ul>
-                {anime.studios.edges.map((edge) => (!edge.isMain ? <li>{edge.node.name}</li> : (<></>)))}
+                {anime.studios.edges.map((edge) => (!edge.isMain ? <li key={edge.node.id} >{edge.node.name}</li> : (<></>)))}
               </ul>
             </div>
             <div className='flex flex-col'>
@@ -262,7 +282,7 @@ const Anime = () => {
             </div>
             <div className='flex flex-col'>
               <div className="font-semibold">Genres</div>
-              <ul>{anime.genres.map((genre) => (<li>{genre}</li>))}</ul>
+              <ul>{anime.genres.map((genre) => (<li key={genre}>{genre}</li>))}</ul>
             </div>
           </Box>
         </Box>
@@ -271,13 +291,13 @@ const Anime = () => {
           <div className='flex flex-col'>
             <div className=' flex gap-4 overflow-x-scroll styled-scrollbars relatedShowsFlex'>
               {(anime.relations.edges.length) ? (
-              anime.relations.edges.map((edge) => (
-                edge.node.type !== "MANGA" ? (
-                  <Link to={`/anime/${edge.node.id}`} key={edge.node.id}>
-                    <AnimeRelations media={edge.node} relationship={edge.relationType} />
-                  </Link>
-                ) : (<></>)
-              ))):(<></>)}
+                anime.relations.edges.map((edge) => (
+                  edge.node.type !== "MANGA" ? (
+                    <Link to={`/anime/${edge.node.id}`} key={edge.node.id}>
+                      <AnimeRelations media={edge.node} relationship={edge.relationType} />
+                    </Link>
+                  ) : (<></>)
+                ))) : (<></>)}
             </div>
             <div className='text-lg sm:text-2xl p-2 relatedShows'>Related Shows</div>
           </div>
@@ -285,11 +305,12 @@ const Anime = () => {
           <div className='flex flex-col '>
             <div className=' flex gap-4 overflow-x-scroll styled-scrollbars relatedShowsFlex'>
               {anime.recommendations.edges.map((edge) => (
+                edge.node.mediaRecommendation ? (
                 edge.node.mediaRecommendation.type !== "MANGA" ? (
                   <Link to={`/anime/${edge.node.mediaRecommendation.id}`} key={edge.node.mediaRecommendation.id}>
                     <AnimeRecommendations media={edge.node.mediaRecommendation} />
                   </Link>
-                ) : (<></>)
+                ) : (<></>)) : (<></>)
               ))}
             </div>
             <div className='text-lg sm:text-2xl p-2 relatedShows'>Recommended Shows</div>

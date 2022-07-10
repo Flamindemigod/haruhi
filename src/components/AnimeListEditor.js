@@ -58,11 +58,6 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
     const [mediaRewatches, setMediaRewatches] = useState(0);
 
     useEffect(() => {
-        console.log(mediaEndDate)
-    }, [mediaEndDate])
-
-
-    useEffect(() => {
         if (mediaListEntry) {
             setMediaStatus(mediaListEntry.status)
             setMediaScore(mediaListEntry.score)
@@ -258,7 +253,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
                     <Button onClick={() => {
                         setOpen(false);
                         saveMediaEntry(mediaID);
-                        setRefresh((prevState) => (prevState + 1));
+                        setRefresh({type: "refresh"});
 
                     }} autoFocus variant="contained">
                         Save
@@ -267,7 +262,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
                         onClick={() => {
                             setOpen(false);
                             deleteMediaEntry(mediaListEntry.id);
-                            setRefresh((prevState) => (prevState + 1));
+                            setRefresh({type: "refresh"});
 
                         }}
                         autoFocus

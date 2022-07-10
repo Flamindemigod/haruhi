@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -6,10 +6,15 @@ import Select from "@mui/material/Select";
 import IconButton from "@mui/material/IconButton";
 import SkipNext from "@mui/icons-material/SkipNext";
 import SkipPrevious from "@mui/icons-material/SkipPrevious";
+import FastForwardIcon from '@mui/icons-material/FastForward';
 import ReactPlayer from 'react-player/lazy';
 import { styled } from '@mui/material/styles';
 import makeQuery from '../misc/makeQuery';
 import { useParams } from 'react-router-dom';
+import { Button } from '@mui/material';
+import screenfull from 'screenfull';
+
+
 //https://stackoverflow.com/questions/45309447/calculating-median-javascript
 function median(values) {
   if (values.length === 0) throw new Error("No inputs");
@@ -128,17 +133,20 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 
 
 const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches }) => {
+
+
   const params = useParams();
   const [episodeLink, setEpisodeLink] = useState("");
   const [episodeToPlay, setEpisodeToPlay] = useState(1);
   const [videoProgress, setVideoProgress] = useState({
     url: null,
     pip: false,
-    playing: true,
+    playing: false,
     controls: false,
     light: false,
     volume: 0.8,
     muted: false,
+    duration: 0,
     played: 0,
     playedSeconds: 0,
     loaded: 0,
@@ -148,6 +156,9 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     loop: false,
   });
   const [videoEnd, setVideoEnd] = useState(false);
+  let videoPlayer = useRef(null)
+  let videoContainer = useRef(null)
+
 
 
   useEffect(() => {
@@ -159,6 +170,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     }
     // eslint-disable-next-line
   }, [mediaId])
+
 
   useEffect(() => {
     const getEpisodeLink = async (idMal, episode) => {
@@ -203,7 +215,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           updateEpisode(mediaId, episodeToPlay, "COMPLETED", mediaListRewatches);
         }
       }
-      else{
+      else {
         updateEpisode(mediaId, episodeToPlay, "CURRENT", mediaListRewatches);
       }
 
@@ -213,23 +225,49 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   return (
     <>{episodeLink ? <>
       <div className='text-2xl p-4'>Streaming</div>
-      <div className="playerWrapper">
+      <div className="playerWrapper  relative" ref={videoContainer}>
         <ReactPlayer
           className="react-player"
           url={episodeLink}
           controls={true}
           pip={true}
+          ref = {videoPlayer}
+          playing = {videoProgress.playing}
+          
           onReady={() => {
             setVideoEnd(false);
           }}
           onProgress={(state) => {
             setVideoProgress({ ...videoProgress, ...state });
           }}
+          onPlay = {()=>{setVideoProgress((state)=>({...state, playing: true}))}}
+          onPause = {()=>{setVideoProgress((state)=>({...state, playing: false}))}}
+          onDuration={(duration)=>{
+            setVideoProgress((state)=>({...state, duration}))
+          }}
           width="100%"
           height="100%"
-        />
+        >
+         </ReactPlayer>
+        <div className='playerControls absolute bottom-28 right-10 ' data-state={!videoProgress.playing ? "visible" : "hidden"}>
+          {/* Play Pause Button */}
+          {/* Elapsed Time / Duration */}
+          {/* Progress Bar */}
+          {/* Volume Mute  Button*/}
+          {/* Volume Slider */}
+          {/* Fullscreen Button */}
+          {/* PiP */}
+          <Button
+          sx={{border:"2px solid", background:"#2e2e2e2e", color: "#eee"}}
+          onClick={()=>{
+            videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + 85)
+          }}>
+            <FastForwardIcon/>
+            +85
+          </Button>
+        </div>
       </div>
-      <div className="playerControls flex flex-row justify-center">
+      <div className="flex flex-row justify-center">
         <IconButton
           sx={{ color: "white" }}
           aria-label="Previous Episode"
@@ -240,9 +278,8 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         >
           <SkipPrevious />
         </IconButton>
-        Playing
         <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel sx={{ color: "white", backgroundColor: "#2e2e2e" }} id="episodeSelectorLabel">Episode</InputLabel>
+          <InputLabel sx={{ color: "white", backgroundColor: "#2e2e2e" }} id="episodeSelectorLabel">Playing Episode</InputLabel>
           <DarkSelect
             MenuProps={{
               PaperProps: {
@@ -258,7 +295,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
             labelId="episodeSelectorLabel"
             id="episodeSelector"
             value={episodeToPlay}
-            label="Age"
+            label="Episode"
             onChange={(e) => {
               setEpisodeToPlay(e.target.value);
             }}
@@ -281,7 +318,8 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           <SkipNext />
         </IconButton>
       </div>
-    </> : <></>}</>
+    </> : <></>
+}</>
   )
 }
 
