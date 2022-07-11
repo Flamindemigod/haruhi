@@ -1,105 +1,54 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import Pagination from '@mui/material/Pagination';
-import PaginationItem from '@mui/material/PaginationItem';
-import { Button } from '@mui/material';
 import { Link } from "react-router-dom"
 import makeQuery from '../misc/makeQuery';
-import LaunchIcon from '@mui/icons-material/Launch';
-import { IconButton } from '@mui/material';
-import {
-  DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
-} from '@mui/x-data-grid';
 import { Box } from '@mui/system';
-import { styled } from '@mui/material';
-const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
-  border: "10px dot red",
-  color:
-    theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.85)',
-  fontFamily: [
-    '-apple-system',
-    'BlinkMacSystemFont',
-    '"Segoe UI"',
-    'Roboto',
-    '"Helvetica Neue"',
-    'Arial',
-    'sans-serif',
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(','),
-  WebkitFontSmoothing: 'auto',
-  letterSpacing: 'normal',
-  '& .MuiDataGrid-columnsContainer': {
-    backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#1d1d1d',
-  },
-  '& .MuiDataGrid-iconSeparator': {
-    display: 'none',
-  },
-  '& .MuiButtonBase-root:not(.Mui-selected)':{
-    color: "#cccd",
-    borderColor:"#cccd"
-  },
-
-  '& .Mui-selected':{
-    color: "var(--clr-primary)",
-    borderColor:"var(--clr-primary)"
-  },
-
-  "& .MuiSvgIcon-root": {
-    color: "white"
-  },
-
-  '& .MuiDataGrid-cell': {
-    color: 'rgba(255,255,255,0.9)',
-  },
-  '& .MuiPaginationItem-root': {
-    borderRadius: 0,
-  },
-}));
-
-function CustomPagination() {
-  const apiRef = useGridApiContext();
-  const page = useGridSelector(apiRef, gridPageSelector);
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-
-  return (
-    <Pagination
-      
-      color="primary"
-      variant="outlined"
-      shape="rounded"
-      page={page + 1}
-      count={pageCount}
-      // @ts-expect-error
-      renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
-      onChange={(event, value) => apiRef.current.setPage(value - 1)}
-    />
-  );
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+const onClickSort = (sort, setter, desc, asc) => {
+  if (sort === asc) {
+    setter(desc)
+  }
+  else if (sort === desc) {
+    setter("UPDATED_TIME_DESC")
+  }
+  else {
+    setter(asc)
+  }
+}
+const renderSwitch = (param, desc, asc) => {
+  switch (param) {
+    case desc:
+      return <ArrowDownwardIcon fontSize="small" />;
+    case asc:
+      return <ArrowUpwardIcon fontSize="small" />;
+    default:
+      return <></>;
+  }
 }
 
-const ListWatching = ({status}) => {
+
+const ListWatching = ({ status }) => {
   let user = useSelector((state) => state.user.value);
   const [animeList, setAnimeList] = useState([])
-  let [rows, setRows] = useState([]);
-  let [columns, setColumns] = useState([]);
+  const [sort, setSort] = useState("UPDATED_TIME_DESC")
+
+
   useEffect(() => {
     const getAnime = async () => {
       var query = `
-            query usersAiringSchedule($perPage: Int = 50, $page: Int = 1, $userName: String, $status:MediaListStatus = CURRENT) {
+            query usersAiringSchedule($perPage: Int = 50, $page: Int = 1, $userName: String, $status:MediaListStatus = CURRENT, $sort:MediaListSort = UPDATED_TIME_DESC) {
                 Page(perPage: $perPage, page: $page) {
                   pageInfo {
                     hasNextPage
                     total
                   }
-                  mediaList(userName: $userName, type: ANIME, status: $status, sort: [UPDATED_TIME_DESC]) {
+                  mediaList(userName: $userName, type: ANIME, status: $status, sort: [$sort]) {
                     media {
                       episodes
                       id
+                      format
                       status
                       siteUrl
                       averageScore
@@ -125,6 +74,7 @@ const ListWatching = ({status}) => {
         page: 0,
         userName: user.userName,
         status: status,
+        sort: sort
       };
 
       const getList = (data) => {
@@ -139,78 +89,44 @@ const ListWatching = ({status}) => {
       };
       let hasNextPage = true
       let airingArrayAccumalated = []
+      setAnimeList([])
+
       let data;
       while (hasNextPage) {
         variables["page"] = variables["page"] + 1
         data = await makeQuery(query, variables).then(getList);
         hasNextPage = data[0];
-        airingArrayAccumalated = airingArrayAccumalated.concat(data[1])
+        setAnimeList((state) => (state.concat(data[1])))
       }
-      setAnimeList(airingArrayAccumalated)
     }
     getAnime();
-  }, [])
+  }, [sort, user])
 
-  useEffect(() => {
-    const _columns = [
-      {
-        field: 'image',
-        sortable: false,
-        headerName: '',
-        width: 150,
-        renderCell: (params) => <img className='object-cover w-full h-full' src={params.row.imgSrc} alt="" />, // renderCell will render the component
-      },
-      { field: 'name', headerName: 'Anime Title', flex: 1, minWidth: 300 },
-      { field: 'status', headerName: 'Status' },
-      { field: 'score', headerName: 'Score' },
-      { field: 'avgScore', headerName: 'Average Score', width:150 },
-      {
-        field: 'progress',
-        headerName: 'Progress',
-      },
-      {
-        field: 'link',
-        headerName: '',
-        sortable: false,
-        renderCell: (params) => (
-          <Link to={`/anime/${params.row.id}`}>
-            <IconButton aria-label="open">
-            <LaunchIcon />
-          </IconButton></Link>
-        ),
-      },
-    ]
-    setColumns(_columns);
-    const createData = (id, name, status, score, avgScore, progress, imgSrc) => {
-      return {
-        imgSrc,
-        id,
-        name,
-        status,
-        score,
-        avgScore,
-        progress
 
-      }
-    }
-    const _rows = animeList.map((anime) => (createData(anime.id, anime.title.userPreferred, anime.status, anime.mediaListEntry.score, anime.averageScore+"%", anime.mediaListEntry.progress, anime.coverImage.large)))
-    setRows(_rows);
-  }, [animeList])
 
   return (
-    <Box sx={{width:"100%", marginInline:"auto"}}>
-      <StyledDataGrid
-      rowHeight={100}
-      pageSize={25}
-      className='styled-scrollbars'
-        autoHeight
-        sx={{ color: "white" }}
-        rows={rows}
-        columns={columns}
-        components={{
-          Pagination: CustomPagination,
-        }}
-      /></Box>
+    <Box className="flex flex-col " sx={{ width: "100%", marginInline: "auto" }}>
+      <div className='flex font-semibold h-32 md:h-16 w-full gap-4 justify-center items-center bg-offWhite-600'>
+        <div className="object-cover h-full w-2/12"></div>
+        <div className="text-sm md:text-lg w-7/12 cursor-pointer" onClick={(event) => { onClickSort(sort, setSort, "MEDIA_TITLE_ROMAJI_DESC", "MEDIA_TITLE_ROMAJI") }}>Title {renderSwitch(sort, "MEDIA_TITLE_ROMAJI_DESC", "MEDIA_TITLE_ROMAJI")}</div>
+        <div onClick={(event) => { onClickSort(sort, setSort, "SCORE_DESC", "SCORE") }} className=" cursor-pointer text-sm md:text-lg w-1/12">Score {renderSwitch(sort, "SCORE_DESC", "SCORE")}</div>
+        <div className="text-sm md:text-lg w-1/12">Type</div>
+        <div onClick={(event) => { onClickSort(sort, setSort, "PROGRESS_DESC", "PROGRESS") }} className=" cursor-pointer text-sm md:text-lg w-1/12" style={{ minWidth: "3rem" }}>Progress {renderSwitch(sort, "PROGRESS_DESC", "PROGRESS")}</div>
+
+
+      </div>
+      {animeList.map((anime) => (
+        <Link to={`/anime/${anime.id}`}>
+          <div className='flex h-32 md:h-16 w-full gap-4 justify-center items-center bg-offWhite-600'>
+            <LazyLoadImage className="object-cover h-full w-2/12" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`}></LazyLoadImage>
+            <div className="text-sm overflow-hidden text-ellipsis md:text-md w-7/12">{anime.title.userPreferred}</div>
+            <div className="text-sm md:text-md w-1/12">{anime.mediaListEntry.score}</div>
+            <div className="text-sm md:text-md w-1/12">{anime.format}</div>
+            <div className="text-sm md:text-md w-1/12" style={{ minWidth: "3rem" }}>{anime.mediaListEntry ? anime.mediaListEntry.progress : 0} {anime.episodes ? `/ ${anime.episodes}` : "+"}</div>
+          </div>
+        </Link>
+      ))}
+    </Box>
   )
 }
 
