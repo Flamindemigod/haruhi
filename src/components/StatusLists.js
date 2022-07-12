@@ -5,6 +5,7 @@ import makeQuery from '../misc/makeQuery';
 import { Box } from '@mui/system';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import SortIcon from '@mui/icons-material/Sort';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 const onClickSort = (sort, setter, desc, asc) => {
   if (sort === asc) {
@@ -24,7 +25,7 @@ const renderSwitch = (param, desc, asc) => {
     case asc:
       return <ArrowUpwardIcon fontSize="small" />;
     default:
-      return <></>;
+      return <SortIcon fontSize='small'/>;
   }
 }
 
@@ -88,7 +89,6 @@ const ListWatching = ({ status }) => {
         return [data.data.Page.pageInfo.hasNextPage, airingArray];
       };
       let hasNextPage = true
-      let airingArrayAccumalated = []
       setAnimeList([])
 
       let data;
@@ -118,7 +118,7 @@ const ListWatching = ({ status }) => {
       {animeList.map((anime) => (
         <Link to={`/anime/${anime.id}`}>
           <div className='flex h-32 md:h-16 w-full gap-4 justify-center items-center bg-offWhite-600'>
-            <LazyLoadImage className="object-cover h-full w-2/12" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`}></LazyLoadImage>
+            <LazyLoadImage className="object-cover  object-top h-full w-2/12" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`}></LazyLoadImage>
             <div className="text-sm overflow-hidden text-ellipsis md:text-md w-7/12">{anime.title.userPreferred}</div>
             <div className="text-sm md:text-md w-1/12">{anime.mediaListEntry.score}</div>
             <div className="text-sm md:text-md w-1/12">{anime.format}</div>
