@@ -1,5 +1,6 @@
 import React from 'react'
 import Countdown, { zeroPad } from "react-countdown";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -20,7 +21,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 const AnimeCard = ({mediaCover, mediaTitle, nextAiringEpisode, timeUntilAiring, episodes, progress}) => {
     return (
         <div className='card relative overflow-hidden'>
-            <img className='object-cover' src={mediaCover} alt={`Cover for ${mediaTitle}`} />
+            <LazyLoadImage className='h-full w-full object-cover' src={mediaCover} alt={`Cover for ${mediaTitle}`} />
             <div className=' absolute top-full text-sm text-white w-full bg-black text-center'>
                 <div>{mediaTitle}</div>
                 {nextAiringEpisode ? (<p className="animeCountdown">
