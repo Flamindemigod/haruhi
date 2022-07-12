@@ -11,7 +11,7 @@ function shuffle(array) {
   let currentIndex = array.length,  randomIndex;
 
   // While there remain elements to shuffle.
-  while (currentIndex != 0) {
+  while (currentIndex !== 0) {
 
     // Pick a remaining element.
     randomIndex = Math.floor(Math.random() * currentIndex);
@@ -41,7 +41,7 @@ const Recommended = () => {
                   hasNextPage
                   total
                 }
-                mediaList(userName: $userName, type: ANIME, sort:[SCORE_DESC]) {
+                mediaList(userName: $userName, type: ANIME, sort:[UPDATED_TIME_DESC]) {
                   progress
                   score
                   media {
@@ -62,6 +62,7 @@ const Recommended = () => {
                             }
                             mediaListEntry{
                               id
+      
                             }
                             
                           }
@@ -87,7 +88,7 @@ const Recommended = () => {
           const recommendationEdges = mediaArray[media].media.recommendations.edges
           for (const edge in recommendationEdges) {
             if (mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation) {
-              RecommendationList = (mediaArray[media].media.recommendations.edges[edge].node.rating > 25) && (!mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation.mediaListEntry) ? [...RecommendationList, mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation] : RecommendationList
+              RecommendationList =(mediaArray[media].media.recommendations.edges[edge].node.rating > 25) && (!mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation.mediaListEntry) ? [...RecommendationList, mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation] : RecommendationList
             }
           }
         }
@@ -101,7 +102,9 @@ const Recommended = () => {
       let data;
       while (hasNextPage) {
         variables["page"] = variables["page"] + 1
-        data = await makeQuery(query, variables).then(getList);
+        data = await makeQuery(query, variables).then((data)=>{
+          return data
+        }).then(getList);
         hasNextPage = data[0];
         airingArrayAccumalated = airingArrayAccumalated.concat(data[1])
         if (airingArrayAccumalated.length >= 20){hasNextPage=false}
@@ -113,7 +116,6 @@ const Recommended = () => {
         return true
     })
     airingArrayAccumalated = shuffle(airingArrayAccumalated)
-
       setAnimeArray(airingArrayAccumalated)
       dispatch(setLoading(false))
 
@@ -125,7 +127,6 @@ const Recommended = () => {
   return (
 
     <><div className='text-2xl font-semibold p-2'>Recommended For You</div>
-
       <div className=' flex flex-row gap-4 p-2  overflow-x-scroll styled-scrollbars'>
         {animeArray.map((media) => (<Link className="cardLink" key={media.id} to={`/anime/${media.id}`}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred} nextAiringEpisode={0} timeUntilAiring={0} episodes={media.episodes} progress={0} /></Link>))}
       </div>

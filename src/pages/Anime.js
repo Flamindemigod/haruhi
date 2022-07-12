@@ -19,7 +19,7 @@ const Anime = () => {
     if (action.type === "Set"){
       return {...action.payload}
     }
-  }, { coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [] });
+  }, { coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [], tags:[] });
 
   const [refresh, setRefresh] = useReducer((state, action)=>{
     switch(action.type){
@@ -101,6 +101,12 @@ const Anime = () => {
           episodes
           status
           genres
+          tags {
+            id
+            name
+            description
+            category
+          }
           mediaListEntry {
             progress
             status
@@ -164,6 +170,7 @@ const Anime = () => {
         }
       }
       
+      
       `;
       const variables = {
         id: params.id,
@@ -225,7 +232,7 @@ const Anime = () => {
       <Box className='flex flex-wrap flex-col md:flex-row p-4 gap-2' >
         {/* sidebar */}
         <Box className='flex flex-col justify-center gap-4' sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
-          <AnimeListEditor mediaListEntry={anime.mediaListEntry} mediaID={anime.id} mediaTitle={anime.title.userPreferred} setRefresh={setRefresh} />
+          <AnimeListEditor mediaListEntry={anime.mediaListEntry} mediaID={anime.id} mediaTitle={anime.title.userPreferred} episodes={anime.episodes} setRefresh={setRefresh} />
           <Box className="flex md:flex-col gap-4 overflow-x-scroll md:overflow-auto styled-scrollbars rounded-xl p-4 bg-offWhite-600" sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
             <div className='flex flex-col '>
               <div className="font-semibold">Format</div>
@@ -262,13 +269,17 @@ const Anime = () => {
             <div className='flex flex-col'>
               <div className="font-semibold">Studios</div>
               <ul>
-                {anime.studios.edges.map((edge) => (edge.isMain ? <li key={edge.node.id}>{edge.node.name}</li> : (<></>)))}
+                {anime.studios.edges.map((edge) => (edge.isMain ? <Link to={`/studio/${edge.node.id}`}>
+                  <li key={edge.node.id}>{edge.node.name}</li>
+                </Link>: (<></>)))}
               </ul>
             </div>
             <div className='flex flex-col'>
               <div className="font-semibold">Producers</div>
               <ul>
-                {anime.studios.edges.map((edge) => (!edge.isMain ? <li key={edge.node.id} >{edge.node.name}</li> : (<></>)))}
+                {anime.studios.edges.map((edge) => (!edge.isMain ? <Link to={`/studio/${edge.node.id}`}>
+                  <li key={edge.node.id} >{edge.node.name}</li>
+                </Link>: (<></>)))}
               </ul>
             </div>
             <div className='flex flex-col'>
@@ -278,6 +289,10 @@ const Anime = () => {
             <div className='flex flex-col'>
               <div className="font-semibold">Genres</div>
               <ul>{anime.genres.map((genre) => (<li key={genre}>{genre}</li>))}</ul>
+            </div>
+            <div className='flex flex-col'>
+              <div className="font-semibold">Tags</div>
+              <ul>{anime.tags.map((tag) => (<li key={tag.id}>{tag.name}</li>))}</ul>
             </div>
           </Box>
         </Box>
@@ -289,7 +304,7 @@ const Anime = () => {
                 anime.relations.edges.map((edge) => (
                   edge.node.type !== "MANGA" ? (
                     <Link to={`/anime/${edge.node.id}`} key={edge.node.id}>
-                      <AnimeRelations media={edge.node} relationship={edge.relationType} />
+                      <AnimeRelations key={edge.node.id} media={edge.node} relationship={edge.relationType} />
                     </Link>
                   ) : (<></>)
                 ))) : (<></>)}
@@ -303,7 +318,7 @@ const Anime = () => {
                 edge.node.mediaRecommendation ? (
                 edge.node.mediaRecommendation.type !== "MANGA" ? (
                   <Link to={`/anime/${edge.node.mediaRecommendation.id}`} key={edge.node.mediaRecommendation.id}>
-                    <AnimeRecommendations media={edge.node.mediaRecommendation} />
+                    <AnimeRecommendations key={edge.node.mediaRecommendation.id} media={edge.node.mediaRecommendation} />
                   </Link>
                 ) : (<></>)) : (<></>)
               ))}
