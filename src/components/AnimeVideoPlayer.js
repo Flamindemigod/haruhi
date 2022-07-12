@@ -249,7 +249,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           height="100%"
         >
          </ReactPlayer>
-        <div className='playerControls absolute bottom-28 right-10 ' data-state={!videoProgress.playing ? "visible" : "hidden"}>
+        <div className='playerControls absolute bottom-2/4 sm:bottom-1/4 right-10 ' data-state={!videoProgress.playing ? "visible" : "hidden"}>
           {/* Play Pause Button */}
           {/* Elapsed Time / Duration */}
           {/* Progress Bar */}

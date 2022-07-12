@@ -18,6 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { styled } from '@mui/material/styles';
 
 
+
 const DarkDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialog-container .MuiPaper-root': {
         color: "white",
@@ -48,7 +49,7 @@ const DarkDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 
-const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) => {
+const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle,episodes, setRefresh }) => {
     const [open, setOpen] = useState(false);
     const [mediaStatus, setMediaStatus] = useState("");
     const [mediaScore, setMediaScore] = useState(0);
@@ -153,7 +154,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
                 maxWidth="md"
                 open={open}
                 disableScrollLock={true}
-                onClose={() => { setOpen(false) }}
+                onClose={() => { setOpen(false); setRefresh({type: "refresh"}); }}
             >
                 <DialogTitle sx={{ position: "relative" }}>
                     {mediaTitle}
@@ -208,7 +209,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, setRefresh }) =>
                         type="number"
                         inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                         onInput={(e) => {
-                            e.target.value = Math.max(0, parseInt(e.target.value))
+                            e.target.value = Math.min(Math.max(0, parseInt(e.target.value)), episodes)
                         }}
                         value={mediaProgress}
                         onChange={(e) => { setMediaProgress(e.target.value) }}
