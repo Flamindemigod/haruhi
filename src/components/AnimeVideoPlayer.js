@@ -10,7 +10,6 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import ReactPlayer from 'react-player/lazy';
 import { styled } from '@mui/material/styles';
 import makeQuery from '../misc/makeQuery';
-import { useParams } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 
