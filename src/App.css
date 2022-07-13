@@ -257,6 +257,18 @@ div.container{
   box-shadow: black 5px 5px 10px;
 };
 
+@media ( hover : none){
+  .cardLink > .card > div:first-of-type{
+    transform: translateY(-100%);
+    --tw-bg-opacity: 0.6;
+    height: 7rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .cardLink:where(:hover, :focus) > .card{
   transform: scale(1.05);
 }

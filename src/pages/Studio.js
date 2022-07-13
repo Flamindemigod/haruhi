@@ -12,7 +12,7 @@ const Studio = () => {
     const params = useParams();
 
     const dispatch = useDispatch();
-    const [onList,setOnList] = useState(false)
+    const [onList,setOnList] = useState(null)
     const [studio, setStudio] = useState({id: 0, name:"", media:{nodes:[]}});
     
     useEffect(() => {
@@ -31,6 +31,18 @@ const Studio = () => {
                         large
                       }
                       episodes
+                      mediaListEntry{
+                        progress
+                      }
+                      airingSchedule {
+                        edges {
+                          node {
+                            airingAt
+                            timeUntilAiring
+                            episode
+                          }
+                        }
+                      }
                       startDate {
                         year
                         month
@@ -50,13 +62,27 @@ const Studio = () => {
             let hasNextPage = true
             let _studio = {};
             let accumalatedMedia = [];
+
+            const getAiring = (media) => {
+              const airingSchedule = media.airingSchedule;
+              delete media.airingSchedule;
+              const nextAiringIndex = airingSchedule.edges.findIndex(
+                (element) => element.node.timeUntilAiring > 0
+            );
+              media["nextAiring"] = airingSchedule.edges[nextAiringIndex];
+              return media
+            }
+            
             while (hasNextPage) {
                 const studioData = await makeQuery(query, variables);
                 _studio = studioData.data.Studio
             document.title = `Haruhi - ${_studio.name}`
 
                 if (studioData.data.Studio.media.nodes.length){
-                    {variables["page"] = variables["page"] + 1}
+                    variables["page"] = variables["page"] + 1
+                    for (const media in studioData.data.Studio.media.nodes){
+                      studioData.data.Studio.media.nodes[media] = getAiring(studioData.data.Studio.media.nodes[media])
+                    }
                     accumalatedMedia = [...accumalatedMedia, ...studioData.data.Studio.media.nodes]
                     setStudio({id: _studio.id, name:_studio.name, media:{nodes:accumalatedMedia}})
                 }
@@ -64,13 +90,13 @@ const Studio = () => {
                     hasNextPage=false
                 }
             }
-
             dispatch(setLoading(false));
 
 
             
         };
         getStudio();
+        //eslint-disable-next-line
     }, [params, onList])
 
 
@@ -79,11 +105,11 @@ const Studio = () => {
         <div className="flex justify-between p-8">
             <h1 className='text-3xl '>{studio.name}</h1>
             <FormGroup>
-                  <FormControlLabel control={<Switch checked={onList} onClick={()=>{setOnList((state)=>(!state))}} />} label="On My List" />
+                  <FormControlLabel control={<Switch checked={onList} onClick={()=>{setOnList((state)=>(state ? null: true))}} />} label="On My List" />
                 </FormGroup>
         </div>
         <div className='flex flex-wrap gap-4'>
-            {studio.media.nodes.map((media)=>(<Link className='cardLink' to={`/anime/${media.id}`}><AnimeCard mediaTitle={media.title.userPreferred} mediaCover={media.coverImage.large}/></Link>))}
+            {studio.media.nodes.map((media)=>(<Link className='cardLink' to={`/anime/${media.id}`}><AnimeCard mediaTitle={media.title.userPreferred} mediaCover={media.coverImage.large} episodes={media.episodes} progress={media.mediaListEntry ? media.mediaListEntry.progress : null} nextAiringEpisode={media.nextAiring ? media.nextAiring.node.episode : 0} timeUntilAiring={media.nextAiring ? media.nextAiring.node.timeUntilAiring : 0}/></Link>))}
         </div>
         </div>
     )
