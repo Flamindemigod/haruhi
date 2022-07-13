@@ -107,10 +107,7 @@ const Anime = () => {
             description
             category
           }
-          mediaListEntry {
-            progress
-            status
-          }
+
           averageScore
           nextAiringEpisode {
             airingAt
@@ -311,7 +308,18 @@ const Anime = () => {
             </div>
             <div className='text-lg sm:text-2xl p-2 relatedShows'>Related Shows</div>
           </div>
-          <AnimeVideoPlayer mediaId={anime.id} mediaMALid={anime.idMal} progress={anime.mediaListEntry} episodes={anime.episodes} nextAiringEpisode={anime.nextAiringEpisode} setVideoEndToast={setVideoEndToast} mediaListStatus={anime.mediaListEntry ? anime.mediaListEntry.status : null} mediaListRewatches={anime.mediaListEntry ? anime.mediaListEntry.repeat : 0} />
+          <AnimeVideoPlayer 
+            mediaId={anime.id} 
+            mediaMALid={anime.idMal} 
+            progress={anime.mediaListEntry} 
+            episodes={anime.episodes} 
+            nextAiringEpisode={anime.nextAiringEpisode} 
+            setVideoEndToast={setVideoEndToast} 
+            mediaListStatus={anime.mediaListEntry ? anime.mediaListEntry.status : null} 
+            mediaListRewatches={anime.mediaListEntry ? anime.mediaListEntry.repeat : 0} 
+            setRefresh={setRefresh}
+          />
+
           <div className='flex flex-col '>
             <div className=' flex gap-4 overflow-x-scroll styled-scrollbars relatedShowsFlex'>
               {anime.recommendations.edges.map((edge) => (

@@ -12,7 +12,6 @@ import { styled } from '@mui/material/styles';
 import makeQuery from '../misc/makeQuery';
 import { useParams } from 'react-router-dom';
 import { Button } from '@mui/material';
-import screenfull from 'screenfull';
 
 
 //https://stackoverflow.com/questions/45309447/calculating-median-javascript
@@ -132,10 +131,9 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 }));
 
 
-const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches }) => {
+const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches, setRefresh }) => {
 
 
-  const params = useParams();
   const [episodeLink, setEpisodeLink] = useState("");
   const [episodeToPlay, setEpisodeToPlay] = useState(1);
   const [videoProgress, setVideoProgress] = useState({
@@ -151,7 +149,6 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     playedSeconds: 0,
     loaded: 0,
     loadedSeconds: 0,
-    duration: 0,
     playbackRate: 1.0,
     loop: false,
   });
@@ -162,7 +159,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
 
 
   useEffect(() => {
-    if (progress) {
+    if (progress && !videoProgress.playing) {
       setEpisodeToPlay(median([1, progress.progress + 1, nextAiringEpisode ? (nextAiringEpisode.episode - 1) : episodes]))
     }
     else {
@@ -218,12 +215,14 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
       else {
         updateEpisode(mediaId, episodeToPlay, "CURRENT", mediaListRewatches);
       }
+      setRefresh({ type: "refresh" });
+
 
     }
     // eslint-disable-next-line
   }, [videoProgress]);
   return (
-    <>{episodeLink ? <>
+    <>
       <div className='text-2xl p-4'>Streaming</div>
       <div className="playerWrapper  relative" ref={videoContainer}>
         <ReactPlayer
@@ -231,24 +230,24 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           url={episodeLink}
           controls={true}
           pip={true}
-          ref = {videoPlayer}
-          playing = {videoProgress.playing}
-          
+          ref={videoPlayer}
+          playing={videoProgress.playing}
+
           onReady={() => {
             setVideoEnd(false);
           }}
           onProgress={(state) => {
             setVideoProgress({ ...videoProgress, ...state });
           }}
-          onPlay = {()=>{setVideoProgress((state)=>({...state, playing: true}))}}
-          onPause = {()=>{setVideoProgress((state)=>({...state, playing: false}))}}
-          onDuration={(duration)=>{
-            setVideoProgress((state)=>({...state, duration}))
+          onPlay={() => { setVideoProgress((state) => ({ ...state, playing: true })) }}
+          onPause={() => { setVideoProgress((state) => ({ ...state, playing: false })) }}
+          onDuration={(duration) => {
+            setVideoProgress((state) => ({ ...state, duration }))
           }}
           width="100%"
           height="100%"
         >
-         </ReactPlayer>
+        </ReactPlayer>
         <div className='playerControls absolute bottom-2/4 sm:bottom-1/4 right-10 ' data-state={!videoProgress.playing ? "visible" : "hidden"}>
           {/* Play Pause Button */}
           {/* Elapsed Time / Duration */}
@@ -258,11 +257,11 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           {/* Fullscreen Button */}
           {/* PiP */}
           <Button
-          sx={{border:"2px solid", background:"#2e2e2e2e", color: "#eee"}}
-          onClick={()=>{
-            videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + 85)
-          }}>
-            <FastForwardIcon/>
+            sx={{ border: "2px solid", background: "#2e2e2e2e", color: "#eee" }}
+            onClick={() => {
+              videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + 85)
+            }}>
+            <FastForwardIcon />
             +85
           </Button>
         </div>
@@ -318,8 +317,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           <SkipNext />
         </IconButton>
       </div>
-    </> : <></>
-}</>
+    </>
   )
 }
 
