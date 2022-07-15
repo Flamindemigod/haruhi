@@ -160,10 +160,10 @@ const Header = () => {
                 >
                     {list()}
                 </StyledDrawer></>):
-                (<nav className='grid grid-cols-3 gap-4 text-xl'>
-                    <NavLink className='' to={"/"}><ButtonBase className=' h-full w-full'>Home</ButtonBase></NavLink>
-                    <NavLink to={"/anime"} className='' ><ButtonBase className='h-full w-full'>Lists</ButtonBase></NavLink>
-                    <NavLink to={"/calender"} className='' >  <ButtonBase className='h-full w-full'>Calender</ButtonBase></NavLink>
+                (<nav className='flex gap-4 text-xl w-3/12 px-14' style={{flexBasis: "100%"}}>
+                    <NavLink className='w-20' to={"/"}><ButtonBase className='px-4 h-full w-full'>Home</ButtonBase></NavLink>
+                    <NavLink to={"/anime"} className='w-20' ><ButtonBase className=' px-4 h-full w-full'>Lists</ButtonBase></NavLink>
+                    <NavLink to={"/calender"} className='w-20' >  <ButtonBase className=' px-4 h-full w-full'>Calender</ButtonBase></NavLink>
                 </nav>)}
                 <div className="h-full p-4 flex gap-4">
                     <SearchAnime />
