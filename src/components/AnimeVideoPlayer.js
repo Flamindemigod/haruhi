@@ -131,10 +131,10 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 
 
 const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches, setRefresh }) => {
-
-
   const [episodeLink, setEpisodeLink] = useState("");
   const [episodeToPlay, setEpisodeToPlay] = useState(1);
+  const [playerReady, setPlayerReady] = useState(false);
+
   const [videoProgress, setVideoProgress] = useState({
     url: null,
     pip: false,
@@ -151,18 +151,20 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     playbackRate: 1.0,
     loop: false,
   });
-  const [videoEnd, setVideoEnd] = useState(false);
+  const [videoEnd, setVideoEnd] = useState(true);
   let videoPlayer = useRef(null)
   let videoContainer = useRef(null)
 
 
 
   useEffect(() => {
-    if (progress && !videoProgress.playing) {
-      setEpisodeToPlay(median([1, progress.progress + 1, nextAiringEpisode ? (nextAiringEpisode.episode - 1) : episodes]))
-    }
-    else {
-      setEpisodeToPlay(1)
+    if (!videoProgress.playing) {
+      if (progress) {
+        setEpisodeToPlay(median([1, progress.progress + 1, nextAiringEpisode ? (nextAiringEpisode.episode - 1) : episodes]))
+      }
+      else {
+        setEpisodeToPlay(1)
+      }
     }
     // eslint-disable-next-line
   }, [mediaId])
@@ -175,12 +177,12 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         40356: "tate-no-yuusha-no-nariagari-season-2",
       }
       let animeID = blacklist[idMal] ? blacklist[idMal] : await getAnimeID(MalTitle).then((data) => {
-        if (data.length) { return data.filter(item => !(item.animeId.includes("dub")))[0].animeId } return ""
+        if (data.length) { return data.filter(item => !(item.animeId.includes("dub")))[0].animeId }
       })
 
 
 
-      const EL = animeID ? await getVideoUrl(animeID, episode).then((data) => { return data.sources[0].file }) : false
+      const EL = animeID ? await getVideoUrl(animeID, episode).then((data) => { return data.sources[0].file }) : ""
       setEpisodeLink(EL)
     }
     getEpisodeLink(mediaMALid, episodeToPlay)
@@ -188,8 +190,9 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   }, [episodeToPlay, mediaId])
 
   useEffect(() => {
-    if (videoProgress.played >= 0.9 && !videoEnd) {
+    if (videoProgress.played >= 0.9 && !videoEnd  && videoProgress.playing) {
       console.log("Video Ended")
+      console.log(videoProgress, videoEnd)
       setVideoEnd(true);
       setVideoEndToast(true);
 
@@ -222,9 +225,10 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   }, [videoProgress]);
   return (
     <>
-      <div className='text-2xl p-4'>Streaming</div>
-      <div className="playerWrapper  relative" ref={videoContainer}>
+      <div className='text-lg sm:text-2xl p-4'>Streaming</div>
+      {episodeLink ? (<div className="playerWrapper relative aspect-video" ref={videoContainer}>
         <ReactPlayer
+          
           className="react-player"
           url={episodeLink}
           controls={true}
@@ -233,12 +237,14 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           playing={videoProgress.playing}
 
           onReady={() => {
+            setVideoProgress({...videoProgress, playing:0})
+            setPlayerReady(true)
             setVideoEnd(false);
           }}
           onProgress={(state) => {
             setVideoProgress({ ...videoProgress, ...state });
           }}
-          onPlay={() => { setVideoProgress((state) => ({ ...state, playing: true })) }}
+          onPlay={() => {setVideoProgress((state) => ({ ...state, playing: true })) }}
           onPause={() => { setVideoProgress((state) => ({ ...state, playing: false })) }}
           onDuration={(duration) => {
             setVideoProgress((state) => ({ ...state, duration }))
@@ -255,22 +261,24 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           {/* Volume Slider */}
           {/* Fullscreen Button */}
           {/* PiP */}
-          <Button
+          {playerReady ? (<Button
             sx={{ border: "2px solid", background: "#2e2e2e2e", color: "#eee" }}
             onClick={() => {
               videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + 85)
             }}>
             <FastForwardIcon />
             +85
-          </Button>
+          </Button>) : (<></>)}
         </div>
-      </div>
+      </div>):(<div>Video is not Currently Avaiable. Try another Episode</div>)}
       <div className="flex flex-row justify-center">
         <IconButton
           sx={{ color: "white" }}
           aria-label="Previous Episode"
           disabled={(episodeToPlay === 1) ? true : false}
           onClick={() => {
+            console.log("Button Pressed")
+            setPlayerReady(false)
             setEpisodeToPlay(episodeToPlay - 1);
           }}
         >
@@ -295,6 +303,8 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
             value={episodeToPlay}
             label="Episode"
             onChange={(e) => {
+              console.log("Button Pressed")
+              setPlayerReady(false)
               setEpisodeToPlay(e.target.value);
             }}
           >
@@ -310,6 +320,8 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           aria-label="Next Episode"
           disabled={episodeToPlay === (nextAiringEpisode ? nextAiringEpisode.episode - 1 : episodes) ? true : false}
           onClick={() => {
+            console.log("Button Pressed")
+            setPlayerReady(false)
             setEpisodeToPlay(episodeToPlay + 1);
           }}
         >
