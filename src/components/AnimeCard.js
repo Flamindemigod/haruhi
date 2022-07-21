@@ -1,6 +1,7 @@
 import React from 'react'
 import Countdown, { zeroPad } from "react-countdown";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { animated, useSpring } from '@react-spring/web'
 
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -19,8 +20,16 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
   };
 
 const AnimeCard = ({mediaCover, mediaTitle, nextAiringEpisode, timeUntilAiring, episodes, progress}) => {
-    return (
-        <div className='card relative overflow-hidden'>
+  const styles = useSpring({
+    from: {
+      opacity: 0
+    },
+    to: {
+      opacity: 1
+    }
+  })  
+  return (
+        <animated.div className='card relative overflow-hidden' style={styles}>
             <LazyLoadImage className='h-full w-full object-cover' src={mediaCover} alt={`Cover for ${mediaTitle}`} />
             <div className=' absolute top-full text-sm text-white w-full bg-black text-center'>
                 <div>{mediaTitle}</div>
@@ -34,7 +43,7 @@ const AnimeCard = ({mediaCover, mediaTitle, nextAiringEpisode, timeUntilAiring, 
             </div>
           {(progress < (nextAiringEpisode-1))? <div className='notification'></div> : <></>}
 
-        </div>
+        </animated.div>
     )
 }
 
