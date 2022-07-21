@@ -132,7 +132,7 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 
 const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches, setRefresh }) => {
   const [episodeLink, setEpisodeLink] = useState("");
-  const [episodeToPlay, setEpisodeToPlay] = useState(1);
+  const [episodeToPlay, setEpisodeToPlay] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
 
   const [videoProgress, setVideoProgress] = useState({
