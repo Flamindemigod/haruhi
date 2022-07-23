@@ -164,7 +164,7 @@ const Anime = () => {
               }
             }
           }
-          characters {
+          characters(sort: ROLE) {
             edges {
               node {
                 id
