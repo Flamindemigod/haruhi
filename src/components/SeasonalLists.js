@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import makeQuery from '../misc/makeQuery'
-import AnimeCard from '../components/AnimeCard';
+import AnimeCard from './AnimeCard';
 import { Link } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 
 
 
-const CalenderLists = ({ season, seasonYear }) => {
+const SeasonalLists = ({ season, seasonYear }) => {
 
   const [seasonalAnime, setSeasonalAnime] = useState([])
   useEffect(() => {
@@ -47,8 +47,8 @@ const CalenderLists = ({ season, seasonYear }) => {
         
 `;
       let variables = {
-        season: season,
-        seasonYear, seasonYear,
+        season,
+        seasonYear,
         page: 1
       };
       let hasNextPage = true
@@ -95,4 +95,4 @@ const CalenderLists = ({ season, seasonYear }) => {
   )
 }
 
-export default CalenderLists
+export default SeasonalLists

@@ -1,4 +1,4 @@
-import CalenderLists from '../components/CalenderLists'
+import SeasonalLists from '../components/SeasonalLists'
 import { useDispatch } from 'react-redux'
 import { setLoading } from '../features/loading'
 import { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import Tab from '@mui/material/Tab';
 
 
 
-const Calender = () => {
+const Seasonal = () => {
 
   const [season, setSeason] = useState("SUMMER");
   const [seasonYear, setSeasonYear] = useState(0);
@@ -65,6 +65,7 @@ const Calender = () => {
   
   const dispatch = useDispatch();
   useEffect(() => {
+    document.title="Haruhi - Seasonal"
     dispatch(setLoading(false))
   }, [])
   return (
@@ -74,11 +75,10 @@ const Calender = () => {
         <Tab wrapped sx={{ "&:not(.Mui-selected)": { color: "#cecece" } , width:"min-content"}} label={`SPRING ${seasonYear}`} value="SPRING" />
         <Tab wrapped sx={{ "&:not(.Mui-selected)": { color: "#cecece" } , width:"min-content"}} label={`SUMMER ${seasonYear}`} value="SUMMER" />
         <Tab wrapped sx={{ "&:not(.Mui-selected)": { color: "#cecece" } , width:"min-content"}} label={`FALL ${seasonYear}`} value="FALL" />
-
       </Tabs>
-      <CalenderLists season={season} seasonYear={season === "WINTER" ? seasonYear + 1 : seasonYear} />
+      <SeasonalLists season={season} seasonYear={season === "WINTER" ? seasonYear + 1 : seasonYear} />
     </>
   )
 }
 
-export default Calender
+export default Seasonal;
