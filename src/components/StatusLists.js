@@ -116,7 +116,7 @@ const ListWatching = ({ status }) => {
 
       </div>
       {animeList.map((anime) => (
-        <Link to={`/anime/${anime.id}`}>
+        <Link to={`/anime/${anime.id}`} className="listLink">
           <div className='flex h-32 md:h-16 w-full gap-4 justify-center items-center bg-offWhite-600'>
             <LazyLoadImage className="object-cover  object-center h-full w-2/12" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`}></LazyLoadImage>
             <div className="text-sm overflow-hidden text-ellipsis md:text-md w-7/12">{anime.title.userPreferred}</div>
