@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const AnimeCharacter = ({ characterEdge }) => {
     return (
         <Card sx={{ minWidth: "25rem", backgroundColor: "rgb(37 37 37)" }}>
-            <Box className='bg-offWhite-600 text-center text-white flex flex-row'>
+            <Box className='bg-offWhite-600 text-center text-white flex flex-row justify-between'>
                 <Link to={`/character/${characterEdge.node.id}`}>
                     <div className="flex">
                         <CardMedia sx={{ width: "5rem", height: "8rem", objectFit: "cover" }} component="img" src={characterEdge.node.image.large} alt={`Character Image for ${characterEdge.node.name}`} />
