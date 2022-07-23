@@ -13,23 +13,24 @@ import IconButton from "@mui/material/IconButton";
 import AnimeRecommendations from '../components/AnimeRecommendations';
 import { Box } from '@mui/material';
 import { useReducer } from 'react';
+import AnimeCharacter from '../components/AnimeCharacter';
 
 const Anime = () => {
-  const [anime, setAnime] = useReducer((state, action)=>{
-    if (action.type === "Set"){
-      return {...action.payload}
+  const [anime, setAnime] = useReducer((state, action) => {
+    if (action.type === "Set") {
+      return { ...action.payload }
     }
-  }, { coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [], tags:[] });
+  }, { coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [], tags: [], characters:{edges: []} });
 
-  const [refresh, setRefresh] = useReducer((state, action)=>{
-    switch(action.type){
+  const [refresh, setRefresh] = useReducer((state, action) => {
+    switch (action.type) {
       case "refresh":
-        return state+1;
+        return state + 1;
       default:
         throw new Error();
     }
 
-  }, 0 );
+  }, 0);
   let [descriptionAfterText, setDescriptionAfterText] = useState("Read More")
   const [videoEndToast, setVideoEndToast] = useState(false)
   let description = createRef()
@@ -107,7 +108,6 @@ const Anime = () => {
             description
             category
           }
-
           averageScore
           nextAiringEpisode {
             airingAt
@@ -164,9 +164,33 @@ const Anime = () => {
               }
             }
           }
+          characters {
+            edges {
+              node {
+                id
+                name {
+      
+                  userPreferred
+                }
+                image {
+                  large
+                }
+              }
+              role
+              voiceActors(language: JAPANESE, sort: ROLE) {
+                id
+                name {
+      
+                  userPreferred
+                }
+                image {
+                  large
+                }
+              }
+            }
+          }
         }
       }
-      
       
       `;
       const variables = {
@@ -174,7 +198,7 @@ const Anime = () => {
       };
       const animeData = await makeQuery(query, variables);
       const data = await animeData.data.Media
-      setAnime({type:"Set", payload: data});
+      setAnime({ type: "Set", payload: data });
 
 
       dispatch(setLoading(false));
@@ -268,7 +292,7 @@ const Anime = () => {
               <ul>
                 {anime.studios.edges.map((edge) => (edge.isMain ? <Link to={`/studio/${edge.node.id}`}>
                   <li key={edge.node.id}>{edge.node.name}</li>
-                </Link>: (<></>)))}
+                </Link> : (<></>)))}
               </ul>
             </div>
             <div className='flex flex-col'>
@@ -276,7 +300,7 @@ const Anime = () => {
               <ul>
                 {anime.studios.edges.map((edge) => (!edge.isMain ? <Link to={`/studio/${edge.node.id}`}>
                   <li key={edge.node.id} >{edge.node.name}</li>
-                </Link>: (<></>)))}
+                </Link> : (<></>)))}
               </ul>
             </div>
             <div className='flex flex-col'>
@@ -295,6 +319,15 @@ const Anime = () => {
         </Box>
         {/* Content */}
         <Box sx={{ flex: "1 1 80%", overflow: "hidden", width: "-webkit-fill-available" }}>
+          <div>
+            <div className='text-lg sm:text-2xl p-2'>
+              Characters
+            </div>
+            <div className="flex gap-4 overflow-x-scroll">
+              {anime.characters.edges.map((edge) => (<AnimeCharacter characterEdge={edge}/>))}
+            </div>
+          </div>
+
           <div className='flex flex-col'>
             <div className=' flex gap-4 overflow-x-scroll styled-scrollbars relatedShowsFlex'>
               {(anime.relations.edges.length) ? (
@@ -308,15 +341,15 @@ const Anime = () => {
             </div>
             <div className='text-lg sm:text-2xl p-2 relatedShows'>Related Shows</div>
           </div>
-          <AnimeVideoPlayer 
-            mediaId={anime.id} 
-            mediaMALid={anime.idMal} 
-            progress={anime.mediaListEntry} 
-            episodes={anime.episodes} 
-            nextAiringEpisode={anime.nextAiringEpisode} 
-            setVideoEndToast={setVideoEndToast} 
-            mediaListStatus={anime.mediaListEntry ? anime.mediaListEntry.status : null} 
-            mediaListRewatches={anime.mediaListEntry ? anime.mediaListEntry.repeat : 0} 
+          <AnimeVideoPlayer
+            mediaId={anime.id}
+            mediaMALid={anime.idMal}
+            progress={anime.mediaListEntry}
+            episodes={anime.episodes}
+            nextAiringEpisode={anime.nextAiringEpisode}
+            setVideoEndToast={setVideoEndToast}
+            mediaListStatus={anime.mediaListEntry ? anime.mediaListEntry.status : null}
+            mediaListRewatches={anime.mediaListEntry ? anime.mediaListEntry.repeat : 0}
             setRefresh={setRefresh}
           />
 
@@ -324,11 +357,11 @@ const Anime = () => {
             <div className=' flex gap-4 overflow-x-scroll styled-scrollbars relatedShowsFlex'>
               {anime.recommendations.edges.map((edge) => (
                 edge.node.mediaRecommendation ? (
-                edge.node.mediaRecommendation.type !== "MANGA" ? (
-                  <Link to={`/anime/${edge.node.mediaRecommendation.id}`} key={edge.node.mediaRecommendation.id}>
-                    <AnimeRecommendations key={edge.node.mediaRecommendation.id} media={edge.node.mediaRecommendation} />
-                  </Link>
-                ) : (<></>)) : (<></>)
+                  edge.node.mediaRecommendation.type !== "MANGA" ? (
+                    <Link to={`/anime/${edge.node.mediaRecommendation.id}`} key={edge.node.mediaRecommendation.id}>
+                      <AnimeRecommendations key={edge.node.mediaRecommendation.id} media={edge.node.mediaRecommendation} />
+                    </Link>
+                  ) : (<></>)) : (<></>)
               ))}
             </div>
             <div className='text-lg sm:text-2xl p-2 relatedShows'>Recommended Shows</div>
