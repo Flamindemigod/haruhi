@@ -44,7 +44,7 @@ const Character = () => {
                 month
                 day
               }
-              media(page: $page, onList: $onList) {
+              media(page: $page, onList: $onList, type: ANIME) {
                 pageInfo {
                   hasNextPage
                 }
@@ -137,7 +137,7 @@ const Character = () => {
                     <div className='text-lg'>{character.name.alternative.map((name) => (`| ${name} |`))}</div>
                 </div>
             </div>
-                <div className='text-md p-8' dangerouslySetInnerHTML={{ __html: character.description.replaceAll("\n", "<br />").replaceAll("~!", "<details><summary>Spoiler Click to Reveal</summary>").replaceAll("!~", "</details>") }}></div>
+                <div className='text-md p-8' dangerouslySetInnerHTML={{ __html: character.description ? character.description.replaceAll("\n", "<br />").replaceAll("~!", "<details><summary>Spoiler Click to Reveal</summary>").replaceAll("!~", "</details>"):"" }}></div>
                 <FormGroup className='p-8 ml-auto w-max'>
                   <FormControlLabel control={<Switch checked={onList} onClick={()=>{setOnList((state)=>(state ? null: true))}} />} label="On My List" />
                 </FormGroup>
