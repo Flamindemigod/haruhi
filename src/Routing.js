@@ -7,6 +7,8 @@ import { Route, Routes } from "react-router-dom";
 import Header from './components/Header';
 import Studio from './pages/Studio';
 import Character from './pages/Character';
+import Staff from './pages/Staff';
+
 const Routing = () => {
     return (
     
@@ -17,7 +19,9 @@ const Routing = () => {
                 <Route path="/anime/:id" element={<Anime />} />
                 <Route path="/studio/:id" element={<Studio />} />
                 <Route path="/character/:id" element={<Character />} />
+                <Route path="/character/:id/:name   " element={<Character />} />
 
+                <Route path="/staff/:id" element={<Staff />} />
                 <Route path="/seasonal" element={<Seasonal  />} />
             </Routes>
         </>
