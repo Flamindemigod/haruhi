@@ -329,3 +329,25 @@ div.container{
 .listLink:hover > *{
   background-color: var(--clr-primary) 600;
 }
+
+.description a{
+  color: var(--clr-primary)
+}
+.description a:hover{
+  text-decoration: underline;
+}
+
+.markdown_spoiler{
+  color:transparent;
+  background-color: #222;
+  transition: color 200ms ease;
+}
+
+.markdown_spoiler:hover{
+  color:white;
+}
+
+.description[data-description-shown=false]{
+  height: 12rem;
+  overflow: hidden
+}
