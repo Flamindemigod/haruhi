@@ -153,7 +153,7 @@ const Staff = () => {
     }, [staff])
     return (
         <div className='p-8'>
-            <div className="flex flex-col sm:flex-row justify-center px-16">
+            <div className="flex flex-col sm:flex-row justify-center sm:px-16">
                 <LazyLoadImage
                     className='h-64 w-48 object-cover self-center sm:self-start mb-8'
                     src={staff.image.large}

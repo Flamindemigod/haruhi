@@ -137,22 +137,24 @@ const Character = () => {
 
   return (
     <div className='p-8'>
-      <div className="flex justify-center">
+      <div className="flex justify-center sm:px-16  sm:flex-row  flex-col">
         <LazyLoadImage
-          className='h-52'
+          className='h-64 w-48 object-cover self-center sm:self-start mb-8'
           src={character.image.large}
           alt={`Character ${character.name.userPreferred}`} />
         <div className="flex flex-col p-4 justify-center">
-          <div className='text-3xl'>{character.name.userPreferred}</div>
-          <div className='text-lg'>{character.name.alternative.map((name) => (`| ${name} |`))}</div>
-        </div>
-      </div>
-      {character.bloodType ? <div className='text-md px-8'><strong>Blood Type:</strong> {character.bloodType}</div> : <></>}
+          <div className='px-8 text-3xl'>{character.name.userPreferred}</div>
+          <div className='px-8 pb-8 text-lg'>{character.name.alternative.map((name) => (`| ${name} |`))}</div>
+          {character.bloodType ? <div className='text-md px-8'><strong>Blood Type:</strong> {character.bloodType}</div> : <></>}
       {character.gender ? <div className='text-md px-8'><strong>Gender:</strong> {character.gender}</div> : <></>}
       {character.dateOfBirth.year || character.dateOfBirth.month || character.dateOfBirth.day ? <div className='text-md px-8'><strong>Date of Birth:</strong> {character.dateOfBirth.day}  {months[character.dateOfBirth.month-1]}   {character.dateOfBirth.year}</div> : <></>}
       {character.age ? <div className='text-md px-8 '><strong>Age:</strong> {character.age}</div> : <></>}
       <div className='text-md px-8 description' ref={description} data-description-shown={showDescription}  dangerouslySetInnerHTML={{ __html: character.description }}></div>
-      {!showDescription ? <button className='hover:underline text-primary-400 hover:text-primary-600' onClick={()=>{setShowDescription(true)}}> Show More</button> : <></>}
+      {!showDescription ? <button className='hover:underline text-primary-400 hover:text-primary-600 mx-auto ' onClick={()=>{setShowDescription(true)}}> Show More</button> : <></>}
+
+        </div>
+
+      </div>
       
       <FormGroup className='p-8 ml-auto w-max'>
         <FormControlLabel control={<Switch checked={onList} onClick={() => { setOnList((state) => (state ? null : true)) }} />} label="On My List" />
