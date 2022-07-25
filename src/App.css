@@ -64,9 +64,9 @@ select {
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
-   scroll-behavior: auto;
+    scroll-behavior: auto;
   }
-  
+
   *,
   *::before,
   *::after {
@@ -77,14 +77,14 @@ select {
   }
 }
 
-:root{
+:root {
   --clr-primary: #42a5f5;
   --clr-secondary: #999;
 }
 
-body{
+body {
   background-color: #2e2e2e;
-  color:white;
+  color: white;
 }
 
 * {
@@ -93,182 +93,196 @@ body{
   /* Foreground, Background */
   scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
 }
+
 *::-webkit-scrollbar {
-  width: 7px; /* Mostly for vertical scrollbars */
-  height: 7px; /* Mostly for horizontal scrollbars */
+  width: 7px;
+  /* Mostly for vertical scrollbars */
+  height: 7px;
+  /* Mostly for horizontal scrollbars */
 }
-*::-webkit-scrollbar-thumb { /* Foreground */
+
+*::-webkit-scrollbar-thumb {
+  /* Foreground */
   background: var(--scrollbar-foreground);
 }
-*::-webkit-scrollbar-track { /* Background */
+
+*::-webkit-scrollbar-track {
+  /* Background */
   background: var(--scrollbar-background);
 }
 
-.margin-inline-auto{
+.margin-inline-auto {
   margin-inline: auto;
 }
 
 
 
 
-.bannerImage{
+.bannerImage {
   grid-column: 1/-1;
   grid-row: 1/-1;
   object-position: center;
 }
 
-.title-card{
+.title-card {
   grid-column: 1/-1;
   grid-row: 2/-1;
 }
 
 @media (min-width: 1024px) {
-  .title-card{
+  .title-card {
     grid-column: 2/5;
   }
 }
 
-.titleDescriptionContainer{
-    margin-block-start: 2rem;
-    margin-inline: auto;
+.titleDescriptionContainer {
+  margin-block-start: 2rem;
+  margin-inline: auto;
 }
 
-.readMore{
-    max-height:10rem;
-    transition: max-height 200ms ease;
-  }
-  .readMore.open{
-    max-height:45rem;
-    
-  }
-
-  .Description{
-    position: relative;
-  }
-  .readMore > .DescriptionInner{
-    overflow: hidden;
-    max-height: 7rem;
-    transition: max-height 200ms ease;
-  }
-  .readMore.open > .DescriptionInner{
-    overflow: hidden;
-    max-height: 45rem;
-  }
-  div.readMore > .before{
-    position:absolute;
-    inset: 0;
-    /* background-color: red; */
-    background: linear-gradient(0deg, #2e2e2e 0%, rgba(255,255,255,0) 100%);
-  }
-.readMore.open > .before{
-    position:absolute;
-    inset: 0;
-    background: transparent;
-  }
-  .after{
-    display: none;
-  }
-
-  .Description.readMore > .after{
-    display: block;
-    position: absolute;
-    overflow: visible;
-    bottom:-5%;
-    left:50%;
-    transform: translate(-50%, 00%);
-    cursor: pointer;
-  }
-
-  .animeDescription.readMore.open > .after{
-    position: absolute;
-    overflow: visible;
-    bottom:0;
-    left:50%;
-    transform: translate(-50%, 100%);
-    cursor: pointer;
-  
-  }
-
-  .relatedShows{
-    order:-1
-  }
-  .relatedShowsFlex:empty + .relatedShows,
-  .relatedShowsFlex:empty{
-    display: none;
-  }
-
-  .relatedShowsFlex:not(:empty) + .relatedShows,
-  .relatedShowsFlex:not(:empty){
-    display: flex;
-  }
-
-  .splashGrid{
-    grid-template-columns: 1fr 2fr;
-    isolation: isolate;
-    height: fit-content;
-    grid-auto-flow: dense;
-    
+.readMore {
+  max-height: 10rem;
+  transition: max-height 200ms ease;
 }
 
-.splashGrid > div:first-of-type{
-    grid-column: 1/1;
-    grid-row: 1/1;
-    justify-self: center;
-    align-self: center;
-    z-index: 1;
-    padding: 2rem;
-}
-.splashGrid > div:last-of-type{
-    
-    grid-column: 1/-1;
-    grid-row: 1/1;
-    justify-self: center;
-    align-self: center;
-    background: linear-gradient(90deg, rgba(9,9,9,0.8) 30%, rgba(255,255,255,0) 100%);
-    width: 100%;
-    height: 100%;
+.readMore.open {
+  max-height: 45rem;
+
 }
 
-.splashGrid > .homeImg{
-    grid-column: 1 / -1;
-    grid-row:1;
-    z-index:-1;
-    height: 30rem;
-    width: 100%;
-    object-fit: cover;
+.Description {
+  position: relative;
 }
 
-.containerHome{
-    margin-inline: auto;
+.readMore>.DescriptionInner {
+  overflow: hidden;
+  max-height: 7rem;
+  transition: max-height 200ms ease;
 }
 
-div.fullscreen{
+.readMore.open>.DescriptionInner {
+  overflow: hidden;
+  max-height: 45rem;
+}
+
+div.readMore>.before {
+  position: absolute;
+  inset: 0;
+  /* background-color: red; */
+  background: linear-gradient(0deg, #2e2e2e 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.readMore.open>.before {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+}
+
+.after {
+  display: none;
+}
+
+.Description.readMore>.after {
+  display: block;
+  position: absolute;
+  overflow: visible;
+  bottom: -5%;
+  left: 50%;
+  transform: translate(-50%, 00%);
+  cursor: pointer;
+}
+
+.animeDescription.readMore.open>.after {
+  position: absolute;
+  overflow: visible;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  cursor: pointer;
+
+}
+
+.relatedShows {
+  order: -1
+}
+
+.relatedShowsFlex:empty+.relatedShows,
+.relatedShowsFlex:empty {
+  display: none;
+}
+
+.relatedShowsFlex:not(:empty)+.relatedShows,
+.relatedShowsFlex:not(:empty) {
+  display: flex;
+}
+
+.splashGrid {
+  grid-template-columns: 1fr 2fr;
+  isolation: isolate;
+  height: fit-content;
+  grid-auto-flow: dense;
+
+}
+
+.splashGrid>div:first-of-type {
+  grid-column: 1/1;
+  grid-row: 1/1;
+  justify-self: center;
+  align-self: center;
+  z-index: 1;
+  padding: 2rem;
+}
+
+.splashGrid>div:last-of-type {
+
+  grid-column: 1/-1;
+  grid-row: 1/1;
+  justify-self: center;
+  align-self: center;
+  background: linear-gradient(90deg, rgba(9, 9, 9, 0.8) 30%, rgba(255, 255, 255, 0) 100%);
+  width: 100%;
+  height: 100%;
+}
+
+.splashGrid>.homeImg {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  z-index: -1;
+  height: 30rem;
+  width: 100%;
+  object-fit: cover;
+}
+
+.containerHome {
+  margin-inline: auto;
+}
+
+div.fullscreen {
   background: url("assets/LoginBG.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
-div.container{
+div.container {
   border-radius: 2rem;
   width: 95%;
   min-width: 300px;
   max-width: 600px;
   box-shadow: black 5px 5px 10px;
-};
-
-
-
-.cardLink:where(:hover, :focus) > .card{
-  transform: scale(1.05);
 }
-.card{
+
+;
+
+
+
+
+
+.cardLink>.card>div:first-of-type {
   transition: transform 200ms ease;
-  transform-origin: bottom center;
 }
 
-
-.cardLink:where(:hover, :focus) > .card > div:first-of-type{
+.cardLink:where(:hover, :focus)>.card>div:first-of-type {
   transform: translateY(-100%);
   --tw-bg-opacity: 0.6;
   height: 7rem;
@@ -277,8 +291,9 @@ div.container{
   align-items: center;
   justify-content: center;
 }
-@media ( hover : none){
-  .cardLink > .card > div:first-of-type{
+
+@media (hover : none) {
+  .cardLink>.card>div:first-of-type {
     transform: translateY(-100%);
     --tw-bg-opacity: 0.6;
     height: 7rem;
@@ -289,65 +304,79 @@ div.container{
   }
 }
 
-.card > div:first-of-type > div{
+.cardLink {
+  transition: transform 200ms ease;
+  transform-origin: bottom center;
+  
+}
+.cardLink:hover, .cardLink:focus {
+  transform: scale(1.05);
+}
+
+
+.card>div:first-of-type>div {
 
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* number of lines to show */
-          line-clamp: 3; 
+  -webkit-line-clamp: 3;
+  /* number of lines to show */
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
 .card {
   height: 14rem;
-  width: 10rem;   
+  width: 10rem;
 }
 
-.notification{
+.notification {
   position: absolute;
-  bottom:0;
-  right:0;
+  bottom: 0;
+  right: 0;
   left: 0;
   height: 0.25rem;
   background: greenyellow;
   box-shadow: 0px 0px 4px greenyellow;
 }
 
-.playerControls, .playerControls[data-state=hidden]{
+.playerControls,
+.playerControls[data-state=hidden] {
   display: none
 }
 
-.playerWrapper:hover .playerControls, .playerControls[data-state=visible]{
+.playerWrapper:hover .playerControls,
+.playerControls[data-state=visible] {
   display: block;
 }
 
-.listLink{
+.listLink {
   transition: transform 200ms ease;
 }
 
-.listLink:hover > *{
+.listLink:hover>* {
   background-color: var(--clr-primary) 600;
 }
 
-.description a{
+.description a {
   color: var(--clr-primary)
 }
-.description a:hover{
+
+.description a:hover {
   text-decoration: underline;
 }
 
-.markdown_spoiler{
-  color:transparent;
+.markdown_spoiler {
+  color: transparent;
   background-color: #222;
   transition: color 200ms ease;
 }
 
-.markdown_spoiler:hover{
-  color:white;
+.markdown_spoiler:hover {
+  color: white;
 }
 
-.description[data-description-shown=false]{
+.description[data-description-shown=false] {
   height: 12rem;
   overflow: hidden
 }
