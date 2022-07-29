@@ -95,7 +95,7 @@ body {
 }
 
 *::-webkit-scrollbar {
-  width: 7px;
+  width: 10px;
   /* Mostly for vertical scrollbars */
   height: 7px;
   /* Mostly for horizontal scrollbars */
@@ -121,8 +121,25 @@ body {
 .bannerImage {
   grid-column: 1/-1;
   grid-row: 1/-1;
-  object-position: center;
+  animation: bannerMove 30s alternate infinite linear;
 }
+
+@media (min-width: 600px) {
+ 
+.bannerImage {
+  animation: bannerMove 20s alternate infinite linear;
+}
+ 
+}
+@keyframes bannerMove{
+  0%{
+    object-position: left top;
+  }
+  100%{
+    object-position: right bottom;
+  }
+}
+
 
 .title-card {
   grid-column: 1/-1;
@@ -217,7 +234,7 @@ div.readMore>.before {
 }
 
 .splashGrid {
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr;
   isolation: isolate;
   height: fit-content;
   grid-auto-flow: dense;
@@ -233,7 +250,7 @@ div.readMore>.before {
   padding: 2rem;
 }
 
-.splashGrid>div:last-of-type {
+.splashGrid>div:nth-of-type(2) {
 
   grid-column: 1/-1;
   grid-row: 1/1;
@@ -251,6 +268,34 @@ div.readMore>.before {
   height: 30rem;
   width: 100%;
   object-fit: cover;
+}
+
+
+.empty{
+display: none; 
+}
+
+.splashGrid > .activity {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  z-index: 1;
+  justify-self: center;
+  align-self: center;
+  height: 30rem;
+overflow-y: scroll;
+}
+
+@media (min-width: 640px) {
+  .splashGrid > .activity {
+    grid-column: 2 / -1;
+    grid-row: 1;
+    z-index: 1;
+    justify-self: center;
+    align-self: center;
+    height: 30rem;
+  overflow-y: scroll;
+  }
+  
 }
 
 .containerHome {
@@ -272,7 +317,6 @@ div.container {
   box-shadow: black 5px 5px 10px;
 }
 
-;
 
 
 
@@ -355,7 +399,7 @@ div.container {
 }
 
 .listLink:hover>* {
-  background-color: var(--clr-primary) 600;
+  background-color: #42a5f5aa;
 }
 
 .description a {
