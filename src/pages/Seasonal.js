@@ -12,8 +12,8 @@ import Tab from '@mui/material/Tab';
 
 const Seasonal = () => {
 
-  const [season, setSeason] = useState("SUMMER");
-  const [seasonYear, setSeasonYear] = useState(0);
+  const [season, setSeason] = useState();
+  const [seasonYear, setSeasonYear] = useState();
   const getCurrentSeason = () => {
     let currentTime = new Date();
     let currentYear = currentTime.getUTCFullYear();
