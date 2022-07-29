@@ -7,6 +7,7 @@ export const userSlice = createSlice({
         value: {
             userAuth: false,
             userName: "",
+            userID: 0,
             userAvatar: "",
             userToken:""
         }
@@ -19,6 +20,7 @@ export const userSlice = createSlice({
             state.value = {
                 userAuth: false,
                 userName: "",
+                userID: 0,
                 userAvatar: "",
                 userToken:""
             };

@@ -36,6 +36,7 @@ function App() {
       dispatch(setUser({
         userAuth: true,
         userName: user.name,
+        userID : user.id,
         userAvatar: user.avatar.medium,
         userToken: getToken()
       }));
