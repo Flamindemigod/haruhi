@@ -11,7 +11,9 @@ import ReactPlayer from 'react-player/lazy';
 import { styled } from '@mui/material/styles';
 import makeQuery from '../misc/makeQuery';
 import { Button } from '@mui/material';
-
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 //https://stackoverflow.com/questions/45309447/calculating-median-javascript
 function median(values) {
@@ -62,7 +64,7 @@ const getVideoUrl = async (title, episode) => {
   }
 
   const req =
-    "https://haruhi-backend.herokuapp.com/vidcdn/watch/" +
+    "https://gogoanime.herokuapp.com/vidcdn/watch/" +
     title +
     "-episode-" +
     episode;
@@ -85,7 +87,7 @@ const getAnimeID = async (title) => {
   }
 
   const req =
-    "https://haruhi-backend.herokuapp.com/search?keyw=" + title;
+    "https://gogoanime.herokuapp.com/search?keyw=" + title;
   const resp = await fetch(req)
     .then(handleResponse)
     .catch(handleError);
@@ -131,10 +133,10 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 
 
 const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches, setRefresh }) => {
-  const [episodeLink, setEpisodeLink] = useState("");
+  const [episodeLink, setEpisodeLink] = useState(null);
   const [episodeToPlay, setEpisodeToPlay] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
-
+  const [isSubbed, setIsSubbed] = useState(false)
   const [videoProgress, setVideoProgress] = useState({
     url: null,
     pip: false,
@@ -175,9 +177,11 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
       const MalTitle = await getMALTitle(idMal);
       const blacklist = {
         40356: "tate-no-yuusha-no-nariagari-season-2",
+        38680: "fruits-basket-2019",
+        47164:"dungeon-ni-deai-wo-motomeru-no-wa-machigatteiru-darou-ka-iv-shin-shou-meikyuu-hen",
       }
       let animeID = blacklist[idMal] ? blacklist[idMal] : await getAnimeID(MalTitle).then((data) => {
-        if (data.length) { return data.filter(item => !(item.animeId.includes("dub")))[0].animeId }
+        if (data.length) { return data.filter(item => (isSubbed ? (item.animeId.includes("dub")) : !(item.animeId.includes("dub"))))[0].animeId }
       })
 
 
@@ -187,7 +191,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     }
     getEpisodeLink(mediaMALid, episodeToPlay)
     // eslint-disable-next-line
-  }, [episodeToPlay, mediaId])
+  }, [episodeToPlay, mediaId, isSubbed])
 
   useEffect(() => {
     if (videoProgress.played >= 0.9 && !videoEnd  && videoProgress.playing) {
@@ -226,7 +230,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   return (
     <>
       <div className='text-lg sm:text-2xl p-4'>Streaming</div>
-      {episodeLink ? (<div className="playerWrapper relative aspect-video" ref={videoContainer}>
+      {episodeLink === null ? <div>Finding Episode</div> : (episodeLink ? (<div className="playerWrapper relative aspect-video" ref={videoContainer}>
         <ReactPlayer
           
           className="react-player"
@@ -270,8 +274,9 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
             +85
           </Button>) : (<></>)}
         </div>
-      </div>):(<div>Video is not Currently Avaiable. Try another Episode</div>)}
-      <div className="flex flex-row justify-center">
+      </div>): <div>Episode Unavailable</div>)}
+
+      <div className="flex flex-row justify-center relative">
         <IconButton
           sx={{ color: "white" }}
           aria-label="Previous Episode"
@@ -327,7 +332,11 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         >
           <SkipNext />
         </IconButton>
+        <FormGroup className='p-8 w-max sm:right-0 sm:top-0 sm:absolute'>
+                <FormControlLabel control={<Switch checked={isSubbed} onClick={() => { setIsSubbed((state) => (!state)) }} />} label={isSubbed ? "Subbed":"Dubbed"} />
+      </FormGroup>
       </div>
+
     </>
   )
 }
