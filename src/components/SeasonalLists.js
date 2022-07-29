@@ -12,7 +12,7 @@ const SeasonalLists = ({ season, seasonYear }) => {
   const [seasonalAnime, setSeasonalAnime] = useState([])
   useEffect(() => {
     const getSeasonal = async () => {
-      const query = `query getSeasonal($season: MediaSeason = SPRING, $seasonYear: Int = 2022, $page:Int=1) {
+      const query = `query getSeasonal($season: MediaSeason, $seasonYear: Int, $page:Int=1) {
         Page(page:$page, perPage:50) {
           pageInfo {
             hasNextPage
