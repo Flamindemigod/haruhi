@@ -9,7 +9,7 @@ import AnimeCard from '../components/AnimeCard';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-
+import { Skeleton } from '@mui/material';
 const Character = () => {
   const params = useParams();
   const dispatch = useDispatch()
@@ -138,10 +138,10 @@ const Character = () => {
   return (
     <div className='p-8'>
       <div className="flex justify-center sm:px-16  sm:flex-row  flex-col">
-        <LazyLoadImage
+        {character.image.large ? <LazyLoadImage
           className='h-64 w-48 object-cover self-center sm:self-start mb-8'
           src={character.image.large}
-          alt={`Character ${character.name.userPreferred}`} />
+          alt={`Character ${character.name.userPreferred}`} />: <Skeleton variant="rectangular" width={192} height={256} />}
         <div className="flex flex-col p-4 justify-center">
           <div className='px-8 text-3xl'>{character.name.userPreferred}</div>
           <div className='px-8 pb-8 text-lg'>{character.name.alternative.map((name) => (`| ${name} |`))}</div>
