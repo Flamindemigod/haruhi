@@ -22,11 +22,13 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 const AnimeCard = ({mediaCover, mediaTitle, nextAiringEpisode, timeUntilAiring, episodes, progress}) => {
   const styles = useSpring({
     from: {
-      opacity: 0
+      opacity: 0,
+      translateY: "50%"
     },
     to: {
-      opacity: 1
-    }
+      opacity: 1,
+      translateY: "0%"
+    },
   })  
   return (
         <animated.div className='card relative overflow-hidden' style={styles}>
