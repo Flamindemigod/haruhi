@@ -9,7 +9,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { animated, useSpring } from '@react-spring/web'
-
+import { Skeleton } from '@mui/material';
 const CharacterMediaCard = ({ characterImage, mediaImage, characterName, characterRole, mediaTitle, mediaID }) => {
     const styles = useSpring({
         from: {
@@ -52,7 +52,7 @@ const Staff = () => {
         },
         languageV2: "",
         image: {
-            large: ""
+            large: null
         },
         description: "",
         characterMedia: [],
@@ -136,6 +136,7 @@ const Staff = () => {
                     variables["page"] = variables["page"] + 1
                 }
                 accumalatedEdges = [...accumalatedEdges, ...staffData.data.Staff.characterMedia.edges]
+                console.log(_staff)
                 setStaff({ ..._staff, characterMedia: accumalatedEdges })
                 dispatch(setLoading(false));
 
@@ -154,12 +155,13 @@ const Staff = () => {
     return (
         <div className='p-8'>
             <div className="flex flex-col sm:flex-row justify-center sm:px-16">
-                <LazyLoadImage
+                {staff.image.large ? <LazyLoadImage
                     className='h-64 w-48 object-cover self-center sm:self-start mb-8'
                     src={staff.image.large}
-                    alt={`staff ${staff.name.userPreferred}`} />
+                    alt={`staff ${staff.name.userPreferred}`} />: <Skeleton variant="rectangular" width={192} height={256} />}
+
                 <div className="flex flex-col px-4 justify-center">
-                    <div className='px-8 text-3xl'>{staff.name.userPreferred}</div>
+                    {<div className='px-8 text-3xl'>{staff.name.userPreferred}</div>} 
                     <div className='px-8 pb-8 text-lg'>{staff.name.alternative.map((name) => (`| ${name} |`))}</div>
 
                     {staff.bloodType ? <div className='text-md px-8'><strong>Blood Type:</strong> {staff.bloodType}</div> : <></>}
