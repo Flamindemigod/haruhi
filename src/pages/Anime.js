@@ -14,13 +14,13 @@ import AnimeRecommendations from '../components/AnimeRecommendations';
 import { Box } from '@mui/material';
 import { useReducer } from 'react';
 import AnimeCharacter from '../components/AnimeCharacter';
-
+import { Helmet } from 'react-helmet';
 const Anime = () => {
   const [anime, setAnime] = useReducer((state, action) => {
     if (action.type === "Set") {
       return { ...action.payload }
     }
-  }, { coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [], tags: [], characters:{edges: []} });
+  }, { coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [], tags: [], characters: { edges: [] } });
 
   const [refresh, setRefresh] = useReducer((state, action) => {
     switch (action.type) {
@@ -207,10 +207,7 @@ const Anime = () => {
     // eslint-disable-next-line
   }, [params.id, refresh]);
 
-  useEffect(() => {
-    document.title = anime.title.userPreferred;
-    // eslint-disable-next-line
-  }, [anime])
+
 
 
 
@@ -235,6 +232,17 @@ const Anime = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{anime.title.userPreferred}</title>
+        <meta name='og:title' content={anime.title.userPreferred} />
+        <meta name='og:description' content={anime.description} />
+        <meta name='description' content={anime.description} />
+
+        <meta content={`http://haruhi.flamindemigod.com/anime/${anime.id}`} property="og:url" />
+        <meta content={`https://img.anili.st/media/${anime.id}`} property="og:image" />
+        <link rel="canonical" href={`http://haruhi.flamindemigod.com/anime/${anime.id}`} />
+        <meta></meta>
+      </Helmet>
       <div className="grid grid-cols-5 grid-rows-2 h-80 w-full">
         {anime.bannerImage ? <img className="bannerImage object-cover h-full w-full" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <></>}
         <div className="flex title-card gap-4 bg-offWhite-800" style={{ "--tw-bg-opacity": 0.6 }}>
@@ -324,7 +332,7 @@ const Anime = () => {
               Characters
             </div>
             <div className="flex gap-4 overflow-x-scroll">
-              {anime.characters.edges.map((edge) => (<AnimeCharacter characterEdge={edge}/>))}
+              {anime.characters.edges.map((edge) => (<AnimeCharacter characterEdge={edge} />))}
             </div>
           </div>
 
