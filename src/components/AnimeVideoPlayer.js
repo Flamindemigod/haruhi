@@ -136,7 +136,9 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   const [episodeLink, setEpisodeLink] = useState(null);
   const [episodeToPlay, setEpisodeToPlay] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
-  const [isSubbed, setIsSubbed] = useState(false)
+  const [isDubbed, setIsDubbed] = useState(false)
+  const [hasDubbed, setHasDubbed] = useState(false)
+
   const [videoProgress, setVideoProgress] = useState({
     url: null,
     pip: false,
@@ -160,15 +162,13 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
 
 
   useEffect(() => {
-    if (!videoProgress.playing) {
       if (progress) {
         setEpisodeToPlay(median([1, progress.progress + 1, nextAiringEpisode ? (nextAiringEpisode.episode - 1) : episodes]))
       }
       else {
         setEpisodeToPlay(1)
       }
-    }
-    // eslint-disable-next-line
+      // eslint-disable-next-line
   }, [mediaId])
 
 
@@ -176,12 +176,30 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     const getEpisodeLink = async (idMal, episode) => {
       const MalTitle = await getMALTitle(idMal);
       const blacklist = {
-        40356: "tate-no-yuusha-no-nariagari-season-2",
-        38680: "fruits-basket-2019",
-        47164:"dungeon-ni-deai-wo-motomeru-no-wa-machigatteiru-darou-ka-iv-shin-shou-meikyuu-hen",
+        40356: ["tate-no-yuusha-no-nariagari-season-2", "tate-no-yuusha-no-nariagari-season-2-dub"],
+        38680: ["fruits-basket-2019", "fruits-basket-2019-dub"],
+        47164: ["dungeon-ni-deai-wo-motomeru-no-wa-machigatteiru-darou-ka-iv-shin-shou-meikyuu-hen"],
       }
-      let animeID = blacklist[idMal] ? blacklist[idMal] : await getAnimeID(MalTitle).then((data) => {
-        if (data.length) { return data.filter(item => (isSubbed ? (item.animeId.includes("dub")) : !(item.animeId.includes("dub"))))[0].animeId }
+      if (blacklist[idMal]){
+        if (blacklist[idMal].length == 2){
+          setHasDubbed(true)
+        }        
+        else{
+          setHasDubbed(false)
+        }
+      }
+      let animeID = blacklist[idMal] ? blacklist[idMal][isDubbed ? 1 : 0] : await getAnimeID(MalTitle)
+      .then((data) => {
+        if (data.length) {
+           const dubbedList = data.filter(item =>(item.animeId.includes("dub")))
+           if (dubbedList.length){
+            setHasDubbed(true)
+           }
+           else(
+            setHasDubbed(false)
+           )
+           return data.filter(item => (isDubbed ? (item.animeId.includes("dub")) : !(item.animeId.includes("dub"))))[0].animeId 
+          }
       })
 
 
@@ -191,10 +209,10 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     }
     getEpisodeLink(mediaMALid, episodeToPlay)
     // eslint-disable-next-line
-  }, [episodeToPlay, mediaId, isSubbed])
+  }, [episodeToPlay, mediaId, isDubbed])
 
   useEffect(() => {
-    if (videoProgress.played >= 0.9 && !videoEnd  && videoProgress.playing) {
+    if (videoProgress.played >= 0.9 && !videoEnd && videoProgress.playing) {
       console.log("Video Ended")
       console.log(videoProgress, videoEnd)
       setVideoEnd(true);
@@ -226,13 +244,13 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
 
     }
     // eslint-disable-next-line
-  }, [videoProgress]);
+  }, [videoProgress.played]);
   return (
     <>
       <div className='text-lg sm:text-2xl p-4'>Streaming</div>
       {episodeLink === null ? <div>Finding Episode</div> : (episodeLink ? (<div className="playerWrapper relative aspect-video" ref={videoContainer}>
         <ReactPlayer
-          
+
           className="react-player"
           url={episodeLink}
           controls={true}
@@ -241,14 +259,14 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           playing={videoProgress.playing}
 
           onReady={() => {
-            setVideoProgress({...videoProgress, playing:0})
+            setVideoProgress({ ...videoProgress, playing: 0 })
             setPlayerReady(true)
             setVideoEnd(false);
           }}
           onProgress={(state) => {
             setVideoProgress({ ...videoProgress, ...state });
           }}
-          onPlay={() => {setVideoProgress((state) => ({ ...state, playing: true })) }}
+          onPlay={() => { setVideoProgress((state) => ({ ...state, playing: true })) }}
           onPause={() => { setVideoProgress((state) => ({ ...state, playing: false })) }}
           onDuration={(duration) => {
             setVideoProgress((state) => ({ ...state, duration }))
@@ -274,7 +292,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
             +85
           </Button>) : (<></>)}
         </div>
-      </div>): <div>Episode Unavailable</div>)}
+      </div>) : <div>Episode Unavailable</div>)}
 
       <div className="flex flex-row justify-center relative">
         <IconButton
@@ -333,8 +351,14 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           <SkipNext />
         </IconButton>
         <FormGroup className='p-8 w-max sm:right-0 sm:top-0 sm:absolute'>
-                <FormControlLabel control={<Switch checked={isSubbed} onClick={() => { setIsSubbed((state) => (!state)) }} />} label={isSubbed ? "Subbed":"Dubbed"} />
-      </FormGroup>
+          <FormControlLabel 
+          control={<Switch
+            checked={isDubbed}
+            disabled={!hasDubbed}
+            onClick={() => { setIsDubbed((state) => (!state)) }} />}
+            label={isDubbed ? "Subbed" : "Dubbed"}
+            sx={{"&  .Mui-disabled.MuiTypography-root":{color:"#acacac"}}} />
+        </FormGroup>
       </div>
 
     </>
