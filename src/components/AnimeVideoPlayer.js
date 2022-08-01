@@ -183,6 +183,8 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   const [isDubbed, setIsDubbed] = useState(false)
   const [hasDubbed, setHasDubbed] = useState(false)
   const [isMuted, setIsMuted] = useState(0)
+  var [timeoutID, setTimoutID] = useState(0)
+
   const [videoProgress, setVideoProgress] = useState({
     url: null,
     pip: false,
@@ -248,14 +250,14 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   }
 
 useEffect(()=>{
-
   document.addEventListener('keyup', keyboardShortcuts);
   document.body.addEventListener("mousemove", function(e) {
-   if (e.movementX || e.movementY)
+   clearTimeout(timeoutID)
+    if (e.movementX || e.movementY)
    {
     setPlayerHidden(false)
    }
-   setTimeout(()=>{setPlayerHidden(true)}, 2000)
+   setTimoutID(setTimeout(()=>{setPlayerHidden(true)}, 5000))
 });
 }, [])
 
@@ -392,6 +394,17 @@ useEffect(()=>{
               onClick={() => { setVideoProgress({ ...videoProgress, playing: !videoProgress.playing }) }}>
               {videoProgress.playing ? <Pause /> : <PlayArrow />}
             </Button>
+            <IconButton
+            sx={{ color: "white" }}
+            aria-label="Next Episode"
+            disabled={episodeToPlay === (nextAiringEpisode ? nextAiringEpisode.episode - 1 : episodes) ? true : false}
+            onClick={() => {
+              setPlayerReady(false)
+              setEpisodeToPlay(episodeToPlay + 1);
+            }}
+          >
+            <SkipNext />
+          </IconButton>
             <div className="my-auto w-24">{formatSeconds(videoProgress.playedSeconds)} / {formatSeconds(videoProgress.duration)}</div>
             {/* Volume Mute  Button*/}
             {/* Volume Slider */}
