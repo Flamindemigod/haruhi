@@ -95,7 +95,7 @@ function timeSince(date) {
             <div className='flex flex-col gap-4 p-4'>
                 {activity.map((data) => (
                     <animated.div className='flex justify-start gap-4 p-4 bg-offWhite-500' style={{"--tw-bg-opacity": "0.6"}}>
-                        <LazyLoadImage src={data.media.coverImage.medium}></LazyLoadImage>
+                        <LazyLoadImage src={data.media.coverImage.medium} className={"object-cover"}></LazyLoadImage>
 
                         <div className="flex flex-col justify-center gap-4">
                             <div className='text-md'>{`${data.user.name} ${data.status} ${data.progress ? data.progress : ""} ${data.progress ? "of" : ""}`} <Link className='text-primary-500 hover:text-primary-300' to={`/anime/${data.media.id}`}> {`${data.media.title.userPreferred}`}</Link></div>
