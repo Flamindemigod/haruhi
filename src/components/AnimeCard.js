@@ -23,9 +23,11 @@ const AnimeCard = ({mediaCover, mediaTitle, nextAiringEpisode, timeUntilAiring, 
   const styles = useSpring({
     from: {
       opacity: 0,
-      translateY: "50%"
+      translateY: "50%",
+      scale: 0
     },
     to: {
+      scale:1,
       opacity: 1,
       translateY: "0%"
     },

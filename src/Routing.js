@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Studio from './pages/Studio';
 import Character from './pages/Character';
 import Staff from './pages/Staff';
+import Footer from './components/Footer';
 
 const Routing = () => {
     return (
@@ -24,6 +25,7 @@ const Routing = () => {
                 <Route path="/staff/:id" element={<Staff />} />
                 <Route path="/seasonal" element={<Seasonal  />} />
             </Routes>
+        <Footer />
         </>
     )
 }
