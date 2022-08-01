@@ -31,7 +31,6 @@ function App() {
 
     makeQuery(query).then((data) => {
       const user = data.data.Viewer;
-      console.log(user)
 
       dispatch(setUser({
         userAuth: true,
@@ -42,11 +41,22 @@ function App() {
       }));
     });
   };
+  const updateUserScoring = async () => {
+    var query = `mutation {
+      UpdateUser(scoreFormat: POINT_10_DECIMAL) {
+        id
+      }
+    }`;
+
+    makeQuery(query)
+  };
   if (!user.userAuth) {
     if (token) {
       getUserDetails();
     }
-  }}, []);
+  }
+  updateUserScoring();
+}, []);
 
   return (
     <Router>
