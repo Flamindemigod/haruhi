@@ -22,31 +22,24 @@ import VolumeMute from '@mui/icons-material/VolumeMute';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import screenfull from 'screenfull';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import PictureInPictureAltIcon from '@mui/icons-material/PictureInPictureAlt';
 import { findDOMNode } from 'react-dom'
-//https://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss/44743686
-function formatSeconds(value, fracDigits) {
-  var isNegative = false;
-  if (isNaN(value)) {
-    return value;
-  } else if (value < 0) {
-    isNegative = true;
-    value = Math.abs(value);
+import { Box } from '@mui/material';
+import _ from "lodash";
+import { useMemo } from 'react';
+function format(seconds) {
+  const date = new Date(seconds * 1000)
+  const hh = date.getUTCHours()
+  const mm = date.getUTCMinutes()
+  const ss = pad(date.getUTCSeconds())
+  if (hh) {
+    return `${hh}:${pad(mm)}:${ss}`
   }
-  var days = Math.floor(value / 86400);
-  value %= 86400;
-  var hours = Math.floor(value / 3600);
-  value %= 3600;
-  var minutes = Math.floor(value / 60);
-  var seconds = (value % 60).toFixed(fracDigits || 0);
-  if (seconds < 10) {
-    seconds = '0' + seconds;
-  }
+  return `${mm}:${ss}`
+}
 
-  var res = hours ? (hours + ':' + ('0' + minutes).slice(-2) + ':' + seconds) : (minutes + ':' + seconds);
-  if (days) {
-    res = days + '.' + res;
-  }
-  return (isNegative ? ('-' + res) : res);
+function pad(string) {
+  return ('0' + string).slice(-2)
 }
 
 //https://stackoverflow.com/questions/45309447/calculating-median-javascript
@@ -183,7 +176,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   const [isDubbed, setIsDubbed] = useState(false)
   const [hasDubbed, setHasDubbed] = useState(false)
   const [isMuted, setIsMuted] = useState(0)
-  var [timeoutID, setTimoutID] = useState(0)
+  var timeoutID = 0;
 
   const [videoProgress, setVideoProgress] = useState({
     url: null,
@@ -206,9 +199,12 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
 
   let videoPlayer = useRef(null)
   let videoContainer = useRef(null)
-
+  const debouncedPlayerControlHandler = useMemo(() => _.throttle((e) => {
+    clearTimeout(timeoutID)
+    setPlayerHidden(false)
+    timeoutID = setTimeout(() => { setPlayerHidden(true) }, 5000)
+  }, 300), [])
   const toggleMute = () => {
-    console.log(isMuted)
     if (isMuted !== 0) {
       setVideoProgress((state) => ({ ...state, volume: isMuted }));
       setIsMuted(0);
@@ -220,46 +216,41 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   }
   const handleClickFullscreen = () => {
     if (screenfull.isFullscreen) {
-
       screenfull.exit(findDOMNode(videoContainer.current))
+      window.screen.orientation.unlock()
     }
     else {
       screenfull.request(findDOMNode(videoContainer.current))
-
+      window.screen.orientation.lock("landscape")
     }
   }
 
   function keyboardShortcuts(event) {
     const { key } = event;
-    switch(key) {
+    switch (key) {
       case 'k':
-        setVideoProgress((state)=>({...state, playing: !state.playing}))
+        setVideoProgress((state) => ({ ...state, playing: !state.playing }))
         break;
       case ' ':
-        setVideoProgress((state)=>({...state, playing: !state.playing}))
+        setVideoProgress((state) => ({ ...state, playing: !state.playing }))
         break;
       case 'm':
-        toggleMute();
+        toggleMute()
         break;
       case 'f':
+        console.log(key)
         handleClickFullscreen();
         break;
       case 'p':
         break;
+      default:
+        break
     }
   }
 
-useEffect(()=>{
-  document.addEventListener('keyup', keyboardShortcuts);
-  document.body.addEventListener("mousemove", function(e) {
-   clearTimeout(timeoutID)
-    if (e.movementX || e.movementY)
-   {
-    setPlayerHidden(false)
-   }
-   setTimoutID(setTimeout(()=>{setPlayerHidden(true)}, 5000))
-});
-}, [])
+  useEffect(() => {
+    document.addEventListener('keyup', keyboardShortcuts, true);
+  }, [])
 
   useEffect(() => {
     if (mediaId) {
@@ -353,18 +344,23 @@ useEffect(()=>{
   return (
     <>
       <div className='text-lg sm:text-2xl p-4'>Streaming</div>
-      {episodeLink === null ? <div>Finding Episode</div> : (episodeLink ? (<div className="playerWrapper relative aspect-video flex" style={{ maxHeight: "100vh" }} ref={videoContainer}>
-        <ReactPlayer
+      {episodeLink === null ? <div>Finding Episode</div> : (episodeLink ? (<div
+        className="playerWrapper relative aspect-video flex"
+        style={{ maxHeight: "100vh" }}
+        ref={videoContainer}
+        onMouseMove={debouncedPlayerControlHandler}
+        onTouchStart={debouncedPlayerControlHandler}>
 
+        <ReactPlayer
           className="react-player"
           url={episodeLink}
           controls={false}
-          pip={true}
+          pip={videoProgress.pip}
           ref={videoPlayer}
           volume={videoProgress.volume}
           playing={videoProgress.playing}
           onReady={() => {
-            setVideoProgress({ ...videoProgress, playing: 0 })
+            setVideoProgress({ ...videoProgress, playing: false })
             setPlayerReady(true)
             setVideoEnd(false);
           }}
@@ -381,51 +377,62 @@ useEffect(()=>{
         >
         </ReactPlayer>
         {playerReady ? <div className='playerControls absolute inset-0' data-state={(!videoProgress.playing || !playerHidden) ? "visible" : "hidden"}>
+          {/* Double Tap to Seek */}
+          <div className='flex w-full h-full flex-grow'>
+            <div className='w-full h-full' onDoubleClick={()=>{videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() - 10)}}></div>
+            <div className='w-full h-full' onDoubleClick={()=>{videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + 10)}}></div>
+          </div>
           {/* Play / Pause Button */}
-          {(<Button className='absolute top-1/2 left-1/2'
-            sx={{ color: "#eee", transform: "translate(-50%, -50%)" }}
+          <Button className='top-1/2 left-1/2'
+            sx={{ position:"absolute", color: "#eee", transform: "translate(-50%, -50%)" }}
             onClick={() => { setVideoProgress({ ...videoProgress, playing: !videoProgress.playing }) }}>
             {videoProgress.playing ? <Pause sx={{ width: 64, height: 64 }} /> : <PlayArrow sx={{ width: 64, height: 64 }} />}
-          </Button>)}
+          </Button>
           {/* Elapsed Time / Duration */}
-          <div className='absolute bottom-0 left-0 right-0 h-8 flex gap-4 justify-around align-center bg-black bg-opacity-50'>
+          <Box className='absolute bottom-0 left-0 right-0 h-16 grid grid-flow-dense justify-around align-center bg-gradient-to-t from-black to-transparent'
+            sx={{ gridTemplateColumns: "0.5fr 0.5fr 1fr 6fr 0.5fr 0.5fr" }} >
+            {/* Progress Bar */}
+            <Box className='w-full mx-auto my-auto relative ' sx={{ gridColumn: "1/-1" }}>
+              <BorderLinearProgress variant="determinate" color='inherit' value={videoProgress.loaded * 100} />
+              <Slider sx={{ position: "absolute", top: "50%", transform: "translateY(-50%)", padding: 0, marginBlock: "auto", "& .MuiSlider-thumb": { width: 16, height: 16 }, "& .MuiSlider-rail": { display: "none" } }} aria-label="Progress" value={videoProgress.played * 100} onChange={(event, newValue) => { setVideoProgress((state) => ({ ...state, played: newValue / 100 })); videoPlayer.current.seekTo(newValue / 100, "fraction") }} />
+
+            </Box>
             <Button className=''
-              sx={{ color: "#eee" }}
+              sx={{ color: "#eee", padding: 0 }}
               onClick={() => { setVideoProgress({ ...videoProgress, playing: !videoProgress.playing }) }}>
               {videoProgress.playing ? <Pause /> : <PlayArrow />}
             </Button>
             <IconButton
-            sx={{ color: "white" }}
-            aria-label="Next Episode"
-            disabled={episodeToPlay === (nextAiringEpisode ? nextAiringEpisode.episode - 1 : episodes) ? true : false}
-            onClick={() => {
-              setPlayerReady(false)
-              setEpisodeToPlay(episodeToPlay + 1);
-            }}
-          >
-            <SkipNext />
-          </IconButton>
-            <div className="my-auto w-24">{formatSeconds(videoProgress.playedSeconds)} / {formatSeconds(videoProgress.duration)}</div>
+              sx={{ color: "white", padding: 0 }}
+              aria-label="Next Episode"
+              disabled={episodeToPlay === (nextAiringEpisode ? nextAiringEpisode.episode - 1 : episodes) ? true : false}
+              onClick={() => {
+                setPlayerReady(false)
+                setEpisodeToPlay(episodeToPlay + 1);
+              }}
+            >
+              <SkipNext />
+            </IconButton>
+            <div className="my-auto p-0 w-24">{format(videoProgress.playedSeconds)} / {format(videoProgress.duration)}</div>
             {/* Volume Mute  Button*/}
             {/* Volume Slider */}
-            <div className="w-36 flex gap-2">
+            <div className="w-16 sm:w-36 p-0 my-auto flex gap-2">
               <div className="" onClick={toggleMute}>{videoProgress.volume >= 0.5 ? <VolumeUp /> : (videoProgress.volume === 0 ? <VolumeMute /> : <VolumeDown />)}</div>
               <Slider valueLabelDisplay="auto" size={"small"} aria-label="Volume" value={parseInt(videoProgress.volume * 100)} onChange={(event, newValue) => { setVideoProgress((state) => ({ ...state, volume: parseInt(newValue) / 100 })) }} />
             </div>
-            {/* Progress Bar */}
-            <div className='w-8/12 my-auto relative'>
-              <BorderLinearProgress variant="determinate" color='inherit' value={videoProgress.loaded * 100} />
-              <Slider sx={{ position: "absolute", top: "50%", padding: 0, marginBlock: "auto", "& .MuiSlider-thumb":{width:16, height:16}, "& .MuiSlider-rail":{display: "none"} }} aria-label="Progress" value={videoProgress.played * 100} onChange={(event, newValue) => { setVideoProgress((state) => ({ ...state, played: newValue / 100 })); videoPlayer.current.seekTo(newValue / 100, "fraction") }} />
+            {/* PiP */}
 
-            </div>
-            <Button sx={{color: "white"}} onClick={handleClickFullscreen}>
-              <FullscreenIcon color='white' />
+            {true ? <Button sx={{ color: "white" }} onClick={() => { setVideoProgress((state) => ({ ...state, pip: !state.pip })) }}>
+              <PictureInPictureAltIcon color='white' />
+            </Button>: <> </>}
+            {/* Fullscreen Button */}
+
+            <Button sx={{ color: "white" }} onClick={handleClickFullscreen}>
+              {screenfull.isFullscreen ? <FullscreenIcon color='white' /> : <FullscreenIcon  />}
             </Button>
-          </div>
+          </Box>
 
 
-          {/* Fullscreen Button */}
-          {/* PiP */}
           <div className="absolute bottom-2/4 sm:bottom-1/4 right-10 ">
             <Button
               sx={{ border: "2px solid", background: "#2e2e2e2e", color: "#eee" }}
