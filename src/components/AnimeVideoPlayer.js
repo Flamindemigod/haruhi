@@ -390,7 +390,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           </Button>
           {/* Elapsed Time / Duration */}
           <Box className='absolute bottom-0 left-0 right-0 h-16 grid grid-flow-dense justify-around align-center bg-gradient-to-t from-black to-transparent'
-            sx={{ gridTemplateColumns: "0.5fr 0.5fr 1fr 6fr 0.5fr 0.5fr" }} >
+            sx={{ gridTemplateColumns: "0.5fr 0.5fr 1fr 8fr 0.5fr 0.5fr" }} >
             {/* Progress Bar */}
             <Box className='w-full mx-auto my-auto relative ' sx={{ gridColumn: "1/-1" }}>
               <BorderLinearProgress variant="determinate" color='inherit' value={videoProgress.loaded * 100} />
@@ -398,7 +398,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
 
             </Box>
             <Button className=''
-              sx={{ color: "#eee", padding: 0 }}
+              sx={{ color: "#eee", padding: "0 0.5rem", minWidth:0}}
               onClick={() => { setVideoProgress({ ...videoProgress, playing: !videoProgress.playing }) }}>
               {videoProgress.playing ? <Pause /> : <PlayArrow />}
             </Button>
@@ -416,13 +416,13 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
             <div className="my-auto p-0 w-24">{format(videoProgress.playedSeconds)} / {format(videoProgress.duration)}</div>
             {/* Volume Mute  Button*/}
             {/* Volume Slider */}
-            <div className="w-16 sm:w-36 p-0 my-auto flex gap-2">
-              <div className="" onClick={toggleMute}>{videoProgress.volume >= 0.5 ? <VolumeUp /> : (videoProgress.volume === 0 ? <VolumeMute /> : <VolumeDown />)}</div>
+            <Box className="p-0 my-auto flex gap-2" sx={{maxWidth:"9rem"}}>
+              <div className="h-full place-self-center" onClick={toggleMute}>{videoProgress.volume >= 0.5 ? <VolumeUp /> : (videoProgress.volume === 0 ? <VolumeMute /> : <VolumeDown />)}</div>
               <Slider valueLabelDisplay="auto" size={"small"} aria-label="Volume" value={parseInt(videoProgress.volume * 100)} onChange={(event, newValue) => { setVideoProgress((state) => ({ ...state, volume: parseInt(newValue) / 100 })) }} />
-            </div>
+            </Box>
             {/* PiP */}
 
-            {true ? <Button sx={{ color: "white" }} onClick={() => { setVideoProgress((state) => ({ ...state, pip: !state.pip })) }}>
+            {document.pictureInPictureEnabled ? <Button sx={{ color: "white" }} onClick={() => { setVideoProgress((state) => ({ ...state, pip: !state.pip })) }}>
               <PictureInPictureAltIcon color='white' />
             </Button>: <> </>}
             {/* Fullscreen Button */}
