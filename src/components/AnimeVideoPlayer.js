@@ -124,7 +124,7 @@ const getAnimeID = async (title) => {
   }
 
   const req =
-    "https://gogoanime.herokuapp.com/search?keyw=" + title;
+    "https://gogoanime.herokuapp.com/search?keyw=" + title.replaceAll("☆", " ").replaceAll("★", " ");
   const resp = await fetch(req)
     .then(handleResponse)
     .catch(handleError);
@@ -276,6 +276,12 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         38475: ["yuru-camp-movie"],
         38474: ["yuru-camp-season-2"],
 
+
+
+
+
+
+
       }
       if (blacklist[idMal]) {
         if (blacklist[idMal].length === 2) {
@@ -413,7 +419,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
             >
               <SkipNext />
             </IconButton>
-            <div className="my-auto p-0 w-24">{format(videoProgress.playedSeconds)} / {format(videoProgress.duration)}</div>
+            <Box className="my-auto px-4 min-w-max">{format(videoProgress.playedSeconds)} / {format(videoProgress.duration)}</Box>
             {/* Volume Mute  Button*/}
             {/* Volume Slider */}
             <Box className="p-0 my-auto flex gap-2" sx={{maxWidth:"9rem"}}>
