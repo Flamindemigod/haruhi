@@ -389,7 +389,6 @@ div.container {
   display: none
 }
 
-.playerWrapper:hover .playerControls,
 .playerControls[data-state=visible] {
   display: block;
 }
