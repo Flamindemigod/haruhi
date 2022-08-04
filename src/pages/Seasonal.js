@@ -23,11 +23,11 @@ const Seasonal = () => {
       setSeasonYear(currentYear)
       setSeason("SPRING")
     }
-    else if (currentMonth >= 4 && currentMonth < 7){
+    else if (currentMonth >= 4 && currentMonth < 8){
       setSeasonYear(currentYear)
       setSeason("SUMMER")
     }
-    else if (currentMonth >= 7 && currentMonth < 10){
+    else if (currentMonth >= 8 && currentMonth < 10){
       setSeasonYear(currentYear)
       setSeason("FALL")
     }
