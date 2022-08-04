@@ -423,3 +423,8 @@ div.container {
   height: 12rem;
   overflow: hidden
 }
+
+button.react-multiple-carousel__arrow{
+  background-color: #42a5f5ee;
+  box-shadow: 0 0 0 3px #42a5f5;
+}
