@@ -127,7 +127,7 @@ const Recommended = () => {
   return (
 
     <><div className='text-2xl font-semibold p-2'>Recommended For You</div>
-      <div className=' flex flex-row gap-4 p-2  overflow-x-scroll styled-scrollbars'>
+      <div className=' flex flex-row gap-4 p-2  overflow-x-auto styled-scrollbars'>
         {animeArray.map((media) => (<Link className="cardLink" key={media.id} to={`/anime/${media.id}`}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred} nextAiringEpisode={0} timeUntilAiring={0} episodes={media.episodes} progress={0} /></Link>))}
       </div>
     </>

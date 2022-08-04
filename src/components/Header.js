@@ -10,7 +10,7 @@ import Logout from '@mui/icons-material/Logout';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { styled, alpha } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchAnime from './SearchAnime';
+import Search from './Search';
 import { SwipeableDrawer, List, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
 import {useMediaQuery} from '@mui/material';
@@ -166,7 +166,7 @@ const Header = () => {
                     <NavLink to={"/seasonal"} className='w-20' >  <ButtonBase className=' px-4 h-full w-full'>Seasonal</ButtonBase></NavLink>
                 </nav>)}
                 <div className="h-full p-4 flex gap-4">
-                    <SearchAnime />
+                    <Search />
                     <Avatar onClick={handleClick} alt={`Avatar of user ${user.userName}`} src={user.userAvatar} />
                 </div>
             </header>
