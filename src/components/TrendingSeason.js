@@ -21,11 +21,11 @@ const TrendingSeason = () => {
       if (currentMonth >= 2 && currentMonth < 4) {
         return ["SPRING", currentYear]
       }
-      else if (currentMonth >= 4 && currentMonth < 7){
+      else if (currentMonth >= 4 && currentMonth < 8){
         return ["SUMMER", currentYear]
         
       }
-      else if (currentMonth >= 7 && currentMonth < 10){
+      else if (currentMonth >= 8 && currentMonth < 10){
         return ["FALL", currentYear]
 
       }
