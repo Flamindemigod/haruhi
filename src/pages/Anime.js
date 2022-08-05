@@ -331,13 +331,13 @@ const Anime = () => {
             <div className='text-lg sm:text-2xl p-2'>
               Characters
             </div>
-            <div className="flex gap-4 overflow-x-scroll">
+            <Box className="grid grid-flow-col grid-rows-2 gap-4 overflow-x-auto" sx={{gridTemplateColumns:"repeat(auto-fill, minMax(25rem, 30rem))"}}>
               {anime.characters.edges.map((edge) => (<AnimeCharacter characterEdge={edge} />))}
-            </div>
+            </Box>
           </div>
 
           <div className='flex flex-col'>
-            <div className=' flex gap-4 overflow-x-scroll styled-scrollbars relatedShowsFlex'>
+            <div className=' flex gap-4 overflow-x-auto styled-scrollbars relatedShowsFlex'>
               {(anime.relations.edges.length) ? (
                 anime.relations.edges.map((edge) => (
                   edge.node.type !== "MANGA" ? (
@@ -362,7 +362,7 @@ const Anime = () => {
           />
 
           <div className='flex flex-col '>
-            <div className=' flex gap-4 overflow-x-scroll styled-scrollbars relatedShowsFlex'>
+            <div className=' flex gap-4 overflow-x-auto styled-scrollbars relatedShowsFlex'>
               {anime.recommendations.edges.map((edge) => (
                 edge.node.mediaRecommendation ? (
                   edge.node.mediaRecommendation.type !== "MANGA" ? (
