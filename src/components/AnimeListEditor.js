@@ -49,7 +49,7 @@ const DarkDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 
-const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle,episodes, setRefresh }) => {
+const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, episodes, setRefresh }) => {
     const [open, setOpen] = useState(false);
     const [mediaStatus, setMediaStatus] = useState("");
     const [mediaScore, setMediaScore] = useState(0);
@@ -154,7 +154,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle,episodes, setRefr
                 maxWidth="md"
                 open={open}
                 disableScrollLock={true}
-                onClose={() => { setOpen(false); setRefresh({type: "refresh"}); }}
+                onClose={() => { setOpen(false); setRefresh({ type: "refresh" }); }}
             >
                 <DialogTitle sx={{ position: "relative" }}>
                     {mediaTitle}
@@ -175,6 +175,17 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle,episodes, setRefr
                     <FormControl sx={{ mt: 1, justifySelf: "center", placeSelf: "center", width: "100%" }}>
                         <InputLabel id="mediaStatuslabel">Status</InputLabel>
                         <Select
+                            MenuProps={{
+                                PaperProps: {
+                                    className: "styled-scrollbars",
+                                    style: {
+                                        width: 100,
+                                        backgroundColor: "#2e2e2e",
+                                        color: 'white'
+                                    },
+                                },
+                                disableScrollLock: true,
+                            }}
                             labelId="mediaStatuslabel"
                             id="mediaStatus"
                             value={mediaStatus}
@@ -254,7 +265,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle,episodes, setRefr
                     <Button onClick={() => {
                         setOpen(false);
                         saveMediaEntry(mediaID);
-                        setRefresh({type: "refresh"});
+                        setRefresh({ type: "refresh" });
 
                     }} autoFocus variant="contained">
                         Save
@@ -263,7 +274,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle,episodes, setRefr
                         onClick={() => {
                             setOpen(false);
                             deleteMediaEntry(mediaListEntry.id);
-                            setRefresh({type: "refresh"});
+                            setRefresh({ type: "refresh" });
 
                         }}
                         autoFocus
