@@ -17,10 +17,10 @@ function App() {
 
   let user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
-  useEffect(()=>{
-  
-  const getUserDetails = async () => {
-    var query = `query {
+  useEffect(() => {
+
+    const getUserDetails = async () => {
+      var query = `query {
                     Viewer {
                         id
                         name
@@ -29,34 +29,37 @@ function App() {
                         }}
                     }`;
 
-    makeQuery(query).then((data) => {
-      const user = data.data.Viewer;
-
-      dispatch(setUser({
-        userAuth: true,
-        userName: user.name,
-        userID : user.id,
-        userAvatar: user.avatar.medium,
-        userToken: getToken()
-      }));
-    });
-  };
-  const updateUserScoring = async () => {
-    var query = `mutation {
+      makeQuery(query).then((data) => {
+        const user = data.data.Viewer;
+        dispatch(setUser({
+          userAuth: true,
+          userName: user.name,
+          userID: user.id,
+          userAvatar: user.avatar.medium,
+          userToken: getToken(),
+          userPreferenceShowEndDialog: JSON.parse(localStorage.getItem("UserPrefShowEndDialog")) ? JSON.parse(localStorage.getItem("UserPrefShowEndDialog")) : true,
+          userPreferenceSkipOpening: localStorage.getItem("UserPrefSkipOpening") ? parseInt(localStorage.getItem("UserPrefSkipOpening")) : 85,
+          userPreferenceDubbed: JSON.parse(localStorage.getItem("UserPrefDubbed")),
+          userPreferenceEpisodeUpdateTreshold: localStorage.getItem("UserPrefEpisodeTreshold") ? parseFloat(localStorage.getItem("UserPrefEpisodeTreshold")) : 0.9,
+        }));
+      });
+    };
+    const updateUserScoring = async () => {
+      var query = `mutation {
       UpdateUser(scoreFormat: POINT_10_DECIMAL) {
         id
       }
     }`;
 
-    makeQuery(query)
-  };
-  if (!user.userAuth) {
-    if (token) {
-      getUserDetails();
+      makeQuery(query)
+    };
+    if (!user.userAuth) {
+      if (token) {
+        getUserDetails();
+      }
     }
-  }
-  updateUserScoring();
-}, []);
+    updateUserScoring();
+  }, []);
 
   return (
     <Router>
@@ -65,7 +68,7 @@ function App() {
       <Routes>
         <Route path="/callback" element={<Callback />} />
       </Routes>
-      
+
     </Router>
   );
 }

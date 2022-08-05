@@ -9,12 +9,21 @@ export const userSlice = createSlice({
             userName: "",
             userID: 0,
             userAvatar: "",
-            userToken:""
+            userToken: "",
+            userPreferenceShowEndDialog: false,
+            userPreferenceSkipOpening: 85,
+            userPreferenceDubbed: false,
+            userPreferenceEpisodeUpdateTreshold: 0.9,
         }
     },
     reducers: {
         setUser: (state, action) => {
-            state.value = action.payload;
+            state.value = { ...state.value, ...action.payload };
+            localStorage.setItem("UserPrefEpisodeTreshold", state.value.userPreferenceEpisodeUpdateTreshold)
+            localStorage.setItem("UserPrefSkipOpening", state.value.userPreferenceSkipOpening)
+            localStorage.setItem("UserPrefShowEndDialog", state.value.userPreferenceShowEndDialog)
+            localStorage.setItem("UserPrefDubbed", state.value.userPreferenceDubbed)
+
         },
         unsetUser: (state, action) => {
             state.value = {
@@ -22,12 +31,21 @@ export const userSlice = createSlice({
                 userName: "",
                 userID: 0,
                 userAvatar: "",
-                userToken:""
+                userToken: "",
+                userPreferenceShowEndDialog: false,
+                userPreferenceSkipOpening: 85,
+                userPreferenceSubbed: false,
+                userPreferenceEpisodeUpdateTreshold: 0.9,
+                
             };
+            localStorage.setItem("UserPrefEpisodeTreshold", state.value.userPreferenceEpisodeUpdateTreshold)
+            localStorage.setItem("UserPrefSkipOpening", state.value.userPreferenceSkipOpening)
+            localStorage.setItem("UserPrefShowEndDialog", state.value.userPreferenceShowEndDialog)
+            localStorage.setItem("UserPrefDubbed", state.value.userPreferenceDubbed)
         },
     }
 });
 
-export const {setUser, unsetUser} = userSlice.actions;
+export const { setUser, unsetUser } = userSlice.actions;
 
 export default userSlice.reducer;
