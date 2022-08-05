@@ -34,7 +34,7 @@ const AnimeCard = ({mediaCover, mediaTitle, nextAiringEpisode, timeUntilAiring, 
   })  
   return (
         <animated.div className='card relative overflow-hidden' style={styles}>
-            <LazyLoadImage className='h-full w-full object-cover' src={mediaCover} alt={`Cover for ${mediaTitle}`} />
+            <LazyLoadImage draggable={false} className='h-full w-full object-cover' src={mediaCover} alt={`Cover for ${mediaTitle}`} />
             <div className=' absolute top-full text-sm text-white w-full bg-black text-center'>
                 <div>{mediaTitle}</div>
                 {nextAiringEpisode ? (<p className="animeCountdown">
