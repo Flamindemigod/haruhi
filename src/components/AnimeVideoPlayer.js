@@ -27,6 +27,9 @@ import { findDOMNode } from 'react-dom'
 import { Box } from '@mui/material';
 import _ from "lodash";
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+
+
 function format(seconds) {
   const date = new Date(seconds * 1000)
   const hh = date.getUTCHours()
@@ -170,6 +173,8 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 
 
 const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches, setRefresh }) => {
+  let user = useSelector((state) => state.user.value);
+  
   const [episodeLink, setEpisodeLink] = useState(null);
   const [episodeToPlay, setEpisodeToPlay] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
@@ -305,7 +310,12 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           }
         })
 
-
+      if (user.userPreferenceSubbed && hasDubbed){
+        setIsDubbed(true)
+      }
+      else{
+        setIsDubbed(false)
+      }
 
       const EL = animeID ? await getVideoUrl(animeID, episode).then((data) => { return data.sources[0].file }) : ""
       setEpisodeLink(EL)
@@ -316,7 +326,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   }, [episodeToPlay, mediaId, isDubbed])
 
   useEffect(() => {
-    if (videoProgress.played >= 0.9 && !videoEnd && videoProgress.playing) {
+    if (videoProgress.played >= user.userPreferenceEpisodeUpdateTreshold && !videoEnd && videoProgress.playing) {
       setVideoEnd(true);
       setVideoEndToast(true);
 
@@ -439,16 +449,16 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           </Box>
 
 
-          <div className="absolute bottom-2/4 sm:bottom-1/4 right-10 ">
+          {user.userPreferenceSkipOpening ? (<div className="absolute bottom-2/4 sm:bottom-1/4 right-10 ">
             <Button
               sx={{ border: "2px solid", background: "#2e2e2e2e", color: "#eee" }}
               onClick={() => {
-                videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + 85)
+                videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + user.userPreferenceSkipOpening)
               }}>
               <FastForwardIcon />
-              +85
+              +{user.userPreferenceSkipOpening}
             </Button>
-          </div>
+          </div>):<></>}
         </div> : (<></>)}
       </div>) : <div>Episode Unavailable</div>)}
 
@@ -513,7 +523,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
               checked={isDubbed}
               disabled={!hasDubbed}
               onClick={() => { setIsDubbed((state) => (!state)) }} />}
-            label={isDubbed ? "Subbed" : "Dubbed"}
+            label={isDubbed ? "Dubbed" : "Subbed"}
             sx={{ "&  .Mui-disabled.MuiTypography-root": { color: "#acacac" } }} />
         </FormGroup>
       </div>
