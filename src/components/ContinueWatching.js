@@ -5,11 +5,52 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from "../features/loading"
 import { Link } from 'react-router-dom';
 import AnimeCard from './AnimeCard';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+
+
 
 const ContinueWatching = () => {
     const dispatch = useDispatch()
     const [animeArray, setAnimeArray] = useState([]);
     let user = useSelector((state) => state.user.value);
+    const responsive = {
+      desktopLarge: {
+        breakpoint: { max: 3000, min: 2000 },
+        items: 11,
+        slidesToSlide: 8 // optional, default to 1.
+      },
+      desktop: {
+        breakpoint: { max: 2000, min: 1500 },
+        items: 7,
+        slidesToSlide: 6 // optional, default to 1.
+      },
+      desktopSmall: {
+        breakpoint: { max: 1500, min: 1100 },
+        items: 5,
+        slidesToSlide: 5 // optional, default to 1.
+      },
+      tabletLarge: {
+        breakpoint: { max: 1100, min: 930 },
+        items: 4,
+        slidesToSlide: 4 // optional, default to 1.
+      },
+      tablet: {
+        breakpoint: { max: 930, min: 740 },
+        items: 3,
+        slidesToSlide: 3 // optional, default to 1.
+      },
+      tabletSmall: {
+        breakpoint: { max: 740, min: 560 },
+        items: 2,
+        slidesToSlide: 2 // optional, default to 1.
+      },
+      mobile: {
+        breakpoint: { max: 560, min:  375 },
+        items: 1,
+        slidesToSlide: 1 // optional, default to 1.
+      }
+    };
 
     useEffect(() => {
         const getCurrentAiring = async () => {
@@ -93,9 +134,14 @@ const ContinueWatching = () => {
 
         <><div className='text-2xl font-semibold p-2'>Continue Watching</div>
 
-            <div className=' flex flex-row gap-4 p-2  overflow-x-auto styled-scrollbars'>
-                {animeArray.map((media) => (<Link className="cardLink" key={media.media.id} to={`/anime/${media.media.id}`}><AnimeCard mediaCover={media.media.coverImage.large} mediaTitle={media.media.title.userPreferred} nextAiringEpisode={media.media.nextAiring ? media.media.nextAiring.node.episode : 0} timeUntilAiring={media.media.nextAiring ? media.media.nextAiring.node.timeUntilAiring : 0} episodes={media.media.episodes} progress={media.progress ? media.progress : 0}/></Link>))}
-            </div>
+            {/* <div className=' flex flex-row gap-4 p-2  overflow-x-auto styled-scrollbars'> */}
+                <Carousel 
+                responsive={responsive} 
+                containerClass="carousel-container"
+                centerMode={true} >
+                {animeArray.map((media) => (<div className='w-40'><Link className="cardLink" key={media.media.id} to={`/anime/${media.media.id}`}><AnimeCard mediaCover={media.media.coverImage.large} mediaTitle={media.media.title.userPreferred} nextAiringEpisode={media.media.nextAiring ? media.media.nextAiring.node.episode : 0} timeUntilAiring={media.media.nextAiring ? media.media.nextAiring.node.timeUntilAiring : 0} episodes={media.media.episodes} progress={media.progress ? media.progress : 0}/></Link></div>))}
+                </Carousel>
+            {/* </div> */}
         </>
     )
 }
