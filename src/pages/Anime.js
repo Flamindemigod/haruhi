@@ -20,7 +20,7 @@ const Anime = () => {
     if (action.type === "Set") {
       return { ...action.payload }
     }
-  }, { coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [], tags: [], characters: { edges: [] } });
+  }, { coverImage: { large: "" }, title: { userPreferred: "", english: "" }, relations: { edges: [] }, mediaListEntry: { score:0, progress: 0, status: "", repeat: 0 }, nextAiringEpisode: { episode: 0 }, recommendations: { edges: [] }, startDate: { year: null, month: null, day: null }, endDate: { year: null, month: null, day: null }, studios: { edges: [] }, source: "", format: "", status: "", season: "", genres: [], tags: [], characters: { edges: [] } });
 
   const [refresh, setRefresh] = useReducer((state, action) => {
     switch (action.type) {
@@ -358,6 +358,7 @@ const Anime = () => {
             setVideoEndToast={setVideoEndToast}
             mediaListStatus={anime.mediaListEntry ? anime.mediaListEntry.status : null}
             mediaListRewatches={anime.mediaListEntry ? anime.mediaListEntry.repeat : 0}
+            mediaListScore={anime.mediaListEntry? anime.mediaListEntry.score : 0}
             setRefresh={setRefresh}
           />
 
