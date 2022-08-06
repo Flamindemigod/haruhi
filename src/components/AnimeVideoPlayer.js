@@ -10,7 +10,7 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import ReactPlayer from 'react-player/lazy';
 import { styled } from '@mui/material/styles';
 import makeQuery from '../misc/makeQuery';
-import { Button } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, Typography, Rating } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -29,6 +29,35 @@ import _ from "lodash";
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
+
+const DarkDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialog-container .MuiPaper-root': {
+      color: "white",
+      backgroundColor: "#2e2e2e",
+      transition: theme.transitions.create([
+          'box-shadow',
+      ]),
+      '& .MuiFormControl-root': {
+          '& .MuiInputLabel-root': {
+              color: "#eee"
+          },
+          "& .MuiInputBase-root": {
+              backgroundColor: "#3e3e3e",
+              color: "white"
+          },
+          "& .MuiSvgIcon-root": {
+              color: "#777"
+          },
+          "& .MuiRating-iconFilled > .MuiSvgIcon-root": {
+              color: "gold",
+          },
+          "& .MuiFormHelperText-root": {
+              color: "#eee"
+          }
+      }
+  }
+
+}));
 
 function format(seconds) {
   const date = new Date(seconds * 1000)
@@ -150,6 +179,20 @@ const updateEpisode = async (id, episode, status, rewatches = 0) => {
   makeQuery(query, variables);
 };
 
+const updateRating = async (id, score) => {
+  const query = `
+              mutation updateEpisode($id: Int=1, $score: Float= 0){
+                SaveMediaListEntry(mediaId: $id, score: $score){
+                  id
+                }
+              }`;
+  const variables = {
+    id: id,
+    score: score
+  };
+  makeQuery(query, variables);
+};
+
 const DarkSelect = styled(Select)(({ theme }) => ({
   '&': {
     position: 'relative',
@@ -172,9 +215,9 @@ const DarkSelect = styled(Select)(({ theme }) => ({
 }));
 
 
-const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches, setRefresh }) => {
+const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches, mediaListScore,setRefresh }) => {
   let user = useSelector((state) => state.user.value);
-  
+  const [mediaScore, setMediaScore] = useState(0);
   const [episodeLink, setEpisodeLink] = useState(null);
   const [episodeToPlay, setEpisodeToPlay] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
@@ -201,10 +244,10 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
   });
   const [videoEnd, setVideoEnd] = useState(true);
   const [playerHidden, setPlayerHidden] = useState(false);
-
+  const [videoEndDialog, setVideoEndDialog] = useState(false)
   let videoPlayer = useRef(null)
   let videoContainer = useRef(null)
-  const debouncedPlayerControlHandler = useMemo(() => _.throttle((e) => {
+  const throttledPlayerControlHandler = useMemo(() => _.throttle((e) => {
     clearTimeout(timeoutID)
     setPlayerHidden(false)
     timeoutID = setTimeout(() => { setPlayerHidden(true) }, 5000)
@@ -310,10 +353,10 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
           }
         })
 
-      if (user.userPreferenceSubbed && hasDubbed){
+      if (user.userPreferenceSubbed && hasDubbed) {
         setIsDubbed(true)
       }
-      else{
+      else {
         setIsDubbed(false)
       }
 
@@ -324,6 +367,12 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     getEpisodeLink(mediaMALid, episodeToPlay)
     // eslint-disable-next-line
   }, [episodeToPlay, mediaId, isDubbed])
+
+  useEffect(() => {
+    if (!videoProgress.playing && videoEnd && (episodeToPlay === episodes) && user.userPreferenceShowEndDialog && !mediaScore) {
+      setVideoEndDialog(true)
+    }
+  }, [videoProgress.played, videoProgress.playing])
 
   useEffect(() => {
     if (videoProgress.played >= user.userPreferenceEpisodeUpdateTreshold && !videoEnd && videoProgress.playing) {
@@ -357,6 +406,8 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
     }
     // eslint-disable-next-line
   }, [videoProgress.played]);
+
+  useEffect(()=>{setMediaScore(mediaListScore)}, [mediaListScore])
   return (
     <>
       <div className='text-lg sm:text-2xl p-4'>Streaming</div>
@@ -364,8 +415,8 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         className="playerWrapper relative aspect-video flex"
         style={{ maxHeight: "100vh" }}
         ref={videoContainer}
-        onMouseMove={debouncedPlayerControlHandler}
-        onTouchStart={debouncedPlayerControlHandler}>
+        onMouseMove={throttledPlayerControlHandler}
+        onTouchStart={throttledPlayerControlHandler}>
 
         <ReactPlayer
           className="react-player"
@@ -395,12 +446,12 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         {playerReady ? <div className='playerControls absolute inset-0' data-state={(!videoProgress.playing || !playerHidden) ? "visible" : "hidden"}>
           {/* Double Tap to Seek */}
           <div className='flex w-full h-full flex-grow'>
-            <div className='w-full h-full' onDoubleClick={()=>{videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() - 10)}}></div>
-            <div className='w-full h-full' onDoubleClick={()=>{videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + 10)}}></div>
+            <div className='w-full h-full' onDoubleClick={() => { videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() - 10) }}></div>
+            <div className='w-full h-full' onDoubleClick={() => { videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + 10) }}></div>
           </div>
           {/* Play / Pause Button */}
           <Button className='top-1/2 left-1/2'
-            sx={{ position:"absolute", color: "#eee", transform: "translate(-50%, -50%)" }}
+            sx={{ position: "absolute", color: "#eee", transform: "translate(-50%, -50%)" }}
             onClick={() => { setVideoProgress({ ...videoProgress, playing: !videoProgress.playing }) }}>
             {videoProgress.playing ? <Pause sx={{ width: 64, height: 64 }} /> : <PlayArrow sx={{ width: 64, height: 64 }} />}
           </Button>
@@ -414,7 +465,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
 
             </Box>
             <Button className=''
-              sx={{ color: "#eee", padding: "0 0.5rem", minWidth:0}}
+              sx={{ color: "#eee", padding: "0 0.5rem", minWidth: 0 }}
               onClick={() => { setVideoProgress({ ...videoProgress, playing: !videoProgress.playing }) }}>
               {videoProgress.playing ? <Pause /> : <PlayArrow />}
             </Button>
@@ -432,7 +483,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
             <Box className="my-auto px-4 min-w-max">{format(videoProgress.playedSeconds)} / {format(videoProgress.duration)}</Box>
             {/* Volume Mute  Button*/}
             {/* Volume Slider */}
-            <Box className="p-0 my-auto flex gap-2" sx={{maxWidth:"9rem"}}>
+            <Box className="p-0 my-auto flex gap-2" sx={{ maxWidth: "9rem" }}>
               <div className="h-full place-self-center" onClick={toggleMute}>{videoProgress.volume >= 0.5 ? <VolumeUp /> : (videoProgress.volume === 0 ? <VolumeMute /> : <VolumeDown />)}</div>
               <Slider valueLabelDisplay="auto" size={"small"} aria-label="Volume" value={parseInt(videoProgress.volume * 100)} onChange={(event, newValue) => { setVideoProgress((state) => ({ ...state, volume: parseInt(newValue) / 100 })) }} />
             </Box>
@@ -440,11 +491,11 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
 
             {document.pictureInPictureEnabled ? <Button sx={{ color: "white" }} onClick={() => { setVideoProgress((state) => ({ ...state, pip: !state.pip })) }}>
               <PictureInPictureAltIcon color='white' />
-            </Button>: <> </>}
+            </Button> : <> </>}
             {/* Fullscreen Button */}
 
             <Button sx={{ color: "white" }} onClick={handleClickFullscreen}>
-              {screenfull.isFullscreen ? <FullscreenIcon color='white' /> : <FullscreenIcon  />}
+              {screenfull.isFullscreen ? <FullscreenIcon color='white' /> : <FullscreenIcon />}
             </Button>
           </Box>
 
@@ -458,7 +509,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
               <FastForwardIcon />
               +{user.userPreferenceSkipOpening}
             </Button>
-          </div>):<></>}
+          </div>) : <></>}
         </div> : (<></>)}
       </div>) : <div>Episode Unavailable</div>)}
 
@@ -527,7 +578,34 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
             sx={{ "&  .Mui-disabled.MuiTypography-root": { color: "#acacac" } }} />
         </FormGroup>
       </div>
-
+      <DarkDialog open={videoEndDialog} onClose={() => { setVideoEndDialog(false) }}>
+        <DialogTitle>
+          Rate Series
+        </DialogTitle>
+        <DialogContent>
+          <Box className='grid'>
+            <div>
+              You've finished watching the series how about rating it?
+              <div className='text-sm'>You can turn off this prompt in the User Prefrences menu</div>
+            </div>
+            <FormControl sx={{ mt: 1, width: "min-content", justifySelf: "center" }}>
+                        <Typography component="legend">Score</Typography>
+                        <Rating
+                            sx={{ width: "min-content" }}
+                            name="mediaRating"
+                            value={mediaScore / 2}
+                            precision={0.5}
+                            defaultValue={0}
+                            onChange={(event, newValue) => {
+                              setMediaScore(newValue * 2);
+                              updateRating(mediaId, newValue*2);
+                              setRefresh({ type: "refresh" });
+                          }}
+                        />
+                    </FormControl>
+          </Box>
+        </DialogContent>
+      </DarkDialog>
     </>
   )
 }
