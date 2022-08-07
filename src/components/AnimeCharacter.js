@@ -27,7 +27,7 @@ const AnimeCharacter = ({ characterEdge }) => {
                             <div className='text-sm'>JAPANESE</div>
 
                         </CardContent>
-                        <CardMedia sx={{ width: "5rem", height: "8rem", objectFit: "cover" }} component="img" src={characterEdge.voiceActors[0].image.large} alt={`Character Image for ${characterEdge.voiceActors[0].name}`} />
+                        <CardMedia sx={{ minWidth: "5rem",width: "5rem", height: "8rem", objectFit: "cover" }} component="img" src={characterEdge.voiceActors[0].image.large} alt={`Character Image for ${characterEdge.voiceActors[0].name}`} />
                     </div>
                     </Link>
                 ) : <div className='w-full h-full bg-offWhite-600 text-white'></div>}
