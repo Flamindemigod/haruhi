@@ -159,7 +159,7 @@ const Character = () => {
       <FormGroup className='p-8 ml-auto w-max'>
         <FormControlLabel control={<Switch checked={onList} onClick={() => { setOnList((state) => (state ? null : true)) }} />} label="On My List" />
       </FormGroup>
-      <div className='flex flex-wrap gap-4'>
+      <div className='flex flex-wrap gap-4 justify-center'>
 
         {character.media.nodes.map((media) => (<Link className='cardLink' to={`/anime/${media.id}`}><AnimeCard mediaTitle={media.title.userPreferred} mediaCover={media.coverImage.large} episodes={media.episodes} progress={media.mediaListEntry ? media.mediaListEntry.progress : null} nextAiringEpisode={media.nextAiring ? media.nextAiring.node.episode : 0} timeUntilAiring={media.nextAiring ? media.nextAiring.node.timeUntilAiring : 0} /></Link>))}
       </div>
