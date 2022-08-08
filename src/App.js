@@ -10,6 +10,7 @@ import makeQuery from "./misc/makeQuery"
 import { useDispatch } from 'react-redux';
 import { setUser } from "./features/user";
 import { useEffect } from "react";
+import ScrollToTop from './components/ScrollToTop';
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <Loader />
       {(token) ? (<Routhing />) : (<Login />)}
       <Routes>
