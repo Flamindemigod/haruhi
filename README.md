@@ -1,4 +1,4 @@
-# **Meet Haruhi**
+# **Meet Haruhi** [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R3E3NZ0)
 
 The open-source anime streaming service made with ReactJS and TailwindCSS. It lets you search, watch animes without any ads with a beautiful ui and with Anilist Integration so you can watch anime without interruptions. It can be self hosted or deployed online.
 
