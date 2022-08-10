@@ -38,10 +38,10 @@ export const userSlice = createSlice({
                 userPreferenceEpisodeUpdateTreshold: 0.9,
                 
             };
-            localStorage.setItem("UserPrefEpisodeTreshold", state.value.userPreferenceEpisodeUpdateTreshold)
-            localStorage.setItem("UserPrefSkipOpening", state.value.userPreferenceSkipOpening)
-            localStorage.setItem("UserPrefShowEndDialog", state.value.userPreferenceShowEndDialog)
-            localStorage.setItem("UserPrefDubbed", state.value.userPreferenceDubbed)
+                localStorage.removeItem("UserPrefEpisodeTreshold");
+                localStorage.removeItem("UserPrefSkipOpening");
+                localStorage.removeItem("UserPrefShowEndDialog");
+                localStorage.removeItem("UserPrefDubbed");
         },
     }
 });
