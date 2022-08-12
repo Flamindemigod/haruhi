@@ -208,7 +208,7 @@ const AdvancedSearchAnime = () => {
                 setGenreWhitelist(values);
               }}
               getOptionLabel={(option) => option}
-              renderInput={(params) => <TextField {...params} label="Genre Blacklist" />}
+              renderInput={(params) => <TextField {...params} label="Genres" />}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
                   <Chip
@@ -254,7 +254,7 @@ const AdvancedSearchAnime = () => {
               options={tagCollection}
               value={tagWhitelist}
               getOptionLabel={(option) => option.name}
-              renderInput={(params) => <TextField {...params} label="Tags Whitelist" />}
+              renderInput={(params) => <TextField {...params} label="Tags" />}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
                   <Chip
