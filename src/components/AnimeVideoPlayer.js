@@ -30,34 +30,6 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 
-const DarkDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialog-container .MuiPaper-root': {
-      color: "white",
-      backgroundColor: "#2e2e2e",
-      transition: theme.transitions.create([
-          'box-shadow',
-      ]),
-      '& .MuiFormControl-root': {
-          '& .MuiInputLabel-root': {
-              color: "#eee"
-          },
-          "& .MuiInputBase-root": {
-              backgroundColor: "#3e3e3e",
-              color: "white"
-          },
-          "& .MuiSvgIcon-root": {
-              color: "#777"
-          },
-          "& .MuiRating-iconFilled > .MuiSvgIcon-root": {
-              color: "gold",
-          },
-          "& .MuiFormHelperText-root": {
-              color: "#eee"
-          }
-      }
-  }
-
-}));
 
 function format(seconds) {
   const date = new Date(seconds * 1000)
@@ -193,26 +165,6 @@ const updateRating = async (id, score) => {
   makeQuery(query, variables);
 };
 
-const DarkSelect = styled(Select)(({ theme }) => ({
-  '&': {
-    position: 'relative',
-    color: "white",
-    backgroundColor: "#2e2e2e",
-    transition: theme.transitions.create([
-      'box-shadow',
-    ]),
-  },
-  "&::before": {
-    borderColor: "#fff",
-  },
-  "&:hover:not(.Mui-disabled):before": {
-    borderColor: "var(--clr-primary)",
-  },
-  '& > .MuiSelect-icon': {
-    color: "white",
-  },
-
-}));
 
 
 const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringEpisode, setVideoEndToast, mediaListStatus, mediaListRewatches, mediaListScore,setRefresh }) => {
@@ -290,6 +242,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         handleClickFullscreen();
         break;
       case 'p':
+        setVideoProgress((state) => ({ ...state, playing: !state.playing }))
         break;
       default:
         break
@@ -413,6 +366,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
       <div className='text-lg sm:text-2xl p-4'>Streaming</div>
       {episodeLink === null ? <div>Finding Episode</div> : (episodeLink ? (<div
         className="playerWrapper relative aspect-video flex"
+        data-state={(!videoProgress.playing || !playerHidden) ? "visible" : "hidden"}
         style={{ maxHeight: "100vh" }}
         ref={videoContainer}
         onMouseMove={throttledPlayerControlHandler}
@@ -502,10 +456,11 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
 
           {user.userPreferenceSkipOpening ? (<div className="absolute bottom-2/4 sm:bottom-1/4 right-10 ">
             <Button
-              sx={{ border: "2px solid", background: "#2e2e2e2e", color: "#eee" }}
               onClick={() => {
                 videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + user.userPreferenceSkipOpening)
-              }}>
+              }}
+              sx={{color: "white", borderColor:"white"}}
+              variant="outlined">
               <FastForwardIcon />
               +{user.userPreferenceSkipOpening}
             </Button>
@@ -516,7 +471,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
       <div className="flex flex-col justify-center relative">
         <div className="flex flex-row justify-center">
           <IconButton
-            sx={{ color: "white" }}
+           
             aria-label="Previous Episode"
             disabled={(episodeToPlay === 1) ? true : false}
             onClick={() => {
@@ -527,17 +482,9 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
             <SkipPrevious />
           </IconButton>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel sx={{ color: "white", backgroundColor: "#2e2e2e" }} id="episodeSelectorLabel">Playing Episode</InputLabel>
-            <DarkSelect
+            <InputLabel id="episodeSelectorLabel">Playing Episode</InputLabel>
+            <Select
               MenuProps={{
-                PaperProps: {
-                  className: "styled-scrollbars",
-                  style: {
-                    width: 100,
-                    backgroundColor: "#2e2e2e",
-                    color: 'white'
-                  },
-                },
                 disableScrollLock: true,
               }}
               labelId="episodeSelectorLabel"
@@ -554,10 +501,9 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
                   <MenuItem key={_episode} value={_episode}>{`${_episode}`}</MenuItem>
                 )
               )}
-            </DarkSelect>
+            </Select>
           </FormControl>
           <IconButton
-            sx={{ color: "white" }}
             aria-label="Next Episode"
             disabled={episodeToPlay === (nextAiringEpisode ? nextAiringEpisode.episode - 1 : episodes) ? true : false}
             onClick={() => {
@@ -574,11 +520,10 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
               checked={isDubbed}
               disabled={!hasDubbed}
               onClick={() => { setIsDubbed((state) => (!state)) }} />}
-            label={isDubbed ? "Dubbed" : "Subbed"}
-            sx={{ "&  .Mui-disabled.MuiTypography-root": { color: "#acacac" } }} />
+            label={isDubbed ? "Dubbed" : "Subbed"}/>
         </FormGroup>
       </div>
-      <DarkDialog open={videoEndDialog} onClose={() => { setVideoEndDialog(false) }}>
+      <Dialog open={videoEndDialog} onClose={() => { setVideoEndDialog(false) }}>
         <DialogTitle>
           Rate Series
         </DialogTitle>
@@ -605,7 +550,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
                     </FormControl>
           </Box>
         </DialogContent>
-      </DarkDialog>
+      </Dialog>
     </>
   )
 }

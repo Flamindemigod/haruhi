@@ -79,7 +79,6 @@ select {
 
 :root {
   --clr-primary: #42a5f5;
-  --clr-secondary: #999;
 }
 
 body {
@@ -384,15 +383,22 @@ div.container {
   box-shadow: 0px 0px 4px greenyellow;
 }
 
-.playerControls,
-.playerControls[data-state=hidden] {
-  display: none;
-  cursor: none;
-}
-
 .playerControls[data-state=visible] {
   display: block;
 }
+.playerControls[data-state=hidden] {
+  display: none;
+}
+
+.playerWrapper[data-state=visible] {
+  cursor: default;
+}
+.playerWrapper[data-state=hidden] {
+  cursor: none;
+}
+
+
+
 
 .listLink {
   transition: transform 200ms ease;
