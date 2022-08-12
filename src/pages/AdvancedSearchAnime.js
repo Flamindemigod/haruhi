@@ -1,4 +1,4 @@
-import { FormControl, InputBase, InputLabel, MenuItem, Select, Box, Autocomplete, TextField, FormControlLabel, Checkbox } from '@mui/material';
+import { FormControl, InputBase, Autocomplete, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import React from 'react'
 import { useEffect } from 'react';
@@ -8,18 +8,14 @@ import { styled, alpha } from '@mui/material/styles';
 import { useState } from 'react';
 import makeQuery from '../misc/makeQuery';
 import Chip from '@mui/material/Chip';
-import { height } from '@mui/system';
 import AnimeCard from '../components/AnimeCard';
 import { Link } from 'react-router-dom';
-import { isImmutableDefault } from '@reduxjs/toolkit';
 
 const SearchInput = styled(InputBase)(({ theme }) => ({
   '&': { width: "100%", height: "100%" },
   '& .MuiInputBase-input': {
     borderRadius: 4,
     position: 'relative',
-    color: "white",
-    backgroundColor: "#414141",
     transition: theme.transitions.create([
       'box-shadow',
     ]),
@@ -36,7 +32,7 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
 
 const AdvancedSearchAnime = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResult, setSearchResult] = useState({media:[]});
+  const [searchResult, setSearchResult] = useState([]);
 
   const [genreWhitelist, setGenreWhitelist] = useState([]);
   const [genreBlacklist, setGenreBlacklist] = useState([]);
@@ -58,8 +54,11 @@ const AdvancedSearchAnime = () => {
 
   useEffect(() => {
     const getSearchResults = async () => {
-      const query = `query Search(${searchQuery ? "$searchQuery: String" : ""}, $sort:[MediaSort] = [POPULARITY_DESC], ${season ?"$season:MediaSeason":""}, ${seasonYear ? "$seasonYear:Int":""}, ${status?"$status:MediaStatus":""}, $isAdult:Boolean = false, ${format?"$format:MediaFormat":""}, ${genreWhitelist.length ? "$genreIn:[String]" : ""},${genreBlacklist.length ? "$genreNotIn:[String]" : ""}, ${tagWhitelist.length ? "$tagIn:[String]":""},${tagBlacklist.length ? "$tagNotIn:[String]":""}, ${onList ? "$onList: Boolean":""} ) {
-        Page(perPage: 25) {
+      const query = `query Search($page:Int, ${searchQuery ? "$searchQuery: String" : ""}, $sort:[MediaSort] = [POPULARITY_DESC], ${season ?"$season:MediaSeason":""}, ${seasonYear ? "$seasonYear:Int":""}, ${status?"$status:MediaStatus":""}, $isAdult:Boolean = false, ${format?"$format:MediaFormat":""}, ${genreWhitelist.length ? "$genreIn:[String]" : ""},${genreBlacklist.length ? "$genreNotIn:[String]" : ""}, ${tagWhitelist.length ? "$tagIn:[String]":""},${tagBlacklist.length ? "$tagNotIn:[String]":""}, ${onList ? "$onList: Boolean":""} ) {
+        Page(perPage: 25, page:$page) {
+          pageInfo{
+            hasNextPage
+          }
           media(${searchQuery ? "search: $searchQuery" : ""}, type: ANIME, sort: $sort, ${season ? "season: $season":""}, ${seasonYear ? "seasonYear: $seasonYear":""}, ${status ? "status: $status" :""}, isAdult: $isAdult, ${format ? "format: $format": ""}, ${genreWhitelist.length ? "genre_in: $genreIn" : ""},${genreBlacklist.length ? "genre_not_in:$genreNotIn" : ""}, ${tagWhitelist.length?"tag_in:$tagIn":""}, ${tagBlacklist.length ?"tag_not_in:$tagNotIn":""},${onList ? "onList:$onList":""} ) {
             id
             title {
@@ -82,11 +81,25 @@ const AdvancedSearchAnime = () => {
         status,
         format,
         onList,
-        isAdult
+        isAdult,
+        page: 1
 
       };
-      const data = await makeQuery(query, variables);
-      setSearchResult(data.data.Page)
+      let dataArray = []
+      let hasNextPage = true
+
+      while (hasNextPage) {
+        const data = await makeQuery(query, variables);
+        dataArray=[...dataArray, ...data.data.Page.media]
+        if ((!data.data.Page.pageInfo.hasNextPage) || (variables.page === 5)){
+          hasNextPage = false
+        }
+        else{
+          variables.page+=1;
+        }
+      }
+      
+      setSearchResult(dataArray)
     }
     getSearchResults();
   }, [searchQuery, genreWhitelist, genreBlacklist, tagWhitelist, tagBlacklist, season, seasonYear, format, status, onList, isAdult])
@@ -131,7 +144,7 @@ const AdvancedSearchAnime = () => {
       <div className='flex flex-col w-11/12 mx-auto p-8'>
         <div className='flex w-11/12 mx-auto py-8 items-center'>
           <SearchInput sx={{"input": {height: "5rem", fontSize:"2rem"}}} placeholder="Search..." variant='standard' onChange={(e) => { setSearchQuery(e.target.value) }} ></SearchInput>
-          <Search sx={{ color: '#fff', mr: 1, my: 0.5 }} />
+          <Search sx={{  mr: 1, my: 0.5 }} />
         </div>
         <div className='flex flex-wrap'>
                     
@@ -223,7 +236,7 @@ const AdvancedSearchAnime = () => {
                 value.map((option, index) => (
                   <Chip
                     label={option}
-                    color="error"
+                    color="secondary"
                     {...getTagProps({ index })}
                   />
                 ))
@@ -268,10 +281,10 @@ const AdvancedSearchAnime = () => {
                 value.map((option, index) => (
                   <Chip
                     label={option.name}
-                    color="primary"
+                    color="secondary"
                     {...getTagProps({ index })}
                   />
-                ))
+                ))  
               }
               onChange={(event, values)=>{setTagBlacklist(values)}}
             ></Autocomplete>
@@ -289,7 +302,7 @@ const AdvancedSearchAnime = () => {
         </div>
       </div>
       
-      <div className='flex flex-wrap justify-center gap-4'>{searchResult.media.map((media)=>(<Link className='cardLink' to={`/anime/${media.id}`} key={media.id}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred} /></Link>))}</div>
+      <div className='flex flex-wrap justify-center gap-4'>{searchResult.map((media)=>(<Link className='cardLink' to={`/anime/${media.id}`} key={media.id}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred} /></Link>))}</div>
     </>
   )
 }

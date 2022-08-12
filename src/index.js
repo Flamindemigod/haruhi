@@ -19,6 +19,12 @@ const store = configureStore({
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
+    primary: {
+      main: "#42A5F5",
+    },
+    secondary: {
+      main: "#ca006b",
+    },
   },
 }); 
 
