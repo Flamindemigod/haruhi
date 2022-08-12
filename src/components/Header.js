@@ -82,7 +82,7 @@ const Header = () => {
     )
     return (
         <>
-            <header className='flex justify-around dark:bg-offWhite-700 dark:text-white'>
+            <header className='flex justify-between dark:bg-offWhite-700 dark:text-white'>
                 {!matches ? (<><IconButton
                     color="inherit"
                     aria-label="open drawer"

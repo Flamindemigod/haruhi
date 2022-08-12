@@ -19,7 +19,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
     }
   };
 
-const AnimeCard = ({mediaCover, mediaTitle, nextAiringEpisode, timeUntilAiring, episodes, progress}) => {
+const AnimeCard = ({mediaCover, mediaTitle, nextAiringEpisode, timeUntilAiring, episodes, progress, mediaListStatus}) => {
   const styles = useSpring({
     from: {
       opacity: 0,
@@ -46,13 +46,22 @@ const AnimeCard = ({mediaCover, mediaTitle, nextAiringEpisode, timeUntilAiring, 
           </p>) : (<></>)}
             </div>
           {(progress < (nextAiringEpisode-1))? <div className='notification'></div> : <></>}
+          {(mediaListStatus === "CURRENT")? <div className='mediaListNotification current'></div> : <></>}
+          {(mediaListStatus === "PAUSED")? <div className='mediaListNotification paused'></div> : <></>}
+          {(mediaListStatus === "COMPLETED")? <div className='mediaListNotification completed'></div> : <></>}
+          {(mediaListStatus === "DROPPED")? <div className='mediaListNotification dropped'></div> : <></>}
+          {(mediaListStatus === "PLANNING")? <div className='mediaListNotification planning'></div> : <></>}
+
+
+
+
 
         </animated.div>
     )
 }
 
 AnimeCard.defaultProps = {
-    mediaCover:"", mediaTitle:"", nextAiringEpisode:0, timeUntilAiring:0, episodes:0, progress:0
+    mediaCover:"", mediaTitle:"", nextAiringEpisode:0, timeUntilAiring:0, episodes:0, progress:0, mediaListStatus:""
 }
 
 export default AnimeCard

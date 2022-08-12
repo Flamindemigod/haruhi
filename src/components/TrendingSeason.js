@@ -92,6 +92,9 @@ const TrendingSeason = () => {
                   coverImage{
                     large
                   }
+                  mediaListEntry{
+                    status
+                  }
                   airingSchedule {
                     edges {
                       node {
@@ -150,7 +153,7 @@ const TrendingSeason = () => {
         responsive={responsive}
         containerClass="carousel-container"
         centerMode={true} >
-        {animeArray.map((media) => (<div className="w-40"><Link className="cardLink" key={media.id} to={`/anime/${media.id}`}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred}  /></Link></div>))}
+        {animeArray.map((media) => (<div className="w-40"><Link className="cardLink" key={media.id} to={`/anime/${media.id}`}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred} mediaListStatus={media.mediaListEntry ? media.mediaListEntry.status : null} /></Link></div>))}
       </Carousel>
       {/* </div> */}
     </>

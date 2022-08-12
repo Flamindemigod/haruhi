@@ -435,3 +435,31 @@ button.react-multiple-carousel__arrow{
   background-color: #42a5f5ee;
   box-shadow: 0 0 0 3px #42a5f5;
 }
+
+.mediaListNotification{
+  position: absolute;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  bottom:0.5rem;
+  left: 0.5rem;
+  -webkit-box-shadow: 2px 2px 21px 4px rgba(0,0,0,0.63); 
+box-shadow: 2px 2px 21px 4px rgba(0,0,0,0.63);
+}
+
+.mediaListNotification.current{
+  background-color: #42a5f5;
+}
+
+.mediaListNotification.planning{
+  background-color: #f79a63;
+}
+.mediaListNotification.paused{
+  background-color: #fa7a7a;
+}
+.mediaListNotification.completed{
+  background-color: #7bd555;
+}
+.mediaListNotification.dropped{
+  background-color: #e85d75;
+}

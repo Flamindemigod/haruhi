@@ -139,7 +139,7 @@ const ContinueWatching = () => {
                 responsive={responsive} 
                 containerClass="carousel-container"
                 centerMode={true} >
-                {animeArray.map((media) => (<div className='w-40'><Link className="cardLink" key={media.media.id} to={`/anime/${media.media.id}`}><AnimeCard mediaCover={media.media.coverImage.large} mediaTitle={media.media.title.userPreferred} nextAiringEpisode={media.media.nextAiring ? media.media.nextAiring.node.episode : 0} timeUntilAiring={media.media.nextAiring ? media.media.nextAiring.node.timeUntilAiring : 0} episodes={media.media.episodes} progress={media.progress ? media.progress : 0}/></Link></div>))}
+                {animeArray.map((media) => (<div className='w-40'><Link className="cardLink" key={media.media.id} to={`/anime/${media.media.id}`}><AnimeCard mediaCover={media.media.coverImage.large} mediaTitle={media.media.title.userPreferred} nextAiringEpisode={media.media.nextAiring ? media.media.nextAiring.node.episode : 0} timeUntilAiring={media.media.nextAiring ? media.media.nextAiring.node.timeUntilAiring : 0} episodes={media.media.episodes} progress={media.progress ? media.progress : 0} mediaListStatus={"CURRENT"}/></Link></div>))}
                 </Carousel>
             {/* </div> */}
         </>

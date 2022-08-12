@@ -100,7 +100,6 @@ const Recommended = () => {
                             }
                             mediaListEntry{
                               id
-      
                             }
                             
                           }
@@ -170,7 +169,7 @@ const Recommended = () => {
         responsive={responsive}
         containerClass="carousel-container"
         centerMode={true} >
-        {animeArray.map((media) => (<div className='w-40'><Link className="cardLink" key={media.id} to={`/anime/${media.id}`}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred} nextAiringEpisode={0} timeUntilAiring={0} episodes={media.episodes} progress={0} /></Link></div>))}
+        {animeArray.map((media) => (<div className='w-40'><Link className="cardLink" key={media.id} to={`/anime/${media.id}`}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred} nextAiringEpisode={0} timeUntilAiring={0} episodes={media.episodes} progress={0} mediaListStatus=""/></Link></div>))}
       </Carousel>
       {/* </div> */}
     </>
