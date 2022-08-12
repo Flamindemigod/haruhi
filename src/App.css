@@ -386,7 +386,8 @@ div.container {
 
 .playerControls,
 .playerControls[data-state=hidden] {
-  display: none
+  display: none;
+  cursor: none;
 }
 
 .playerControls[data-state=visible] {
