@@ -106,23 +106,23 @@ const ListWatching = ({ status }) => {
 
   return (
     <Box className="flex flex-col " sx={{ width: "100%", marginInline: "auto" }}>
-      <div className='flex font-semibold h-32 md:h-16 w-full gap-4 justify-center items-center bg-offWhite-600'>
+      <div className='flex font-semibold h-32 sm:h-16 w-full gap-4 justify-center items-center bg-offWhite-600'>
         <div className="object-cover h-full w-2/12"></div>
-        <div className="text-sm md:text-lg w-7/12 cursor-pointer" onClick={(event) => { onClickSort(sort, setSort, "MEDIA_TITLE_ROMAJI_DESC", "MEDIA_TITLE_ROMAJI") }}>Title {renderSwitch(sort, "MEDIA_TITLE_ROMAJI_DESC", "MEDIA_TITLE_ROMAJI")}</div>
-        <div onClick={(event) => { onClickSort(sort, setSort, "SCORE_DESC", "SCORE") }} className=" cursor-pointer text-sm md:text-lg w-1/12">Score {renderSwitch(sort, "SCORE_DESC", "SCORE")}</div>
-        <div className="text-sm md:text-lg w-1/12">Type</div>
-        <div onClick={(event) => { onClickSort(sort, setSort, "PROGRESS_DESC", "PROGRESS") }} className=" cursor-pointer text-sm md:text-lg w-1/12" style={{ minWidth: "3rem" }}>Progress {renderSwitch(sort, "PROGRESS_DESC", "PROGRESS")}</div>
+        <div className="text-xs sm:text-lg w-7/12 cursor-pointer" onClick={(event) => { onClickSort(sort, setSort, "MEDIA_TITLE_ROMAJI_DESC", "MEDIA_TITLE_ROMAJI") }}>Title {renderSwitch(sort, "MEDIA_TITLE_ROMAJI_DESC", "MEDIA_TITLE_ROMAJI")}</div>
+        <div onClick={(event) => { onClickSort(sort, setSort, "SCORE_DESC", "SCORE") }} className=" cursor-pointer text-xs sm:text-lg w-1/12">Score {renderSwitch(sort, "SCORE_DESC", "SCORE")}</div>
+        <div className="text-xs sm:text-lg w-1/12">Type</div>
+        <div onClick={(event) => { onClickSort(sort, setSort, "PROGRESS_DESC", "PROGRESS") }} className=" cursor-pointer text-xs sm:text-lg w-1/12" style={{ minWidth: "3rem" }}>Progress {renderSwitch(sort, "PROGRESS_DESC", "PROGRESS")}</div>
 
 
       </div>
       {animeList.map((anime) => (
         <Link to={`/anime/${anime.id}`} className="listLink">
-          <div className='flex h-32 md:h-16 w-full gap-4 justify-center items-center bg-offWhite-600'>
+          <div className='flex h-32 sm:h-16 w-full gap-4 justify-center items-center bg-offWhite-600'>
             <LazyLoadImage className="object-cover  object-center h-full w-2/12" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`}></LazyLoadImage>
-            <div className="text-sm overflow-hidden text-ellipsis md:text-md w-7/12">{anime.title.userPreferred}</div>
-            <div className="text-sm md:text-md w-1/12">{anime.mediaListEntry.score}</div>
-            <div className="text-sm md:text-md w-1/12">{anime.format}</div>
-            <div className="text-sm md:text-md w-1/12" style={{ minWidth: "3rem" }}>{anime.mediaListEntry ? anime.mediaListEntry.progress : 0} {anime.episodes ? `/ ${anime.episodes}` : "+"}</div>
+            <div className="text-xs overflow-hidden text-ellipsis sm:text-md w-7/12">{anime.title.userPreferred}</div>
+            <div className="text-xs sm:text-md w-1/12">{anime.mediaListEntry.score}</div>
+            <div className="text-xs sm:text-md w-1/12">{anime.format}</div>
+            <div className="text-xs sm:text-md w-1/12" style={{ minWidth: "3rem" }}>{anime.mediaListEntry ? anime.mediaListEntry.progress : 0} {anime.episodes ? `/ ${anime.episodes}` : "+"}</div>
           </div>
         </Link>
       ))}

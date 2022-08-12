@@ -36,15 +36,15 @@ const List = () => {
     </Box>
     
 
-      <TabPanel value="1" ><StatusLists status={"CURRENT"} /></TabPanel>
+      <TabPanel sx={{padding:0}} value="1" ><StatusLists status={"CURRENT"} /></TabPanel>
 
-      <TabPanel value="2" ><StatusLists status={"PAUSED"} /></TabPanel>
+      <TabPanel sx={{padding:0}} value="2" ><StatusLists status={"PAUSED"} /></TabPanel>
   
-      <TabPanel value="3" ><StatusLists status={"PLANNING"} /></TabPanel>
+      <TabPanel sx={{padding:0}} value="3" ><StatusLists status={"PLANNING"} /></TabPanel>
  
-      <TabPanel value="4" ><StatusLists status={"COMPLETED"} /></TabPanel>
+      <TabPanel sx={{padding:0}} value="4" ><StatusLists status={"COMPLETED"} /></TabPanel>
 
-      <TabPanel value="5" ><StatusLists status={"DROPPED"} /></TabPanel>
+      <TabPanel sx={{padding:0}} value="5" ><StatusLists status={"DROPPED"} /></TabPanel>
       </TabContext>
     
     </Box>
