@@ -34,7 +34,7 @@ const SearchAnime = () => {
 
   return (
     <>
-      <Button sx={{fontSize: "1.25rem", textTransform: "none", fontWeight: "normal", borderColor: "transparent", ":hover": { borderColor: "#fff" } }} variant='outlined' endIcon={<Search />} onClick={() => { setDialogOpen(true) }}> Search </Button>
+      <Button sx={{color:"white", fontSize: "1.25rem", textTransform: "none", fontWeight: "normal", borderColor: "transparent", ":hover": { borderColor: "#fff" } }} variant='outlined' endIcon={<Search />} onClick={() => { setDialogOpen(true) }}> Search </Button>
       <Dialog
         sx={{ "& .MuiPaper-root": { background: "transparent", boxShadow: "none" } }}
         className='styled-scrollbars'
@@ -49,7 +49,9 @@ const SearchAnime = () => {
         aria-describedby="search-dialog-description"
         scroll={"body"}
       >
-        <DialogTitle id="search-dialog-title">
+        <DialogTitle 
+        id="search-dialog-title"
+        className={"bg-offWhite-400"}>
           <div className='flex justify-center items-center gap-2'>
             <SearchInput placeholder="Search..." variant='standard' onChange={(e) => { setSearchQuery(e.target.value) }} ></SearchInput>
             <Search sx={{  mr: 1, my: 0.5 }} />
