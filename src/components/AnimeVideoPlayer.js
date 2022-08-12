@@ -445,7 +445,7 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
 
             {document.pictureInPictureEnabled ? <Button sx={{ color: "white" }} onClick={() => { setVideoProgress((state) => ({ ...state, pip: !state.pip })) }}>
               <PictureInPictureAltIcon color='white' />
-            </Button> : <> </>}
+            </Button> : <div> </div>}
             {/* Fullscreen Button */}
 
             <Button sx={{ color: "white" }} onClick={handleClickFullscreen}>
