@@ -8,7 +8,7 @@ import userReducer from "./features/user"
 import loadingReducer from "./features/loading"
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -16,11 +16,19 @@ const store = configureStore({
   },
 })
 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+}); 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <LocalizationProvider dateAdapter={AdapterDateFns}>
     <Provider store={store}>
+    <ThemeProvider theme={darkTheme}>
       <App />
+      </ThemeProvider>
     </Provider>
     </LocalizationProvider>
 );

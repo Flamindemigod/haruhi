@@ -5,7 +5,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Search } from '@mui/icons-material';
 import { Button, ButtonBase, InputBase } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
-import makeQuery from '../misc/makeQuery';
 import { Link } from 'react-router-dom';
 import SearchMedia from './SearchMedia';
 import SearchCharacter from './SearchCharacter';
@@ -35,54 +34,6 @@ const SearchAnime = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  useEffect(() => {
-    const search = async () => {
-      const mediaQuery = `query Search($searchstring: String){
-                Page{
-                  media(search:$searchstring, type:ANIME, sort:[POPULARITY_DESC]) {
-                    id
-                    title{
-                      userPreferred
-                    }
-                    coverImage{medium}
-                  }
-                }
-              }
-              `;
-
-      const characterQuery = `query Search($searchstring: String) {
-                Page {
-                  characters(search: $searchstring, sort: [RELEVANCE]) {
-                    id
-                    name
-                    image {
-                      medium
-                    }
-                  }
-                }
-              }`;
-
-      const query = `query Search($searchstring: String){
-            Page{
-              media(search:$searchstring, type:ANIME, sort:[POPULARITY_DESC]) {
-                id
-                title{
-                  userPreferred
-                }
-                coverImage{medium}
-                
-              }
-            }
-          }
-          `;
-      const variables = {
-        searchstring: searchQuery,
-      };
-      const data = await makeQuery(query, variables);
-    }
-    search()
-
-  }, [])
   return (
     <>
       <Button sx={{ color: "#fff", fontSize: "1.25rem", textTransform: "none", fontWeight: "normal", borderColor: "transparent", ":hover": { borderColor: "#fff" } }} variant='outlined' endIcon={<Search />} onClick={() => { setDialogOpen(true) }}> Search </Button>
@@ -106,6 +57,10 @@ const SearchAnime = () => {
             <Search sx={{ color: '#fff', mr: 1, my: 0.5 }} />
           </div>
         </DialogTitle>
+        <div className='text-right'>Try the <Link to="/search" onClick={() => {
+          setSearchQuery("");
+          setDialogOpen(false);
+        }} style={{color:"var(--clr-primary)"}}>Advanced Search</Link></div>
         <DialogContent className='styled-scrollbars' sx={{ backgroundColor: "transparent", color: "white" }}>
           <div className='grid sm:grid-cols-2 md:grid-cols-3 max-w-8xl gap-8 gap-y-8 mx-auto mt-8'>
             <SearchMedia searchString={searchQuery} setSearchQuery={setSearchQuery} setDialogOpen={setDialogOpen} />
