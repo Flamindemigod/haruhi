@@ -71,10 +71,10 @@ const Seasonal = () => {
   return (
     <>
       <Tabs centered value={season} onChange={handleChange} aria-label="icon label tabs example">
-        <Tab wrapped sx={{ "&:not(.Mui-selected)": { color: "#cecece" } , width:"min-content"}} label={`WINTER ${seasonYear + 1}`} value={"WINTER"} />
-        <Tab wrapped sx={{ "&:not(.Mui-selected)": { color: "#cecece" } , width:"min-content"}} label={`SPRING ${seasonYear}`} value="SPRING" />
-        <Tab wrapped sx={{ "&:not(.Mui-selected)": { color: "#cecece" } , width:"min-content"}} label={`SUMMER ${seasonYear}`} value="SUMMER" />
-        <Tab wrapped sx={{ "&:not(.Mui-selected)": { color: "#cecece" } , width:"min-content"}} label={`FALL ${seasonYear}`} value="FALL" />
+        <Tab wrapped sx={{ width:"min-content"}} label={`WINTER ${seasonYear + 1}`} value={"WINTER"} />
+        <Tab wrapped sx={{ width:"min-content"}} label={`SPRING ${seasonYear}`} value="SPRING" />
+        <Tab wrapped sx={{ width:"min-content"}} label={`SUMMER ${seasonYear}`} value="SUMMER" />
+        <Tab wrapped sx={{ width:"min-content"}} label={`FALL ${seasonYear}`} value="FALL" />
       </Tabs>
       <SeasonalLists season={season} seasonYear={season === "WINTER" ? seasonYear + 1 : seasonYear} />
     </>

@@ -18,37 +18,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { styled } from '@mui/material/styles';
 
 
-
-const DarkDialog = styled(Dialog)(({ theme }) => ({
-    '& .MuiDialog-container .MuiPaper-root': {
-        color: "white",
-        backgroundColor: "#2e2e2e",
-        transition: theme.transitions.create([
-            'box-shadow',
-        ]),
-        '& .MuiFormControl-root': {
-            '& .MuiInputLabel-root': {
-                color: "#eee"
-            },
-            "& .MuiInputBase-root": {
-                backgroundColor: "#3e3e3e",
-                color: "white"
-            },
-            "& .MuiSvgIcon-root": {
-                color: "#777"
-            },
-            "& .MuiRating-iconFilled > .MuiSvgIcon-root": {
-                color: "gold",
-            },
-            "& .MuiFormHelperText-root": {
-                color: "#eee"
-            }
-        }
-    }
-
-}));
-
-
 const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, episodes, setRefresh }) => {
     const [open, setOpen] = useState(false);
     const [mediaStatus, setMediaStatus] = useState("");
@@ -149,7 +118,7 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, episodes, setRef
                         Add to List
                     </>)}
             </Fab>
-            <DarkDialog
+            <Dialog
                 fullWidth={true}
                 maxWidth="md"
                 open={open}
@@ -176,14 +145,6 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, episodes, setRef
                         <InputLabel id="mediaStatuslabel">Status</InputLabel>
                         <Select
                             MenuProps={{
-                                PaperProps: {
-                                    className: "styled-scrollbars",
-                                    style: {
-                                        width: 100,
-                                        backgroundColor: "#2e2e2e",
-                                        color: 'white'
-                                    },
-                                },
                                 disableScrollLock: true,
                             }}
                             labelId="mediaStatuslabel"
@@ -279,12 +240,12 @@ const AnimeListEditor = ({ mediaListEntry, mediaID, mediaTitle, episodes, setRef
                         }}
                         autoFocus
                         variant="contained"
-                        color="error"
+                        color="secondary"
                     >
                         Delete
                     </Button>
                 </DialogActions>
-            </DarkDialog>
+            </Dialog>
 
         </>
     )

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Avatar, Dialog, DialogContent, DialogTitle, FormControl, FormLabel, ListItem, ListItemButton, ListItemText, Slider, Typography, Select, Switch } from '@mui/material';
+import { Avatar, Dialog, DialogContent, DialogTitle, FormControl, ListItem, ListItemButton, ListItemText, Slider, Typography, Select, Switch } from '@mui/material';
 import { useSelector, useDispatch } from "react-redux";
 import { unsetUser } from "../features/user"
 import { ButtonBase } from '@mui/material';
@@ -8,124 +8,12 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Logout from '@mui/icons-material/Logout';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import { styled, alpha } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import Search from './Search';
 import { SwipeableDrawer, List, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
 import { useMediaQuery } from '@mui/material';
 import { setUser } from '../features/user';
-const DarkDialog = styled(Dialog)(({ theme }) => ({
-    '& .MuiDialog-container .MuiPaper-root': {
-        color: "white",
-        backgroundColor: "#2e2e2e",
-        transition: theme.transitions.create([
-            'box-shadow',
-        ]),
-        '& .MuiFormControl-root': {
-            '& .MuiInputLabel-root': {
-                color: "#eee"
-            },
-            "& .MuiInputBase-root": {
-                backgroundColor: "#3e3e3e",
-                color: "white"
-            },
-            "& .MuiSvgIcon-root": {
-                color: "#777"
-            },
-            "& .MuiRating-iconFilled > .MuiSvgIcon-root": {
-                color: "gold",
-            },
-            "& .MuiFormHelperText-root": {
-                color: "#eee"
-            }
-        }
-    }
-
-}));
-const DarkSelect = styled(Select)(({ theme }) => ({
-    '&': {
-        position: 'relative',
-        color: "white",
-        backgroundColor: "#2e2e2e",
-        transition: theme.transitions.create([
-            'box-shadow',
-        ]),
-    },
-    "&::before": {
-        borderColor: "#fff",
-    },
-    "&:hover:not(.Mui-disabled):before": {
-        borderColor: "var(--clr-primary)",
-    },
-    '& > .MuiSelect-icon': {
-        color: "white",
-    },
-
-    '& .MuiMenu-paper': { backgroundColor: "#2e2e2e" }
-
-}));
-const StyledMenu = styled((props) => (
-    <Menu
-        elevation={0}
-        anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-        }}
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-        }}
-        {...props}
-    />
-))(({ theme }) => ({
-    '& .MuiPaper-root': {
-        borderRadius: 6,
-        marginTop: theme.spacing(1),
-        minWidth: 180,
-        backgroundColor: "#2e2e2e",
-        color:
-            "#fff",
-        boxShadow:
-            'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-        '& .MuiMenu-list': {
-            padding: '4px 0',
-        },
-        '& .MuiMenuItem-root': {
-            '& .MuiSvgIcon-root': {
-                fontSize: 18,
-                color: "#f22",
-                marginRight: theme.spacing(1.5),
-            },
-            '&:active': {
-                backgroundColor: alpha(
-                    theme.palette.primary.main,
-                    theme.palette.action.selectedOpacity,
-                ),
-            },
-        },
-    },
-}));
-
-
-const StyledDrawer = styled(SwipeableDrawer)(({ theme }) => ({
-    '& .MuiPaper-root': {
-        backgroundColor: "#2e2e2e",
-        align: "center",
-        color:
-            "#eee",
-        boxShadow:
-            'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-        '& .MuiMenu-list': {
-            padding: '4px 0',
-        },
-
-    },
-}));
-
-
-
-
 
 const Header = () => {
     const matches = useMediaQuery('(min-width:600px)');
@@ -204,14 +92,14 @@ const Header = () => {
                 >
                     <MenuIcon></MenuIcon>
                 </IconButton>
-                    <StyledDrawer
+                    <SwipeableDrawer
                         anchor={"left"}
                         open={drawerOpen}
                         onClose={toggleDrawer(false)}
                         onOpen={toggleDrawer(true)}
                     >
                         {list()}
-                    </StyledDrawer></>) :
+                    </SwipeableDrawer></>) :
                     (<nav className='flex gap-4 text-xl w-3/12 px-14' style={{ flexBasis: "100%" }}>
                         <NavLink className='w-20' to={"/"}><ButtonBase className='px-4 h-full w-full'>Home</ButtonBase></NavLink>
                         <NavLink to={"/anime"} className='w-20' ><ButtonBase className=' px-4 h-full w-full'>Lists</ButtonBase></NavLink>
@@ -222,7 +110,7 @@ const Header = () => {
                     <Avatar onClick={handleClick} alt={`Avatar of user ${user.userName}`} src={user.userAvatar} />
                 </div>
             </header>
-            <StyledMenu
+            <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={open}
@@ -239,8 +127,8 @@ const Header = () => {
                 </ListItemIcon>
                     Logout</MenuItem>
 
-            </StyledMenu>
-            <DarkDialog open={dialogOpen} onClose={() => { setDialogOpen(false) }}>
+            </Menu>
+            <Dialog open={dialogOpen} onClose={() => { setDialogOpen(false) }}>
                 <DialogTitle> User Prefrences </DialogTitle>
                 <DialogContent>
                     <Box className='grid grid-cols-2 p-8 text-left justify-end gap-4 sm:gap-16 gap-y-2' sx={{ gridTemplateColumns: "2fr 1fr" }}>
@@ -253,7 +141,7 @@ const Header = () => {
                             <div className='w-full text-sm'>Setting to 0 removes Button</div>
                         </div>
                         <FormControl className="">
-                            <DarkSelect
+                            <Select
                                 value={user.userPreferenceSkipOpening}
                                 onChange={(e) => { dispatch(setUser({ userPreferenceSkipOpening: parseInt(e.target.value) })) }}
                                 MenuProps={{
@@ -261,8 +149,6 @@ const Header = () => {
                                         className: "styled-scrollbars",
                                         style: {
                                             width: 100,
-                                            backgroundColor: "#2e2e2e",
-                                            color: 'white'
                                         },
                                     },
                                     disableScrollLock: true,
@@ -272,7 +158,7 @@ const Header = () => {
                                 <MenuItem value={85}>85</MenuItem>
                                 <MenuItem value={90}>90</MenuItem>
 
-                            </DarkSelect>
+                            </Select>
                         </FormControl>
                         <div className='w-full'>
                             <Typography className=''>Prefer Dubbed</Typography>
@@ -291,7 +177,7 @@ const Header = () => {
 
                     </Box>
                 </DialogContent>
-            </DarkDialog>
+            </Dialog>
         </>
     )
 }

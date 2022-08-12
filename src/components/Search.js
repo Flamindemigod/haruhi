@@ -17,8 +17,6 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
     borderRadius: 4,
     position: 'relative',
-    color: "white",
-    backgroundColor: "#414141",
     transition: theme.transitions.create([
       'box-shadow',
     ]),
@@ -36,7 +34,7 @@ const SearchAnime = () => {
 
   return (
     <>
-      <Button sx={{ color: "#fff", fontSize: "1.25rem", textTransform: "none", fontWeight: "normal", borderColor: "transparent", ":hover": { borderColor: "#fff" } }} variant='outlined' endIcon={<Search />} onClick={() => { setDialogOpen(true) }}> Search </Button>
+      <Button sx={{fontSize: "1.25rem", textTransform: "none", fontWeight: "normal", borderColor: "transparent", ":hover": { borderColor: "#fff" } }} variant='outlined' endIcon={<Search />} onClick={() => { setDialogOpen(true) }}> Search </Button>
       <Dialog
         sx={{ "& .MuiPaper-root": { background: "transparent", boxShadow: "none" } }}
         className='styled-scrollbars'
@@ -51,17 +49,17 @@ const SearchAnime = () => {
         aria-describedby="search-dialog-description"
         scroll={"body"}
       >
-        <DialogTitle id="search-dialog-title" sx={{ backgroundColor: "#313131", color: "white" }}>
+        <DialogTitle id="search-dialog-title">
           <div className='flex justify-center items-center gap-2'>
             <SearchInput placeholder="Search..." variant='standard' onChange={(e) => { setSearchQuery(e.target.value) }} ></SearchInput>
-            <Search sx={{ color: '#fff', mr: 1, my: 0.5 }} />
+            <Search sx={{  mr: 1, my: 0.5 }} />
           </div>
         </DialogTitle>
         <div className='text-right'>Try the <Link to="/search" onClick={() => {
           setSearchQuery("");
           setDialogOpen(false);
         }} style={{color:"var(--clr-primary)"}}>Advanced Search</Link></div>
-        <DialogContent className='styled-scrollbars' sx={{ backgroundColor: "transparent", color: "white" }}>
+        <DialogContent className='styled-scrollbars' sx={{ backgroundColor: "transparent"}}>
           <div className='grid sm:grid-cols-2 md:grid-cols-3 max-w-8xl gap-8 gap-y-8 mx-auto mt-8'>
             <SearchMedia searchString={searchQuery} setSearchQuery={setSearchQuery} setDialogOpen={setDialogOpen} />
             <SearchCharacter searchString={searchQuery} setSearchQuery={setSearchQuery} setDialogOpen={setDialogOpen} />

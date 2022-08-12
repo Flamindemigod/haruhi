@@ -24,13 +24,13 @@ const List = () => {
   return (
     <Box sx={{ width: '100%', fontSize: '5rem' }}>
     <TabContext value={tabIndex}>
-    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+    <Box sx={{ borderBottom: 1 }}>
     <TabList sx={{"& .MuiTabs-scroller":{marginInline:"auto"}, "& .MuiTabs-flexContainerVertical":{width:"max-content", marginInline:"auto"}}} orientation={ !useMediaQuery('(min-width:600px)') ? 'vertical' : "horizontal"} onChange={handleChange} centered>
-        <Tab sx={{"&:not(.Mui-selected)":{color:"#cecece"}}} label="Currently Watching" value="1"/>
-        <Tab sx={{"&:not(.Mui-selected)":{color:"#cecece"}}} label="On Hold" value="2"/>
-        <Tab sx={{"&:not(.Mui-selected)":{color:"#cecece"}}} label="Planning" value="3"/>
-        <Tab sx={{"&:not(.Mui-selected)":{color:"#cecece"}}} label="Completed" value="4"/>
-        <Tab sx={{"&:not(.Mui-selected)":{color:"#cecece"}}} label="Dropped" value="5"/>
+        <Tab label="Currently Watching" value="1"/>
+        <Tab label="On Hold" value="2"/>
+        <Tab label="Planning" value="3"/>
+        <Tab label="Completed" value="4"/>
+        <Tab label="Dropped" value="5"/>
 
     </TabList>
     </Box>
