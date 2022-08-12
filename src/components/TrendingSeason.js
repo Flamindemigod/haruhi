@@ -150,7 +150,7 @@ const TrendingSeason = () => {
         responsive={responsive}
         containerClass="carousel-container"
         centerMode={true} >
-        {animeArray.map((media) => (<div className="w-40"><Link className="cardLink" key={media.id} to={`/anime/${media.id}`}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred} nextAiringEpisode={media.nextAiring ? media.nextAiring.node.episode : 0} timeUntilAiring={media.nextAiring ? media.nextAiring.node.timeUntilAiring : 0} episodes={media.episodes} progress={media.progress ? media.progress : 0} /></Link></div>))}
+        {animeArray.map((media) => (<div className="w-40"><Link className="cardLink" key={media.id} to={`/anime/${media.id}`}><AnimeCard mediaCover={media.coverImage.large} mediaTitle={media.title.userPreferred}  /></Link></div>))}
       </Carousel>
       {/* </div> */}
     </>

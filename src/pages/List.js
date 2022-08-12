@@ -24,7 +24,7 @@ const List = () => {
   return (
     <Box sx={{ width: '100%', fontSize: '5rem' }}>
     <TabContext value={tabIndex}>
-    <Box sx={{ borderBottom: 1 }}>
+    <Box>
     <TabList sx={{"& .MuiTabs-scroller":{marginInline:"auto"}, "& .MuiTabs-flexContainerVertical":{width:"max-content", marginInline:"auto"}}} orientation={ !useMediaQuery('(min-width:600px)') ? 'vertical' : "horizontal"} onChange={handleChange} centered>
         <Tab label="Currently Watching" value="1"/>
         <Tab label="On Hold" value="2"/>

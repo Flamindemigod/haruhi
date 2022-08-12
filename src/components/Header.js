@@ -101,9 +101,9 @@ const Header = () => {
                         {list()}
                     </SwipeableDrawer></>) :
                     (<nav className='flex gap-4 text-xl w-3/12 px-14' style={{ flexBasis: "100%" }}>
-                        <NavLink className='w-20' to={"/"}><ButtonBase className='px-4 h-full w-full'>Home</ButtonBase></NavLink>
-                        <NavLink to={"/anime"} className='w-20' ><ButtonBase className=' px-4 h-full w-full'>Lists</ButtonBase></NavLink>
-                        <NavLink to={"/seasonal"} className='w-20' >  <ButtonBase className=' px-4 h-full w-full'>Seasonal</ButtonBase></NavLink>
+                        <NavLink className='w-24' to={"/"}><ButtonBase className='px-4 h-full w-full'>Home</ButtonBase></NavLink>
+                        <NavLink to={"/anime"} className='w-24' ><ButtonBase className=' px-4 h-full w-full'>Lists</ButtonBase></NavLink>
+                        <NavLink to={"/seasonal"} className='w-24' >  <ButtonBase className=' px-4 h-full w-full'>Seasonal</ButtonBase></NavLink>
                     </nav>)}
                 <div className="h-full p-4 flex gap-4">
                     <Search />
