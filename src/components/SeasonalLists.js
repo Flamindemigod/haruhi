@@ -40,6 +40,7 @@ const SeasonalLists = ({ season, seasonYear }) => {
             }
             mediaListEntry{
               progress
+              status
             }
           }
         }
@@ -90,6 +91,7 @@ const SeasonalLists = ({ season, seasonYear }) => {
           progress={media.mediaListEntry ? media.mediaListEntry.progress : null}
           nextAiringEpisode={media.nextAiring ? media.nextAiring.node.episode : 0}
           timeUntilAiring={media.nextAiring ? media.nextAiring.node.timeUntilAiring : 0}
+          mediaListStatus={media.mediaListEntry ? media.mediaListEntry.status : null}
         />
       </Link>))}</Box>
   )
