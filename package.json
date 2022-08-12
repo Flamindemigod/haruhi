@@ -38,7 +38,7 @@
   "scripts": {
     "start": "PORT=8080 HTTPS=true react-scripts start",
     "build": "react-scripts build",
-    "build-prod":"react-scripts build && sudo cp -rv build/* /var/www/haruhi.flamindemigod.com/",
+    "build-prod":"react-scripts build && sudo cp -rv build/* /var/www/haruhi/",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "host": "sudo serve -s --ssl-cert /etc/letsencrypt/live/haruhi.flamindemigod.com/fullchain.pem --ssl-key /etc/letsencrypt/live/haruhi.flamindemigod.com/privkey.pem build"
