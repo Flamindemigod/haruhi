@@ -9,6 +9,7 @@ import Studio from './pages/Studio';
 import Character from './pages/Character';
 import Staff from './pages/Staff';
 import Footer from './components/Footer';
+import AdvancedSearchAnime from './pages/AdvancedSearchAnime';
 
 const Routing = () => {
     return (
@@ -21,9 +22,10 @@ const Routing = () => {
                 <Route path="/studio/:id" element={<Studio />} />
                 <Route path="/character/:id" element={<Character />} />
                 <Route path="/character/:id/:name   " element={<Character />} />
-
                 <Route path="/staff/:id" element={<Staff />} />
                 <Route path="/seasonal" element={<Seasonal  />} />
+                <Route path="/search" element={<AdvancedSearchAnime></AdvancedSearchAnime>} />
+
             </Routes>
         <Footer />
         </>
