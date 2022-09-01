@@ -128,7 +128,7 @@ const getAnimeID = async (title) => {
   }
 
   const req =
-    "https://gogoanime.herokuapp.com/search?keyw=" + title.replaceAll("☆", " ").replaceAll("★", " ");
+    "https://gogoanime.herokuapp.com/search?keyw=" + title.replace(/[☆★♡△]/g, " ");
   const resp = await fetch(req)
     .then(handleResponse)
     .catch(handleError);
@@ -273,16 +273,6 @@ const AnimeVideoPlayer = ({ mediaId, mediaMALid, progress, episodes, nextAiringE
         40356: ["tate-no-yuusha-no-nariagari-season-2", "tate-no-yuusha-no-nariagari-season-2-dub"],
         38680: ["fruits-basket-2019", "fruits-basket-2019-dub"],
         47164: ["dungeon-ni-deai-wo-motomeru-no-wa-machigatteiru-darou-ka-iv-shin-shou-meikyuu-hen"],
-        34798: ["yuru-camp"],
-        38475: ["yuru-camp-movie"],
-        38474: ["yuru-camp-season-2"],
-
-
-
-
-
-
-
       }
       if (blacklist[idMal]) {
         if (blacklist[idMal].length === 2) {
