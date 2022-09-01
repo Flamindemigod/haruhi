@@ -22,7 +22,7 @@ const CharacterMediaCard = ({ characterImage, mediaImage, characterName, charact
     return (
         <Link to={`/anime/${mediaID}`}>
             <animated.div className='relative w-40' style={styles}>
-                <div className='overflow-hidden w-40 relative'>
+                <div className='overflow-hidden w-40 h-64 relative'>
                     <LazyLoadImage className='h-full w-full object-cover' src={characterImage} alt={`Character ${characterImage}`} />
                     <div className='absolute bottom-0 right-0 top-2/3 left-2/3'><LazyLoadImage className='w-full h-full object-cover' src={mediaImage} alt={`Media ${mediaTitle}`} /></div>
                 </div>
@@ -169,7 +169,7 @@ const Staff = () => {
                     {staff.dateOfBirth.year || staff.dateOfBirth.month || staff.dateOfBirth.day ? <div className='text-md px-8'><strong>Date of Birth:</strong> {staff.dateOfBirth.day}  {months[staff.dateOfBirth.month - 1]}   {staff.dateOfBirth.year}</div> : <></>}
                     {staff.age ? <div className='text-md px-8'><strong>Age:</strong> {staff.age}</div> : <></>}
                     
-                    <div className='text-md px-8 description' ref={description} data-description-shown={showDescription} dangerouslySetInnerHTML={{ __html: staff.description.replaceAll("https://anilist.co/", "http://haruhi.flamindemigod.com/") }} />
+                    <div className='text-md px-8 description' ref={description} data-description-shown={showDescription} dangerouslySetInnerHTML={{ __html: staff.description.replaceAll("https://anilist.co/", "https://haruhi.flamindemigod.com/") }} />
                     {!showDescription ? <button className='hover:underline text-primary-400 hover:text-primary-600' onClick={()=>{setShowDescription(true)}}> Show More</button> : <></>}
                 </div>
             </div>
@@ -180,9 +180,9 @@ const Staff = () => {
             <div className='flex flex-wrap gap-4 justify-center'>
                 {staff.characterMedia.map((edge) => (edge.characters.map((character) => (<CharacterMediaCard
                     key={edge.node.id}
-                    characterImage={character.image.large}
+                    characterImage={character? character.image.large:null}
                     mediaImage={edge.node.coverImage.medium}
-                    characterName={character.name.userPreferred}
+                    characterName={character?character.name.userPreferred:null}
                     characterRole={edge.characterRole}
                     mediaTitle={edge.node.title.userPreferred}
                     mediaID={edge.node.id}
