@@ -27,7 +27,7 @@ const Header = () => {
         setMenuAnchorEl(null);
     };
     return (
-        <div className='w-full bg-offWhite-800 text-offWhite-100 flex px-8 flex-row items-center'>
+        <div className='w-full bg-offWhite-700 text-offWhite-100 h-16 flex px-8 flex-row items-center'>
             {matches ?
                 <nav className="grid h-full" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
                     <Link href="/" className="w-full h-full"><ButtonBase className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></Link>
