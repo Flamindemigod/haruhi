@@ -16,11 +16,11 @@ const Trending = () => {
         if (currentMonth >= 2 && currentMonth < 4) {
             return ["SPRING", currentYear]
         }
-        else if (currentMonth >= 4 && currentMonth < 8) {
+        else if (currentMonth >= 4 && currentMonth < 9) {
             return ["SUMMER", currentYear]
 
         }
-        else if (currentMonth >= 8 && currentMonth < 10) {
+        else if (currentMonth >= 9 && currentMonth < 10) {
             return ["FALL", currentYear]
 
         }
@@ -99,7 +99,6 @@ const Trending = () => {
         getCurrentAiring();
         // eslint-disable-next-line
     }, []);
-
     return (
         <div className="">
             <div className="text-xl p-4">
@@ -116,7 +115,11 @@ const Trending = () => {
                     hasNotif={true}
                     status={anime.mediaListEntry && anime.mediaListEntry.status}
                     progress={anime.mediaListEntry && `${anime.mediaListEntry.progress} ${anime.episodes ? "/" : "+"} ${anime.episodes ? anime.episodes : ""}`}
-                    changeDirection={((animeArray.length - index) < 5) ? true : false} />)}
+                    changeDirection={((animeArray.length - index) < 5) ? true : false}
+                    nextAiringEpisode={anime.nextAiring && anime.nextAiring.node.episode}
+                    nextAiringTime={anime.nextAiring && anime.nextAiring.node.timeUntilAiring}
+
+                />)}
             </Carosel>
         </div>
     )
