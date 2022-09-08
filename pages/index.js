@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import Meta from '../components/Meta'
 
 export default function Home({ token = "" }) {
   const user = useSelector(state => state.user.value)
@@ -7,14 +8,8 @@ export default function Home({ token = "" }) {
 
   return (
     <>
+      <Meta />
     </>
   )
 }
 
-
-export async function getServerSideProps(ctx) {
-  const parsedCookies = cookie.parse(ctx.req.headers.cookie || "");
-  return {
-    props: { token: parsedCookies.access_token || null }
-  }
-}
