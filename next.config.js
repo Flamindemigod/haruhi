@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["haruhi.flamindemigod.com", 'storage.ko-fi.com'],
+    domains: ["haruhi.flamindemigod.com", 'storage.ko-fi.com', "s4.anilist.co"],
   },
 }
 
