@@ -1,9 +1,12 @@
 import { Box, Divider, FormControl, Slider, Select, MenuItem, Switch } from "@mui/material"
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import { setUser } from "../features/user";
+import { setLoading } from "../features/loading"
 const prefrences = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.value);
+    useEffect(() => { dispatch(setLoading(false)) }, [])
     return (
         <div className="text-offWhite-100 w-10/12">
             <div className="text-xl">User Prefrences</div>
