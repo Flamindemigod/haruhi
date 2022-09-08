@@ -29,10 +29,10 @@ const Header = () => {
     return (
         <div className='w-full bg-offWhite-800 text-offWhite-100 flex h-24 px-8 flex-row items-center'>
             {matches ?
-                <nav className="flex flex-row gap-10 h-full ">
+                <nav className="grid h-full" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
                     <Link href="/" className="w-full h-full"><ButtonBase className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></Link>
                     <Link href="/anime" className="w-full h-full"><ButtonBase className="w-full h-full"><div className="text-xl">Lists</div></ButtonBase></Link>
-                    <Link href="/seasonal" className="w-full h-full"><ButtonBase className="w-full h-full"><div className="text-xl">Calender</div></ButtonBase></Link>
+                    <Link href="/seasonal" className="w-full h-full"><ButtonBase className="w-full h-full p-4"><div className="text-xl">Seasonal</div></ButtonBase></Link>
                 </nav> :
                 (<>
                     <IconButton onClick={() => { setDrawerOpen(true) }}>
