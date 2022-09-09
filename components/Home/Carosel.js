@@ -30,13 +30,13 @@ const Carosel = ({ width = "100vw", children }) => {
     }, [])
     return (
         <div className="relative isolate">
-            {showLeftButton && (<IconButton onClick={scrollBack} className="absolute top-1/2 left-4 z-20" sx={{ backgroundColor: "var(--clr-primary)", opacity: "0.6", "&:hover": { backgroundColor: "var(--clr-primary)", opacity: 1 }, transform: "translateY(-50%)" }}>
+            {showLeftButton && (<IconButton onClick={scrollBack} className="absolute top-1/2 left-4 z-20" sx={{ backgroundColor: "var(--clr-primary)", opacity: "0.6", "&:hover": { backgroundColor: "var(--clr-primary)", opacity: 1 }, transform: "translateY(-50%)", position: "absolute" }}>
                 <ArrowBackIos />
             </IconButton>)}
-            <Box width={width} className="scroll-smooth relative flex overflow-x-auto overflow-y-hidden gap-4" ref={caroselTrack}>
+            <Box width={width} className=" scroll-smooth relative flex overflow-x-auto overflow-y-hidden gap-4" ref={caroselTrack}>
                 {children}
             </Box>
-            {showRightButton && (<IconButton onClick={scrollForward} className="absolute top-1/2 right-4 z-20" sx={{ backgroundColor: "var(--clr-primary)", opacity: "0.6", "&:hover": { backgroundColor: "var(--clr-primary)", opacity: 1 }, transform: "translateY(-50%)" }}>
+            {showRightButton && (<IconButton onClick={scrollForward} className="absolute top-1/2 right-4 z-20" sx={{ backgroundColor: "var(--clr-primary)", opacity: "0.6", "&:hover": { backgroundColor: "var(--clr-primary)", opacity: 1 }, transform: "translateY(-50%)", position: "absolute" }}>
                 <ArrowForwardIos />
             </IconButton>)}
         </div>
