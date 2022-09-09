@@ -40,10 +40,18 @@
 /* Card CSS */
 .card--content {
     display: none;
+}
+
+.card--content.left-full {
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
-
 }
+
+.card--content.right-full {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+}
+
 
 .card--image:hover+.card--content {
     display: flex;

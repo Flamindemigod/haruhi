@@ -30,10 +30,10 @@ const Header = () => {
         <div className='w-full bg-offWhite-700 text-offWhite-100 h-16 flex px-8 flex-row items-center'>
             {matches ?
                 <nav className="grid h-full" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-                    <Link href="/" className="w-full h-full"><ButtonBase className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></Link>
-                    <Link href="/anime" className="w-full h-full"><ButtonBase className="w-full h-full"><div className="text-xl">Lists</div></ButtonBase></Link>
-                    <Link href="/seasonal" className="w-full h-full"><ButtonBase className="w-full h-full p-4"><div className="text-xl">Seasonal</div></ButtonBase></Link>
-                </nav> :
+                    <Link href="/" className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></Link>
+                    <Link href="/anime" className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Lists</div></ButtonBase></Link>
+                    <Link href="/seasonal" className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full p-4"><div className="text-xl">Seasonal</div></ButtonBase></Link >
+                </nav > :
                 (<>
                     <IconButton onClick={() => { setDrawerOpen(true) }}>
                         <MenuIcon />
@@ -125,7 +125,7 @@ const Header = () => {
                         color="primary"
                         href={`https://anilist.co/api/v2/oauth/authorize?client_id=${AnilistClientID}&response_type=token`} className="w-full"><Image src={`${SERVER}/AnilistIcon.svg`} width={37} height={37} /> Login With Anilist</Button></div>)}
             </Box>
-        </div>
+        </div >
     )
 }
 
