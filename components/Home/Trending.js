@@ -46,6 +46,7 @@ const Trending = () => {
                         userPreferred
                       }
                       episodes
+                      status
                       coverImage{
                         large
                       }
@@ -109,12 +110,14 @@ const Trending = () => {
                     key={anime.id}
                     height={167}
                     width={128}
+                    status={anime.status}
                     image={anime.coverImage.large}
                     title={anime.title.userPreferred}
                     link={`/anime/${anime.id}`}
                     hasNotif={true}
-                    status={anime.mediaListEntry && anime.mediaListEntry.status}
-                    progress={anime.mediaListEntry && `${anime.mediaListEntry.progress} ${anime.episodes ? "/" : "+"} ${anime.episodes ? anime.episodes : ""}`}
+                    listStatus={anime.mediaListEntry && anime.mediaListEntry.status}
+                    progress={anime.mediaListEntry && anime.mediaListEntry.progress}
+                    episodes={anime.episodes}
                     changeDirection={((animeArray.length - index) < 5) ? true : false}
                     nextAiringEpisode={anime.nextAiring && anime.nextAiring.node.episode}
                     nextAiringTime={anime.nextAiring && anime.nextAiring.node.timeUntilAiring}
