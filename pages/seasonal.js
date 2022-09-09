@@ -1,5 +1,5 @@
 import Meta from "../components/Meta"
-
+import { SERVER } from "../config"
 const seasonal = () => {
     return (
         <div>

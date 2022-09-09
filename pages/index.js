@@ -1,4 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
+import Recommended from "../components/Home/Recommended";
+import Trending from "../components/Home/Trending";
 import Meta from '../components/Meta'
 
 export default function Home({ token = "" }) {
@@ -9,6 +11,10 @@ export default function Home({ token = "" }) {
   return (
     <>
       <Meta />
+      <section>
+        <Recommended />
+        <Trending />
+      </section>
     </>
   )
 }

@@ -21,8 +21,11 @@ const makeQuery = async (query, variables = {}, token) => {
     var url = "https://graphql.anilist.co",
         options = {
             method: "POST",
-            headers: {
+            headers: accessToken ? {
                 Authorization: "Bearer " + accessToken,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            } : {
                 "Content-Type": "application/json",
                 Accept: "application/json",
             },

@@ -1,2 +1,101 @@
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --clr-primary: #ca006b;
+    --clr-status-current: #42a5f5;
+    --clr-status-planning: #f79a63;
+    --clr-status-paused: #fa7a7a;
+    --clr-status-completed: #7bd555;
+    --clr-status-dropped: #e85d75;
+}
+
+
+/*Custom Scroll Bars */
+* {
+    --scrollbar-foreground: var(--clr-primary);
+    --scrollbar-background: var(--clr-secondary);
+    /* Foreground, Background */
+    scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    /* Mostly for vertical scrollbars */
+    height: 7px;
+    /* Mostly for horizontal scrollbars */
+}
+
+*::-webkit-scrollbar-thumb {
+    /* Foreground */
+    background: var(--scrollbar-foreground);
+}
+
+*::-webkit-scrollbar-track {
+    /* Background */
+    background: var(--scrollbar-background);
+}
+
+
+/* Card CSS */
+.card--content {
+    display: none;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+
+}
+
+.card--image:hover+.card--content {
+    display: flex;
+}
+
+.card--title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.notification {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 0.25rem;
+    background: greenyellow;
+    box-shadow: 0px 0px 4px greenyellow;
+}
+
+
+.mediaListNotification {
+    position: absolute;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    -webkit-box-shadow: 2px 2px 21px 4px rgba(0, 0, 0, 0.63);
+    box-shadow: 2px 2px 21px 4px rgba(0, 0, 0, 0.63);
+}
+
+.mediaListNotification.current {
+    background-color: var(--clr-status-current);
+}
+
+.mediaListNotification.planning {
+    background-color: var(--clr-status-planning);
+}
+
+.mediaListNotification.paused {
+    background-color: var(--clr-status-paused);
+}
+
+.mediaListNotification.completed {
+    background-color: var(--clr-status-completed);
+}
+
+.mediaListNotification.dropped {
+    background-color: var(--clr-status-dropped);
+}

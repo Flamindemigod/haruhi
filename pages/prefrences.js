@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import { setUser } from "../features/user";
 import { setLoading } from "../features/loading"
-const prefrences = () => {
+const Prefrences = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.value);
     useEffect(() => { dispatch(setLoading(false)) }, [])
@@ -61,4 +61,4 @@ const prefrences = () => {
     )
 }
 
-export default prefrences
+export default Prefrences
