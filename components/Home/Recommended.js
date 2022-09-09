@@ -52,7 +52,7 @@ const Recommended = () => {
             
         `;
       var variables = {
-        perPage: 50,
+        perPage: 10,
         page: 0,
         userName: user.userName,
       };
