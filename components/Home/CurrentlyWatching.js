@@ -1,121 +1,115 @@
 import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import makeQuery from "../../makeQuery";
-import { shuffle } from "../../shuffle"
 import Card from "../Card";
 import Carosel from "./Carosel";
 
-const Recommended = () => {
-    const user = useSelector(state => state.user.value);
+
+
+const CurrentlyWatching = () => {
     const [animeArray, setAnimeArray] = useState([]);
+    let user = useSelector((state) => state.user.value);
+
 
     useEffect(() => {
         const getCurrentAiring = async () => {
-            var query = `query userRecommended($perPage: Int = 50, $page: Int = 1, $userName: String) {
+            var query = `
+          query usersAiringSchedule($perPage: Int = 50, $page: Int = 1, $userName: String) {
             Page(perPage: $perPage, page: $page) {
               pageInfo {
                 hasNextPage
                 total
               }
-              mediaList(userName: $userName, type: ANIME, sort:[UPDATED_TIME_DESC]) {
+              mediaList(userName: $userName, type: ANIME, status:CURRENT, sort: [UPDATED_TIME_DESC]) {
                 progress
-                score
                 media {
-                  recommendations {
+                  episodes
+                  id
+                  status
+                  siteUrl
+                  coverImage {
+                    large
+                  }
+                  title {
+                    userPreferred
+                  }
+                  airingSchedule {
                     edges {
                       node {
-                        rating
-                        mediaRecommendation {
-                          episodes
-                          id
-                          status
-                          siteUrl
-                          coverImage {
-                            large
-                          }
-                          title {
-                            userPreferred
-                          }
-                          mediaListEntry{
-                            id
-                          }
-                          
-                        }
+                        airingAt
+                        timeUntilAiring
+                        episode
                       }
                     }
                   }
                 }
               }
             }
-          }`;
-
-
+          }
+        `;
             var variables = {
-                userName: user.userName
+                perPage: 50,
+                page: 0,
+                userName: user.userName,
             };
 
             const getList = (data) => {
                 const mediaArray = data.data.Page.mediaList;
-                var RecommendationList = [];
+                var airingArray = [];
                 for (const media in mediaArray) {
-                    const recommendationEdges = mediaArray[media].media.recommendations.edges
-                    for (const edge in recommendationEdges) {
-                        if (mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation) {
-                            RecommendationList = (mediaArray[media].media.recommendations.edges[edge].node.rating > 25) && (!mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation.mediaListEntry) ? [...RecommendationList, mediaArray[media].media.recommendations.edges[edge].node.mediaRecommendation] : RecommendationList
-                        }
-                    }
+
+                    const airingSchedule = mediaArray[media].media.airingSchedule;
+                    delete mediaArray[media].media.airingSchedule;
+                    const nextAiringIndex = airingSchedule.edges.findIndex(
+                        (element) => element.node.timeUntilAiring > 0
+                    );
+                    mediaArray[media].media["nextAiring"] =
+                        airingSchedule.edges[nextAiringIndex];
+                    airingArray[media] = mediaArray[media];
                 }
 
 
-
-                return [data.data.Page.pageInfo.hasNextPage, RecommendationList];
+                return [data.data.Page.pageInfo.hasNextPage, airingArray];
             };
             let hasNextPage = true
             let airingArrayAccumalated = []
             let data;
             while (hasNextPage) {
                 variables["page"] = variables["page"] + 1
-                data = await makeQuery(query, variables).then((data) => {
-                    return data
-                }).then(getList);
+                data = await makeQuery(query, variables).then(getList);
                 hasNextPage = data[0];
                 airingArrayAccumalated = airingArrayAccumalated.concat(data[1])
-                if (airingArrayAccumalated.length >= 20) { hasNextPage = false }
             }
-            const mediaIDArray = [];
-            airingArrayAccumalated = airingArrayAccumalated.filter((c) => {
-                if (mediaIDArray.includes(c.id)) { return false }
-                mediaIDArray.push(c.id)
-                return true
-            })
-            airingArrayAccumalated = shuffle(airingArrayAccumalated)
             setAnimeArray(airingArrayAccumalated)
 
         };
-        getCurrentAiring();
+        if (user.userAuth) {
+            getCurrentAiring();
+        }
         // eslint-disable-next-line
     }, []);
+
     return (
         <div className="">
             <div className="text-xl p-4">
-                Recommended for you
+                Continue Watching
             </div>
             <Carosel width={"95vw"}>
                 {animeArray.map((anime, index) => <Card
-                    key={anime.id}
+                    key={anime.media.id}
                     height={167}
                     width={128}
-                    status={anime.status}
-                    image={anime.coverImage.large}
-                    title={anime.title.userPreferred}
-                    link={`/anime/${anime.id}`}
+                    status={anime.media.status}
+                    image={anime.media.coverImage.large}
+                    title={anime.media.title.userPreferred}
+                    link={`/anime/${anime.media.id}`}
                     hasNotif={true}
-                    listStatus={anime.mediaListEntry && anime.mediaListEntry.status}
-                    progress={anime.mediaListEntry && anime.mediaListEntry.progress}
-                    episodes={anime.episodes}
+                    listStatus={anime.media.mediaListEntry && anime.media.mediaListEntry.status}
+                    progress={anime.media.mediaListEntry && anime.media.mediaListEntry.progress}
+                    episodes={anime.media.episodes}
                     changeDirection={((animeArray.length - index) < 5) ? true : false}
-                    nextAiringEpisode={anime.nextAiring && anime.nextAiring.node.episode}
-                    nextAiringTime={anime.nextAiring && anime.nextAiring.node.timeUntilAiring}
+                    nextAiringEpisode={anime.media.nextAiring && anime.media.nextAiring.node.episode}
+                    nextAiringTime={anime.media.nextAiring && anime.media.nextAiring.node.timeUntilAiring}
 
                 />)}
             </Carosel>
@@ -123,4 +117,4 @@ const Recommended = () => {
     )
 }
 
-export default Recommended
+export default CurrentlyWatching
