@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
-    "start": "next start -p 4000",
+    "start": "next start -p 3000 -H 136.243.175.33",
     "lint": "next lint"
   },
   "dependencies": {
@@ -17,9 +17,11 @@
     "cookie": "^0.5.0",
     "next": "12.2.5",
     "react": "18.2.0",
+    "react-countdown": "^2.3.2",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.2",
     "react-spinners": "^0.13.4",
+    "react-spring": "^9.5.2",
     "redux": "^4.2.0"
   },
   "devDependencies": {
