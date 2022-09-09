@@ -78,9 +78,7 @@ const Recommended = () => {
       let data;
       while (hasNextPage) {
         variables["page"] = variables["page"] + 1
-        data = await makeQuery(query, variables).then((data) => {
-          return data
-        }).then(getList);
+        data = await makeQuery(query, variables).then(getList);
         hasNextPage = data[0];
         airingArrayAccumalated = airingArrayAccumalated.concat(data[1])
         if (airingArrayAccumalated.length >= 20) { hasNextPage = false }
@@ -95,9 +93,11 @@ const Recommended = () => {
       setAnimeArray(airingArrayAccumalated)
 
     };
-    getReccomendations();
+    if (user.userAuth) {
+      getReccomendations();
+    }
     // eslint-disable-next-line
-  }, [user.userName]);
+  }, [user]);
   return (
     <div className="">
       <div className="text-xl p-4">
