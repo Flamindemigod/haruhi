@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
                             }}
                         }`;
 
-            const userData = await makeQuery(query, token = token).then((data) =>
+            const userData = await makeQuery(query, {}, token).then((data) =>
                 (data.data.Viewer));
             dispatch(setUser({
                 userAuth: true,

@@ -22,6 +22,7 @@ const CurrentlyWatching = () => {
               }
               mediaList(userName: $userName, type: ANIME, status:CURRENT, sort: [UPDATED_TIME_DESC]) {
                 progress
+                status
                 media {
                   episodes
                   id
@@ -76,7 +77,7 @@ const CurrentlyWatching = () => {
       let data;
       while (hasNextPage) {
         variables["page"] = variables["page"] + 1
-        data = await makeQuery(query, variables).then(getList);
+        data = await makeQuery(query, variables, user.userToken).then(getList);
         hasNextPage = data[0];
         airingArrayAccumalated = airingArrayAccumalated.concat(data[1])
       }
@@ -104,8 +105,8 @@ const CurrentlyWatching = () => {
           title={anime.media.title.userPreferred}
           link={`/anime/${anime.media.id}`}
           hasNotif={true}
-          listStatus={anime.media.mediaListEntry && anime.media.mediaListEntry.status}
-          progress={anime.media.mediaListEntry && anime.media.mediaListEntry.progress}
+          listStatus={anime.status}
+          progress={anime.progress}
           episodes={anime.media.episodes}
           changeDirection={(((animeArray.length - index) < 5) && (index > 5)) ? true : false}
           nextAiringEpisode={anime.media.nextAiring && anime.media.nextAiring.node.episode}

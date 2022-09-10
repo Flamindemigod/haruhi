@@ -78,7 +78,7 @@ const Recommended = () => {
       let data;
       while (hasNextPage) {
         variables["page"] = variables["page"] + 1
-        data = await makeQuery(query, variables).then(getList);
+        data = await makeQuery(query, variables, user.userToken).then(getList);
         hasNextPage = data[0];
         airingArrayAccumalated = airingArrayAccumalated.concat(data[1])
         if (airingArrayAccumalated.length >= 20) { hasNextPage = false }
@@ -113,8 +113,6 @@ const Recommended = () => {
           title={anime.title.userPreferred}
           link={`/anime/${anime.id}`}
           hasNotif={true}
-          listStatus={anime.mediaListEntry && anime.mediaListEntry.status}
-          progress={anime.mediaListEntry && anime.mediaListEntry.progress}
           episodes={anime.episodes}
           changeDirection={((animeArray.length - index) < 5) ? true : false}
           nextAiringEpisode={anime.nextAiring && anime.nextAiring.node.episode}

@@ -95,11 +95,10 @@ const TrendingSeason = () => {
             }
             airingArrayAccumalated = airingArrayAccumalated.concat(data.data.Page.media)
             setAnimeArray(airingArrayAccumalated)
-
         };
         getTrending();
         // eslint-disable-next-line
-    }, []);
+    }, [user.userToken]);
     return (
         <div className="">
             <div className="text-xl p-4">
