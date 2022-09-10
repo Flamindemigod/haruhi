@@ -1,9 +1,15 @@
-import { useSelector } from "react-redux"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import Meta from "../../components/Meta"
 import { SERVER } from "../../config"
+import { setLoading } from "../../features/loading"
 
 const AnimeList = () => {
     const user = useSelector(state => state.user.value)
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(setLoading(false))
+    }, [])
     return (
         <div>
             <Meta

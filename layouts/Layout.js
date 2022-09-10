@@ -35,14 +35,20 @@ const Layout = ({ children }) => {
                 userPreferenceDubbed: JSON.parse(localStorage.getItem("UserPrefDubbed")) ? JSON.parse(localStorage.getItem("UserPrefDubbed")) : false,
                 userPreferenceEpisodeUpdateTreshold: localStorage.getItem("UserPrefEpisodeTreshold") ? parseFloat(localStorage.getItem("UserPrefEpisodeTreshold")) : 0.9,
             }));
+            dispatch(setLoading(false))
         };
         const token = getToken();
-        if (token) getUserDetails();
-        dispatch(setLoading(false))
+        if (token) {
+            getUserDetails();
+        }
+        else {
+            dispatch(setLoading(false))
+
+        }
     }, [])
     return (
         <Box className='flex flex-col' sx={{ minHeight: "100vh", flex: "1 0 100%" }}>
-            {/* <Loading /> */}
+            <Loading />
             <header>
                 <Header />
             </header>
