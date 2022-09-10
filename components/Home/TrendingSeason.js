@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import makeQuery from "../../makeQuery";
 import Card from "../Card";
-import Carosel from "./Carosel";
+import Carosel from "../Carosel";
 
 const TrendingSeason = () => {
     const user = useSelector(state => state.user.value);

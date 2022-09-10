@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import makeQuery from "../../makeQuery";
 import { shuffle } from "../../shuffle"
 import Card from "../Card";
-import Carosel from "./Carosel";
+import Carosel from "../Carosel";
 
 const Recommended = () => {
   const user = useSelector(state => state.user.value);
