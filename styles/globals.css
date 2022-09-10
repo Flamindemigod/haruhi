@@ -37,6 +37,22 @@
 }
 
 
+/* Activity / Home Bg CSS */
+.activity {
+    grid-column: 1/-1;
+    grid-row: 1;
+    z-index: 10;
+}
+
+@media (min-width: 640px) {
+    .activity {
+        grid-column: 1;
+        grid-row: 1;
+        z-index: 10;
+    }
+}
+
+
 /* Card CSS */
 .card--content {
     display: none;

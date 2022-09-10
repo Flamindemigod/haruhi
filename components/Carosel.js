@@ -18,22 +18,15 @@ const Carosel = ({ width = "100vw", children }) => {
     }
 
 
-    useEffect(() => {
-        if (caroselTrack.current.scrollWidth == caroselTrack.current.clientWidth) {
-            setShowLeftButton(false)
-            setShowRightButton(false)
-        } else {
-            setShowLeftButton(false)
-            setShowRightButton(true)
-        }
-    }, [children])
-
 
 
     useEffect(() => {
 
         caroselTrack.current.addEventListener("scroll", () => {
+            setShowLeftButton(true)
+            setShowRightButton(true)
             if (caroselTrack.current.scrollLeft === 0) {
+
                 setShowLeftButton(false)
             }
             if (parseInt(caroselTrack.current.scrollLeft + 1) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth)) {
@@ -53,7 +46,7 @@ const Carosel = ({ width = "100vw", children }) => {
         }))
     }, [])
     return (
-        <div className="relative isolate">
+        <div className="relative isolate flex justify-center">
             {showLeftButton && (<IconButton onClick={scrollBack} className="absolute top-1/2 left-4 z-20" sx={{ backgroundColor: "var(--clr-primary)", opacity: "0.6", "&:hover": { backgroundColor: "var(--clr-primary)", opacity: 1 }, transform: "translateY(-50%)", position: "absolute" }}>
                 <ArrowBackIos />
             </IconButton>)}
