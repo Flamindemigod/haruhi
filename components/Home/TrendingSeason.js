@@ -4,7 +4,7 @@ import makeQuery from "../../makeQuery";
 import Card from "../Card";
 import Carosel from "./Carosel";
 
-const Trending = () => {
+const TrendingSeason = () => {
     const user = useSelector(state => state.user.value);
     const [animeArray, setAnimeArray] = useState([]);
     const [windowWidth, setWindowWidth] = useState(0);
@@ -34,7 +34,7 @@ const Trending = () => {
         }
     }
     useEffect(() => {
-        const getCurrentAiring = async () => {
+        const getTrending = async () => {
             var query = `query getMediaTrend($season: MediaSeason, $seasonYear: Int) {
                   Page(perPage: 50){
                     pageInfo{
@@ -97,7 +97,7 @@ const Trending = () => {
             setAnimeArray(airingArrayAccumalated)
 
         };
-        getCurrentAiring();
+        getTrending();
         // eslint-disable-next-line
     }, []);
     return (
@@ -128,4 +128,4 @@ const Trending = () => {
     )
 }
 
-export default Trending
+export default TrendingSeason
