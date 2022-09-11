@@ -12,11 +12,9 @@ import { SERVER } from "../config";
 
 export default function Home({ token = "" }) {
   const user = useSelector(state => state.user.value)
-  const [width, setWidth] = useState(4000);
   const [height, setHeight] = useState(4000);
 
   useEffect(() => {
-    setWidth(window.screen.width);
     setHeight(window.screen.height);
   }, [])
   return (
