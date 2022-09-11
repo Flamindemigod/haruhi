@@ -47,7 +47,7 @@ const Layout = ({ children }) => {
         }
     }, [])
     return (
-        <Box className='flex flex-col' sx={{ minHeight: "100vh", flex: "1 0 100%" }}>
+        <Box className='flex flex-col' sx={{ minHeight: "100vh", flex: "1 0 100%", overflowX: "hidden" }}>
             <Loading />
             <header>
                 <Header />

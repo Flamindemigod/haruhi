@@ -175,14 +175,14 @@
 
 .description--container.readMore[open] {
     max-height: 45rem;
-    overflow: auto
+    overflow-y: auto
 }
 
 .description--container.readMore::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 10%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(0deg, #121212 10%, rgba(255, 255, 255, 0) 100%);
     opacity: 1;
     transition: opacity 200ms ease;
 }
