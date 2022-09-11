@@ -7,6 +7,8 @@ import makeQuery from "../../makeQuery"
 import * as cookie from 'cookie'
 import Image from "next/image"
 import Description from "../../components/Anime/Description"
+import { Box } from "@mui/material"
+import Characters from "../../components/Anime/Characters"
 
 const Anime = ({ anime }) => {
   const user = useSelector(state => state.user.value)
@@ -22,17 +24,33 @@ const Anime = ({ anime }) => {
         url={`${SERVER}/anime/${anime.id}`}
         image={anime.coverImage.large} />
 
-      <div className="grid grid-cols-5 grid-rows-2 h-80 w-screen relative isolate">
-        {anime.bannerImage ? <Image layout="fill" className="banner--image | object-cover  -z-10" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <></>}
-        <div className="title--card | flex gap-4 bg-offWhite-800" style={{ "--tw-bg-opacity": 0.6 }}>
-          {anime.coverImage.large ? <img className="aspect-auto" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} /> : <></>}
-          <div className=" self-center">
-            <div className='text-xl font-semibold'>{anime.title.userPreferred}</div>
-            <div className='text-base'>{anime.title.english}</div>
+      <section>
+        <div className="grid grid-cols-5 grid-rows-2 h-80 w-screen relative isolate">
+          {anime.bannerImage ? <Image layout="fill" className="banner--image | object-cover  -z-10" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <></>}
+          <div className="title--card | flex gap-4 bg-offWhite-800" style={{ "--tw-bg-opacity": 0.6 }}>
+            {anime.coverImage.large ? <img className="aspect-auto" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} /> : <></>}
+            <div className=" self-center">
+              <div className='text-xl font-semibold'>{anime.title.userPreferred}</div>
+              <div className='text-base'>{anime.title.english}</div>
+            </div>
           </div>
         </div>
-      </div>
-      <Description text={anime.description} />
+      </section>
+      <section>
+        <Description text={anime.description} />
+      </section>
+      <section>
+        <Box className="flex flex-wrap flex-col md:flex-row p-4 gap-2">
+          {/* Sidebar */}
+          <Box className='flex flex-col justify-center gap-4' sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
+
+          </Box>
+          {/* Content */}
+          <Box sx={{ flex: "1 1 80%", overflow: "hidden", width: "-webkit-fill-available" }}>
+            <Characters characters={anime.characters.edges} />
+          </Box>
+        </Box>
+      </section>
     </div>
   )
 }
