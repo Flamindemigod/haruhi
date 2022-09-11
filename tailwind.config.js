@@ -1,11 +1,12 @@
 module.exports = {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        primary: {
+        secondary: {
           100: "#d9edfd",
           200: "#b3dbfb",
           300: "#8ec9f9",
@@ -16,16 +17,16 @@ module.exports = {
           800: "#1a4262",
           900: "#0d2131"
         },
-        secondary: {
-          100: "#d4edeb",
-          200: "#a8dbd7",
-          300: "#7dcac2",
-          400: "#51b8ae",
-          500: "#26a69a",
-          600: "#1e857b",
-          700: "#17645c",
-          800: "#0f423e",
-          900: "#08211f"
+        primary: {
+          100: "#f4cce1",
+          200: "#ea99c4",
+          300: "#df66a6",
+          400: "#d53389",
+          500: "#ca006b",
+          600: "#a20056",
+          700: "#790040",
+          800: "#51002b",
+          900: "#280015"
         },
         offWhite: {
           100: "#d5d5d5",
