@@ -22,7 +22,7 @@ const Relations = ({ relations }) => {
                 <div className='text-xl'>Relations</div>
                 <Carosel width="95vw">
                     {_relations.map(relation => (
-                        <Link href={`/anime/${relation.node.id}`}>
+                        <Link key={relation.node.id} href={`/anime/${relation.node.id}`}>
                             <Card className="cursor-pointer flex-shrink-0" sx={{ width: "19rem" }}>
                                 <div className="flex h-full w-full">
                                     <div className="flex-shrink-0">
