@@ -9,6 +9,7 @@ import Image from "next/image"
 import Description from "../../components/Anime/Description"
 import { Box } from "@mui/material"
 import Characters from "../../components/Anime/Characters"
+import Relations from "../../components/Anime/Relations"
 
 const Anime = ({ anime }) => {
   const user = useSelector(state => state.user.value)
@@ -47,7 +48,12 @@ const Anime = ({ anime }) => {
           </Box>
           {/* Content */}
           <Box sx={{ flex: "1 1 80%", overflow: "hidden", width: "-webkit-fill-available" }}>
-            <Characters characters={anime.characters.edges} />
+            <section className="py-2">
+              <Characters characters={anime.characters.edges} />
+            </section>
+            <section className="py-2">
+              <Relations relations={anime.relations.edges} />
+            </section>
           </Box>
         </Box>
       </section>
