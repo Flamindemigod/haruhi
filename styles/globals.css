@@ -123,3 +123,84 @@
 .mediaListNotification.dropped {
     background-color: var(--clr-status-dropped);
 }
+
+/* Anime Page CSS */
+
+/* Banner Animations */
+.banner--image {
+    grid-column: 1/-1;
+    grid-row: 1/-1;
+    animation: bannerMove 30s alternate infinite linear;
+}
+
+@media (min-width: 600px) {
+
+    .banner--image {
+        animation: bannerMove 20s alternate infinite linear;
+    }
+
+}
+
+@keyframes bannerMove {
+    0% {
+        object-position: left top;
+    }
+
+    100% {
+        object-position: right bottom;
+    }
+}
+
+
+.title--card {
+    grid-column: 1/-1;
+    grid-row: 2/-1;
+}
+
+@media (min-width: 1024px) {
+    .title--card {
+        grid-column: 2/5;
+    }
+}
+
+.description--container {
+    pointer-events: none;
+}
+
+.description--container.readMore {
+    max-height: 170px;
+    overflow: hidden;
+    transition: max-height 200ms ease;
+}
+
+.description--container.readMore[open] {
+    max-height: 45rem;
+    overflow: auto
+}
+
+.description--container.readMore::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 10%, rgba(255, 255, 255, 0) 100%);
+    opacity: 1;
+    transition: opacity 200ms ease;
+}
+
+.description--container.readMore[open]::before {
+    opacity: 0;
+}
+
+.description--container.readMore::after {
+    pointer-events: all;
+    content: "Read More";
+    position: absolute;
+    bottom: 0.5rem;
+    right: 50%;
+    translate: 50%;
+    cursor: pointer;
+}
+
+.description--container.readMore[open]::after {
+    content: "Read Less";
+}
