@@ -1,8 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import ReactPlayer from 'react-player/lazy'
 import { Box, Button, styled, LinearProgress, Slider, linearProgressClasses, IconButton } from '@mui/material'
 import screenfull from 'screenfull';
 import { PlayArrow, Pause, SkipNext, VolumeUp, VolumeMute, VolumeDown, PictureInPictureAlt, Fullscreen } from '@mui/icons-material';
+import _ from "lodash";
+
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 2,
     borderRadius: 5,
@@ -28,7 +30,10 @@ function pad(string) {
 }
 
 const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
+    let timeoutID = null
     const [isMuted, setIsMuted] = useState(0);
+    const [controlsHidden, setControlsHidden] = useState(0);
+
     const [playerState, setPlayerState] = useState({
         url: null,
         pip: false,
@@ -74,8 +79,19 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
     useEffect(() => {
         setPlayerState(state => ({ ...state, url: url }))
     }, [url])
+
+    useEffect(() => {
+        setControlsHidden(playerState.playing)
+    }, [playerState.playing])
+
+    const throttledPlayerControlHandler = useMemo(() => _.throttle((e) => {
+        clearTimeout(timeoutID)
+        setControlsHidden(false)
+        timeoutID = setTimeout(() => { setControlsHidden(true) }, 3000)
+    }, 300), [])
+
     return (
-        <Box className="player | relative isolate" sx={{ aspectRatio: "16/9" }} ref={playerContainer}>
+        <Box className="player | relative isolate" sx={{ aspectRatio: "16/9" }} ref={playerContainer} onMouseMove={throttledPlayerControlHandler} onTouchStart={throttledPlayerControlHandler}>
             <ReactPlayer width="100%" height="100%"
                 url={playerState.url}
                 ref={videoPlayer}
@@ -90,7 +106,7 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
                     setPlayerState(state => ({ ...state, duration }))
                 }} />
 
-            <Box className='player--controls | absolute inset-0 z-10'>
+            <Box className="player--controls | absolute inset-0 z-10" hidden={controlsHidden}>
                 {/* Seek Fields */}
 
                 <div className='flex w-full h-full'>
@@ -152,7 +168,7 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
                     </div>
                 </Box>
             </Box>
-        </Box>
+        </Box >
     )
 }
 
