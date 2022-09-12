@@ -14,12 +14,17 @@ const Layout = ({ children }) => {
     useEffect(() => {
         const getUserDetails = async () => {
             var query = `query {
-                        Viewer {
-                            id
-                            name
-                            avatar{
-                                medium
-                            }}
+                    Viewer {
+                      id
+                      name
+                      avatar {
+                        medium
+                      }
+                      mediaListOptions{
+                        scoreFormat
+                      }
+                    }
+                  
                         }`;
 
             const userData = await makeQuery(query, {}, token).then((data) =>
@@ -34,6 +39,7 @@ const Layout = ({ children }) => {
                 userPreferenceSkipOpening: localStorage.getItem("UserPrefSkipOpening") ? parseInt(localStorage.getItem("UserPrefSkipOpening")) : 85,
                 userPreferenceDubbed: JSON.parse(localStorage.getItem("UserPrefDubbed")) ? JSON.parse(localStorage.getItem("UserPrefDubbed")) : false,
                 userPreferenceEpisodeUpdateTreshold: localStorage.getItem("UserPrefEpisodeTreshold") ? parseFloat(localStorage.getItem("UserPrefEpisodeTreshold")) : 0.9,
+                userScoreFormat: userData.mediaListOptions.scoreFormat,
             }));
             dispatch(setLoading(false))
         };
