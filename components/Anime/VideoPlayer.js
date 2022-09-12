@@ -1,4 +1,3 @@
-import { findDOMNode } from 'react-dom';
 import { useEffect, useState, useRef } from 'react';
 import ReactPlayer from 'react-player/lazy'
 import { Box, Button, styled, LinearProgress, Slider, linearProgressClasses, IconButton } from '@mui/material'
@@ -63,11 +62,11 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
 
     const handleClickFullscreen = () => {
         if (screenfull.isFullscreen) {
-            screenfull.exit(findDOMNode(playerContainer.current))
+            screenfull.exit(playerContainer.current)
             window.screen.orientation.unlock()
         }
         else {
-            screenfull.request(findDOMNode(playerContainer.current))
+            screenfull.request(playerContainer.current)
             window.screen.orientation.lock("landscape")
         }
     }
