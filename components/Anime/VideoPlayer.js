@@ -148,7 +148,6 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
                             {/* Fullscreen */}
                             <Button sx={{ color: "white" }} onClick={handleClickFullscreen}>
                                 <Fullscreen />
-                                <div className='w-full h-full'></div>
                             </Button>
                         </div>
                     </div>
