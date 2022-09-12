@@ -5,6 +5,9 @@ import { useSelector } from 'react-redux';
 import { VIDEOSERVER } from '../../config';
 import { median } from '../../median';
 import VideoPlayer from './VideoPlayer';
+import makeQuery from "../../makeQuery";
+import AlertInfo from '../AlertInfo';
+
 
 const getVideoUrl = async (title, episode) => {
     function handleResponse(response) {
@@ -24,12 +27,33 @@ const getVideoUrl = async (title, episode) => {
 };
 
 const Streaming = ({ anime, videoId }) => {
+    const [alertOpen, setAlertOpen] = useState(false);
     const [windowLoaded, setWindowLoaded] = useState(false);
     const user = useSelector(state => state.user.value)
     const [videoURL, setVideoURL] = useState("");
     const [episode, setEpisode] = useState(1);
     const [hasDubbed, setHasDubbed] = useState(false);
     const [isDubbed, setIsDubbed] = useState(user.userPreferenceDubbed);
+    const [progress, setProgress] = useState(0);
+    const [videoEnd, setVideoEnd] = useState(false);
+
+
+
+    const updateEpisode = async (id, episode, status, rewatches = 0) => {
+        const query = `
+                mutation updateEpisode($id: Int=1, $episode: Int=1, $status: MediaListStatus=CURRENT, $rewatches: Int= 0){
+                  SaveMediaListEntry(mediaId: $id, progress:$episode, status:$status, repeat: $rewatches){
+                    id
+                  }
+                }`;
+        const variables = {
+            id: id,
+            episode: episode,
+            status: status,
+            rewatches: rewatches
+        };
+        makeQuery(query, variables, user.userToken);
+    };
 
     useEffect(() => {
         if (anime.mediaListEntry) {
@@ -65,11 +89,45 @@ const Streaming = ({ anime, videoId }) => {
     useEffect(() => {
         setWindowLoaded(true)
     }, []);
+
+    useEffect(() => {
+        if (user.userAuth) {
+            if (progress >= user.userPreferenceEpisodeUpdateTreshold && !videoEnd) {
+                setVideoEnd(true);
+                setAlertOpen(true);
+                if (episode === 1) {
+                    if (mediaListStatus === "COMPLETED") {
+                        updateEpisode(mediaId, episodeToPlay, "CURRENT", anime.mediaListEntry.repeat + 1);
+
+                    }
+                    else {
+                        updateEpisode(mediaId, episodeToPlay, "CURRENT", anime.mediaListEntry.repeat);
+
+                    }
+                }
+                if (episode === anime.episodes) {
+                    if (episode === 1) {
+                        updateEpisode(anime.id, episode, "COMPLETED", anime.mediaListEntry.repeat + 1);
+                    }
+                    else {
+                        updateEpisode(anime.id, episode, "COMPLETED", anime.mediaListEntry.repeat);
+                    }
+                }
+                else {
+                    updateEpisode(anime.id, episode, "CURRENT", anime.mediaListEntry.repeat);
+                }
+
+
+            }
+        }
+    }, [progress])
     return (
         <div>
             <div className='text-xl'>Streaming</div>
-            {/* {JSON.stringify(videoURL)} */}
             {windowLoaded && <VideoPlayer
+                setVideoEnd={setVideoEnd}
+                setProgress={setProgress}
+                onReady={() => { setVideoEnd(false) }}
                 url={videoURL}
                 hasNextEpisode={(episode === (anime.nextAiringEpisode ? anime.nextAiringEpisode.episode - 1 : anime.episodes)) ? false : true}
                 onNextEpisode={() => { setEpisode(state => state + 1) }} />}
@@ -121,6 +179,11 @@ const Streaming = ({ anime, videoId }) => {
                     <FormControlLabel disabled={!hasDubbed} control={<Switch checked={isDubbed} onChange={() => { setIsDubbed(state => !state) }} />} label={isDubbed ? "Dubbed" : "Subbed"} />
                 </FormGroup>
             </div>
+            <AlertInfo
+                open={alertOpen}
+                onClose={() => { setAlertOpen(false) }}
+                value="Episode Updated"
+            />
         </div>
     )
 }

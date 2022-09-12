@@ -29,7 +29,7 @@ function pad(string) {
     return ('0' + string).slice(-2)
 }
 
-const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
+const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode, onReady }) => {
     let timeoutID = null
     const [isMuted, setIsMuted] = useState(0);
     const [controlsHidden, setControlsHidden] = useState(0);
@@ -54,6 +54,29 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
     const playerContainer = useRef();
 
 
+    function keyboardShortcuts(event) {
+        const { key } = event;
+        switch (key) {
+            case 'k':
+                setPlayerState((state) => ({ ...state, playing: !state.playing }))
+                break;
+            case ' ':
+                setPlayerState((state) => ({ ...state, playing: !state.playing }))
+                break;
+            case 'm':
+                toggleMute()
+                break;
+            case 'f':
+                handleClickFullscreen();
+                break;
+            case 'p':
+                setPlayerState((state) => ({ ...state, playing: !state.playing }))
+                break;
+            default:
+                break
+        }
+    }
+
     const toggleMute = () => {
         if (isMuted !== 0) {
             setPlayerState((state) => ({ ...state, volume: isMuted }));
@@ -77,12 +100,17 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
     }
 
     useEffect(() => {
-        setPlayerState(state => ({ ...state, url: url }))
-    }, [url])
+        setPlayerState(state => ({ ...state, url: url }));
+    }, [url]);
 
     useEffect(() => {
-        setControlsHidden(playerState.playing)
-    }, [playerState.playing])
+        setControlsHidden(playerState.playing);
+    }, [playerState.playing]);
+
+    useEffect(() => {
+        document.addEventListener('keyup', keyboardShortcuts, true);
+        return (document.removeEventListener('keyup', keyboardShortcuts))
+    }, []);
 
     const throttledPlayerControlHandler = useMemo(() => _.throttle((e) => {
         clearTimeout(timeoutID)
@@ -98,8 +126,9 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode }) => {
                 playing={playerState.playing}
                 volume={playerState.volume}
                 pip={playerState.pip}
+                onReady={onReady}
                 onProgress={(newState) => {
-                    console.log(newState)
+                    setProgress(newState.played)
                     setPlayerState(state => ({ ...state, ...newState }))
                 }}
                 onDuration={(duration) => {
