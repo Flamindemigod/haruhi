@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Meta from "../../components/Meta"
-import { SERVER } from "../../config"
+import { MALSERVER, SERVER, VIDEOSERVER } from "../../config"
 import { setLoading } from "../../features/loading"
 import makeQuery from "../../makeQuery"
 import * as cookie from 'cookie'
@@ -10,8 +10,9 @@ import Description from "../../components/Anime/Description"
 import { Box } from "@mui/material"
 import Characters from "../../components/Anime/Characters"
 import Relations from "../../components/Anime/Relations"
+import Streaming from "../../components/Anime/Streaming"
 
-const Anime = ({ anime }) => {
+const Anime = ({ anime, videoId }) => {
   const user = useSelector(state => state.user.value)
   const dispatch = useDispatch();
   useEffect(() => {
@@ -54,6 +55,9 @@ const Anime = ({ anime }) => {
             <section className="py-2">
               <Relations relations={anime.relations.edges} />
             </section>
+            <section>
+              <Streaming anime={anime} videoId={videoId} />
+            </section>
           </Box>
         </Box>
       </section>
@@ -62,6 +66,44 @@ const Anime = ({ anime }) => {
 }
 
 export async function getServerSideProps({ params, req }) {
+
+  const getMALTitle = async (idMal) => {
+    function handleResponse(response) {
+      return response.json().then(function (json) {
+        return response.ok ? json : Promise.reject(json);
+      });
+    }
+
+    function handleError(error) {
+      console.error(error);
+    }
+    const req = `${MALSERVER}/${idMal}`;
+    const resp = await fetch(req)
+      .then(handleResponse)
+      .catch(handleError);
+    return resp.data.title;
+  };
+
+  const getAnimeID = async (title) => {
+    function handleResponse(response) {
+      return response.json().then(function (json) {
+        return response.ok ? json : Promise.reject(json);
+      });
+    }
+
+
+    function handleError(error) {
+      console.error(error);
+    }
+
+    const req =
+      `${VIDEOSERVER}/search?keyw=${title.replace(/[☆★♡△]/g, " ")}`;
+    const resp = await fetch(req)
+      .then(handleResponse)
+      .catch(handleError);
+    return resp;
+  };
+
   const query = `query getAnimeData($id: Int = 1) {
         Media(id: $id) {
           id
@@ -200,9 +242,15 @@ export async function getServerSideProps({ params, req }) {
     id: params.id,
   };
   const animeData = await makeQuery(query, variables, req.headers.cookie ? cookie.parse(req.headers.cookie).access_token : null);
-  const data = await animeData.data.Media
+  const data = await animeData.data.Media;
+
+
+
+  const malTitle = await getMALTitle(data.idMal);
+  const animeID = await getAnimeID(malTitle);
+
   return {
-    props: { anime: data }
+    props: { anime: data, videoId: animeID }
   }
 }
 
