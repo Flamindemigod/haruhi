@@ -45,11 +45,11 @@ const Anime = ({ anime, videoId }) => {
       <section>
         <Box className="flex flex-wrap flex-col md:flex-row p-4 gap-2">
           {/* Sidebar */}
-          <Box className='flex flex-col gap-4' sx={{ flex: "1 1 25%", width: "-webkit-fill-available" }}>
+          <Box className='flex flex-col gap-4' sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
             <ListEditor anime={anime} />
           </Box>
           {/* Content */}
-          <Box sx={{ flex: "1 1 70%", overflow: "hidden", width: "-webkit-fill-available" }}>
+          <Box sx={{ flex: "1 1 80%", overflow: "hidden", width: "-webkit-fill-available" }}>
             <section className="py-2">
               <Characters characters={anime.characters.edges} />
             </section>
