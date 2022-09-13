@@ -11,6 +11,7 @@ import { Box } from "@mui/material"
 import Characters from "../../components/Anime/Characters"
 import Relations from "../../components/Anime/Relations"
 import Streaming from "../../components/Anime/Streaming"
+import ListEditor from "../../components/Anime/ListEditor"
 
 const Anime = ({ anime, videoId }) => {
   const user = useSelector(state => state.user.value)
@@ -30,7 +31,7 @@ const Anime = ({ anime, videoId }) => {
         <div className="grid grid-cols-5 grid-rows-2 h-80 w-screen relative isolate">
           {anime.bannerImage ? <Image layout="fill" className="banner--image | object-cover  -z-10" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <></>}
           <div className="title--card | flex gap-4 bg-offWhite-800" style={{ "--tw-bg-opacity": 0.6 }}>
-            {anime.coverImage.large ? <img className="aspect-auto" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} /> : <></>}
+            <Image className="aspect-auto" width={128} height={228} src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} />
             <div className=" self-center">
               <div className='text-xl font-semibold'>{anime.title.userPreferred}</div>
               <div className='text-base'>{anime.title.english}</div>
@@ -44,11 +45,11 @@ const Anime = ({ anime, videoId }) => {
       <section>
         <Box className="flex flex-wrap flex-col md:flex-row p-4 gap-2">
           {/* Sidebar */}
-          <Box className='flex flex-col justify-center gap-4' sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
-
+          <Box className='flex flex-col gap-4' sx={{ flex: "1 1 25%", width: "-webkit-fill-available" }}>
+            <ListEditor anime={anime} />
           </Box>
           {/* Content */}
-          <Box sx={{ flex: "1 1 80%", overflow: "hidden", width: "-webkit-fill-available" }}>
+          <Box sx={{ flex: "1 1 70%", overflow: "hidden", width: "-webkit-fill-available" }}>
             <section className="py-2">
               <Characters characters={anime.characters.edges} />
             </section>
@@ -152,6 +153,7 @@ export async function getServerSideProps({ params, req }) {
             name
             description
             category
+            rank
           }
           averageScore
           nextAiringEpisode {
@@ -244,11 +246,14 @@ export async function getServerSideProps({ params, req }) {
   const animeData = await makeQuery(query, variables, req.headers.cookie ? cookie.parse(req.headers.cookie).access_token : null);
   const data = await animeData.data.Media;
 
-
+  const blacklist = {
+    40356: [{ animeId: "tate-no-yuusha-no-nariagari-season-2" }, { animeId: "tate-no-yuusha-no-nariagari-season-2-dub" }],
+    38680: [{ animeId: "fruits-basket-2019" }, { animeId: "fruits-basket-2019-dub" }],
+    47164: [{ animeId: "dungeon-ni-deai-wo-motomeru-no-wa-machigatteiru-darou-ka-iv-shin-shou-meikyuu-hen" }],
+  }
 
   const malTitle = await getMALTitle(data.idMal);
-  const animeID = await getAnimeID(malTitle);
-
+  const animeID = blacklist[data.idMal] || await getAnimeID(malTitle);
   return {
     props: { anime: data, videoId: animeID }
   }
