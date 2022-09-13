@@ -31,7 +31,7 @@ const Anime = ({ anime, videoId }) => {
         <div className="grid grid-cols-5 grid-rows-2 h-80 w-screen relative isolate">
           {anime.bannerImage ? <Image layout="fill" className="banner--image | object-cover  -z-10" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <></>}
           <div className="title--card | flex gap-4 bg-offWhite-800" style={{ "--tw-bg-opacity": 0.6 }}>
-            <Image className="aspect-auto" width={128} height={228} src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} />
+            <Image className="aspect-auto object-cover" width={128} height={228} src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} />
             <div className=" self-center">
               <div className='text-xl font-semibold'>{anime.title.userPreferred}</div>
               <div className='text-base'>{anime.title.english}</div>

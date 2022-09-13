@@ -97,11 +97,11 @@ const ListEditor = ({ anime }) => {
             <Dialog open={open} onClose={() => { setOpen(false) }} fullWidth maxWidth={"lg"}>
                 <Box className="relative w-full">
                     <Box className="relative w-full" sx={{ aspectRatio: "21 / 6", maxHeight: "20rem" }}>
-                        <Image src={anime.bannerImage} layout="fill" className='object-cover' />
+                        <Image src={anime.bannerImage || ""} layout="fill" className='object-cover' />
                         <Box className='flex absolute top-1/2 w-full px-10' sx={{
                             transform: "translateY(-50%)"
                         }}>
-                            < Image src={anime.coverImage.large} width={80} height={127} />
+                            < Image src={anime.coverImage.large} width={80} height={127} className="object-cover" />
                             <div className='w-full bg-black bg-opacity-40 p-4'>
                                 <div className='text-xl font-semibold'>{anime.title.userPreferred}</div>
                                 <div className=''>{anime.title.english}</div>
