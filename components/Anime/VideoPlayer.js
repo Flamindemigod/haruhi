@@ -2,8 +2,9 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import ReactPlayer from 'react-player/lazy'
 import { Box, Button, styled, LinearProgress, Slider, linearProgressClasses, IconButton } from '@mui/material'
 import screenfull from 'screenfull';
-import { PlayArrow, Pause, SkipNext, VolumeUp, VolumeMute, VolumeDown, PictureInPictureAlt, Fullscreen } from '@mui/icons-material';
+import { PlayArrow, Pause, SkipNext, VolumeUp, VolumeMute, VolumeDown, PictureInPictureAlt, Fullscreen, FastForward } from '@mui/icons-material';
 import _ from "lodash";
+import { useSelector } from 'react-redux';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 2,
@@ -31,6 +32,7 @@ function pad(string) {
 
 const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode, onReady }) => {
     let timeoutID = null
+    const user = useSelector(state => state.user.value)
     const [isMuted, setIsMuted] = useState(0);
     const [controlsHidden, setControlsHidden] = useState(0);
 
@@ -148,6 +150,18 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode, onReady 
                     onClick={() => { setPlayerState(state => ({ ...state, playing: !state.playing })) }}>
                     {playerState.playing ? <Pause sx={{ width: 64, height: 64 }} /> : <PlayArrow sx={{ width: 64, height: 64 }} />}
                 </Button>
+                {/* Opening Skip Button */}
+                {user.userPreferenceSkipOpening ? (<div className="absolute bottom-2/4 sm:bottom-1/4 right-10 ">
+                    <Button
+                        onClick={() => {
+                            videoPlayer.current.seekTo(videoPlayer.current.getCurrentTime() + user.userPreferenceSkipOpening)
+                        }}
+                        sx={{ color: "white", borderColor: "white" }}
+                        variant="outlined">
+                        <FastForward />
+                        +{user.userPreferenceSkipOpening}
+                    </Button>
+                </div>) : <></>}
                 {/* Bottom Controls */}
                 <Box className='absolute -bottom-1 left-0 right-0 flex flex-col bg-gradient-to-t from-black to-transparent'>
                     <div className='relative'>
