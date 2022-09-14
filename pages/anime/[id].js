@@ -13,6 +13,7 @@ import Relations from "../../components/Anime/Relations"
 import Streaming from "../../components/Anime/Streaming"
 import ListEditor from "../../components/Anime/ListEditor"
 import Sidebar from "../../components/Anime/Sidebar"
+import Recommended from "../../components/Anime/Recommended"
 
 const Anime = ({ anime, videoId }) => {
   const user = useSelector(state => state.user.value)
@@ -30,7 +31,7 @@ const Anime = ({ anime, videoId }) => {
 
       <section>
         <div className="grid grid-cols-5 grid-rows-2 h-80 w-screen relative isolate">
-          {anime.bannerImage ? <Image layout="fill" className="banner--image | object-cover  -z-10" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <></>}
+          {anime.bannerImage ? <Image layout="fill" className="banner--image | object-cover  -z-10" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <div className="banner--image--empty" />}
           <div className="title--card | flex gap-4 bg-offWhite-800" style={{ "--tw-bg-opacity": 0.6 }}>
             <div className="flex-shrink-0 overflow-hidden flex items-center">
               <Image className="aspect-auto object-contain" width={128} height={228} src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} />
@@ -60,8 +61,11 @@ const Anime = ({ anime, videoId }) => {
             <section className="py-2">
               <Relations relations={anime.relations.edges} />
             </section>
-            <section>
+            <section className="py-2">
               <Streaming anime={anime} videoId={videoId} />
+            </section>
+            <section className="py-2">
+              <Recommended recommendations={anime.recommendations.edges} />
             </section>
           </Box>
         </Box>
@@ -204,6 +208,7 @@ export async function getServerSideProps({ params, req }) {
                 mediaRecommendation {
                   type
                   id
+                  status
                   title {
                     userPreferred
                   }
