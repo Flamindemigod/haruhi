@@ -35,7 +35,7 @@ const Carosel = ({ width = "100vw", children }) => {
 
                 setShowLeftButton(false)
             }
-            if (parseInt(caroselTrack.current.scrollLeft + 1) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth)) {
+            if (parseInt(caroselTrack.current.scrollLeft) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth)) {
                 setShowRightButton(false)
             }
         })
@@ -46,7 +46,7 @@ const Carosel = ({ width = "100vw", children }) => {
             if (caroselTrack.current.scrollLeft === 0) {
                 setShowLeftButton(false)
             }
-            if (parseInt(caroselTrack.current.scrollLeft + 1) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth)) {
+            if (parseInt(caroselTrack.current.scrollLeft) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth)) {
                 setShowRightButton(false)
             }
         }))
