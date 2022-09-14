@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link";
 import { unsetUser } from "../features/user";
 import { Menu as MenuIcon, Logout } from "@mui/icons-material";
+import SearchButton from "./Header/Search";
 
 const Header = () => {
     const matches = useMediaQuery('(min-width:640px)');
@@ -69,7 +70,8 @@ const Header = () => {
                 </>
                 )
             }
-            <Box className="self-center ml-auto">
+            <Box className="flex gap-2 self-center ml-auto">
+                <SearchButton />
                 {user.userAuth ? (<div className="flex gap-4">
                     <Avatar onClick={handleClick} src={user.userAvatar}></Avatar>
                     <Menu

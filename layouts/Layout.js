@@ -58,7 +58,7 @@ const Layout = ({ children }) => {
             <header>
                 <Header />
             </header>
-            <main className='flex justify-center align-center w-full'>{children}</main>
+            <main className='flex justify-center align-center w-full flex-grow'>{children}</main>
             <footer>
                 <Footer />
             </footer>
