@@ -45,7 +45,7 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
                     </div>
                     <div className={`card--content | flex-col absolute ${changeDirection ? "right-full" : "left-full"} w-64 top-0 bottom-0 bg-offWhite-600 z-10 p-4`}>
                         <div className="card--title | text-lg">{title}</div>
-                        <div className='mt-auto'>{progress && `Progress: ${progress} ${episodes ? "/" : "+"} ${episodes ? episodes : ""}`}</div>
+                        <div className='mt-auto'>{progress ? `Progress: ${progress} ${episodes ? "/" : "+"} ${episodes ? episodes : ""}` : ""}</div>
                         <div>{nextAiringTime && (<div>
                             {`Ep ${nextAiringEpisode} airing in `}
                             <Countdown
@@ -53,7 +53,7 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
                                 renderer={countdownRenderer}
                             />
                         </div>)}</div>
-                        <div className='capitalize'>{status.replace(/[_]/gm, " ").toLowerCase()}</div>
+                        {status && <div className='capitalize'>{status.replace(/[_]/gm, " ").toLowerCase()}</div>}
 
                     </div>
                     {((progress < (nextAiringEpisode - 1)) && progress) && <div className='notification'></div>}

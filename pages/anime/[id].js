@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Meta from "../../components/Meta"
-import { SERVER } from "../../config"
+import { MALSERVER, SERVER, VIDEOSERVER } from "../../config"
 import { setLoading } from "../../features/loading"
 import makeQuery from "../../makeQuery"
 import * as cookie from 'cookie'
@@ -10,8 +10,12 @@ import Description from "../../components/Anime/Description"
 import { Box } from "@mui/material"
 import Characters from "../../components/Anime/Characters"
 import Relations from "../../components/Anime/Relations"
+import Streaming from "../../components/Anime/Streaming"
+import ListEditor from "../../components/Anime/ListEditor"
+import Sidebar from "../../components/Anime/Sidebar"
+import Recommended from "../../components/Anime/Recommended"
 
-const Anime = ({ anime }) => {
+const Anime = ({ anime, videoId }) => {
   const user = useSelector(state => state.user.value)
   const dispatch = useDispatch();
   useEffect(() => {
@@ -27,12 +31,14 @@ const Anime = ({ anime }) => {
 
       <section>
         <div className="grid grid-cols-5 grid-rows-2 h-80 w-screen relative isolate">
-          {anime.bannerImage ? <Image layout="fill" className="banner--image | object-cover  -z-10" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <></>}
+          {anime.bannerImage ? <Image layout="fill" className="banner--image | object-cover  -z-10" src={anime.bannerImage} alt={`Banner for ${anime.title.userPreferred}`} /> : <div className="banner--image--empty" />}
           <div className="title--card | flex gap-4 bg-offWhite-800" style={{ "--tw-bg-opacity": 0.6 }}>
-            {anime.coverImage.large ? <img className="aspect-auto" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} /> : <></>}
+            <div className="flex-shrink-0 overflow-hidden flex items-center">
+              <Image className="aspect-auto object-contain" width={128} height={228} src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} />
+            </div>
             <div className=" self-center">
-              <div className='text-xl font-semibold'>{anime.title.userPreferred}</div>
-              <div className='text-base'>{anime.title.english}</div>
+              <div className='media--title | text-xl font-semibold'>{anime.title.userPreferred}</div>
+              <div className='media--title | text-base'>{anime.title.english}</div>
             </div>
           </div>
         </div>
@@ -41,10 +47,11 @@ const Anime = ({ anime }) => {
         <Description text={anime.description} />
       </section>
       <section>
-        <Box className="flex flex-wrap flex-col md:flex-row p-4 gap-2">
+        <Box className="flex flex-wrap flex-col md:flex-row p-4 gap-4">
           {/* Sidebar */}
-          <Box className='flex flex-col justify-center gap-4' sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
-
+          <Box className='flex flex-col gap-4' sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
+            <ListEditor anime={anime} />
+            <Sidebar anime={anime} />
           </Box>
           {/* Content */}
           <Box sx={{ flex: "1 1 80%", overflow: "hidden", width: "-webkit-fill-available" }}>
@@ -54,6 +61,12 @@ const Anime = ({ anime }) => {
             <section className="py-2">
               <Relations relations={anime.relations.edges} />
             </section>
+            <section className="py-2">
+              <Streaming anime={anime} videoId={videoId} />
+            </section>
+            <section className="py-2">
+              <Recommended recommendations={anime.recommendations.edges} />
+            </section>
           </Box>
         </Box>
       </section>
@@ -62,6 +75,44 @@ const Anime = ({ anime }) => {
 }
 
 export async function getServerSideProps({ params, req }) {
+
+  const getMALTitle = async (idMal) => {
+    function handleResponse(response) {
+      return response.json().then(function (json) {
+        return response.ok ? json : Promise.reject(json);
+      });
+    }
+
+    function handleError(error) {
+      console.error(error);
+    }
+    const req = `${MALSERVER}/${idMal}`;
+    const resp = await fetch(req)
+      .then(handleResponse)
+      .catch(handleError);
+    return resp.data.title;
+  };
+
+  const getAnimeID = async (title) => {
+    function handleResponse(response) {
+      return response.json().then(function (json) {
+        return response.ok ? json : Promise.reject(json);
+      });
+    }
+
+
+    function handleError(error) {
+      console.error(error);
+    }
+
+    const req =
+      `${VIDEOSERVER}/search?keyw=${title.replace(/[☆★♡△]/g, " ")}`;
+    const resp = await fetch(req)
+      .then(handleResponse)
+      .catch(handleError);
+    return resp;
+  };
+
   const query = `query getAnimeData($id: Int = 1) {
         Media(id: $id) {
           id
@@ -110,6 +161,7 @@ export async function getServerSideProps({ params, req }) {
             name
             description
             category
+            rank
           }
           averageScore
           nextAiringEpisode {
@@ -156,6 +208,7 @@ export async function getServerSideProps({ params, req }) {
                 mediaRecommendation {
                   type
                   id
+                  status
                   title {
                     userPreferred
                   }
@@ -200,9 +253,18 @@ export async function getServerSideProps({ params, req }) {
     id: params.id,
   };
   const animeData = await makeQuery(query, variables, req.headers.cookie ? cookie.parse(req.headers.cookie).access_token : null);
-  const data = await animeData.data.Media
+  const data = await animeData.data.Media;
+
+  const blacklist = {
+    40356: [{ animeId: "tate-no-yuusha-no-nariagari-season-2" }, { animeId: "tate-no-yuusha-no-nariagari-season-2-dub" }],
+    38680: [{ animeId: "fruits-basket-2019" }, { animeId: "fruits-basket-2019-dub" }],
+    47164: [{ animeId: "dungeon-ni-deai-wo-motomeru-no-wa-machigatteiru-darou-ka-iv-shin-shou-meikyuu-hen" }],
+  }
+
+  const malTitle = await getMALTitle(data.idMal);
+  const animeID = blacklist[data.idMal] || await getAnimeID(malTitle);
   return {
-    props: { anime: data }
+    props: { anime: data, videoId: animeID }
   }
 }
 

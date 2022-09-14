@@ -14,6 +14,7 @@ export const userSlice = createSlice({
             userPreferenceSkipOpening: 85,
             userPreferenceDubbed: false,
             userPreferenceEpisodeUpdateTreshold: 0.9,
+            userScoreFormat: "POINT_10_DECIMAL"
         }
     },
     reducers: {

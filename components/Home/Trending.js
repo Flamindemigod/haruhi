@@ -36,7 +36,7 @@ const Trending = () => {
   useEffect(() => {
     const getTrending = async () => {
       var query = `query getMediaTrend {
-                  Page(perPage: 50){
+                  Page(perPage: 20){
                     pageInfo{
                       hasNextPage
                     }
@@ -91,7 +91,6 @@ const Trending = () => {
       }
       airingArrayAccumalated = airingArrayAccumalated.concat(data.data.Page.media)
       setAnimeArray(airingArrayAccumalated)
-      console.log(airingArrayAccumalated)
 
     };
     getTrending();

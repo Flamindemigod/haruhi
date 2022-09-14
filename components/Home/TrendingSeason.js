@@ -36,7 +36,7 @@ const TrendingSeason = () => {
     useEffect(() => {
         const getTrending = async () => {
             var query = `query getMediaTrend($season: MediaSeason, $seasonYear: Int) {
-                  Page(perPage: 50){
+                  Page(perPage: 20){
                     pageInfo{
                       hasNextPage
                     }
