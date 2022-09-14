@@ -114,7 +114,7 @@ const List = ({ status }) => {
 
             </div>
             {animeList.map((anime) => (
-                <Link href={`/anime/${anime.id}`} className="listLink">
+                <Link key={anime.id} href={`/anime/${anime.id}`} className="listLink">
                     <div className='flex h-32 sm:h-16 w-full gap-4 justify-center items-center cursor-pointer'>
                         <Box className="h-full w-2/12 relative">
                             <Image className="object-cover  object-center" layout="fill" src={anime.coverImage.large} alt={`Cover for ${anime.title.userPreferred}`} />
