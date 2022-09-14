@@ -58,6 +58,7 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode, onReady 
 
     function keyboardShortcuts(event) {
         const { key } = event;
+
         switch (key) {
             case 'k':
                 setPlayerState((state) => ({ ...state, playing: !state.playing }))
@@ -75,12 +76,14 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode, onReady 
                 setPlayerState((state) => ({ ...state, playing: !state.playing }))
                 break;
             default:
-                break
+                break;
         }
     }
 
     const toggleMute = () => {
+        console.log(isMuted, playerState.volume)
         if (isMuted !== 0) {
+            console.log("Test")
             setPlayerState((state) => ({ ...state, volume: isMuted }));
             setIsMuted(0);
         }
@@ -110,9 +113,10 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode, onReady 
     }, [playerState.playing]);
 
     useEffect(() => {
-        document.addEventListener('keyup', keyboardShortcuts, true);
-        return (document.removeEventListener('keyup', keyboardShortcuts))
-    }, []);
+        document.addEventListener('keyup', keyboardShortcuts);
+
+        return () => { document.removeEventListener('keyup', keyboardShortcuts) }
+    }, [playerState.volume]);
 
     const throttledPlayerControlHandler = useMemo(() => _.throttle((e) => {
         clearTimeout(timeoutID)
