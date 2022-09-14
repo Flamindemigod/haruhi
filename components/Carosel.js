@@ -18,10 +18,16 @@ const Carosel = ({ width = "100vw", children }) => {
     }
 
 
-
+    useEffect(() => {
+        setShowLeftButton(false)
+        setShowRightButton(false)
+        if (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth) {
+            setShowLeftButton(false)
+            setShowRightButton(true)
+        }
+    }, [children])
 
     useEffect(() => {
-
         caroselTrack.current.addEventListener("scroll", () => {
             setShowLeftButton(true)
             setShowRightButton(true)
