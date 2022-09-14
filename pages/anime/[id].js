@@ -12,6 +12,7 @@ import Characters from "../../components/Anime/Characters"
 import Relations from "../../components/Anime/Relations"
 import Streaming from "../../components/Anime/Streaming"
 import ListEditor from "../../components/Anime/ListEditor"
+import Sidebar from "../../components/Anime/Sidebar"
 
 const Anime = ({ anime, videoId }) => {
   const user = useSelector(state => state.user.value)
@@ -45,10 +46,11 @@ const Anime = ({ anime, videoId }) => {
         <Description text={anime.description} />
       </section>
       <section>
-        <Box className="flex flex-wrap flex-col md:flex-row p-4 gap-2">
+        <Box className="flex flex-wrap flex-col md:flex-row p-4 gap-4">
           {/* Sidebar */}
           <Box className='flex flex-col gap-4' sx={{ flex: "1 1 15%", width: "-webkit-fill-available" }}>
             <ListEditor anime={anime} />
+            <Sidebar anime={anime} />
           </Box>
           {/* Content */}
           <Box sx={{ flex: "1 1 80%", overflow: "hidden", width: "-webkit-fill-available" }}>
