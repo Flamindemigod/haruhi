@@ -53,7 +53,7 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
                                 renderer={countdownRenderer}
                             />
                         </div>)}</div>
-                        <div className='capitalize'>{status.replace(/[_]/gm, " ").toLowerCase()}</div>
+                        {status && <div className='capitalize'>{status.replace(/[_]/gm, " ").toLowerCase()}</div>}
 
                     </div>
                     {((progress < (nextAiringEpisode - 1)) && progress) && <div className='notification'></div>}
