@@ -101,10 +101,12 @@ const ListEditor = ({ anime }) => {
                         <Box className='flex absolute top-1/2 w-full px-10' sx={{
                             transform: "translateY(-50%)"
                         }}>
-                            < Image src={anime.coverImage.large} width={80} height={127} className="object-cover" />
+                            <div className="flex items-center flex-shrink-0">
+                                <Image src={anime.coverImage.large} width={80} height={127} className="object-contain" />
+                            </div>
                             <div className='w-full bg-black bg-opacity-40 p-4'>
-                                <div className='text-xl font-semibold'>{anime.title.userPreferred}</div>
-                                <div className=''>{anime.title.english}</div>
+                                <div className='media--title | text-xl font-semibold'>{anime.title.userPreferred}</div>
+                                <div className='media--title'>{anime.title.english}</div>
                             </div>
                         </Box>
                     </Box>

@@ -1,4 +1,4 @@
-import { FormControlLabel, FormGroup, Switch, IconButton, Select, FormControl, InputLabel, MenuItem } from '@mui/material';
+import { FormControlLabel, FormGroup, Switch, IconButton, Select, FormControl, InputLabel, MenuItem, Box } from '@mui/material';
 import { SkipPrevious, SkipNext } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -31,7 +31,7 @@ const Streaming = ({ anime, videoId }) => {
     const [windowLoaded, setWindowLoaded] = useState(false);
     const user = useSelector(state => state.user.value)
     const [videoURL, setVideoURL] = useState("");
-    const [episode, setEpisode] = useState(1);
+    const [episode, setEpisode] = useState(0);
     const [hasDubbed, setHasDubbed] = useState(false);
     const [isDubbed, setIsDubbed] = useState(user.userPreferenceDubbed);
     const [progress, setProgress] = useState(0);
@@ -131,9 +131,11 @@ const Streaming = ({ anime, videoId }) => {
                 url={videoURL}
                 hasNextEpisode={(episode === (anime.nextAiringEpisode ? anime.nextAiringEpisode.episode - 1 : anime.episodes)) ? false : true}
                 onNextEpisode={() => { setEpisode(state => state + 1) }} />}
-            <div className="flex flex-col sm:flex-row w-full justify-center items-center">
+            <div className="flex flex-col sm:flex-row w-full justify-between items-center">
+                {/* Empty Div to help position */}
+                <Box sx={{ width: "10rem" }}></Box>
                 {/* Episode Selector */}
-                <div className="flex flex-row justify-center ml-0 sm:ml-auto">
+                <div className="flex flex-row justify-center ">
                     <IconButton
                         aria-label="Previous Episode"
                         disabled={(episode === 1) ? true : false}
@@ -175,7 +177,7 @@ const Streaming = ({ anime, videoId }) => {
                     </IconButton>
                 </div>
                 {/* Dubbed Selector */}
-                <FormGroup sx={{ ml: "auto" }}>
+                <FormGroup sx={{ width: "10rem" }}>
                     <FormControlLabel disabled={!hasDubbed} control={<Switch checked={isDubbed} onChange={() => { setIsDubbed(state => !state) }} />} label={isDubbed ? "Dubbed" : "Subbed"} />
                 </FormGroup>
             </div>
