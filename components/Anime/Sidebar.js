@@ -23,8 +23,8 @@ const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
 const Content = ({ title, content, containerClass = "" }) => {
     return (
         <div className={containerClass}>
-            <div className='font-semibold w-max'>{title}</div>
-            <div className="w-max">{content}</div>
+            <div className='font-semibold w-max md:w-auto'>{title}</div>
+            <div className="w-max md:w-auto">{content}</div>
         </div>
     )
 }
@@ -61,7 +61,7 @@ const Sidebar = ({ anime }) => {
                 anime.genres.map(genre => (<div key={genre}>{genre}</div>))
             }</div>} />
             <Content title="Tags" content={<div className="flex flex-col">{
-                anime.tags.map(tag => (<div className="flex justify-between gap-4" key={tag.id}><div>{tag.name}</div><div>{`${tag.rank}%`}</div></div>))
+                anime.tags.map(tag => (<div className="flex justify-between gap-4 items-end" key={tag.id}><div>{tag.name}</div><div>{`${tag.rank}%`}</div></div>))
             }</div>} />
         </Box>
     )
