@@ -19,7 +19,9 @@ const SearchStudio = ({ searchString, setDialogOpen, setSearchQuery }) => {
                 searchString
             };
             const data = await makeQuery(query, variables);
-            setSearchResults(data.data.Page)
+            if (data) {
+                setSearchResults(await data.data.Page)
+            }
         }
         search()
 

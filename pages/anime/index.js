@@ -11,7 +11,7 @@ const AnimeList = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.value)
     const [tabIndex, setTabIndex] = useState("1");
-
+    const ScreenOrientation = useMediaQuery('(min-width:600px)');
     const handleChange = (event, newtabIndex) => {
         setTabIndex(newtabIndex);
     };
@@ -30,7 +30,7 @@ const AnimeList = () => {
                 <Box className="w-full text-xl">
                     <TabContext value={tabIndex}>
                         <Box>
-                            <TabList sx={{ "& .MuiTabs-scroller": { marginInline: "auto" }, "& .MuiTabs-flexContainerVertical": { width: "max-content", marginInline: "auto" } }} orientation={!useMediaQuery('(min-width:600px)') ? 'vertical' : "horizontal"} onChange={handleChange} centered>
+                            <TabList sx={{ "& .MuiTabs-scroller": { marginInline: "auto" }, "& .MuiTabs-flexContainerVertical": { width: "max-content", marginInline: "auto" } }} orientation={!ScreenOrientation ? 'vertical' : "horizontal"} onChange={handleChange} centered>
                                 <Tab label="Currently Watching" value="1" />
                                 <Tab label="On Hold" value="2" />
                                 <Tab label="Planning" value="3" />
