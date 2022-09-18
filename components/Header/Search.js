@@ -56,10 +56,10 @@ const SearchButton = () => {
                         <Search sx={{ mr: 1, my: 0.5 }} />
                     </div>
                 </DialogTitle>
-                <div className='flex gap-1 w-full justify-end'>Try the <Link href="/search" onClick={() => {
+                <div className='flex gap-1 w-full justify-end'>Try the <Link href="/search" ><Box className='cursor-pointer' onClick={() => {
                     setSearchQuery("");
                     setDialogOpen(false);
-                }}><Box sx={{ color: "var(--clr-primary)" }}> Advanced Search </Box></Link></div>
+                }} sx={{ color: "var(--clr-primary)" }}> Advanced Search </Box></Link></div>
                 <DialogContent className='styled-scrollbars' sx={{ backgroundColor: "transparent" }}>
                     <div className='grid sm:grid-cols-2 md:grid-cols-3 max-w-8xl gap-8 gap-y-8 mx-auto mt-8'>
                         <SearchMedia searchString={searchQuery} setSearchQuery={setSearchQuery} setDialogOpen={setDialogOpen} />
