@@ -1,7 +1,7 @@
 import { FormControl, InputBase, Autocomplete, TextField, FormControlLabel, Checkbox, Box, useMediaQuery } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { useEffect, useState, useRef } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setLoading } from '../features/loading';
 import { styled, alpha } from '@mui/material/styles';
 import makeQuery from '../makeQuery';
@@ -26,6 +26,7 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const AdvancedSearch = () => {
+    const user = useSelector(state => state.user.value)
     const dispatch = useDispatch();
     const hasHover = useMediaQuery("(hover:hover)");
     const searchGrid = useRef();
@@ -90,7 +91,7 @@ const AdvancedSearch = () => {
             let hasNextPage = true
 
             while (hasNextPage) {
-                const data = await makeQuery(query, variables);
+                const data = await makeQuery(query, variables, user.userToken);
                 if (!data) { return null }
                 dataArray = [...dataArray, ...data.data.Page.media]
                 if ((!data.data.Page.pageInfo.hasNextPage) || (variables.page === 5)) {
@@ -312,12 +313,12 @@ const AdvancedSearch = () => {
 
                 </div>
                 <div className="ml-auto">
-                    <FormControl sx={{ justifySelf: "end" }}>
+                    <FormControl disabled={!user.userAuth} sx={{ justifySelf: "end" }}>
                         <FormControlLabel
                             control={<Checkbox checked={onList} onChange={(e) => { setOnList(e.target.checked) }} />}
                             label="Is on List" />
                     </FormControl>
-                    <FormControl>
+                    <FormControl disabled={!user.userAuth}>
                         <FormControlLabel
                             control={<Checkbox checked={isAdult} onChange={(e) => { setIsAdult(e.target.checked) }} />}
                             label="Is Adult" />
@@ -327,7 +328,7 @@ const AdvancedSearch = () => {
             <div className="flex justify-center items-center ">
                 <Box ref={searchGrid} className={`search--grid | grid justify-center gap-4 w-max ${hasHover ? "grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11 3xl:grid-cols-13" : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"}`}>
                     {searchResult.map((media, index) => (
-                        <Card height={168} width={128} key={media.id} link={`/anime/${media.id}`} image={media.coverImage.large} title={media.title.userPreferred} status={media.status} changeDirection={(index % searchGridColumnCount === searchGridColumnCount - 1) ? true : false} />
+                        <Card height={168} width={128} key={media.id} link={`/anime/${media.id}`} image={media.coverImage.large} title={media.title.userPreferred} status={media.status} changeDirection={(index % searchGridColumnCount >= searchGridColumnCount - 2 && index > 2) ? true : false} />
                     ))}
                 </Box>
             </div>
