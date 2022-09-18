@@ -61,9 +61,9 @@ const Anime = ({ anime, videoId }) => {
             <section className="py-2">
               <Relations relations={anime.relations.edges} />
             </section>
-            <section className="py-2">
+            {videoId.length ? <section className="py-2">
               <Streaming anime={anime} videoId={videoId} />
-            </section>
+            </section> : <></>}
             <section className="py-2">
               <Recommended recommendations={anime.recommendations.edges} />
             </section>
@@ -106,7 +106,7 @@ export async function getServerSideProps({ params, req }) {
     }
 
     const req =
-      `${VIDEOSERVER}/search?keyw=${title.replace(/[☆★♡△]/g, " ")}`;
+      `${VIDEOSERVER}/search?keyw=${title.replace(/[☆★♡△♥]/g, " ")}`;
     const resp = await fetch(req)
       .then(handleResponse)
       .catch(handleError);
