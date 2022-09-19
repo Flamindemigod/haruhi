@@ -31,9 +31,9 @@ const Header = () => {
         <div className='w-full bg-offWhite-700 text-offWhite-100 h-16 flex px-8 flex-row items-center'>
             {matches ?
                 <nav className="grid h-full" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-                    <Link href="/" className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></Link>
-                    <Link href="/anime" className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Lists</div></ButtonBase></Link>
-                    <Link href="/seasonal" className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full p-4"><div className="text-xl">Seasonal</div></ButtonBase></Link >
+                    <Link href="/"><a className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></a></Link>
+                    <Link href="/anime"><a className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Lists</div></ButtonBase></a></Link>
+                    <Link href="/seasonal"><a className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full p-4"><div className="text-xl">Seasonal</div></ButtonBase></a></Link >
                 </nav > :
                 (<>
                     <IconButton onClick={() => { setDrawerOpen(true) }}>
@@ -73,7 +73,11 @@ const Header = () => {
             <Box className="flex gap-2 self-center ml-auto">
                 <SearchButton />
                 {user.userAuth ? (<div className="flex gap-4">
-                    <Avatar onClick={handleClick} src={user.userAvatar}></Avatar>
+                    <a>
+                        <IconButton className="cursor-pointer" onClick={handleClick}>
+                            <Avatar alt={user.userName} draggable={false} src={user.userAvatar} />
+                        </IconButton>
+                    </a>
                     <Menu
                         id="basic-menu"
                         anchorEl={menuAnchorEl}
@@ -108,25 +112,29 @@ const Header = () => {
                         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                     > <Link href="/prefrences">
-                            <MenuItem
-                                onClick={() => {
-                                    handleClose();
-                                }}>
+                            <a>
+                                <MenuItem
+                                    onClick={() => {
+                                        handleClose();
+                                    }}>
 
-                                <div className="text-offWhite-100 no-underline">Prefrences</div>
-                            </MenuItem>
+                                    <div className="text-offWhite-100 no-underline">Prefrences</div>
+                                </MenuItem>
+                            </a>
                         </Link>
-                        <MenuItem sx={{ color: "#f22", }} onClick={handleLogout}>
-                            <Logout fontSize="small" /> Logout
-                        </MenuItem>
-
+                        <a href='#'>
+                            <MenuItem sx={{ color: "#f22", }} onClick={handleLogout}>
+                                <Logout fontSize="small" /> Logout
+                            </MenuItem>
+                        </a>
                     </Menu>
                 </div>) : (<div>
                     <Button
                         variant="contained"
                         color="primary"
-                        href={`https://anilist.co/api/v2/oauth/authorize?client_id=${AnilistClientID}&response_type=token`} className="w-full"><Image src={`${SERVER}/AnilistIcon.svg`} width={37} height={37} /> Login With Anilist</Button></div>)}
-            </Box>
+                        href={`https://anilist.co/api/v2/oauth/authorize?client_id=${AnilistClientID}&response_type=token`} className="w-full"><Image src={`${SERVER}/AnilistIcon.svg`} width={37} height={37} /> Login With Anilist</Button></div>)
+                }
+            </Box >
         </div >
     )
 }
