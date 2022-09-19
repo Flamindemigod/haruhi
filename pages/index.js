@@ -20,7 +20,7 @@ export default function Home({ token = "" }) {
   return (
     <>
       <Meta />
-      <section>
+      <section className="w-full">
         <Box className="relative grid isolate" sx={{ gridTemplateColumns: "1fr 1fr", height: height * 0.6 }}>
           <Box className="" sx={{ gridColumn: "1/-1", gridRow: "1 / -1" }} >
             <Image layout="fill" className="object-cover" src={`${SERVER}/haruhiHomeBg.webp`} />
