@@ -20,7 +20,7 @@ const Anime = ({ anime, videoId }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setLoading(false))
-  }, [])
+  }, [anime])
   return (
     <div>
       <Meta
