@@ -34,7 +34,7 @@ const ListEditor = ({ anime }) => {
             }
             if (anime.mediaListEntry.completedAt) {
                 if (anime.mediaListEntry.completedAt.year) {
-                    setMediaEndDate(new Date().setFullYear(anime.mediaListEntry.completedAt.year, anime.mediaListEntry.completedAt.month, anime.mediaListEntry.completedAt.day))
+                    setMediaEndDate(new Date().setFullYear(anime.mediaListEntry.completedAt.year, anime.mediaListEntry.completedAt.month - 1, anime.mediaListEntry.completedAt.day))
                 }
                 else {
                     setMediaEndDate(null)
