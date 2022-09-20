@@ -1,4 +1,4 @@
-import Header from '../components/Header'
+import Header from '../components/Header/Header'
 import Footer from '../components/Footer'
 import { useSelector, useDispatch } from 'react-redux'
 import { Box } from '@mui/material'
@@ -55,10 +55,11 @@ const Layout = ({ children }) => {
     return (
         <Box className='flex flex-col' sx={{ minHeight: "100vh", flex: "1 0 100%", overflowX: "hidden" }}>
             <Loading />
+            <a className="navigation--link | fixed top-0 left-0 right-0 p-4 text-center bg-black text-white z-10" href="#main">Skip Navigation</a>
             <header>
                 <Header />
             </header>
-            <main className='flex justify-center align-center w-full flex-grow'>{children}</main>
+            <main className='flex justify-center align-center w-full flex-grow' id="main">{children}</main>
             <footer id="footer">
                 <Footer />
             </footer>

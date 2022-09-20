@@ -29,7 +29,9 @@ export default function Home({ token = "" }) {
             <Image layout="fill" className="object-cover" src={`${SERVER}/haruhiHomeBg.webp`} />
             <a className="absolute -bottom-5 right-0 text-white no-underline hover:underline underline-offset-2" href="https://twitter.com/sakura_tsubame/"><p>Sakura Tsubame</p></a>
           </Box>
-          <Box className="activity | overflow-y-scroll">{user.userAuth && <Activity />}</Box>
+          <Box className="activity | overflow-y-scroll">{user.userAuth && <>
+            <a className="navigation--link | fixed top-0 left-0 right-0 p-4 text-center bg-black text-white" href="#currentlyWatching">Skip to Currently Watching</a>
+            <Activity /></>}</Box>
         </Box>
         {user.userAuth && <section id="currentlyWatching">
           <a className="navigation--link | fixed top-0 left-0 right-0 p-4 text-center bg-black text-white" href="#recommended">Skip to Recommended for you</a>
