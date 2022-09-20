@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import makeQuery from '../../makeQuery';
-import Link from 'next/link';
+import Link from '../Link';
 import { ButtonBase } from '@mui/material';
 const SearchStudio = ({ searchString, setDialogOpen, setSearchQuery }) => {
     const [searchResults, setSearchResults] = useState({ "studios": [] })

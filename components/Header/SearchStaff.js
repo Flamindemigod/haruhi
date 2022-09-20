@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import makeQuery from '../../makeQuery';
-import Link from 'next/link';
+import Link from '../Link';
 import Image from 'next/image';
 import { ButtonBase } from '@mui/material';
 const SearchStaff = ({ searchString, setDialogOpen, setSearchQuery }) => {

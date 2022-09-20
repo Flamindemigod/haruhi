@@ -1,10 +1,8 @@
 import { Box, useMediaQuery } from '@mui/material'
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from './Link';
 import Countdown, { zeroPad } from "react-countdown";
 import { animated, useSpring } from '@react-spring/web';
-import { useDispatch } from 'react-redux';
-import { setLoading } from "../features/loading";
 
 
 const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
@@ -24,7 +22,6 @@ const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
 };
 
 const Card = ({ height, width, image, status, title, link, progress, episodes, nextAiringEpisode, nextAiringTime, listStatus, changeDirection }) => {
-    const dispatch = useDispatch();
     const hasHover = useMediaQuery("(hover: hover)");
     const styles = useSpring({
         from: {
@@ -39,14 +36,12 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
         },
     })
     return (
-        <animated.div style={styles} onClick={() => { dispatch(setLoading(true)) }}>
+        <animated.div style={styles}>
 
             <Box className='card | relative cursor-pointer flex' sx={{ height }}>
                 <Box className="card--image" sx={{ aspectRatio: "4/3", height, width }}>
                     <Link href={link} >
-                        <a>
-                            <Image draggable={false} width={width} height={height} className='object-cover' src={image} />
-                        </a>
+                        <Image draggable={false} width={width} height={height} className='object-cover' src={image} />
                     </Link>
                 </Box>
                 <div className={`card--content | flex-col ${hasHover && "absolute"} ${changeDirection ? "right-full" : "left-full"} w-64 top-0 bottom-0 bg-offWhite-600 z-10 p-4`}>

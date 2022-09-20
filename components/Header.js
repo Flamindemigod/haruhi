@@ -3,7 +3,7 @@ import { Avatar, Box, Button, ButtonBase, IconButton, SwipeableDrawer, useMediaQ
 import { useSelector, useDispatch } from "react-redux"
 import { AnilistClientID, SERVER } from "../config";
 import Image from "next/image"
-import Link from "next/link";
+import Link from "./Link";
 import { unsetUser } from "../features/user";
 import { Menu as MenuIcon, Logout } from "@mui/icons-material";
 import SearchButton from "./Header/Search";
@@ -15,10 +15,6 @@ const Header = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const menuOpen = Boolean(menuAnchorEl);
-    const handleLogout = () => {
-        document.cookie = document.cookie + ";max-age=0";
-        dispatch(unsetUser());
-    }
 
 
     const handleClick = (event) => {
@@ -31,9 +27,9 @@ const Header = () => {
         <div className='w-full bg-offWhite-700 text-offWhite-100 h-16 flex px-8 flex-row items-center'>
             {matches ?
                 <nav className="grid h-full" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-                    <Link href="/"><a className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></a></Link>
-                    <Link href="/anime"><a className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Lists</div></ButtonBase></a></Link>
-                    <Link href="/seasonal"><a className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full p-4"><div className="text-xl">Seasonal</div></ButtonBase></a></Link >
+                    <Link href="/" aClasses="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></Link>
+                    <Link href="/anime" aClasses="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Lists</div></ButtonBase></Link>
+                    <Link href="/seasonal" aClasses="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full p-4"><div className="text-xl">Seasonal</div></ButtonBase></Link >
                 </nav > :
                 (<>
                     <IconButton onClick={() => { setDrawerOpen(true) }}>
@@ -44,21 +40,21 @@ const Header = () => {
                             role="presentation">
                             <List onClick={() => { setDrawerOpen(false) }}>
                                 <ListItem>
-                                    <Link className='w-full' href={"/"}>
+                                    <Link aClasses='w-full' href={"/"}>
                                         <ListItemButton>
                                             <ListItemText primary={"Home"} />
                                         </ListItemButton>
                                     </Link>
                                 </ListItem>
                                 <ListItem >
-                                    <Link className='w-full' href={"/anime"}>
+                                    <Link aClasses='w-full' href={"/anime"}>
                                         <ListItemButton>
                                             <ListItemText primary={"Lists"} />
                                         </ListItemButton>
                                     </Link>
                                 </ListItem>
                                 <ListItem >
-                                    <Link className='w-full' href={"/seasonal"}>
+                                    <Link aClasses='w-full' href={"/seasonal"}>
                                         <ListItemButton>
                                             <ListItemText primary={"Seaonal"} />
                                         </ListItemButton>
@@ -73,11 +69,9 @@ const Header = () => {
             <Box className="flex gap-2 self-center ml-auto">
                 <SearchButton />
                 {user.userAuth ? (<div className="flex gap-4">
-                    <a>
-                        <IconButton className="cursor-pointer" onClick={handleClick}>
-                            <Avatar alt={user.userName} draggable={false} src={user.userAvatar} />
-                        </IconButton>
-                    </a>
+                    <IconButton className="cursor-pointer" onClick={handleClick}>
+                        <Avatar alt={user.userName} draggable={false} src={user.userAvatar} />
+                    </IconButton>
                     <Menu
                         id="basic-menu"
                         anchorEl={menuAnchorEl}
@@ -112,21 +106,19 @@ const Header = () => {
                         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                     > <Link href="/prefrences">
-                            <a>
-                                <MenuItem
-                                    onClick={() => {
-                                        handleClose();
-                                    }}>
+                            <MenuItem
+                                onClick={() => {
+                                    handleClose();
+                                }}>
 
-                                    <div className="text-offWhite-100 no-underline">Prefrences</div>
-                                </MenuItem>
-                            </a>
+                                <div className="text-offWhite-100 no-underline">Prefrences</div>
+                            </MenuItem>
                         </Link>
-                        <a href='#'>
-                            <MenuItem sx={{ color: "#f22", }} onClick={handleLogout}>
+                        <Link href="/logout">
+                            <MenuItem sx={{ color: "#f22", }}>
                                 <Logout fontSize="small" /> Logout
                             </MenuItem>
-                        </a>
+                        </Link>
                     </Menu>
                 </div>) : (<div>
                     <Button

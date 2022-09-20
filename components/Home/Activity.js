@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import makeQuery from "../../makeQuery"
 import { Avatar, Box } from '@mui/material';
-import Link from 'next/link';
+import Link from '../Link';
 import { setLoading } from '../../features/loading';
 
 
@@ -82,7 +82,7 @@ const Activity = () => {
               <Image layout='fill' src={data.media.coverImage.medium} className={"object-cover"}></Image>
             </Box>
             <div className="flex flex-col justify-center gap-4">
-              <div className='text-md'>{`${data.user.name} ${data.status} ${data.progress ? data.progress : ""} ${data.progress ? "of" : ""}`} <Link href={`/anime/${data.media.id}`}><span className="text-primary-500 hover:text-primary-300 cursor-pointer" onClick={() => { dispatch(setLoading(true)) }}>{data.media.title.userPreferred}</span></Link></div>
+              <div className='text-md'>{`${data.user.name} ${data.status} ${data.progress ? data.progress : ""} ${data.progress ? "of" : ""}`} <Link href={`/anime/${data.media.id}`}><span className="text-primary-500 hover:text-primary-300">{data.media.title.userPreferred}</span></Link></div>
               <Avatar alt={`Avatar of user ${data.user.name}`} src={data.user.avatar.medium} />
               <div className='text-sm'>{timeSince(data.createdAt)}</div>
             </div>

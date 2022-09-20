@@ -59,7 +59,7 @@ const Layout = ({ children }) => {
                 <Header />
             </header>
             <main className='flex justify-center align-center w-full flex-grow'>{children}</main>
-            <footer>
+            <footer id="footer">
                 <Footer />
             </footer>
         </Box>

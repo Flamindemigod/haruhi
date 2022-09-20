@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Link from "next/link";
+import Link from "../Link";
 import Countdown, { zeroPad } from "react-countdown";
 
 
@@ -49,12 +49,12 @@ const Sidebar = ({ anime }) => {
             {anime.averageScore && <Content title="Average Score" content={`${anime.averageScore}%`} />}
             <Content title="Studios" content={<div className="flex flex-col">{anime.studios.edges.filter(edge => { if (edge.isMain) { return true } return false }).map(edge => (
                 <Link key={edge.node.id} href={`/studio/${edge.node.id}`}>
-                    <div className="cursor-pointer">{edge.node.name}</div>
+                    <div className="">{edge.node.name}</div>
                 </Link>
             ))}</div>} />
             <Content title="Producers" content={<div className="flex flex-col">{anime.studios.edges.filter(edge => { if (edge.isMain) { return false } return true }).map(edge => (
                 <Link key={edge.node.id} href={`/studio/${edge.node.id}`}>
-                    <div className="cursor-pointer">{edge.node.name}</div>
+                    <div className="">{edge.node.name}</div>
                 </Link>
             ))}</div>} />
             <Content title="Genres" content={<div className="flex flex-col">{
