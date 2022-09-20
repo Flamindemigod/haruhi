@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { unsetUser } from '../features/user';
 import Meta from '../components/Meta';
 import { useEffect } from 'react';
-const logout = () => {
+const Logout = () => {
     const user = useSelector(state => state.user.value);
     const dispatch = useDispatch();
 
@@ -29,4 +29,4 @@ const logout = () => {
     )
 }
 
-export default logout
+export default Logout
