@@ -10,11 +10,9 @@ const Logout = () => {
     const handleLogout = () => {
         document.cookie = document.cookie + ";max-age=0";
         dispatch(unsetUser());
-        Router.push("/")
-
     }
 
-    useEffect(() => { if (user.userAuth) { handleLogout() } }, [])
+    useEffect(() => { if (user.userAuth) { handleLogout() } Router.push("/") }, [])
 
     return (
         <>

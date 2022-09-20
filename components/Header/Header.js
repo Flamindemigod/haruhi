@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { Avatar, Box, Button, ButtonBase, IconButton, SwipeableDrawer, useMediaQuery, List, ListItem, ListItemButton, ListItemText, Menu, MenuItem } from "@mui/material"
-import { useSelector, useDispatch } from "react-redux"
-import { AnilistClientID, SERVER } from "../config";
+import { useSelector } from "react-redux"
+import { AnilistClientID, SERVER } from "../../config";
 import Image from "next/image"
-import Link from "./Link";
-import { unsetUser } from "../features/user";
+import Link from "../Link";
 import { Menu as MenuIcon, Logout } from "@mui/icons-material";
-import SearchButton from "./Header/Search";
+import SearchButton from "./Search";
 
 const Header = () => {
     const matches = useMediaQuery('(min-width:640px)');
-    const dispatch = useDispatch();
     const user = useSelector(state => state.user.value);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
