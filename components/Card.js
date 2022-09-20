@@ -41,7 +41,7 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
             <Box className='card | relative cursor-pointer flex' sx={{ height }}>
                 <Box className="card--image" sx={{ aspectRatio: "4/3", height, width }}>
                     <Link href={link} >
-                        <Image draggable={false} width={width} height={height} className='object-cover' src={image} />
+                        <Image draggable={false} width={width} height={height} className='object-cover' src={image} alt={title} />
                     </Link>
                 </Box>
                 <div className={`card--content | flex-col ${hasHover && "absolute"} ${changeDirection ? "right-full" : "left-full"} w-64 top-0 bottom-0 bg-offWhite-600 z-10 p-4`}>
