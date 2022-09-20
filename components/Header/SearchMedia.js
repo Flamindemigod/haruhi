@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import makeQuery from '../../makeQuery';
-import Link from 'next/link';
+import Link from '../Link';
 import { ButtonBase } from '@mui/material';
 import Image from 'next/image';
 const SearchMedia = ({ searchString, setDialogOpen, setSearchQuery }) => {
