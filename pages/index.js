@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Activity from "../components/Home/Activity";
 import CurrentlyWatching from "../components/Home/CurrentlyWatching";
 import Recommended from "../components/Home/Recommended";
@@ -9,12 +9,15 @@ import Trending from "../components/Home/Trending";
 import TrendingSeason from "../components/Home/TrendingSeason";
 import Meta from '../components/Meta'
 import { SERVER } from "../config";
+import { setLoading } from "../features/loading";
 
 export default function Home({ token = "" }) {
   const user = useSelector(state => state.user.value)
+  const dispatch = useDispatch();
   const [height, setHeight] = useState(4000);
 
   useEffect(() => {
+    dispatch(setLoading(false))
     setHeight(window.screen.height);
   }, [])
   return (
@@ -28,10 +31,25 @@ export default function Home({ token = "" }) {
           </Box>
           <Box className="activity | overflow-y-scroll">{user.userAuth && <Activity />}</Box>
         </Box>
-        {user.userAuth && <CurrentlyWatching />}
-        {user.userAuth && <Recommended />}
-        <TrendingSeason />
-        <Trending />
+        {user.userAuth && <section id="currentlyWatching">
+          <a className="navigation--link | fixed top-0 left-0 right-0 p-4 text-center bg-black text-white" href="#recommended">Skip to Recommended for you</a>
+          <CurrentlyWatching />
+        </section>}
+        {user.userAuth && <section id="recommended">
+          <a className="navigation--link | fixed top-0 left-0 right-0 p-4 text-center bg-black text-white" href="#trendingSeason">Skip to Trending This Season</a>
+
+          <Recommended />
+        </section>}
+        <section id="trendingSeason">
+          <a className="navigation--link | fixed top-0 left-0 right-0 p-4 text-center bg-black text-white" href="#trending">Skip to Trending</a>
+
+          <TrendingSeason />
+        </section>
+        <section id="trending">
+          <a className="navigation--link | fixed top-0 left-0 right-0 p-4 text-center bg-black text-white" href="#footer">Skip to Footer</a>
+
+          <Trending />
+        </section>
       </section>
     </>
   )

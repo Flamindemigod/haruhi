@@ -118,6 +118,16 @@ select {
     background: var(--scrollbar-background);
 }
 
+.navigation--link {
+    translate: 0 -100%;
+    transition: translate 150ms ease;
+}
+
+.navigation--link:focus {
+    translate: 0;
+}
+
+
 
 /* Activity / Home Bg CSS */
 .activity {
@@ -142,9 +152,20 @@ select {
     border-bottom-right-radius: 1rem;
 }
 
+.card {
+    scale: 1;
+    transition: scale 200ms ease;
+}
+
 @media (hover: hover) {
     .card--content {
         display: none;
+    }
+
+    .card:focus-within,
+    .card:hover {
+        scale: 1.05;
+        z-index: 10;
     }
 
     .card--image:focus-within+.card--content,

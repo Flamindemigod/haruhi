@@ -5,7 +5,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Search } from '@mui/icons-material';
 import { Box, Button, InputBase } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
-import Link from 'next/link';
+import Link from '../Link';
 import SearchMedia from './SearchMedia';
 import SearchCharacter from './SearchCharacter';
 import SearchStudio from './SearchStudio';
@@ -56,7 +56,7 @@ const SearchButton = () => {
                         <Search sx={{ mr: 1, my: 0.5 }} />
                     </div>
                 </DialogTitle>
-                <div className='flex gap-1 w-full justify-end'>Try the <Link href="/search" ><Box className='cursor-pointer' onClick={() => {
+                <div className='flex gap-1 w-full justify-end'>Try the <Link href="/search" ><Box className='' onClick={() => {
                     setSearchQuery("");
                     setDialogOpen(false);
                 }} sx={{ color: "var(--clr-primary)" }}> Advanced Search </Box></Link></div>
