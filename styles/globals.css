@@ -147,6 +147,7 @@ select {
         display: none;
     }
 
+    .card--image:focus-within+.card--content,
     .card--image:hover+.card--content {
         display: flex;
     }
