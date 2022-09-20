@@ -24,7 +24,7 @@ export default function Home({ token = "" }) {
         <Box className="relative grid isolate" sx={{ gridTemplateColumns: "1fr 1fr", height: height * 0.6 }}>
           <Box className="" sx={{ gridColumn: "1/-1", gridRow: "1 / -1" }} >
             <Image layout="fill" className="object-cover" src={`${SERVER}/haruhiHomeBg.webp`} />
-            <a className="absolute -bottom-10 right-0 text-white no-underline hover:underline underline-offset-2" href="https://twitter.com/sakura_tsubame/"><p>Sakura Tsubame</p></a>
+            <a className="absolute -bottom-5 right-0 text-white no-underline hover:underline underline-offset-2" href="https://twitter.com/sakura_tsubame/"><p>Sakura Tsubame</p></a>
           </Box>
           <Box className="activity | overflow-y-scroll">{user.userAuth && <Activity />}</Box>
         </Box>
