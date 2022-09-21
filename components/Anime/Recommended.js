@@ -2,7 +2,6 @@ import React from 'react'
 import Carosel from '../Carosel'
 import Card from "../Card"
 const Recommended = ({ recommendations }) => {
-    console.log(recommendations)
     return (
         <>
             <div className='text-xl'>Recommendations</div>
