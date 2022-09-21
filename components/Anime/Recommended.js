@@ -2,11 +2,12 @@ import React from 'react'
 import Carosel from '../Carosel'
 import Card from "../Card"
 const Recommended = ({ recommendations }) => {
+    console.log(recommendations)
     return (
         <>
             <div className='text-xl'>Recommendations</div>
             <Carosel width="95vw">
-                {recommendations.map((edge, index) => (<Card
+                {recommendations.map((edge, index) => (edge.node.mediaRecommendation && (<Card
                     key={edge.node.mediaRecommendation.id}
                     title={edge.node.mediaRecommendation.title.userPreferred}
                     status={edge.node.mediaRecommendation.status}
@@ -15,7 +16,7 @@ const Recommended = ({ recommendations }) => {
                     width={128}
                     height={167}
                     changeDirection={((recommendations.length - index) < 5) ? true : false}
-                />))}
+                />)))}
             </Carosel>
         </>
     )
