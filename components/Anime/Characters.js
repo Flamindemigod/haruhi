@@ -21,7 +21,7 @@ const Characters = ({ characters }) => {
                                     </Box>
                                 </Box>
                             </Link>
-                            {character.voiceActors.length && <Link href={`/staff/${character.voiceActors[0].id}`}>
+                            {character.voiceActors.length ? <Link href={`/staff/${character.voiceActors[0].id}`}>
                                 <Box className='flex gap-2 text-end'>
                                     <Box className="flex flex-col justify-around">
                                         <div className="text-md">{character.voiceActors[0].name.userPreferred}</div>
@@ -29,7 +29,7 @@ const Characters = ({ characters }) => {
                                     </Box>
                                     <Image width={80} height={128} src={character.voiceActors[0].image.large} alt={character.node.name.userPreferred} />
                                 </Box>
-                            </Link>}
+                            </Link> : <></>}
                         </Card>
                     ))}
                 </Box>
