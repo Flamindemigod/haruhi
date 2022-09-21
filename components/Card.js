@@ -1,5 +1,5 @@
 import { Box, useMediaQuery } from '@mui/material'
-import Image from 'next/image';
+import Image from "next/future/image";
 import Link from './Link';
 import Countdown, { zeroPad } from "react-countdown";
 import { animated, useSpring } from '@react-spring/web';
@@ -36,14 +36,12 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
         },
     })
     return (
-        <animated.div style={styles}>
+        <animated.div style={styles} className="flex-shrink-0">
 
             <Box className='card | relative cursor-pointer flex' sx={{ height }}>
-                <Box className="card--image" sx={{ aspectRatio: "4/3", height, width }}>
-                    <Link href={link} >
-                        <Image draggable={false} width={width} height={height} className='object-cover' src={image} alt={title} />
-                    </Link>
-                </Box>
+                <Link href={link} >
+                    <Image draggable={false} width={width} height={height} className='card--image | object-cover' src={image} alt={title} />
+                </Link>
                 <div className={`card--content | flex-col ${hasHover && "absolute"} ${changeDirection ? "right-full" : "left-full"} w-64 top-0 bottom-0 bg-offWhite-600 z-10 p-4`}>
                     <div className="card--title | text-lg">{title}</div>
 

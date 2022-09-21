@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import makeQuery from '../../makeQuery';
 import Link from '../Link';
-import Image from 'next/image';
+import Image from 'next/future/image';
 import { ButtonBase } from '@mui/material';
 const SearchStaff = ({ searchString, setDialogOpen, setSearchQuery }) => {
   const [searchResults, setSearchResults] = useState({ "staff": [] })

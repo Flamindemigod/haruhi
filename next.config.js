@@ -5,6 +5,7 @@ const nextConfig = {
   images: {
     domains: ["haruhi.flamindemigod.com", "haruhi-dev.flamindemigod.com", 'storage.ko-fi.com', "s4.anilist.co"],
   },
+  experimental: { images: { allowFutureImage: true } }
 }
 
 module.exports = nextConfig
