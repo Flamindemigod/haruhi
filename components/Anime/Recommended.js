@@ -15,7 +15,7 @@ const Recommended = ({ recommendations }) => {
                     link={`/anime/${edge.node.mediaRecommendation.id}`}
                     width={128}
                     height={167}
-                    changeDirection={((recommendations.length - index) < 5) ? true : false}
+                    changeDirection={((((recommendations.length - index) < 5) && index > 5)) ? true : false}
                 />)))}
             </Carosel>
         </>
