@@ -11,10 +11,12 @@ const Description = ({ text }) => {
     }
 
     useEffect(() => {
+        setReadMore(false)
+        setOpen(false)
         if (descriptionContainer.current.offsetHeight >= 170) {
             setReadMore(true);
         }
-    }, []);
+    }, [text]);
 
     return (
         <div className={`description--container ${readMore && "readMore"} | p-8 mb-4 relative`} ref={descriptionContainer} open={open} onClick={toggleOpen}>
