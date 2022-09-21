@@ -39,7 +39,7 @@ const Sidebar = ({ anime }) => {
                 <Countdown date={Date.now() + anime.nextAiringEpisode.timeUntilAiring * 1000} renderer={countdownRenderer} />
             </>} containerClass="text-primary-500" />}
             <Content title="Format" content={anime.format} />
-            <Content title="Source" content={<div className="capitalize">{anime.source.replace(/[_]/gm, " ").toLowerCase()}</div>} />
+            {anime.source && <Content title="Source" content={<div className="capitalize">{anime.source.replace(/[_]/gm, " ").toLowerCase()}</div>} />}
             <Content title="Episodes" content={anime.episodes} />
             <Content title="Episode Duration" content={`${anime.duration} mins`} />
             <Content title="Status" content={<div className="capitalize">{anime.status.toLowerCase().replace(/[_]/gm, " ")}</div>} />

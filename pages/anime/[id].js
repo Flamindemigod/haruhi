@@ -90,7 +90,7 @@ export async function getServerSideProps({ params, req }) {
     const resp = await fetch(req)
       .then(handleResponse)
       .catch(handleError);
-    return resp.data.title;
+    return resp ? resp.data.title : null;
   };
 
   const getAnimeID = async (title) => {
@@ -262,7 +262,7 @@ export async function getServerSideProps({ params, req }) {
   }
 
   const malTitle = await getMALTitle(data.idMal);
-  const animeID = blacklist[data.idMal] || await getAnimeID(malTitle);
+  const animeID = blacklist[data.idMal] || (malTitle ? await getAnimeID(malTitle) : []);
   return {
     props: { anime: data, videoId: animeID }
   }
