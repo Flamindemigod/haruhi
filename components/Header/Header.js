@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Avatar, Box, Button, ButtonBase, IconButton, SwipeableDrawer, useMediaQuery, List, ListItem, ListItemButton, ListItemText, Menu, MenuItem } from "@mui/material"
 import { useSelector } from "react-redux"
 import { AnilistClientID, SERVER } from "../../config";
-import Image from "next/image"
+import Image from "next/future/image";
 import Link from "../Link";
 import { Menu as MenuIcon, Logout } from "@mui/icons-material";
 import SearchButton from "./Search";
@@ -122,7 +122,7 @@ const Header = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        href={`https://anilist.co/api/v2/oauth/authorize?client_id=${AnilistClientID}&response_type=token`} className="w-full"><Image src={`${SERVER}/AnilistIcon.svg`} width={37} height={37} /> Login With Anilist</Button></div>)
+                        href={`https://anilist.co/api/v2/oauth/authorize?client_id=${AnilistClientID}&response_type=token`} className="w-full"><Image src={`${SERVER}/AnilistIcon.svg`} alt={"Anilist Icon"} width={37} height={37} /> Login With Anilist</Button></div>)
                 }
             </Box >
         </div >

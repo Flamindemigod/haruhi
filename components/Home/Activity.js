@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Image from 'next/image';
+import Image from 'next/future/image';
 import { useSelector, useDispatch } from 'react-redux';
 import makeQuery from "../../makeQuery"
 import { Avatar, Box } from '@mui/material';
@@ -78,9 +78,7 @@ const Activity = () => {
       <div className='flex flex-col gap-2 p-2'>
         {activity.map((data) => (
           <div key={data.media.id} className='flex items-center justify-start gap-4 p-4 bg-offWhite-700 isolate' style={{ "--tw-bg-opacity": "0.6" }}>
-            <Box className='relative flex-shrink-0' sx={{ width: 80, height: 128 }}>
-              <Image layout='fill' src={data.media.coverImage.medium} className={"object-cover"}></Image>
-            </Box>
+            <Image width={80} height={128} src={data.media.coverImage.medium} className={"object-cover flex-shrink-0"} alt={data.media.title.userPreferred} />
             <div className="flex flex-col justify-center gap-4">
               <div className='text-md'>{`${data.user.name} ${data.status} ${data.progress ? data.progress : ""} ${data.progress ? "of" : ""}`} <Link href={`/anime/${data.media.id}`}><span className="text-primary-500 hover:text-primary-300">{data.media.title.userPreferred}</span></Link></div>
               <Avatar alt={`Avatar of user ${data.user.name}`} src={data.user.avatar.medium} />

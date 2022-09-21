@@ -1,5 +1,6 @@
 import { Favorite, GitHub } from '@mui/icons-material';
-import Image from 'next/image';
+import Image from "next/future/image";
+
 const Footer = () => {
     return (
         <div className='w-full bg-offWhite-700 text-offWhite-100 flex p-8 flex-col sm:flex-row justify-between'>

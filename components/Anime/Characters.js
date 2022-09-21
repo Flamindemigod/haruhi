@@ -1,5 +1,5 @@
 import { Card, Box } from '@mui/material'
-import Image from 'next/image'
+import Image from "next/future/image";
 import Link from '../Link'
 import React from 'react'
 import Carosel from '../Carosel'

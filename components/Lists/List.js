@@ -4,7 +4,7 @@ import Link from "../Link";
 import makeQuery from "../../makeQuery";
 import { Box } from "@mui/material";
 import { ArrowUpward, ArrowDownward, Sort } from "@mui/icons-material";
-import Image from "next/image";
+import Image from "next/future/image";
 
 const onClickSort = (sort, setter, desc, asc) => {
     if (sort === asc) {
