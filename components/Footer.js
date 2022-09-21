@@ -1,4 +1,5 @@
 import { Favorite, GitHub } from '@mui/icons-material';
+import { Button } from '@mui/material';
 import Image from "next/future/image";
 
 const Footer = () => {
@@ -10,11 +11,11 @@ const Footer = () => {
             </div>
             <div>
                 <div>Made for you with <Favorite sx={{ color: '#ff1000' }} /> by Flamindemigod </div>
-                <a href={"https://ko-fi.com/flamindemigod"}><Image width={160} height={25} src='https://storage.ko-fi.com/cdn/brandasset/kofi_button_blue.png' alt='' /></a>
+                <Button href={"https://ko-fi.com/flamindemigod"} variant="contained"><Image width={32} height={32} src='https://storage.ko-fi.com/cdn/brandasset/kofi_p_logo_nolabel.png' alt='Ko-fi Logo' /> Support me on Kofi</Button>
                 <br />
                 <a className='text-offWhite-100 no-underline' href={"https://github.com/andradesavio9073/haruhi"}>Submit Bug Reports or Help contribute on Github <GitHub /> </a>
             </div>
-        </div>
+        </div >
     )
 }
 
