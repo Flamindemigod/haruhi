@@ -8,12 +8,11 @@ const Footer = () => {
             <div >
                 <div>Eat Cheesecake at the Néapolitan Café</div>
                 <div>Be a friendly triangle like Deltoid</div>
+                <Button href={"https://ko-fi.com/flamindemigod"} variant="contained"><Image width={32} height={32} src='https://storage.ko-fi.com/cdn/brandasset/kofi_p_logo_nolabel.png' alt='Ko-fi Logo' /> Support me on Kofi</Button>
             </div>
             <div>
                 <div>Made for you with <Favorite sx={{ color: '#ff1000' }} /> by Flamindemigod </div>
-                <Button href={"https://ko-fi.com/flamindemigod"} variant="contained"><Image width={32} height={32} src='https://storage.ko-fi.com/cdn/brandasset/kofi_p_logo_nolabel.png' alt='Ko-fi Logo' /> Support me on Kofi</Button>
-                <br />
-                <a className='text-offWhite-100 no-underline' href={"https://github.com/andradesavio9073/haruhi"}>Submit Bug Reports or Help contribute on Github <GitHub /> </a>
+                <div className=""><a className='text-offWhite-100 hover:underline focus:underline' href={"https://github.com/andradesavio9073/haruhi"}>Submit Bug Reports or Help contribute on Github <GitHub /></a></div>
             </div>
         </div >
     )
