@@ -1,6 +1,6 @@
 import { Favorite, GitHub } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import Image from "next/future/image";
+import Image from "next/image";
 
 const Footer = () => {
     return (
