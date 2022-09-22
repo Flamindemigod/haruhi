@@ -146,6 +146,8 @@ select {
 
 
 /* Card CSS */
+
+
 .card--content {
     display: flex;
     border-top-right-radius: 1rem;
@@ -243,6 +245,8 @@ select {
     background-color: var(--clr-status-dropped);
 }
 
+
+
 /* Anime Page CSS */
 
 
@@ -304,7 +308,6 @@ select {
 
 .description--container.readMore[open] {
     max-height: 45rem;
-    overflow-y: auto
 }
 
 .description--container.readMore::before {
