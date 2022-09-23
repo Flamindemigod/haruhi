@@ -2,8 +2,7 @@ import { Box, useMediaQuery } from '@mui/material'
 import Image from "next/future/image";
 import Link from './Link';
 import Countdown, { zeroPad } from "react-countdown";
-import { animated, useSpring } from '@react-spring/web';
-
+import { motion } from 'framer-motion';
 
 const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -23,20 +22,14 @@ const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
 
 const Card = ({ height, width, image, status, title, link, progress, episodes, nextAiringEpisode, nextAiringTime, listStatus, changeDirection }) => {
     const hasHover = useMediaQuery("(hover: hover)");
-    const styles = useSpring({
-        from: {
-            opacity: 0,
-            translateY: "50%",
-            scale: 0
-        },
-        to: {
-            scale: 1,
-            opacity: 1,
-            translateY: "0%"
-        },
-    })
     return (
-        <animated.div style={styles} className="flex-shrink-0">
+        <motion.div
+            className="flex-shrink-0"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+
+        >
             <Link href={link} >
 
                 <Box className='card | relative cursor-pointer flex' sx={{ height }}>
@@ -65,7 +58,7 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
                 </Box>
             </Link>
 
-        </animated.div>
+        </motion.div>
     )
 }
 

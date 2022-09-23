@@ -9,6 +9,7 @@ import Chip from '@mui/material/Chip';
 import Meta from "../components/Meta";
 import { SERVER } from '../config';
 import Card from "../components/Card"
+import { AnimatePresence } from 'framer-motion';
 
 const SearchInput = styled(InputBase)(({ theme }) => ({
     '&': { width: "100%", height: "100%" },
@@ -327,9 +328,11 @@ const AdvancedSearch = () => {
             </div>
             <div className="flex justify-center items-center ">
                 <Box ref={searchGrid} className={`search--grid | grid justify-center gap-4 w-max ${hasHover ? "grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-10 3xl:grid-cols-12" : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"}`}>
-                    {searchResult.map((media, index) => (
-                        <Card height={168} width={128} key={media.id} link={`/anime/${media.id}`} image={media.coverImage.large} title={media.title.userPreferred} status={media.status} changeDirection={(index % searchGridColumnCount >= searchGridColumnCount - 2 && index > 2) ? true : false} />
-                    ))}
+                    <AnimatePresence>
+                        {searchResult.map((media, index) => (
+                            <Card height={168} width={128} key={media.id} link={`/anime/${media.id}`} image={media.coverImage.large} title={media.title.userPreferred} status={media.status} changeDirection={(index % searchGridColumnCount >= searchGridColumnCount - 2 && index > 2) ? true : false} />
+                        ))}
+                    </AnimatePresence>
                 </Box>
             </div>
         </div>
