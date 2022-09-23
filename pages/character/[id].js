@@ -7,6 +7,7 @@ import { Skeleton, Box, useMediaQuery, FormGroup, FormControlLabel, Switch } fro
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../../features/loading';
 import Card from '../../components/Card';
+import { AnimatePresence } from 'framer-motion';
 
 const Character = ({ character }) => {
   const dispatch = useDispatch();
@@ -37,19 +38,16 @@ const Character = ({ character }) => {
 
   useEffect(() => {
     setMedia([])
-    setTimeout(() => {
-      if (onList && user.userAuth) {
-        setMedia(character.media.nodes.filter((media) => {
-          if (media.mediaListEntry) {
-            return true
-          }
-          return false
-        }))
-      } else {
-        setMedia(character.media.nodes)
-      }
-    }, 1)
-    console.log(media)
+    if (onList && user.userAuth) {
+      setMedia(character.media.nodes.filter((media) => {
+        if (media.mediaListEntry) {
+          return true
+        }
+        return false
+      }))
+    } else {
+      setMedia(character.media.nodes)
+    }
   }, [onList])
   return (
     <div className='p-4'>
@@ -75,24 +73,26 @@ const Character = ({ character }) => {
       </FormGroup>
       <div className="w-full flex justify-center">
         <Box ref={grid} className={`grid justify-center gap-4 w-max ${hasHover ? "grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-10 3xl:grid-cols-12" : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"}`}>
-          {media.map((el, index) => (
-            <Card
-              key={el.id}
-              width={128}
-              height={168}
-              image={el.coverImage.large}
-              title={el.title.userPreferred}
-              link={`/anime/${el.id}`}
-              status={el.status}
-              changeDirection={(index % gridColumnCount >= gridColumnCount - 2 && index > 2) ? true : false}
-              episodes={el.episodes}
-              nextAiringEpisode={el.nextAiring && el.nextAiring.node.episode}
-              nextAiringTime={el.nextAiring && el.nextAiring.node.timeUntilAiring}
-              progress={el.mediaListEntry && el.mediaListEntry.progress}
-              listStatus={el.mediaListEntry && el.mediaListEntry.status}
-            />
+          <AnimatePresence>
+            {media.map((el, index) => (
+              <Card
+                key={el.id}
+                width={128}
+                height={168}
+                image={el.coverImage.large}
+                title={el.title.userPreferred}
+                link={`/anime/${el.id}`}
+                status={el.status}
+                changeDirection={(index % gridColumnCount >= gridColumnCount - 2 && index > 2) ? true : false}
+                episodes={el.episodes}
+                nextAiringEpisode={el.nextAiring && el.nextAiring.node.episode}
+                nextAiringTime={el.nextAiring && el.nextAiring.node.timeUntilAiring}
+                progress={el.mediaListEntry && el.mediaListEntry.progress}
+                listStatus={el.mediaListEntry && el.mediaListEntry.status}
+              />
 
-          ))}
+            ))}
+          </AnimatePresence>
         </Box>
       </div>
 
