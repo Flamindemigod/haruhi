@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../../features/loading';
 import Card from '../../components/Card';
 import { AnimatePresence } from 'framer-motion';
+import Meta from "../../components/Meta";
 
 const Character = ({ character }) => {
   const dispatch = useDispatch();
@@ -50,53 +51,59 @@ const Character = ({ character }) => {
     }
   }, [onList])
   return (
-    <div className='p-4'>
-      <div className="flex justify-center sm:px-16  sm:flex-row flex-col">
-        {character.image.large ? <Image
-          width={192}
-          height={256}
-          className='object-cover self-center sm:self-start mb-8'
-          src={character.image.large}
-          alt={`Character ${character.name.userPreferred}`} /> : <Skeleton variant="rectangular" width={192} height={256} />}
-        <div className="flex flex-col p-4 justify-center">
-          <div className='px-8 text-3xl'>{character.name.userPreferred}</div>
-          <div className='px-8 pb-8 text-lg'>{character.name.alternative.map((name) => (`| ${name} |`))}</div>
-          {character.bloodType ? <div className='text-md px-8'><strong>Blood Type:</strong> {character.bloodType}</div> : <></>}
-          {character.gender ? <div className='text-md px-8'><strong>Gender:</strong> {character.gender}</div> : <></>}
-          {character.dateOfBirth.year || character.dateOfBirth.month || character.dateOfBirth.day ? <div className='text-md px-8'><strong>Date of Birth:</strong> {character.dateOfBirth.day}  {months[character.dateOfBirth.month - 1]}   {character.dateOfBirth.year}</div> : <></>}
-          {character.age ? <div className='text-md px-8 '><strong>Age:</strong> {character.age}</div> : <></>}
-          {character.description ? <Description text={character.description} /> : <></>}
+    <>
+      <Meta
+        title={character.name.userPreferred}
+        description={character.description}
+        image={character.image.large}
+        url={`/character/${character.id}`} />
+      <div className='p-4'>
+        <div className="flex justify-center sm:px-16  sm:flex-row flex-col">
+          {character.image.large ? <Image
+            width={192}
+            height={256}
+            className='object-cover self-center sm:self-start mb-8'
+            src={character.image.large}
+            alt={`Character ${character.name.userPreferred}`} /> : <Skeleton variant="rectangular" width={192} height={256} />}
+          <div className="flex flex-col p-4 justify-center">
+            <div className='px-8 text-3xl'>{character.name.userPreferred}</div>
+            <div className='px-8 pb-8 text-lg'>{character.name.alternative.map((name) => (`| ${name} |`))}</div>
+            {character.bloodType ? <div className='text-md px-8'><strong>Blood Type:</strong> {character.bloodType}</div> : <></>}
+            {character.gender ? <div className='text-md px-8'><strong>Gender:</strong> {character.gender}</div> : <></>}
+            {character.dateOfBirth.year || character.dateOfBirth.month || character.dateOfBirth.day ? <div className='text-md px-8'><strong>Date of Birth:</strong> {character.dateOfBirth.day}  {months[character.dateOfBirth.month - 1]}   {character.dateOfBirth.year}</div> : <></>}
+            {character.age ? <div className='text-md px-8 '><strong>Age:</strong> {character.age}</div> : <></>}
+            {character.description ? <Description text={character.description} /> : <></>}
+          </div>
+        </div>
+        <FormGroup className='p-8 ml-auto w-max'>
+          <FormControlLabel control={<Switch checked={onList} onClick={() => { setOnList((state) => (state ? null : true)) }} />} label="On My List" />
+        </FormGroup>
+        <div className="w-full flex justify-center">
+          <Box ref={grid} className={`grid justify-center gap-4 w-max ${hasHover ? "grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-10 3xl:grid-cols-12" : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"}`}>
+            <AnimatePresence>
+              {media.map((el, index) => (
+                <Card
+                  key={el.id}
+                  width={128}
+                  height={168}
+                  image={el.coverImage.large}
+                  title={el.title.userPreferred}
+                  link={`/anime/${el.id}`}
+                  status={el.status}
+                  changeDirection={(index % gridColumnCount >= gridColumnCount - 2 && index > 2) ? true : false}
+                  episodes={el.episodes}
+                  nextAiringEpisode={el.nextAiring && el.nextAiring.node.episode}
+                  nextAiringTime={el.nextAiring && el.nextAiring.node.timeUntilAiring}
+                  progress={el.mediaListEntry && el.mediaListEntry.progress}
+                  listStatus={el.mediaListEntry && el.mediaListEntry.status}
+                />
+
+              ))}
+            </AnimatePresence>
+          </Box>
         </div>
       </div>
-      <FormGroup className='p-8 ml-auto w-max'>
-        <FormControlLabel control={<Switch checked={onList} onClick={() => { setOnList((state) => (state ? null : true)) }} />} label="On My List" />
-      </FormGroup>
-      <div className="w-full flex justify-center">
-        <Box ref={grid} className={`grid justify-center gap-4 w-max ${hasHover ? "grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-10 3xl:grid-cols-12" : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"}`}>
-          <AnimatePresence>
-            {media.map((el, index) => (
-              <Card
-                key={el.id}
-                width={128}
-                height={168}
-                image={el.coverImage.large}
-                title={el.title.userPreferred}
-                link={`/anime/${el.id}`}
-                status={el.status}
-                changeDirection={(index % gridColumnCount >= gridColumnCount - 2 && index > 2) ? true : false}
-                episodes={el.episodes}
-                nextAiringEpisode={el.nextAiring && el.nextAiring.node.episode}
-                nextAiringTime={el.nextAiring && el.nextAiring.node.timeUntilAiring}
-                progress={el.mediaListEntry && el.mediaListEntry.progress}
-                listStatus={el.mediaListEntry && el.mediaListEntry.status}
-              />
-
-            ))}
-          </AnimatePresence>
-        </Box>
-      </div>
-
-    </div>
+    </>
   )
 }
 
