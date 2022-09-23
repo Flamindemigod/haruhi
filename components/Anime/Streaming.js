@@ -96,12 +96,12 @@ const Streaming = ({ anime, videoId }) => {
                 setVideoEnd(true);
                 setAlertOpen(true);
                 if (episode === 1) {
-                    if (mediaListStatus === "COMPLETED") {
-                        updateEpisode(mediaId, episodeToPlay, "CURRENT", anime.mediaListEntry.repeat + 1);
+                    if (anime.mediaListEntry.status === "COMPLETED") {
+                        updateEpisode(anime.id, episode, "CURRENT", anime.mediaListEntry.repeat + 1);
 
                     }
                     else {
-                        updateEpisode(mediaId, episodeToPlay, "CURRENT", anime.mediaListEntry.repeat);
+                        updateEpisode(anime.id, episode, "CURRENT", anime.mediaListEntry.repeat);
 
                     }
                 }
