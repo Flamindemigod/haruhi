@@ -8,7 +8,7 @@ import { DatePicker } from '@mui/x-date-pickers'
 import makeQuery from '../../makeQuery'
 
 
-const ListEditor = ({ anime }) => {
+const ListEditor = ({ anime, refresh }) => {
     const user = useSelector(state => state.user.value)
     const [open, setOpen] = useState(false);
     const [mediaStatus, setMediaStatus] = useState("");
@@ -80,6 +80,7 @@ const ListEditor = ({ anime }) => {
         };
 
         makeQuery(query, variables, user.userToken);
+        refresh();
     }
 
     return (

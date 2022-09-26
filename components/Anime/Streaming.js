@@ -26,7 +26,7 @@ const getVideoUrl = async (title, episode) => {
     return resp;
 };
 
-const Streaming = ({ anime, videoId }) => {
+const Streaming = ({ anime, videoId, refresh }) => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [windowLoaded, setWindowLoaded] = useState(false);
     const user = useSelector(state => state.user.value)
@@ -53,6 +53,7 @@ const Streaming = ({ anime, videoId }) => {
             rewatches: rewatches
         };
         makeQuery(query, variables, user.userToken);
+        refresh(); 
     };
 
     useEffect(() => {
