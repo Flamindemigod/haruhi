@@ -82,7 +82,20 @@ const ListEditor = ({ anime, refresh }) => {
         makeQuery(query, variables, user.userToken);
         refresh();
     }
-
+    const deleteMediaEntry = async (mediaListEntry) => {
+        const query = `
+        mutation deleteMediaEntry($id: Int) {
+          DeleteMediaListEntry(id: $id) {
+            deleted
+          }
+        }      
+        `;
+        const variables = {
+            id: mediaListEntry
+        }
+        makeQuery(query, variables, user.userToken);
+        refresh();
+    }
     return (
         <>
             <Fab sx={{ zIndex: 10 }} variant="extended" disabled={!user.userAuth} color='primary' onClick={() => { setOpen(true) }}>
