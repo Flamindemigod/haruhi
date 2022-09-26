@@ -69,6 +69,8 @@ const Anime = ({ _anime }) => {
         40356: [{ animeId: "tate-no-yuusha-no-nariagari-season-2" }, { animeId: "tate-no-yuusha-no-nariagari-season-2-dub" }],
         38680: [{ animeId: "fruits-basket-2019" }, { animeId: "fruits-basket-2019-dub" }],
         47164: [{ animeId: "dungeon-ni-deai-wo-motomeru-no-wa-machigatteiru-darou-ka-iv-shin-shou-meikyuu-hen" }],
+        33605: [{ animeId: "spiritpact" }],
+        36522: [{ animeId: "spiritpact-s2" }],
       }
 
       const malTitle = await getMALTitle(_anime.idMal);
