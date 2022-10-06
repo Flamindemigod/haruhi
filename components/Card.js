@@ -49,7 +49,7 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
 
 
                     </div>
-                    {((progress < (nextAiringEpisode - 1)) && progress) && <div className='notification'></div>}
+                    {(listStatus === "CURRENT" && (progress < (nextAiringEpisode - 1))) ? <div className='notification'></div> : <></>}
                     {(listStatus === "CURRENT") && <div className='mediaListNotification current'></div>}
                     {(listStatus === "PAUSED") && <div className='mediaListNotification paused'></div>}
                     {(listStatus === "COMPLETED") && <div className='mediaListNotification completed'></div>}

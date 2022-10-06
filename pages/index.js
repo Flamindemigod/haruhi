@@ -29,7 +29,7 @@ export default function Home({ token = "" }) {
             <Image layout="fill" className="object-cover" src={`${SERVER}/haruhiHomeBg.webp`} alt={"Haruhi Art made by Sakura Tsubame"} />
             <a className="absolute -bottom-5 right-0 text-white no-underline hover:underline underline-offset-2" href="https://twitter.com/sakura_tsubame/"><p>Made by Sakura Tsubame</p></a>
           </Box>
-          <Box className="activity | overflow-y-scroll">{user.userAuth && <>
+          <Box className="activity | overflow-y-auto">{user.userAuth && <>
             <a className="navigation--link | fixed top-0 left-0 right-0 p-4 text-center bg-black text-white" href="#currentlyWatching">Skip to Currently Watching</a>
             <Activity /></>}</Box>
         </Box>
