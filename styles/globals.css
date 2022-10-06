@@ -99,6 +99,7 @@ select {
     --scrollbar-background: var(--clr-secondary);
     /* Foreground, Background */
     scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+    scrollbar-width: thin;
 }
 
 *::-webkit-scrollbar {

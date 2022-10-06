@@ -53,7 +53,7 @@ const Streaming = ({ anime, videoId, refresh }) => {
             rewatches: rewatches
         };
         makeQuery(query, variables, user.userToken);
-        refresh(); 
+        refresh();
     };
 
     useEffect(() => {
@@ -97,12 +97,14 @@ const Streaming = ({ anime, videoId, refresh }) => {
                 setVideoEnd(true);
                 setAlertOpen(true);
                 if (episode === 1) {
-                    if (anime.mediaListEntry.status === "COMPLETED") {
-                        updateEpisode(anime.id, episode, "CURRENT", anime.mediaListEntry.repeat + 1);
+                    if (anime.mediaListEntry) {
+                        if (anime.mediaListEntry.status === "COMPLETED") {
+                            updateEpisode(anime.id, episode, "CURRENT", anime.mediaListEntry.repeat + 1);
 
+                        }
                     }
                     else {
-                        updateEpisode(anime.id, episode, "CURRENT", anime.mediaListEntry.repeat);
+                        updateEpisode(anime.id, episode, "CURRENT", anime.mediaListEntry ? anime.mediaListEntry.repeat : 0);
 
                     }
                 }
@@ -115,7 +117,7 @@ const Streaming = ({ anime, videoId, refresh }) => {
                     }
                 }
                 else {
-                    updateEpisode(anime.id, episode, "CURRENT", anime.mediaListEntry.repeat);
+                    updateEpisode(anime.id, episode, "CURRENT", anime.mediaListEntry ? anime.mediaListEntry.repeat : 0);
                 }
 
 
