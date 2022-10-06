@@ -125,7 +125,7 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode, onReady 
     }, 300), [])
 
     return (
-        <Box className="player | relative isolate" sx={{ aspectRatio: "16/9" }} ref={playerContainer} onMouseMove={throttledPlayerControlHandler} onTouchStart={throttledPlayerControlHandler}>
+        <Box className="player | relative isolate cursor-none" sx={{ aspectRatio: "16/9" }} ref={playerContainer} onMouseMove={throttledPlayerControlHandler} onTouchStart={throttledPlayerControlHandler}>
             <ReactPlayer width="100%" height="100%"
                 url={playerState.url}
                 ref={videoPlayer}
@@ -141,7 +141,7 @@ const VideoPlayer = ({ url, setProgress, onNextEpisode, hasNextEpisode, onReady 
                     setPlayerState(state => ({ ...state, duration }))
                 }} />
 
-            <Box className="player--controls | absolute inset-0 z-10" hidden={controlsHidden}>
+            <Box className="player--controls | absolute inset-0 z-10 cursor-auto" hidden={controlsHidden}>
                 {/* Seek Fields */}
 
                 <div className='flex w-full h-full'>
