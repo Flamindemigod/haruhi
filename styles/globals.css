@@ -82,6 +82,7 @@ select {
 
 :root {
     --clr-primary: #ca006b;
+    --clr-secondary: #00000000; 
     --clr-status-current: #42a5f5;
     --clr-status-planning: #f79a63;
     --clr-status-paused: #fa7a7a;
