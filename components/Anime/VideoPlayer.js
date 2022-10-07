@@ -8,6 +8,8 @@ import {
   Slider,
   linearProgressClasses,
   IconButton,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import screenfull from "screenfull";
 import {
@@ -59,7 +61,10 @@ const VideoPlayer = ({
   const user = useSelector((state) => state.user.value);
   const [isMuted, setIsMuted] = useState(0);
   const [controlsHidden, setControlsHidden] = useState(0);
-
+  const [playerReady, setPlayerReady] = useState(false);
+  const [qualitySelctorMenuAnchor, setQualitySelectorMenuAnchor] =
+    useState(false);
+  const qualitySelctorMenuOpen = Boolean(qualitySelctorMenuAnchor);
   const [playerState, setPlayerState] = useState({
     url: null,
     pip: false,
@@ -78,6 +83,7 @@ const VideoPlayer = ({
   });
   const videoPlayer = useRef();
   const playerContainer = useRef();
+  const playerControls = useRef();
 
   function keyboardShortcuts(event) {
     const { key } = event;
@@ -104,9 +110,7 @@ const VideoPlayer = ({
   }
 
   const toggleMute = () => {
-    console.log(isMuted, playerState.volume);
     if (isMuted !== 0) {
-      console.log("Test");
       setPlayerState((state) => ({ ...state, volume: isMuted }));
       setIsMuted(0);
     } else {
@@ -155,6 +159,13 @@ const VideoPlayer = ({
     []
   );
 
+  const handleClick = (event) => {
+    setQualitySelectorMenuAnchor(event.currentTarget);
+  };
+  const handleClose = () => {
+    setQualitySelectorMenuAnchor(null);
+  };
+
   return (
     <Box
       className="player | relative isolate cursor-none"
@@ -171,7 +182,10 @@ const VideoPlayer = ({
         playing={playerState.playing}
         volume={playerState.volume}
         pip={playerState.pip}
-        onReady={onReady}
+        onReady={(e) => {
+          onReady(e);
+          setPlayerReady(true);
+        }}
         onProgress={(newState) => {
           setProgress(newState.played);
           setPlayerState((state) => ({ ...state, ...newState }));
@@ -184,6 +198,7 @@ const VideoPlayer = ({
       <Box
         className="player--controls | absolute inset-0 z-10 cursor-auto"
         hidden={controlsHidden}
+        ref={playerControls}
       >
         {/* Seek Fields */}
 
@@ -330,8 +345,48 @@ const VideoPlayer = ({
                 }}
               />
             </Box>
+            <div className="ml-auto"></div>
+            {/* Quality Selector */}
+            {playerReady && videoPlayer.current.getInternalPlayer("hls") ? (
+              <>
+                <Button onClick={handleClick} sx={{ color: "white" }}>{`${
+                  videoPlayer.current.getInternalPlayer("hls").currentLevel ===
+                  -1
+                    ? "auto"
+                    : `${
+                        videoPlayer.current.getInternalPlayer("hls").levels[
+                          videoPlayer.current.getInternalPlayer("hls")
+                            .currentLevel
+                        ].height
+                      }p`
+                }`}</Button>
+                <Menu
+                  anchorEl={qualitySelctorMenuAnchor}
+                  open={qualitySelctorMenuOpen}
+                  container={playerControls.current}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                  transformOrigin={{ vertical: "top", horizontal: "center" }}
+                >
+                  {videoPlayer.current
+                    .getInternalPlayer("hls")
+                    .levels.map((level, index) => (
+                      <MenuItem
+                        onClick={() => {
+                          videoPlayer.current.getInternalPlayer(
+                            "hls"
+                          ).currentLevel = index;
+                          handleClose();
+                        }}
+                      >{`${level.height}p`}</MenuItem>
+                    ))}
+                </Menu>
+              </>
+            ) : (
+              <></>
+            )}
             {/* PiP */}
-            <div className="flex ml-auto">
+            <div className="flex">
               {document.pictureInPictureEnabled && (
                 <Button
                   sx={{ color: "white" }}
