@@ -233,7 +233,7 @@ export async function getServerSideProps({ params, req }) {
     const staffData = await makeQuery(
       query,
       variables,
-      req.headers.cookie ? cookie.parse(req.headers.cookie).access_token : null
+      req.headers.cookie ? req.headers.cookie.access_token : null
     );
     _staff = staffData.data.Staff;
     if (!staffData.data.Staff.characterMedia.pageInfo.hasNextPage) {
