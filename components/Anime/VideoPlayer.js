@@ -368,6 +368,16 @@ const VideoPlayer = ({
                   anchorOrigin={{ vertical: "top", horizontal: "center" }}
                   transformOrigin={{ vertical: "top", horizontal: "center" }}
                 >
+                  <MenuItem
+                    onClick={() => {
+                      videoPlayer.current.getInternalPlayer(
+                        "hls"
+                      ).currentLevel = -1;
+                      handleClose();
+                    }}
+                  >
+                    Auto
+                  </MenuItem>
                   {videoPlayer.current
                     .getInternalPlayer("hls")
                     .levels.map((level, index) => (
