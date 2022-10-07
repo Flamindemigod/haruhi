@@ -7,7 +7,6 @@ import {
   LinearProgress,
   Slider,
   linearProgressClasses,
-  IconButton,
   Menu,
   MenuItem,
 } from "@mui/material";
