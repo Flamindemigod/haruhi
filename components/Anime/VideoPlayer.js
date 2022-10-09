@@ -381,6 +381,7 @@ const VideoPlayer = ({
                     .getInternalPlayer("hls")
                     .levels.map((level, index) => (
                       <MenuItem
+                        key={index}
                         onClick={() => {
                           videoPlayer.current.getInternalPlayer(
                             "hls"
