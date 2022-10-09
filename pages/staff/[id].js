@@ -147,6 +147,7 @@ const Staff = ({ staff }) => {
               {media.map((el) =>
                 el.characters.map((_el) => (
                   <CardTwo
+                    key={el.node.id}
                     width={150}
                     height={256}
                     title={_el && _el.name.userPreferred}
