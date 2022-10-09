@@ -8,7 +8,7 @@ import Tab from "@mui/material/Tab";
 import getCurrentSeason from "../getCurrentSeason";
 import List from "../components/Seasonal/List";
 
-const seasonal = () => {
+const Seasonal = () => {
   const dispatch = useDispatch();
   const [season, setSeason] = useState();
   const [seasonYear, setSeasonYear] = useState();
@@ -82,4 +82,4 @@ const seasonal = () => {
   );
 };
 
-export default seasonal;
+export default Seasonal;
