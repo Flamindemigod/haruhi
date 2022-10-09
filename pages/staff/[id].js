@@ -149,8 +149,8 @@ const Staff = ({ staff }) => {
                   <CardTwo
                     width={150}
                     height={256}
-                    title={_el.name.userPreferred}
-                    mainImage={_el.image.large}
+                    title={_el && _el.name.userPreferred}
+                    mainImage={_el && _el.image.large}
                     subImage={el.node.coverImage.large}
                     subTitle={el.node.title.userPreferred}
                     link={`/anime/${el.node.id}`}

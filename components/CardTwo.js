@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 import Image from "next/future/image";
 import React from "react";
 import Link from "./Link";
@@ -25,13 +25,17 @@ const CardTwo = ({
       <Box className="card" sx={{ width }}>
         <Link href={link}>
           <Box className="relative">
-            <Image
-              className="object-cover"
-              width={width}
-              height={height}
-              src={mainImage}
-              alt={title}
-            />
+            {mainImage ? (
+              <Image
+                className="object-cover"
+                width={width}
+                height={height}
+                src={mainImage}
+                alt={title}
+              />
+            ) : (
+              <Skeleton width={width} height={height} variant="rectangular" />
+            )}
             {subImage ? (
               <Image
                 className="absolute bottom-0 right-0"
