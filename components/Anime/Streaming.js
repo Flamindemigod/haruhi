@@ -151,7 +151,8 @@ const Streaming = ({ anime, videoId, refresh }) => {
               anime.mediaListEntry.repeat
             );
           }
-        } else {
+        }
+        if (episode !== anime.episodes && episode !== 1) {
           updateEpisode(
             anime.id,
             episode,
