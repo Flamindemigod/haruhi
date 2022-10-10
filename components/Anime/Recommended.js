@@ -6,7 +6,7 @@ const Recommended = ({ recommendations }) => {
         <>
             <div className='text-xl'>Recommendations</div>
             <Carosel width="95vw">
-                {recommendations.map((edge, index) => (<Card
+                {recommendations.map((edge, index) => (edge.node.mediaRecommendation && (<Card
                     key={edge.node.mediaRecommendation.id}
                     title={edge.node.mediaRecommendation.title.userPreferred}
                     status={edge.node.mediaRecommendation.status}
@@ -14,8 +14,8 @@ const Recommended = ({ recommendations }) => {
                     link={`/anime/${edge.node.mediaRecommendation.id}`}
                     width={128}
                     height={167}
-                    changeDirection={((recommendations.length - index) < 5) ? true : false}
-                />))}
+                    changeDirection={((((recommendations.length - index) < 5) && index > 5)) ? true : false}
+                />)))}
             </Carosel>
         </>
     )
