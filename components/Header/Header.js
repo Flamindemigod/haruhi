@@ -1,23 +1,18 @@
 import { useState } from "react";
 import { Avatar, Box, Button, ButtonBase, IconButton, SwipeableDrawer, useMediaQuery, List, ListItem, ListItemButton, ListItemText, Menu, MenuItem } from "@mui/material"
-import { useSelector, useDispatch } from "react-redux"
-import { AnilistClientID, SERVER } from "../config";
-import Image from "next/image"
-import Link from "next/link";
-import { unsetUser } from "../features/user";
+import { useSelector } from "react-redux"
+import { AnilistClientID, SERVER } from "../../config";
+import Image from "next/future/image";
+import Link from "../Link";
 import { Menu as MenuIcon, Logout } from "@mui/icons-material";
+import SearchButton from "./Search";
 
 const Header = () => {
     const matches = useMediaQuery('(min-width:640px)');
-    const dispatch = useDispatch();
     const user = useSelector(state => state.user.value);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
     const menuOpen = Boolean(menuAnchorEl);
-    const handleLogout = () => {
-        document.cookie = document.cookie + ";max-age=0";
-        dispatch(unsetUser());
-    }
 
 
     const handleClick = (event) => {
@@ -30,9 +25,9 @@ const Header = () => {
         <div className='w-full bg-offWhite-700 text-offWhite-100 h-16 flex px-8 flex-row items-center'>
             {matches ?
                 <nav className="grid h-full" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-                    <Link href="/" className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></Link>
-                    <Link href="/anime" className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Lists</div></ButtonBase></Link>
-                    <Link href="/seasonal" className="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full p-4"><div className="text-xl">Seasonal</div></ButtonBase></Link >
+                    <Link href="/" aClasses="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Home</div></ButtonBase></Link>
+                    <Link href="/anime" aClasses="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full"><div className="text-xl">Lists</div></ButtonBase></Link>
+                    <Link href="/seasonal" aClasses="w-full h-full"><ButtonBase sx={{ p: "1rem" }} className="w-full h-full p-4"><div className="text-xl">Seasonal</div></ButtonBase></Link >
                 </nav > :
                 (<>
                     <IconButton onClick={() => { setDrawerOpen(true) }}>
@@ -43,21 +38,21 @@ const Header = () => {
                             role="presentation">
                             <List onClick={() => { setDrawerOpen(false) }}>
                                 <ListItem>
-                                    <Link className='w-full' href={"/"}>
+                                    <Link aClasses='w-full' href={"/"}>
                                         <ListItemButton>
                                             <ListItemText primary={"Home"} />
                                         </ListItemButton>
                                     </Link>
                                 </ListItem>
                                 <ListItem >
-                                    <Link className='w-full' href={"/anime"}>
+                                    <Link aClasses='w-full' href={"/anime"}>
                                         <ListItemButton>
                                             <ListItemText primary={"Lists"} />
                                         </ListItemButton>
                                     </Link>
                                 </ListItem>
                                 <ListItem >
-                                    <Link className='w-full' href={"/seasonal"}>
+                                    <Link aClasses='w-full' href={"/seasonal"}>
                                         <ListItemButton>
                                             <ListItemText primary={"Seaonal"} />
                                         </ListItemButton>
@@ -69,9 +64,12 @@ const Header = () => {
                 </>
                 )
             }
-            <Box className="self-center ml-auto">
+            <Box className="flex gap-2 self-center ml-auto">
+                <SearchButton />
                 {user.userAuth ? (<div className="flex gap-4">
-                    <Avatar onClick={handleClick} src={user.userAvatar}></Avatar>
+                    <IconButton className="cursor-pointer" onClick={handleClick}>
+                        <Avatar alt={user.userName} draggable={false} src={user.userAvatar} />
+                    </IconButton>
                     <Menu
                         id="basic-menu"
                         anchorEl={menuAnchorEl}
@@ -114,17 +112,19 @@ const Header = () => {
                                 <div className="text-offWhite-100 no-underline">Prefrences</div>
                             </MenuItem>
                         </Link>
-                        <MenuItem sx={{ color: "#f22", }} onClick={handleLogout}>
-                            <Logout fontSize="small" /> Logout
-                        </MenuItem>
-
+                        <Link href="/logout">
+                            <MenuItem sx={{ color: "#f22", }}>
+                                <Logout fontSize="small" /> Logout
+                            </MenuItem>
+                        </Link>
                     </Menu>
                 </div>) : (<div>
                     <Button
                         variant="contained"
                         color="primary"
-                        href={`https://anilist.co/api/v2/oauth/authorize?client_id=${AnilistClientID}&response_type=token`} className="w-full"><Image src={`${SERVER}/AnilistIcon.svg`} width={37} height={37} /> Login With Anilist</Button></div>)}
-            </Box>
+                        href={`https://anilist.co/api/v2/oauth/authorize?client_id=${AnilistClientID}&response_type=token`} className="w-full"><Image src={`${SERVER}/AnilistIcon.svg`} alt={"Anilist Icon"} width={37} height={37} /> Login With Anilist</Button></div>)
+                }
+            </Box >
         </div >
     )
 }

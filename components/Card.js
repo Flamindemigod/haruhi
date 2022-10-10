@@ -1,10 +1,8 @@
-import { Box } from '@mui/material'
-import Image from 'next/image'
-import Link from 'next/link';
+import { Box, useMediaQuery } from '@mui/material'
+import Image from "next/future/image";
+import Link from './Link';
 import Countdown, { zeroPad } from "react-countdown";
-import { animated, useSpring } from '@react-spring/web'
-
-
+import { motion } from 'framer-motion';
 
 const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -23,28 +21,22 @@ const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
 };
 
 const Card = ({ height, width, image, status, title, link, progress, episodes, nextAiringEpisode, nextAiringTime, listStatus, changeDirection }) => {
-    const styles = useSpring({
-        from: {
-            opacity: 0,
-            translateY: "50%",
-            scale: 0
-        },
-        to: {
-            scale: 1,
-            opacity: 1,
-            translateY: "0%"
-        },
-    })
-
+    const hasHover = useMediaQuery("(hover: hover)");
     return (
-        <animated.div style={styles}>
-            <Link href={link}>
-                <Box className='card | relative cursor-pointer' sx={{ aspectRatio: "4/3", height, width }}>
-                    <div className="card--image ">
-                        <Image draggable={false} width={width} height={height} className='object-cover' src={image} />
-                    </div>
-                    <div className={`card--content | flex-col absolute ${changeDirection ? "right-full" : "left-full"} w-64 top-0 bottom-0 bg-offWhite-600 z-10 p-4`}>
+        <motion.div
+            className="flex-shrink-0"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+
+        >
+            <Link href={link} >
+
+                <Box className='card | relative cursor-pointer flex' sx={{ height }}>
+                    <Image draggable={false} width={width} height={height} className='card--image | object-cover' src={image} alt={title} />
+                    <div className={`card--content | flex-col ${hasHover && "absolute"} ${changeDirection ? "right-full" : "left-full"} w-64 top-0 bottom-0 bg-offWhite-600 z-10 p-4`}>
                         <div className="card--title | text-lg">{title}</div>
+
                         <div className='mt-auto'>{progress ? `Progress: ${progress} ${episodes ? "/" : "+"} ${episodes ? episodes : ""}` : ""}</div>
                         <div>{nextAiringTime && (<div>
                             {`Ep ${nextAiringEpisode} airing in `}
@@ -55,8 +47,9 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
                         </div>)}</div>
                         {status && <div className='capitalize'>{status.replace(/[_]/gm, " ").toLowerCase()}</div>}
 
+
                     </div>
-                    {((progress < (nextAiringEpisode - 1)) && progress) && <div className='notification'></div>}
+                    {(listStatus === "CURRENT" && (progress < (nextAiringEpisode - 1))) ? <div className='notification'></div> : <></>}
                     {(listStatus === "CURRENT") && <div className='mediaListNotification current'></div>}
                     {(listStatus === "PAUSED") && <div className='mediaListNotification paused'></div>}
                     {(listStatus === "COMPLETED") && <div className='mediaListNotification completed'></div>}
@@ -64,7 +57,8 @@ const Card = ({ height, width, image, status, title, link, progress, episodes, n
                     {(listStatus === "PLANNING") && <div className='mediaListNotification planning'></div>}
                 </Box>
             </Link>
-        </animated.div>
+
+        </motion.div>
     )
 }
 

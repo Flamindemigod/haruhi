@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import makeQuery from "../../makeQuery";
@@ -104,22 +105,25 @@ const Recommended = () => {
         Recommended for you
       </div>
       <Carosel width={"95vw"}>
-        {animeArray.map((anime, index) => <Card
-          key={anime.id}
-          height={167}
-          width={128}
-          status={anime.status}
-          image={anime.coverImage.large}
-          title={anime.title.userPreferred}
-          link={`/anime/${anime.id}`}
-          hasNotif={true}
-          episodes={anime.episodes}
-          changeDirection={((animeArray.length - index) < 5) ? true : false}
-          nextAiringEpisode={anime.nextAiring && anime.nextAiring.node.episode}
-          nextAiringTime={anime.nextAiring && anime.nextAiring.node.timeUntilAiring}
+        <AnimatePresence>
+          {animeArray.map((anime, index) => <Card
+            key={anime.id}
+            height={167}
+            width={128}
+            status={anime.status}
+            image={anime.coverImage.large}
+            title={anime.title.userPreferred}
+            link={`/anime/${anime.id}`}
+            hasNotif={true}
+            episodes={anime.episodes}
+            changeDirection={((animeArray.length - index) < 5) ? true : false}
+            nextAiringEpisode={anime.nextAiring && anime.nextAiring.node.episode}
+            nextAiringTime={anime.nextAiring && anime.nextAiring.node.timeUntilAiring}
 
-        />)}
+          />)}
+        </AnimatePresence>
       </Carosel>
+
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { Card } from '@mui/material'
 import Image from 'next/image'
-import Link from 'next/link'
-import React, { useEffect } from 'react'
+import Link from '../Link'
+import { useEffect } from 'react'
 import { useState } from 'react'
 import Carosel from '../Carosel'
 
@@ -21,10 +21,10 @@ const Relations = ({ relations }) => {
         <>
             {_relations.length ? (<>
                 <div className='text-xl'>Relations</div>
-                <Carosel width="95vw">
+                <Carosel width="95vw" height="100%">
                     {_relations.map(relation => (
                         <Link key={relation.node.id} href={`/anime/${relation.node.id}`}>
-                            <Card className="cursor-pointer flex-shrink-0" sx={{ width: "21rem" }}>
+                            <Card className="flex-shrink-0" sx={{ width: "21rem" }}>
                                 <div className="flex h-full w-full">
                                     <div className="flex-shrink-0">
                                         <Image width={128} height={167} src={relation.node.coverImage.large} />

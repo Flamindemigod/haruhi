@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import makeQuery from "../../makeQuery";
@@ -96,23 +97,25 @@ const CurrentlyWatching = () => {
         Continue Watching
       </div>
       <Carosel width={"95vw"}>
-        {animeArray.map((anime, index) => <Card
-          key={anime.media.id}
-          height={167}
-          width={128}
-          status={anime.media.status}
-          image={anime.media.coverImage.large}
-          title={anime.media.title.userPreferred}
-          link={`/anime/${anime.media.id}`}
-          hasNotif={true}
-          listStatus={anime.status}
-          progress={anime.progress}
-          episodes={anime.media.episodes}
-          changeDirection={(((animeArray.length - index) < 5) && (index > 5)) ? true : false}
-          nextAiringEpisode={anime.media.nextAiring && anime.media.nextAiring.node.episode}
-          nextAiringTime={anime.media.nextAiring && anime.media.nextAiring.node.timeUntilAiring}
+        <AnimatePresence>
+          {animeArray.map((anime, index) => <Card
+            key={anime.media.id}
+            height={167}
+            width={128}
+            status={anime.media.status}
+            image={anime.media.coverImage.large}
+            title={anime.media.title.userPreferred}
+            link={`/anime/${anime.media.id}`}
+            hasNotif={true}
+            listStatus={anime.status}
+            progress={anime.progress}
+            episodes={anime.media.episodes}
+            changeDirection={(((animeArray.length - index) < 5) && (index > 5)) ? true : false}
+            nextAiringEpisode={anime.media.nextAiring && anime.media.nextAiring.node.episode}
+            nextAiringTime={anime.media.nextAiring && anime.media.nextAiring.node.timeUntilAiring}
 
-        />)}
+          />)}
+        </AnimatePresence>
       </Carosel>
     </div>
   )

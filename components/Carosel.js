@@ -3,7 +3,7 @@ import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material"
 import { IconButton, Box } from "@mui/material"
 import { useRef } from "react"
 
-const Carosel = ({ width = "100vw", children }) => {
+const Carosel = ({ width = "100vw", height = 195, children }) => {
     const caroselTrack = useRef();
     const [showLeftButton, setShowLeftButton] = useState(false)
     const [showRightButton, setShowRightButton] = useState(true)
@@ -35,7 +35,7 @@ const Carosel = ({ width = "100vw", children }) => {
 
                 setShowLeftButton(false)
             }
-            if (parseInt(caroselTrack.current.scrollLeft) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth)) {
+            if (parseInt(caroselTrack.current.scrollLeft) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth) || (parseInt(caroselTrack.current.scrollLeft + 1) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth))) {
                 setShowRightButton(false)
             }
         })
@@ -46,20 +46,20 @@ const Carosel = ({ width = "100vw", children }) => {
             if (caroselTrack.current.scrollLeft === 0) {
                 setShowLeftButton(false)
             }
-            if (parseInt(caroselTrack.current.scrollLeft) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth)) {
+            if (parseInt(caroselTrack.current.scrollLeft) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth) || parseInt(caroselTrack.current.scrollLeft + 1) === (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth)) {
                 setShowRightButton(false)
             }
         }))
     }, [])
     return (
         <div className="relative isolate flex justify-center">
-            {showLeftButton && (<IconButton onClick={scrollBack} className="absolute top-1/2 left-4 z-20" sx={{ backgroundColor: "var(--clr-primary)", opacity: "0.6", "&:hover": { backgroundColor: "var(--clr-primary)", opacity: 1 }, transform: "translateY(-50%)", position: "absolute" }}>
+            {showLeftButton && (<IconButton aria-label="Carosel Button Go Back" onClick={scrollBack} className="absolute top-1/2 left-4 z-20" sx={{ backgroundColor: "var(--clr-primary)", opacity: "0.6", "&:hover": { backgroundColor: "var(--clr-primary)", opacity: 1 }, transform: "translateY(-50%)", position: "absolute" }}>
                 <ArrowBackIos />
             </IconButton>)}
-            <Box width={width} className=" scroll-smooth relative flex overflow-x-auto overflow-y-hidden gap-4" ref={caroselTrack}>
+            <Box width={width} height={height} className=" scroll-smooth relative flex overflow-x-auto gap-4 items-center" ref={caroselTrack}>
                 {children}
             </Box>
-            {showRightButton && (<IconButton onClick={scrollForward} className="absolute top-1/2 right-4 z-20" sx={{ backgroundColor: "var(--clr-primary)", opacity: "0.6", "&:hover": { backgroundColor: "var(--clr-primary)", opacity: 1 }, transform: "translateY(-50%)", position: "absolute" }}>
+            {showRightButton && (<IconButton aria-label="Carosel Button Go Forward" onClick={scrollForward} className="absolute top-1/2 right-4 z-20" sx={{ backgroundColor: "var(--clr-primary)", opacity: "0.6", "&:hover": { backgroundColor: "var(--clr-primary)", opacity: 1 }, transform: "translateY(-50%)", position: "absolute" }}>
                 <ArrowForwardIos />
             </IconButton>)}
         </div>

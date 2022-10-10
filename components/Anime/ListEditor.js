@@ -8,7 +8,7 @@ import { DatePicker } from '@mui/x-date-pickers'
 import makeQuery from '../../makeQuery'
 
 
-const ListEditor = ({ anime }) => {
+const ListEditor = ({ anime, refresh }) => {
     const user = useSelector(state => state.user.value)
     const [open, setOpen] = useState(false);
     const [mediaStatus, setMediaStatus] = useState("");
@@ -34,7 +34,7 @@ const ListEditor = ({ anime }) => {
             }
             if (anime.mediaListEntry.completedAt) {
                 if (anime.mediaListEntry.completedAt.year) {
-                    setMediaEndDate(new Date().setFullYear(anime.mediaListEntry.completedAt.year, anime.mediaListEntry.completedAt.month, anime.mediaListEntry.completedAt.day))
+                    setMediaEndDate(new Date().setFullYear(anime.mediaListEntry.completedAt.year, anime.mediaListEntry.completedAt.month - 1, anime.mediaListEntry.completedAt.day))
                 }
                 else {
                     setMediaEndDate(null)
@@ -80,8 +80,22 @@ const ListEditor = ({ anime }) => {
         };
 
         makeQuery(query, variables, user.userToken);
+        refresh();
     }
-
+    const deleteMediaEntry = async (mediaListEntry) => {
+        const query = `
+        mutation deleteMediaEntry($id: Int) {
+          DeleteMediaListEntry(id: $id) {
+            deleted
+          }
+        }      
+        `;
+        const variables = {
+            id: mediaListEntry
+        }
+        makeQuery(query, variables, user.userToken);
+        refresh();
+    }
     return (
         <>
             <Fab sx={{ zIndex: 10 }} variant="extended" disabled={!user.userAuth} color='primary' onClick={() => { setOpen(true) }}>
