@@ -5,3 +5,4 @@ export const SERVER = isProd
   : "http://136.243.175.33:8080";
 export const VIDEOSERVER = "https://haruhi-backend.flamindemigod.com";
 export const MALSERVER = "https://api.jikan.moe/v4/anime";
+
