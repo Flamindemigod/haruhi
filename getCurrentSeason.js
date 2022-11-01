@@ -7,10 +7,10 @@ const getCurrentSeason = () => {
     return ["SPRING", currentYear];
   } else if (currentMonth >= 4 && currentMonth < 9) {
     return ["SUMMER", currentYear];
-  } else if (currentMonth >= 9 && currentMonth < 10) {
+  } else if (currentMonth >= 9 && currentMonth < 11) {
     return ["FALL", currentYear];
   } else {
-    if (currentMonth >= 10) {
+    if (currentMonth >= 11) {
       return ["WINTER", currentYear];
     } else {
       return ["WINTER", currentYear - 1];
