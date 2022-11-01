@@ -1,22 +1,23 @@
-import Layout from '../layouts/Layout';
-import '../styles/globals.css';
-import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
-import { Provider } from 'react-redux';
+import Layout from "../layouts/Layout";
+import "../styles/globals.css";
+import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
+import { Provider } from "react-redux";
 import loadingReducer from "../features/loading";
 import userReducer from "../features/user";
-import { configureStore } from '@reduxjs/toolkit';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { configureStore } from "@reduxjs/toolkit";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { Analytics } from "@vercel/analytics/react";
 const store = configureStore({
   reducer: {
     user: userReducer,
     loading: loadingReducer,
   },
-})
+});
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     secondary: {
       main: "#42a5f5",
     },
@@ -25,7 +26,6 @@ const darkTheme = createTheme({
     },
   },
 });
-
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -36,10 +36,11 @@ function MyApp({ Component, pageProps }) {
           <Layout>
             <Component {...pageProps} />
           </Layout>
+          <Analytics />
         </ThemeProvider>
       </Provider>
     </LocalizationProvider>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;
