@@ -71,6 +71,7 @@ const Anime = ({ _anime }) => {
         47164: [{ animeId: "dungeon-ni-deai-wo-motomeru-no-wa-machigatteiru-darou-ka-iv-shin-shou-meikyuu-hen" }],
         33605: [{ animeId: "spiritpact" }],
         36522: [{ animeId: "spiritpact-s2" }],
+        36296: [{animeId: "hinamatsuri"}, {animeID: "hinamatsuri-dub"}]
       }
 
       const malTitle = await getMALTitle(_anime.idMal);
