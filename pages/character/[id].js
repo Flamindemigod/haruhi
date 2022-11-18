@@ -14,7 +14,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../features/loading";
 import Card from "../../components/Card";
-import { AnimatePresence } from "framer-motion";
 import Meta from "../../components/Meta";
 
 const Character = ({ character }) => {
@@ -163,33 +162,29 @@ const Character = ({ character }) => {
                 : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
             }`}
           >
-            <AnimatePresence>
-              {media.map((el, index) => (
-                <Card
-                  key={el.id}
-                  width={128}
-                  height={168}
-                  image={el.coverImage.large}
-                  title={el.title.userPreferred}
-                  link={`/anime/${el.id}`}
-                  status={el.status}
-                  changeDirection={
-                    index % gridColumnCount >= gridColumnCount - 2 && index > 2
-                      ? true
-                      : false
-                  }
-                  episodes={el.episodes}
-                  nextAiringEpisode={
-                    el.nextAiring && el.nextAiring.node.episode
-                  }
-                  nextAiringTime={
-                    el.nextAiring && el.nextAiring.node.timeUntilAiring
-                  }
-                  progress={el.mediaListEntry && el.mediaListEntry.progress}
-                  listStatus={el.mediaListEntry && el.mediaListEntry.status}
-                />
-              ))}
-            </AnimatePresence>
+            {media.map((el, index) => (
+              <Card
+                key={el.id}
+                width={128}
+                height={168}
+                image={el.coverImage.large}
+                title={el.title.userPreferred}
+                link={`/anime/${el.id}`}
+                status={el.status}
+                changeDirection={
+                  index % gridColumnCount >= gridColumnCount - 2 && index > 2
+                    ? true
+                    : false
+                }
+                episodes={el.episodes}
+                nextAiringEpisode={el.nextAiring && el.nextAiring.node.episode}
+                nextAiringTime={
+                  el.nextAiring && el.nextAiring.node.timeUntilAiring
+                }
+                progress={el.mediaListEntry && el.mediaListEntry.progress}
+                listStatus={el.mediaListEntry && el.mediaListEntry.status}
+              />
+            ))}
           </Box>
         </div>
       </div>

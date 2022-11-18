@@ -13,7 +13,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../features/loading";
 import CardTwo from "../../components/CardTwo";
-import { AnimatePresence } from "framer-motion";
 import makeQuery from "../../makeQuery";
 import Meta from "../../components/Meta";
 
@@ -45,21 +44,18 @@ const Staff = ({ staff }) => {
   }, [staff]);
 
   useEffect(() => {
-    setMedia([]);
+    console.log(media);
     if (onList && user.userAuth) {
-      console.log(staff.media.nodes);
-      setMedia(
-        staff.media.nodes.filter((media) => {
-          if (media.node.mediaListEntry) {
-            return true;
-          }
-          return false;
-        })
-      );
+      const _media = staff.media.nodes.filter((media) => {
+        if (media.node.mediaListEntry) {
+          return true;
+        }
+        return false;
+      });
+      setMedia(_media);
     } else {
       setMedia(staff.media.nodes);
     }
-    console.log(media);
   }, [onList]);
   return (
     <>
@@ -143,23 +139,21 @@ const Staff = ({ staff }) => {
           <Box
             className={`grid gap-4 w-max grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-9 3xl:grid-cols-11`}
           >
-            <AnimatePresence>
-              {media.map((el) =>
-                el.characters.map((_el) => (
-                  <CardTwo
-                    key={el.node.id}
-                    width={150}
-                    height={256}
-                    title={_el && _el.name.userPreferred}
-                    mainImage={_el && _el.image.large}
-                    subImage={el.node.coverImage.large}
-                    subTitle={el.node.title.userPreferred}
-                    link={`/anime/${el.node.id}`}
-                    role={el.characterRole}
-                  />
-                ))
-              )}
-            </AnimatePresence>
+            {media.map((el) =>
+              el.characters.map((_el) => (
+                <CardTwo
+                  key={el.node.id}
+                  width={150}
+                  height={256}
+                  title={_el && _el.name.userPreferred}
+                  mainImage={_el && _el.image.large}
+                  subImage={el.node.coverImage.large}
+                  subTitle={el.node.title.userPreferred}
+                  link={`/anime/${el.node.id}`}
+                  role={el.characterRole}
+                />
+              ))
+            )}
           </Box>
         </div>
       </div>
@@ -234,13 +228,14 @@ export async function getServerSideProps({ params, req }) {
     const staffData = await makeQuery(
       query,
       variables,
-      req.headers.cookie ? req.headers.cookie.access_token : null
+      req.headers.cookie ? cookie.parse(req.headers.cookie).access_token : null
     );
     _staff = staffData.data.Staff;
     if (!staffData.data.Staff.characterMedia.pageInfo.hasNextPage) {
       hasNextPage = false;
     } else {
       variables["page"] = variables["page"] + 1;
+      console.log(variables);
     }
     accumalatedEdges = [
       ...accumalatedEdges,
