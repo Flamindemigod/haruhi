@@ -260,12 +260,17 @@ const VideoPlayer = ({
         <Box className="absolute -bottom-1 left-0 right-0 flex flex-col bg-gradient-to-t from-black to-transparent">
           <div className="relative">
             <BorderLinearProgress
+              sx={{
+                height: 4,
+              }}
               variant="determinate"
               color="inherit"
               value={playerState.loaded * 100}
             />
             <Slider
               sx={{
+                height: 4,
+
                 position: "absolute",
                 top: "50%",
                 transform: "translateY(-50%)",
