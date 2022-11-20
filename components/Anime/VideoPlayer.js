@@ -249,7 +249,12 @@ const VideoPlayer = ({
                     user.userPreferenceSkipOpening
                 );
               }}
-              sx={{ color: "white", borderColor: "white" }}
+              sx={{
+                color: "white",
+                borderColor: "white",
+                backgroundColor: "#1212128f",
+                "&:hover": { backgroundColor: "#121212" },
+              }}
               variant="outlined"
             >
               <FastForward />+{user.userPreferenceSkipOpening}
