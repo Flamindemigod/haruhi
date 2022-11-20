@@ -291,6 +291,7 @@ const VideoPlayer = ({
                 "& .MuiSlider-rail": { display: "none" },
               }}
               aria-label="Progress Slider"
+              classes={"transition-all"}
               value={playerState.played * 100}
               onChange={(event, newValue) => {
                 setPlayerState((state) => ({
