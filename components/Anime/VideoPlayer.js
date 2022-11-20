@@ -9,6 +9,7 @@ import {
   linearProgressClasses,
   Menu,
   MenuItem,
+  useMediaQuery,
 } from "@mui/material";
 import screenfull from "screenfull";
 import {
@@ -58,6 +59,7 @@ const VideoPlayer = ({
 }) => {
   let timeoutID = null;
   const user = useSelector((state) => state.user.value);
+  const isSmall = useMediaQuery("(min-width: 420px)");
   const [isMuted, setIsMuted] = useState(0);
   const [controlsHidden, setControlsHidden] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
@@ -258,19 +260,23 @@ const VideoPlayer = ({
         )}
         {/* Bottom Controls */}
         <Box className="absolute -bottom-1 left-0 right-0 flex flex-col bg-gradient-to-t from-black to-transparent">
-          <div className="relative">
+          <Box
+            className="relative"
+            sx={{
+              "&:hover .MuiLinearProgress-root,&:hover .MuiSlider-root": {
+                height: "8px ",
+              },
+            }}
+          >
             <BorderLinearProgress
-              sx={{
-                height: 4,
-              }}
               variant="determinate"
               color="inherit"
+              className="transition-all h-1"
               value={playerState.loaded * 100}
             />
             <Slider
               sx={{
                 height: 4,
-
                 position: "absolute",
                 top: "50%",
                 transform: "translateY(-50%)",
@@ -289,7 +295,7 @@ const VideoPlayer = ({
                 videoPlayer.current.seekTo(newValue / 100, "fraction");
               }}
             />
-          </div>
+          </Box>
           <div className="flex">
             <Button
               className=""
@@ -312,43 +318,45 @@ const VideoPlayer = ({
               <SkipNext />
             </Button>
             {/* Elapsed Time */}
-            <Box className="my-auto px-4 min-w-max">
+            <Box className="my-auto px-2 sm:px-4 min-w-max text-xs sm:text-base">
               {format(playerState.playedSeconds)} /{" "}
               {format(playerState.duration)}
             </Box>
             {/* Volume Mute  Button*/}
             {/* Volume Slider */}
-            <Box
-              className="p-0 flex gap-2 items-center flex-grow"
-              sx={{ minWidth: "5rem", maxWidth: "9rem" }}
-            >
-              <Button
-                sx={{ color: "#eee", padding: "0.5rem", minWidth: 0 }}
-                aria-label="Volume Mute"
-                onClick={toggleMute}
+            {isSmall && (
+              <Box
+                className="p-0 flex gap-2 items-center flex-grow"
+                sx={{ minWidth: "5rem", maxWidth: "9rem" }}
               >
-                {playerState.volume >= 0.5 ? (
-                  <VolumeUp />
-                ) : playerState.volume === 0 ? (
-                  <VolumeMute />
-                ) : (
-                  <VolumeDown />
-                )}
-              </Button>
-              <Slider
-                sx={{ width: "100%" }}
-                valueLabelDisplay="auto"
-                size={"small"}
-                aria-label="Volume Slider"
-                value={parseInt(playerState.volume * 100)}
-                onChange={(event, newValue) => {
-                  setPlayerState((state) => ({
-                    ...state,
-                    volume: parseInt(newValue) / 100,
-                  }));
-                }}
-              />
-            </Box>
+                <Button
+                  sx={{ color: "#eee", padding: "0.5rem", minWidth: 0 }}
+                  aria-label="Volume Mute"
+                  onClick={toggleMute}
+                >
+                  {playerState.volume >= 0.5 ? (
+                    <VolumeUp />
+                  ) : playerState.volume === 0 ? (
+                    <VolumeMute />
+                  ) : (
+                    <VolumeDown />
+                  )}
+                </Button>
+                <Slider
+                  sx={{ width: "100%" }}
+                  valueLabelDisplay="auto"
+                  size={"small"}
+                  aria-label="Volume Slider"
+                  value={parseInt(playerState.volume * 100)}
+                  onChange={(event, newValue) => {
+                    setPlayerState((state) => ({
+                      ...state,
+                      volume: parseInt(newValue) / 100,
+                    }));
+                  }}
+                />
+              </Box>
+            )}
             <div className="ml-auto"></div>
             {/* Quality Selector */}
             {playerReady && videoPlayer.current.getInternalPlayer("hls") ? (
