@@ -1,16 +1,12 @@
-import { AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import makeQuery from "../../makeQuery";
 import Card from "../Card";
 import Carosel from "../Carosel";
 
-
-
 const CurrentlyWatching = () => {
   const [animeArray, setAnimeArray] = useState([]);
   let user = useSelector((state) => state.user.value);
-
 
   useEffect(() => {
     const getCurrentAiring = async () => {
@@ -59,7 +55,6 @@ const CurrentlyWatching = () => {
         const mediaArray = data.data.Page.mediaList;
         var airingArray = [];
         for (const media in mediaArray) {
-
           const airingSchedule = mediaArray[media].media.airingSchedule;
           delete mediaArray[media].media.airingSchedule;
           const nextAiringIndex = airingSchedule.edges.findIndex(
@@ -70,20 +65,18 @@ const CurrentlyWatching = () => {
           airingArray[media] = mediaArray[media];
         }
 
-
         return [data.data.Page.pageInfo.hasNextPage, airingArray];
       };
-      let hasNextPage = true
-      let airingArrayAccumalated = []
+      let hasNextPage = true;
+      let airingArrayAccumalated = [];
       let data;
       while (hasNextPage) {
-        variables["page"] = variables["page"] + 1
+        variables["page"] = variables["page"] + 1;
         data = await makeQuery(query, variables, user.userToken).then(getList);
         hasNextPage = data[0];
-        airingArrayAccumalated = airingArrayAccumalated.concat(data[1])
+        airingArrayAccumalated = airingArrayAccumalated.concat(data[1]);
       }
-      setAnimeArray(airingArrayAccumalated)
-
+      setAnimeArray(airingArrayAccumalated);
     };
     if (user.userAuth) {
       getCurrentAiring();
@@ -93,12 +86,10 @@ const CurrentlyWatching = () => {
 
   return (
     <div className="">
-      <div className="text-xl p-4">
-        Continue Watching
-      </div>
+      <div className="text-xl p-4">Continue Watching</div>
       <Carosel width={"95vw"}>
-        <AnimatePresence>
-          {animeArray.map((anime, index) => <Card
+        {animeArray.map((anime, index) => (
+          <Card
             key={anime.media.id}
             height={167}
             width={128}
@@ -110,15 +101,21 @@ const CurrentlyWatching = () => {
             listStatus={anime.status}
             progress={anime.progress}
             episodes={anime.media.episodes}
-            changeDirection={(((animeArray.length - index) < 5) && (index > 5)) ? true : false}
-            nextAiringEpisode={anime.media.nextAiring && anime.media.nextAiring.node.episode}
-            nextAiringTime={anime.media.nextAiring && anime.media.nextAiring.node.timeUntilAiring}
-
-          />)}
-        </AnimatePresence>
+            changeDirection={
+              animeArray.length - index < 5 && index > 5 ? true : false
+            }
+            nextAiringEpisode={
+              anime.media.nextAiring && anime.media.nextAiring.node.episode
+            }
+            nextAiringTime={
+              anime.media.nextAiring &&
+              anime.media.nextAiring.node.timeUntilAiring
+            }
+          />
+        ))}
       </Carosel>
     </div>
-  )
-}
+  );
+};
 
-export default CurrentlyWatching
+export default CurrentlyWatching;
