@@ -25,6 +25,7 @@ import {
 } from "@mui/icons-material";
 import _ from "lodash";
 import { useSelector } from "react-redux";
+import { median } from "../../median";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 2,
@@ -63,6 +64,10 @@ const VideoPlayer = ({
   const [isMuted, setIsMuted] = useState(0);
   const [controlsHidden, setControlsHidden] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
+  const [sliderTooltip, setSliderTooltip] = useState({
+    absoluteX: 0,
+    relativeX: 0,
+  });
   const [qualitySelctorMenuAnchor, setQualitySelectorMenuAnchor] =
     useState(false);
   const qualitySelctorMenuOpen = Boolean(qualitySelctorMenuAnchor);
@@ -85,6 +90,7 @@ const VideoPlayer = ({
   const videoPlayer = useRef();
   const playerContainer = useRef();
   const playerControls = useRef();
+  const sliderRef = useRef();
 
   function keyboardShortcuts(event) {
     const { key } = event;
@@ -165,6 +171,17 @@ const VideoPlayer = ({
   };
   const handleClose = () => {
     setQualitySelectorMenuAnchor(null);
+  };
+
+  const setTooltip = (e) => {
+    const rect = sliderRef.current.getBoundingClientRect();
+    const absoluteX = e.clientX - rect.left;
+    const relativeX = absoluteX / (rect.right - rect.left);
+    console.log(absoluteX, rect.right - rect.left);
+    setSliderTooltip({
+      absoluteX: median([20, absoluteX - 30, rect.right - rect.left - 80]),
+      relativeX: median([0, relativeX, 1]),
+    });
   };
 
   return (
@@ -267,6 +284,8 @@ const VideoPlayer = ({
         <Box className="absolute -bottom-1 left-0 right-0 flex flex-col bg-gradient-to-t from-black to-transparent">
           <Box
             className="relative"
+            onMouseMove={setTooltip}
+            onTouchStart={setTooltip}
             sx={{
               "&:hover .MuiLinearProgress-root,&:hover .MuiSlider-root": {
                 height: "8px ",
@@ -277,6 +296,7 @@ const VideoPlayer = ({
               variant="determinate"
               color="inherit"
               className="transition-all h-1"
+              ref={sliderRef}
               value={playerState.loaded * 100}
             />
             <Slider
@@ -296,11 +316,17 @@ const VideoPlayer = ({
               onChange={(event, newValue) => {
                 setPlayerState((state) => ({
                   ...state,
-                  played: newValue / 100,
+                  played: sliderTooltip.relativeX,
                 }));
-                videoPlayer.current.seekTo(newValue / 100, "fraction");
+                videoPlayer.current.seekTo(sliderTooltip.relativeX, "fraction");
               }}
             />
+            <Box
+              className="absolute -top-10  h-4 min-w-min p-4 flex items-center justify-center rounded-lg bg-primary-500"
+              left={`${sliderTooltip.absoluteX}px`}
+            >
+              {format(sliderTooltip.relativeX * playerState.duration)}
+            </Box>
           </Box>
           <div className="flex">
             <Button
