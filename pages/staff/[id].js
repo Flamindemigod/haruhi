@@ -44,7 +44,6 @@ const Staff = ({ staff }) => {
   }, [staff]);
 
   useEffect(() => {
-    console.log(media);
     if (onList && user.userAuth) {
       const _media = staff.media.nodes.filter((media) => {
         if (media.node.mediaListEntry) {
@@ -235,7 +234,6 @@ export async function getServerSideProps({ params, req }) {
       hasNextPage = false;
     } else {
       variables["page"] = variables["page"] + 1;
-      console.log(variables);
     }
     accumalatedEdges = [
       ...accumalatedEdges,

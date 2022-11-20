@@ -9,6 +9,7 @@ import {
   linearProgressClasses,
   Menu,
   MenuItem,
+  useMediaQuery,
 } from "@mui/material";
 import screenfull from "screenfull";
 import {
@@ -24,6 +25,7 @@ import {
 } from "@mui/icons-material";
 import _ from "lodash";
 import { useSelector } from "react-redux";
+import { median } from "../../median";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 2,
@@ -58,9 +60,14 @@ const VideoPlayer = ({
 }) => {
   let timeoutID = null;
   const user = useSelector((state) => state.user.value);
+  const isSmall = useMediaQuery("(min-width: 420px)");
   const [isMuted, setIsMuted] = useState(0);
   const [controlsHidden, setControlsHidden] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
+  const [sliderTooltip, setSliderTooltip] = useState({
+    absoluteX: 0,
+    relativeX: 0,
+  });
   const [qualitySelctorMenuAnchor, setQualitySelectorMenuAnchor] =
     useState(false);
   const qualitySelctorMenuOpen = Boolean(qualitySelctorMenuAnchor);
@@ -83,6 +90,7 @@ const VideoPlayer = ({
   const videoPlayer = useRef();
   const playerContainer = useRef();
   const playerControls = useRef();
+  const sliderRef = useRef();
 
   function keyboardShortcuts(event) {
     const { key } = event;
@@ -163,6 +171,17 @@ const VideoPlayer = ({
   };
   const handleClose = () => {
     setQualitySelectorMenuAnchor(null);
+  };
+
+  const setTooltip = (e) => {
+    const rect = sliderRef.current.getBoundingClientRect();
+    const absoluteX = e.clientX - rect.left;
+    const relativeX = absoluteX / (rect.right - rect.left);
+    console.log(absoluteX, rect.right - rect.left);
+    setSliderTooltip({
+      absoluteX: median([20, absoluteX - 30, rect.right - rect.left - 80]),
+      relativeX: median([0, relativeX, 1]),
+    });
   };
 
   return (
@@ -247,7 +266,12 @@ const VideoPlayer = ({
                     user.userPreferenceSkipOpening
                 );
               }}
-              sx={{ color: "white", borderColor: "white" }}
+              sx={{
+                color: "white",
+                borderColor: "white",
+                backgroundColor: "#1212128f",
+                "&:hover": { backgroundColor: "#121212" },
+              }}
               variant="outlined"
             >
               <FastForward />+{user.userPreferenceSkipOpening}
@@ -258,14 +282,27 @@ const VideoPlayer = ({
         )}
         {/* Bottom Controls */}
         <Box className="absolute -bottom-1 left-0 right-0 flex flex-col bg-gradient-to-t from-black to-transparent">
-          <div className="relative">
+          <Box
+            className="relative"
+            onMouseMove={setTooltip}
+            onTouchStart={setTooltip}
+            sx={{
+              "&:hover .MuiLinearProgress-root,&:hover .MuiSlider-root": {
+                height: "8px ",
+              },
+              "&:hover .tooltip": { display: "flex" },
+            }}
+          >
             <BorderLinearProgress
               variant="determinate"
               color="inherit"
+              className="transition-all h-1"
+              ref={sliderRef}
               value={playerState.loaded * 100}
             />
             <Slider
               sx={{
+                height: 4,
                 position: "absolute",
                 top: "50%",
                 transform: "translateY(-50%)",
@@ -275,16 +312,23 @@ const VideoPlayer = ({
                 "& .MuiSlider-rail": { display: "none" },
               }}
               aria-label="Progress Slider"
+              classes={"transition-all"}
               value={playerState.played * 100}
               onChange={(event, newValue) => {
                 setPlayerState((state) => ({
                   ...state,
-                  played: newValue / 100,
+                  played: sliderTooltip.relativeX,
                 }));
-                videoPlayer.current.seekTo(newValue / 100, "fraction");
+                videoPlayer.current.seekTo(sliderTooltip.relativeX, "fraction");
               }}
             />
-          </div>
+            <Box
+              className="tooltip | hidden absolute -top-10  h-4 min-w-min p-4 items-center justify-center rounded-lg bg-primary-500 bg-opacity-40"
+              left={`${sliderTooltip.absoluteX}px`}
+            >
+              {format(sliderTooltip.relativeX * playerState.duration)}
+            </Box>
+          </Box>
           <div className="flex">
             <Button
               className=""
@@ -307,43 +351,45 @@ const VideoPlayer = ({
               <SkipNext />
             </Button>
             {/* Elapsed Time */}
-            <Box className="my-auto px-4 min-w-max">
+            <Box className="my-auto px-2 sm:px-4 min-w-max text-xs sm:text-base">
               {format(playerState.playedSeconds)} /{" "}
               {format(playerState.duration)}
             </Box>
             {/* Volume Mute  Button*/}
             {/* Volume Slider */}
-            <Box
-              className="p-0 flex gap-2 items-center flex-grow"
-              sx={{ minWidth: "5rem", maxWidth: "9rem" }}
-            >
-              <Button
-                sx={{ color: "#eee", padding: "0.5rem", minWidth: 0 }}
-                aria-label="Volume Mute"
-                onClick={toggleMute}
+            {isSmall && (
+              <Box
+                className="p-0 flex gap-2 items-center flex-grow"
+                sx={{ minWidth: "5rem", maxWidth: "9rem" }}
               >
-                {playerState.volume >= 0.5 ? (
-                  <VolumeUp />
-                ) : playerState.volume === 0 ? (
-                  <VolumeMute />
-                ) : (
-                  <VolumeDown />
-                )}
-              </Button>
-              <Slider
-                sx={{ width: "100%" }}
-                valueLabelDisplay="auto"
-                size={"small"}
-                aria-label="Volume Slider"
-                value={parseInt(playerState.volume * 100)}
-                onChange={(event, newValue) => {
-                  setPlayerState((state) => ({
-                    ...state,
-                    volume: parseInt(newValue) / 100,
-                  }));
-                }}
-              />
-            </Box>
+                <Button
+                  sx={{ color: "#eee", padding: "0.5rem", minWidth: 0 }}
+                  aria-label="Volume Mute"
+                  onClick={toggleMute}
+                >
+                  {playerState.volume >= 0.5 ? (
+                    <VolumeUp />
+                  ) : playerState.volume === 0 ? (
+                    <VolumeMute />
+                  ) : (
+                    <VolumeDown />
+                  )}
+                </Button>
+                <Slider
+                  sx={{ width: "100%" }}
+                  valueLabelDisplay="auto"
+                  size={"small"}
+                  aria-label="Volume Slider"
+                  value={parseInt(playerState.volume * 100)}
+                  onChange={(event, newValue) => {
+                    setPlayerState((state) => ({
+                      ...state,
+                      volume: parseInt(newValue) / 100,
+                    }));
+                  }}
+                />
+              </Box>
+            )}
             <div className="ml-auto"></div>
             {/* Quality Selector */}
             {playerReady && videoPlayer.current.getInternalPlayer("hls") ? (
