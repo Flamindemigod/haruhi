@@ -290,6 +290,7 @@ const VideoPlayer = ({
               "&:hover .MuiLinearProgress-root,&:hover .MuiSlider-root": {
                 height: "8px ",
               },
+              "&:hover .tooltip": { display: "flex" },
             }}
           >
             <BorderLinearProgress
@@ -322,7 +323,7 @@ const VideoPlayer = ({
               }}
             />
             <Box
-              className="absolute -top-10  h-4 min-w-min p-4 flex items-center justify-center rounded-lg bg-primary-500"
+              className="tooltip | hidden absolute -top-10  h-4 min-w-min p-4 items-center justify-center rounded-lg bg-primary-500 bg-opacity-40"
               left={`${sliderTooltip.absoluteX}px`}
             >
               {format(sliderTooltip.relativeX * playerState.duration)}
