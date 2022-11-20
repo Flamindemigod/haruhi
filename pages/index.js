@@ -215,7 +215,6 @@ export async function getServerSideProps({ params, req }) {
   }
   airingArrayAccumalated = airingArrayAccumalated.concat(data.data.Page.media);
   const trendingSeasonData = airingArrayAccumalated;
-  console.log(trendingData, trendingSeasonData);
   return {
     props: { trendingData, trendingSeasonData },
   };
