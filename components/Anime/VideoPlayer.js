@@ -10,6 +10,7 @@ import {
   Menu,
   MenuItem,
   useMediaQuery,
+  CircularProgress,
 } from "@mui/material";
 import screenfull from "screenfull";
 import {
@@ -26,6 +27,7 @@ import {
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { median } from "../../median";
+import { CircleLoader } from "react-spinners";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 2,
@@ -186,7 +188,7 @@ const VideoPlayer = ({
 
   return (
     <Box
-      className="player | relative isolate cursor-none"
+      className="player | relative cursor-none"
       sx={{ aspectRatio: "16/9" }}
       ref={playerContainer}
       onMouseMove={throttledPlayerControlHandler}
@@ -212,7 +214,11 @@ const VideoPlayer = ({
           setPlayerState((state) => ({ ...state, duration }));
         }}
       />
-
+      {playerState.loaded == playerState.played && (
+        <div className="player-loader | absolute inset-0 z-50 flex items-center justify-center pointer-events-none">
+          <CircularProgress size={"5rem"} />
+        </div>
+      )}
       <Box
         className="player--controls | absolute inset-0 z-10 cursor-auto"
         hidden={controlsHidden}
