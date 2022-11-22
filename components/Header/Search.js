@@ -3,7 +3,13 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Search } from "@mui/icons-material";
-import { Box, Button, InputBase, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  InputAdornment,
+  InputBase,
+  TextField,
+} from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import Link from "../Link";
 import SearchMedia from "./SearchMedia";
@@ -67,24 +73,25 @@ const SearchButton = () => {
         aria-describedby="search-dialog-description"
         scroll={"body"}
       >
-        <DialogTitle id="search-dialog-title" className={"bg-offWhite-400"}>
+        <DialogTitle id="search-dialog-title" className={"bg-offWhite-700"}>
           <div className="flex justify-center items-center gap-2">
             <TextField
-              label="Search"
+              sx={{ "& .MuiInputBase-root": { mt: 0 } }}
+              placeholder="Search"
               variant="standard"
               autoFocus
               fullWidth
               onChange={debouncedSearchQuery}
-            />
-            {/* <SearchInput
-              autoFocus
-              placeholder="Search..."
-              variant="standard"
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Search sx={{ mr: 1, my: 0.5 }} />
+                  </InputAdornment>
+                ),
               }}
-            ></SearchInput> */}
-            <Search sx={{ mr: 1, my: 0.5 }} />
+            />
+
+            {/* <Search sx={{ mr: 1, my: 0.5 }} /> */}
           </div>
         </DialogTitle>
         <div className="flex gap-1 w-full justify-end">
@@ -102,33 +109,37 @@ const SearchButton = () => {
             </Box>
           </Link>
         </div>
-        <DialogContent
-          className="styled-scrollbars"
-          sx={{ backgroundColor: "transparent" }}
-        >
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 max-w-8xl gap-8 gap-y-8 mx-auto mt-8">
-            <SearchMedia
-              searchString={searchQuery}
-              setSearchQuery={setSearchQuery}
-              setDialogOpen={setDialogOpen}
-            />
-            <SearchCharacter
-              searchString={searchQuery}
-              setSearchQuery={setSearchQuery}
-              setDialogOpen={setDialogOpen}
-            />
-            <SearchStaff
-              searchString={searchQuery}
-              setSearchQuery={setSearchQuery}
-              setDialogOpen={setDialogOpen}
-            />
-            <SearchStudio
-              searchString={searchQuery}
-              setSearchQuery={setSearchQuery}
-              setDialogOpen={setDialogOpen}
-            />
-          </div>
-        </DialogContent>
+        {searchQuery ? (
+          <DialogContent
+            className="styled-scrollbars"
+            sx={{ backgroundColor: "transparent" }}
+          >
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 max-w-8xl gap-8 gap-y-8 mx-auto mt-8">
+              <SearchMedia
+                searchString={searchQuery}
+                setSearchQuery={setSearchQuery}
+                setDialogOpen={setDialogOpen}
+              />
+              <SearchCharacter
+                searchString={searchQuery}
+                setSearchQuery={setSearchQuery}
+                setDialogOpen={setDialogOpen}
+              />
+              <SearchStaff
+                searchString={searchQuery}
+                setSearchQuery={setSearchQuery}
+                setDialogOpen={setDialogOpen}
+              />
+              <SearchStudio
+                searchString={searchQuery}
+                setSearchQuery={setSearchQuery}
+                setDialogOpen={setDialogOpen}
+              />
+            </div>
+          </DialogContent>
+        ) : (
+          <></>
+        )}
       </Dialog>
     </>
   );
