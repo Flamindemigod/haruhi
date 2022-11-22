@@ -64,6 +64,7 @@ const VideoPlayer = ({
   const user = useSelector((state) => state.user.value);
   const isSmall = useMediaQuery("(min-width: 420px)");
   const [isMuted, setIsMuted] = useState(0);
+  const [showLoading, setShowLoading] = useState(0);
   const [controlsHidden, setControlsHidden] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
   const [sliderTooltip, setSliderTooltip] = useState({
@@ -149,6 +150,13 @@ const VideoPlayer = ({
   }, [playerState.playing]);
 
   useEffect(() => {
+    if (playerState.played > showLoading) {
+      console.log(playerState.played, showLoading);
+      setShowLoading(0);
+    }
+  }, [playerState.played]);
+
+  useEffect(() => {
     document.addEventListener("keyup", keyboardShortcuts);
 
     return () => {
@@ -202,6 +210,10 @@ const VideoPlayer = ({
         playing={playerState.playing}
         volume={playerState.volume}
         pip={playerState.pip}
+        onBuffer={(e) => {
+          console.log(e);
+          setShowLoading(playerState.played + 0.0005);
+        }}
         onReady={(e) => {
           onReady(e);
           setPlayerReady(true);
@@ -214,10 +226,12 @@ const VideoPlayer = ({
           setPlayerState((state) => ({ ...state, duration }));
         }}
       />
-      {playerState.loaded == playerState.played && (
+      {showLoading ? (
         <div className="player-loader | absolute inset-0 z-50 flex items-center justify-center pointer-events-none">
           <CircularProgress size={"5rem"} />
         </div>
+      ) : (
+        <></>
       )}
       <Box
         className="player--controls | absolute inset-0 z-10 cursor-auto"
