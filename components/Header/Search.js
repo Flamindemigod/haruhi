@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Search } from "@mui/icons-material";
-import { Box, Button, InputBase } from "@mui/material";
+import { Box, Button, InputBase, TextField } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import Link from "../Link";
 import SearchMedia from "./SearchMedia";
 import SearchCharacter from "./SearchCharacter";
 import SearchStudio from "./SearchStudio";
 import SearchStaff from "./SearchStaff";
-
+import _ from "lodash";
 const SearchInput = styled(InputBase)(({ theme }) => ({
   "&": { width: "100%", height: "100%" },
   "& .MuiInputBase-input": {
@@ -27,6 +27,11 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
 const SearchButton = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const debouncedSearchQuery = useCallback(
+    _.debounce((event) => {
+      setSearchQuery(event.target.value);
+    }, 300)
+  );
   return (
     <>
       <Button
@@ -64,14 +69,21 @@ const SearchButton = () => {
       >
         <DialogTitle id="search-dialog-title" className={"bg-offWhite-400"}>
           <div className="flex justify-center items-center gap-2">
-            <SearchInput
+            <TextField
+              label="Search"
+              variant="standard"
+              autoFocus
+              fullWidth
+              onChange={debouncedSearchQuery}
+            />
+            {/* <SearchInput
               autoFocus
               placeholder="Search..."
               variant="standard"
               onChange={(e) => {
                 setSearchQuery(e.target.value);
               }}
-            ></SearchInput>
+            ></SearchInput> */}
             <Search sx={{ mr: 1, my: 0.5 }} />
           </div>
         </DialogTitle>
