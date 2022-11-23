@@ -59,12 +59,15 @@ const VideoPlayer = ({
   onNextEpisode,
   hasNextEpisode,
   onReady,
+  playerState,
+  setPlayerState,
+  videoPlayer,
+  seekTo,
 }) => {
   let timeoutID = null;
   const user = useSelector((state) => state.user.value);
   const isSmall = useMediaQuery("(min-width: 420px)");
   const [isMuted, setIsMuted] = useState(0);
-  const [showLoading, setShowLoading] = useState(0);
   const [controlsHidden, setControlsHidden] = useState(0);
   const [playerReady, setPlayerReady] = useState(false);
   const [sliderTooltip, setSliderTooltip] = useState({
@@ -74,23 +77,7 @@ const VideoPlayer = ({
   const [qualitySelctorMenuAnchor, setQualitySelectorMenuAnchor] =
     useState(false);
   const qualitySelctorMenuOpen = Boolean(qualitySelctorMenuAnchor);
-  const [playerState, setPlayerState] = useState({
-    url: null,
-    pip: false,
-    playing: false,
-    controls: false,
-    light: false,
-    volume: 0.8,
-    muted: false,
-    duration: 0,
-    played: 0,
-    playedSeconds: 0,
-    loaded: 0,
-    loadedSeconds: 0,
-    playbackRate: 1.0,
-    loop: false,
-  });
-  const videoPlayer = useRef();
+
   const playerContainer = useRef();
   const playerControls = useRef();
   const sliderRef = useRef();
@@ -150,13 +137,6 @@ const VideoPlayer = ({
   }, [playerState.playing]);
 
   useEffect(() => {
-    if (playerState.played > showLoading) {
-      console.log(playerState.played, showLoading);
-      setShowLoading(0);
-    }
-  }, [playerState.played]);
-
-  useEffect(() => {
     document.addEventListener("keyup", keyboardShortcuts);
 
     return () => {
@@ -187,7 +167,6 @@ const VideoPlayer = ({
     const rect = sliderRef.current.getBoundingClientRect();
     const absoluteX = e.clientX - rect.left;
     const relativeX = absoluteX / (rect.right - rect.left);
-    console.log(absoluteX, rect.right - rect.left);
     setSliderTooltip({
       absoluteX: median([20, absoluteX - 30, rect.right - rect.left - 80]),
       relativeX: median([0, relativeX, 1]),
@@ -210,10 +189,6 @@ const VideoPlayer = ({
         playing={playerState.playing}
         volume={playerState.volume}
         pip={playerState.pip}
-        onBuffer={(e) => {
-          console.log(e);
-          setShowLoading(playerState.played + 0.0005);
-        }}
         onReady={(e) => {
           onReady(e);
           setPlayerReady(true);
@@ -226,13 +201,7 @@ const VideoPlayer = ({
           setPlayerState((state) => ({ ...state, duration }));
         }}
       />
-      {showLoading ? (
-        <div className="player-loader | absolute inset-0 z-50 flex items-center justify-center pointer-events-none">
-          <CircularProgress size={"5rem"} />
-        </div>
-      ) : (
-        <></>
-      )}
+
       <Box
         className="player--controls | absolute inset-0 z-10 cursor-auto"
         hidden={controlsHidden}
@@ -244,17 +213,13 @@ const VideoPlayer = ({
           <div
             className="w-full h-full"
             onDoubleClick={() => {
-              videoPlayer.current.seekTo(
-                videoPlayer.current.getCurrentTime() - 10
-              );
+              seekTo(videoPlayer.current.getCurrentTime() - 10, "seconds");
             }}
           ></div>
           <div
             className="w-full h-full"
             onDoubleClick={() => {
-              videoPlayer.current.seekTo(
-                videoPlayer.current.getCurrentTime() + 10
-              );
+              seekTo(videoPlayer.current.getCurrentTime() + 10, "seconds");
             }}
           ></div>
         </div>
@@ -281,9 +246,10 @@ const VideoPlayer = ({
           <div className="absolute bottom-2/4 sm:bottom-1/4 right-10 ">
             <Button
               onClick={() => {
-                videoPlayer.current.seekTo(
+                seekTo(
                   videoPlayer.current.getCurrentTime() +
-                    user.userPreferenceSkipOpening
+                    user.userPreferenceSkipOpening,
+                  "seconds"
                 );
               }}
               sx={{
@@ -339,7 +305,7 @@ const VideoPlayer = ({
                   ...state,
                   played: sliderTooltip.relativeX,
                 }));
-                videoPlayer.current.seekTo(sliderTooltip.relativeX, "fraction");
+                seekTo(sliderTooltip.relativeX, "fraction");
               }}
             />
             <Box
