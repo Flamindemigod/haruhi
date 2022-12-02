@@ -37,6 +37,7 @@ export default function Home({ trendingData, trendingSeasonData }) {
               className="object-cover"
               src={`${SERVER}/haruhiHomeBg.webp`}
               alt={"Haruhi Art made by Sakura Tsubame"}
+              priority
             />
             <a
               className="absolute -bottom-5 right-0 text-white no-underline hover:underline underline-offset-2"
