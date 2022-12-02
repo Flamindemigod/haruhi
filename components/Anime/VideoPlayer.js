@@ -288,7 +288,7 @@ const VideoPlayer = ({
             />
             <Slider
               sx={{
-                height: 4,
+                height: 6,
                 position: "absolute",
                 top: "50%",
                 transform: "translateY(-50%)",

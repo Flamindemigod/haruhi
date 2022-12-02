@@ -21,6 +21,7 @@ const Anime = ({ _anime }) => {
   const [videoId, setVideoId] = useState([]);
   const [anime, setAnime] = useState(_anime);
   const [refresh, setRefresh] = useState(0);
+
   useEffect(() => {
     dispatch(setLoading(false));
     setRefresh(0);
@@ -62,7 +63,7 @@ const Anime = ({ _anime }) => {
         return resp;
       };
 
-      const blacklist = {
+      const blacklistAnimeName = {
         40356: [
           { animeId: "tate-no-yuusha-no-nariagari-season-2" },
           { animeId: "tate-no-yuusha-no-nariagari-season-2-dub" },
@@ -85,7 +86,8 @@ const Anime = ({ _anime }) => {
 
       const malTitle = await getMALTitle(_anime.idMal);
       const animeID =
-        blacklist[_anime.idMal] || (malTitle ? await getAnimeID(malTitle) : []);
+        blacklistAnimeName[_anime.idMal] ||
+        (malTitle ? await getAnimeID(malTitle) : []);
       setVideoId(animeID);
     };
 
