@@ -10,6 +10,7 @@ import {
   Menu,
   MenuItem,
   useMediaQuery,
+  CircularProgress,
 } from "@mui/material";
 import screenfull from "screenfull";
 import {
@@ -26,6 +27,7 @@ import {
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { median } from "../../median";
+import { CircleLoader } from "react-spinners";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 2,
@@ -57,6 +59,10 @@ const VideoPlayer = ({
   onNextEpisode,
   hasNextEpisode,
   onReady,
+  playerState,
+  setPlayerState,
+  videoPlayer,
+  seekTo,
 }) => {
   let timeoutID = null;
   const user = useSelector((state) => state.user.value);
@@ -71,23 +77,7 @@ const VideoPlayer = ({
   const [qualitySelctorMenuAnchor, setQualitySelectorMenuAnchor] =
     useState(false);
   const qualitySelctorMenuOpen = Boolean(qualitySelctorMenuAnchor);
-  const [playerState, setPlayerState] = useState({
-    url: null,
-    pip: false,
-    playing: false,
-    controls: false,
-    light: false,
-    volume: 0.8,
-    muted: false,
-    duration: 0,
-    played: 0,
-    playedSeconds: 0,
-    loaded: 0,
-    loadedSeconds: 0,
-    playbackRate: 1.0,
-    loop: false,
-  });
-  const videoPlayer = useRef();
+
   const playerContainer = useRef();
   const playerControls = useRef();
   const sliderRef = useRef();
@@ -177,7 +167,6 @@ const VideoPlayer = ({
     const rect = sliderRef.current.getBoundingClientRect();
     const absoluteX = e.clientX - rect.left;
     const relativeX = absoluteX / (rect.right - rect.left);
-    console.log(absoluteX, rect.right - rect.left);
     setSliderTooltip({
       absoluteX: median([20, absoluteX - 30, rect.right - rect.left - 80]),
       relativeX: median([0, relativeX, 1]),
@@ -186,7 +175,7 @@ const VideoPlayer = ({
 
   return (
     <Box
-      className="player | relative isolate cursor-none"
+      className="player | relative cursor-none"
       sx={{ aspectRatio: "16/9" }}
       ref={playerContainer}
       onMouseMove={throttledPlayerControlHandler}
@@ -224,17 +213,13 @@ const VideoPlayer = ({
           <div
             className="w-full h-full"
             onDoubleClick={() => {
-              videoPlayer.current.seekTo(
-                videoPlayer.current.getCurrentTime() - 10
-              );
+              seekTo(videoPlayer.current.getCurrentTime() - 10, "seconds");
             }}
           ></div>
           <div
             className="w-full h-full"
             onDoubleClick={() => {
-              videoPlayer.current.seekTo(
-                videoPlayer.current.getCurrentTime() + 10
-              );
+              seekTo(videoPlayer.current.getCurrentTime() + 10, "seconds");
             }}
           ></div>
         </div>
@@ -261,9 +246,10 @@ const VideoPlayer = ({
           <div className="absolute bottom-2/4 sm:bottom-1/4 right-10 ">
             <Button
               onClick={() => {
-                videoPlayer.current.seekTo(
+                seekTo(
                   videoPlayer.current.getCurrentTime() +
-                    user.userPreferenceSkipOpening
+                    user.userPreferenceSkipOpening,
+                  "seconds"
                 );
               }}
               sx={{
@@ -302,7 +288,7 @@ const VideoPlayer = ({
             />
             <Slider
               sx={{
-                height: 4,
+                height: 6,
                 position: "absolute",
                 top: "50%",
                 transform: "translateY(-50%)",
@@ -319,7 +305,7 @@ const VideoPlayer = ({
                   ...state,
                   played: sliderTooltip.relativeX,
                 }));
-                videoPlayer.current.seekTo(sliderTooltip.relativeX, "fraction");
+                seekTo(sliderTooltip.relativeX, "fraction");
               }}
             />
             <Box
