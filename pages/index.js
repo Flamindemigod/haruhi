@@ -33,7 +33,7 @@ export default function Home({ trendingData, trendingSeasonData }) {
         >
           <Box className="" sx={{ gridColumn: "1/-1", gridRow: "1 / -1" }}>
             <Image
-              layout="fill"
+              fill
               className="object-cover"
               src={`${SERVER}/haruhiHomeBg.webp`}
               alt={"Haruhi Art made by Sakura Tsubame"}

@@ -1,5 +1,5 @@
 import { Box, Skeleton } from "@mui/material";
-import Image from "next/future/image";
+import Image from "next/image";
 import React from "react";
 import Link from "./Link";
 import { motion } from "framer-motion";
