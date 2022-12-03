@@ -259,7 +259,7 @@ const Anime = ({ _anime }) => {
         <div className="grid grid-cols-5 grid-rows-2 h-80 w-screen relative isolate">
           {anime.bannerImage ? (
             <Image
-              layout="fill"
+              fill
               className="banner--image | object-cover  -z-10"
               src={anime.bannerImage}
               alt={`Banner for ${anime.title.userPreferred}`}

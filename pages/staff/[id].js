@@ -1,7 +1,7 @@
 import * as cookie from "cookie";
 import { useEffect, useState } from "react";
 import Description from "../../components/Anime/Description";
-import Image from "next/future/image";
+import Image from "next/image";
 import {
   Skeleton,
   Box,

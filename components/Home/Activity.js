@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react'
-import Image from 'next/future/image';
-import { useSelector, useDispatch } from 'react-redux';
-import makeQuery from "../../makeQuery"
-import { Avatar, Box } from '@mui/material';
-import Link from '../Link';
-import { setLoading } from '../../features/loading';
-
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useSelector, useDispatch } from "react-redux";
+import makeQuery from "../../makeQuery";
+import { Avatar, Box } from "@mui/material";
+import Link from "../Link";
+import { setLoading } from "../../features/loading";
 
 //https://gist.github.com/techtheory/383ad87b1fdfb36cde15
 function timeSince(date) {
-  var seconds = Math.floor(((new Date().getTime() / 1000) - date)),
+  var seconds = Math.floor(new Date().getTime() / 1000 - date),
     interval = Math.floor(seconds / 31536000);
 
   if (interval > 1) return interval + ` years ago`;
@@ -64,32 +63,52 @@ const Activity = () => {
                       }
                     }
                   }
-                }`
-      const variables = {}
-      const data = await makeQuery(query, variables, user.userToken)
-      setActivity(data.data.Page.activities)
-    }
+                }`;
+      const variables = {};
+      const data = await makeQuery(query, variables, user.userToken);
+      setActivity(data.data.Page.activities);
+    };
     getActivity();
-  }, [])
-
+  }, []);
 
   return (
     <>
-      <div className='flex flex-col gap-2 p-2'>
+      <div className="flex flex-col gap-2 p-2">
         {activity.map((data) => (
-          <div key={data.media.id} className='flex items-center justify-start gap-4 p-4 bg-offWhite-700 isolate' style={{ "--tw-bg-opacity": "0.6" }}>
-            <Image width={80} height={128} src={data.media.coverImage.medium} className={"object-cover flex-shrink-0"} alt={data.media.title.userPreferred} />
+          <div
+            key={data.media.id}
+            className="flex items-center justify-start gap-4 p-4 bg-offWhite-700 isolate"
+            style={{ "--tw-bg-opacity": "0.6" }}
+          >
+            <Image
+              width={80}
+              height={128}
+              src={data.media.coverImage.medium}
+              className={"object-cover flex-shrink-0"}
+              alt={data.media.title.userPreferred}
+            />
             <div className="flex flex-col justify-center gap-4">
-              <div className='text-md'>{`${data.user.name} ${data.status} ${data.progress ? data.progress : ""} ${data.progress ? "of" : ""}`} <Link href={`/anime/${data.media.id}`}><span className="text-primary-500 hover:text-primary-300">{data.media.title.userPreferred}</span></Link></div>
-              <Avatar alt={`Avatar of user ${data.user.name}`} src={data.user.avatar.medium} />
-              <div className='text-sm'>{timeSince(data.createdAt)}</div>
+              <div className="text-md">
+                {`${data.user.name} ${data.status} ${
+                  data.progress ? data.progress : ""
+                } ${data.progress ? "of" : ""}`}{" "}
+                <Link href={`/anime/${data.media.id}`}>
+                  <span className="text-primary-500 hover:text-primary-300">
+                    {data.media.title.userPreferred}
+                  </span>
+                </Link>
+              </div>
+              <Avatar
+                alt={`Avatar of user ${data.user.name}`}
+                src={data.user.avatar.medium}
+              />
+              <div className="text-sm">{timeSince(data.createdAt)}</div>
             </div>
-
           </div>
         ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Activity
+export default Activity;

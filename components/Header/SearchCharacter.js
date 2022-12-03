@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
-import makeQuery from '../../makeQuery';
-import Link from '../Link';
-import { ButtonBase } from '@mui/material';
-import Image from 'next/future/image';
+import { useEffect, useState } from "react";
+import makeQuery from "../../makeQuery";
+import Link from "../Link";
+import { ButtonBase } from "@mui/material";
+import Image from "next/image";
 const SearchCharacter = ({ searchString, setDialogOpen, setSearchQuery }) => {
-  const [searchResults, setSearchResults] = useState({ "characters": [] })
+  const [searchResults, setSearchResults] = useState({ characters: [] });
 
   useEffect(() => {
     const search = async () => {
@@ -22,26 +22,53 @@ const SearchCharacter = ({ searchString, setDialogOpen, setSearchQuery }) => {
               }
             }`;
       const variables = {
-        searchString
+        searchString,
       };
       const data = await makeQuery(query, variables);
       if (data) {
-        setSearchResults(await data.data.Page)
+        setSearchResults(await data.data.Page);
       }
-    }
-    search()
-
-  }, [searchString])
+    };
+    search();
+  }, [searchString]);
   return (
     <>
-      {searchResults.characters.length ? <div className='bg-offWhite-500'>
-        <div className='text-lg px-4'>Characters</div>
-        <div className="flex flex-col gap-4 justify-center p-4">
-          {searchResults.characters.map((character) => (<Link href={`/character/${character.id}`} key={character.id} onClick={() => { setDialogOpen(false); setSearchQuery("") }}><div className='w-auto h-16'><ButtonBase sx={{ justifyContent: "flex-start" }} className='flex text-sm sm:text-md gap-4 w-full'><Image height={64} width={48} src={character.image.medium} alt={character.name.full} /> <div className=''>{character.name.full}</div></ButtonBase></div></Link>))}
+      {searchResults.characters.length ? (
+        <div className="bg-offWhite-500">
+          <div className="text-lg px-4">Characters</div>
+          <div className="flex flex-col gap-4 justify-center p-4">
+            {searchResults.characters.map((character) => (
+              <Link
+                href={`/character/${character.id}`}
+                key={character.id}
+                onClick={() => {
+                  setDialogOpen(false);
+                  setSearchQuery("");
+                }}
+              >
+                <div className="w-auto h-16">
+                  <ButtonBase
+                    sx={{ justifyContent: "flex-start" }}
+                    className="flex text-sm sm:text-md gap-4 w-full"
+                  >
+                    <Image
+                      height={64}
+                      width={48}
+                      src={character.image.medium}
+                      alt={character.name.full}
+                    />{" "}
+                    <div className="">{character.name.full}</div>
+                  </ButtonBase>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-      </div> : <></>}
+      ) : (
+        <></>
+      )}
     </>
-  )
-}
+  );
+};
 
-export default SearchCharacter
+export default SearchCharacter;

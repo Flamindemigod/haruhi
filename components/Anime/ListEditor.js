@@ -152,8 +152,9 @@ const ListEditor = ({ anime, refresh }) => {
           >
             <Image
               src={anime.bannerImage || ""}
-              layout="fill"
+              fill
               className="object-cover"
+              alt={`Banner for ${anime.title.userPreferred}`}
             />
             <Box
               className="flex absolute top-1/2 w-full px-10"
@@ -167,6 +168,7 @@ const ListEditor = ({ anime, refresh }) => {
                   width={80}
                   height={127}
                   className="object-contain"
+                  alt={`Cover for ${anime.title.userPreferred}`}
                 />
               </div>
               <div className="w-full bg-black bg-opacity-40 p-4">
