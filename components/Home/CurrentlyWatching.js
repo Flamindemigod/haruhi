@@ -87,33 +87,39 @@ const CurrentlyWatching = () => {
   return (
     <div className="">
       <div className="text-xl p-4">Continue Watching</div>
-      <Carosel width={"95vw"}>
-        {animeArray.map((anime, index) => (
-          <Card
-            key={anime.media.id}
-            height={167}
-            width={128}
-            status={anime.media.status}
-            image={anime.media.coverImage.large}
-            title={anime.media.title.userPreferred}
-            link={`/anime/${anime.media.id}`}
-            hasNotif={true}
-            listStatus={anime.status}
-            progress={anime.progress}
-            episodes={anime.media.episodes}
-            changeDirection={
-              animeArray.length - index < 5 && index > 5 ? true : false
-            }
-            nextAiringEpisode={
-              anime.media.nextAiring && anime.media.nextAiring.node.episode
-            }
-            nextAiringTime={
-              anime.media.nextAiring &&
-              anime.media.nextAiring.node.timeUntilAiring
-            }
-          />
-        ))}
-      </Carosel>
+      {animeArray.length !== 0 ? (
+        <Carosel width={"95vw"}>
+          {animeArray.map((anime, index) => (
+            <Card
+              key={anime.media.id}
+              height={167}
+              width={128}
+              status={anime.media.status}
+              image={anime.media.coverImage.large}
+              title={anime.media.title.userPreferred}
+              link={`/anime/${anime.media.id}`}
+              hasNotif={true}
+              listStatus={anime.status}
+              progress={anime.progress}
+              episodes={anime.media.episodes}
+              changeDirection={
+                animeArray.length - index < 5 && index > 5 ? true : false
+              }
+              nextAiringEpisode={
+                anime.media.nextAiring && anime.media.nextAiring.node.episode
+              }
+              nextAiringTime={
+                anime.media.nextAiring &&
+                anime.media.nextAiring.node.timeUntilAiring
+              }
+            />
+          ))}
+        </Carosel>
+      ) : (
+        <div className="flex justify-center items-center w-full h-[167px]">
+          This Seems Empty. Start watching some anime to populate it
+        </div>
+      )}
     </div>
   );
 };

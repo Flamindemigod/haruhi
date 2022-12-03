@@ -109,44 +109,25 @@ export default function Home({ trendingData, trendingSeasonData }) {
 }
 
 export async function getServerSideProps({ params, req }) {
-  var queryTrending = `query getMediaTrend {
-    Page(perPage: 20){
-      pageInfo{
-        hasNextPage
-      }
-      media(sort:[POPULARITY_DESC], type:ANIME) {
-        id
-        title{
-          userPreferred
-        }
-        episodes
-        status
-        coverImage{
-          large
-        }
-        mediaListEntry{
-          progress
-          status
-        }
-        airingSchedule {
-          edges {
-            node {
-              airingAt
-              timeUntilAiring
-              episode
-            }
-          }
-        }
-      }
-    }
-    }`;
+  const getAiring = (media) => {
+    const airingSchedule = media.airingSchedule;
+    delete media.airingSchedule;
+    const nextAiringIndex = airingSchedule.edges.findIndex(
+      (element) => element.node.timeUntilAiring > 0
+    );
+    media["nextAiring"] = airingSchedule.edges[nextAiringIndex]
+      ? airingSchedule.edges[nextAiringIndex]
+      : null;
+    return media;
+  };
 
-  var queryTrendingSeason = `query getMediaTrend($season: MediaSeason, $seasonYear: Int) {
-      Page(perPage: 20){
+  const getTrending = async () => {
+    var queryTrending = `query getMediaTrend {
+      Page(perPage: 25){
         pageInfo{
           hasNextPage
         }
-        media(sort:[POPULARITY_DESC], season: $season, seasonYear: $seasonYear, type:ANIME) {
+        media(sort:[POPULARITY_DESC], type:ANIME) {
           id
           title{
             userPreferred
@@ -173,49 +154,76 @@ export async function getServerSideProps({ params, req }) {
       }
       }`;
 
-  let season = null;
-  let seasonYear = null;
-  [season, seasonYear] = getCurrentSeason();
-
-  var variablesTrendingSeason = {
-    season,
-    seasonYear,
-    page: 1,
-  };
-
-  const getAiring = (media) => {
-    const airingSchedule = media.airingSchedule;
-    delete media.airingSchedule;
-    const nextAiringIndex = airingSchedule.edges.findIndex(
-      (element) => element.node.timeUntilAiring > 0
+    let data = await makeQuery(
+      queryTrending,
+      {},
+      req.headers.cookie ? cookie.parse(req.headers.cookie).access_token : null
     );
-    media["nextAiring"] = airingSchedule.edges[nextAiringIndex]
-      ? airingSchedule.edges[nextAiringIndex]
-      : null;
-    return media;
+    data.data.Page.media = data.data.Page.media.map((el) => getAiring(el));
+
+    return data.data.Page.media;
   };
-  let airingArrayAccumalated = [];
-  let data = await makeQuery(
-    queryTrending,
-    {},
-    req.headers.cookie ? cookie.parse(req.headers.cookie).access_token : null
-  );
-  for (const media in data.data.Page.media) {
-    data.data.Page.media[media] = getAiring(data.data.Page.media[media]);
-  }
-  airingArrayAccumalated = airingArrayAccumalated.concat(data.data.Page.media);
-  const trendingData = airingArrayAccumalated;
-  airingArrayAccumalated = [];
-  data = await makeQuery(
-    queryTrendingSeason,
-    variablesTrendingSeason,
-    req.headers.cookie ? cookie.parse(req.headers.cookie).access_token : null
-  );
-  for (const media in data.data.Page.media) {
-    data.data.Page.media[media] = getAiring(data.data.Page.media[media]);
-  }
-  airingArrayAccumalated = airingArrayAccumalated.concat(data.data.Page.media);
-  const trendingSeasonData = airingArrayAccumalated;
+  const getTrendingSeason = async () => {
+    var queryTrendingSeason = `query getMediaTrend($season: MediaSeason, $seasonYear: Int) {
+    Page(perPage: 25){
+      pageInfo{
+        hasNextPage
+      }
+      media(sort:[POPULARITY_DESC], season: $season, seasonYear: $seasonYear, type:ANIME) {
+        id
+        title{
+          userPreferred
+        }
+        episodes
+        status
+        coverImage{
+          large
+        }
+        mediaListEntry{
+          progress
+          status
+        }
+        airingSchedule {
+          edges {
+            node {
+              airingAt
+              timeUntilAiring
+              episode
+            }
+          }
+        }
+      }
+    }
+    }`;
+
+    let season = null;
+    let seasonYear = null;
+    [season, seasonYear] = getCurrentSeason();
+
+    var variablesTrendingSeason = {
+      season,
+      seasonYear,
+      page: 1,
+    };
+    let airingArrayAccumalated = [];
+    let data = await makeQuery(
+      queryTrendingSeason,
+      variablesTrendingSeason,
+      req.headers.cookie ? cookie.parse(req.headers.cookie).access_token : null
+    );
+    data.data.Page.media = data.data.Page.media.map((el) => getAiring(el));
+
+    return data.data.Page.media;
+  };
+  const trending = getTrending();
+  const trendingSeason = getTrendingSeason();
+
+  let trendingData = [];
+  let trendingSeasonData = [];
+  [trendingData, trendingSeasonData] = await Promise.all([
+    trending,
+    trendingSeason,
+  ]);
   return {
     props: { trendingData, trendingSeasonData },
   };
