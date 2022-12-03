@@ -85,8 +85,8 @@ const Streaming = ({ anime, videoId, refresh }) => {
 
   const [syncCode, setSyncCode] = useState(uuidv4());
   const [_seekTo, setSeekTo] = useState({ to: 0, type: "fraction" });
-  const locked = false;
-  const episodeLock = false;
+  let locked = false;
+  let episodeLock = false;
   const [playerState, setPlayerState] = useState({
     ready: false,
     url: null,
@@ -213,99 +213,10 @@ const Streaming = ({ anime, videoId, refresh }) => {
     });
   }, [_seekTo]);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const { data, error } = await supabase.from(`watchparties`).select();
-  //     const filteredData = data.filter((el) => {
-  //       if (el.id === syncCode) {
-  //         return true;
-  //       }
-  //     })[0];
-  //     setHost(filteredData.host);
-  //     setEpisode(filteredData.episode);
-  //     setVideoURL(filteredData.url);
-  //     setPlayerState((state) => ({
-  //       ...state,
-  //       playing: filteredData.playing,
-  //     }));
-  //     videoPlayer.current.seekTo(filteredData.played, "fraction");
-  //   };
-  //   getData();
-  // }, [syncCode]);
-
-  // useEffect(() => {
-  //   supabase
-  //     .channel(`public:watchparties:id=eq.${syncCode}`)
-  //     .on("postgres_changes", { event: "UPDATE", schema: "*" }, (payload) => {
-  //       if (payload.new.id !== syncCode || payload.new.host === userID) {
-  //         return null;
-  //       }
-  //       setHost(payload.new.host);
-  //       setEpisode(payload.new.episode);
-  //       setVideoURL(payload.new.url);
-  //       setPlayerState((state) => ({
-  //         ...state,
-  //         playing: payload.new.playing,
-  //       }));
-  //       if (payload.old.seekto !== payload.new.seekto) {
-  //         videoPlayer.current.seekTo(payload.new.seekto, payload.new.seektype);
-  //       }
-  //       if (payload.old.playing !== payload.new.playing) {
-  //         videoPlayer.current.seekTo(payload.new.played, "fraction");
-  //       }
-  //     })
-  //     .subscribe();
-  // }, [syncCode]);
-
-  // const setDatabaseTable = useCallback(
-  //   _.throttle(async (data, episode, syncCode, userID, _seakTo) => {
-  //     const res = await supabase.from("watchparties").upsert({
-  //       id: syncCode,
-  //       episode: episode,
-  //       playing: data.playing,
-  //       played: data.played,
-  //       url: data.url,
-  //       host: userID,
-  //       seekto: _seakTo.to,
-  //       seektype: _seakTo.type,
-  //       lastUpdated: new Date(),
-  //     });
-  //   }, 100),
-  //   []
-  // );
-
   const seekTo = (to, type = "seconds") => {
     setSeekTo({ to, type });
     videoPlayer.current.seekTo(to, type);
   };
-  // useEffect(() => {
-  //   const channel = supabase.channel("db-watchParties");
-  //   channel.on(
-  //     "postgres_changes",
-  //     {
-  //       event: "UPDATE",
-  //       schema: "public",
-  //       table: "watchparties",
-  //       filter: `id=eq.${syncCode}`,
-  //     },
-  //     (payload) => {
-  //       console.log(payload);
-
-  //       setEpisode(payload.new.episode);
-  //       setVideoURL(payload.new.url);
-  //       setPlayerState((state) => ({
-  //         ...state,
-  //         playing: payload.new.playing,
-  //         played: payload.new.played,
-  //       }));
-  //     }
-  //   );
-  // });
-  // useEffect(() => {
-  //   if (userID === host) {
-  //     setDatabaseTable(playerState, episode, syncCode, userID, _seakTo);
-  //   }
-  // }, [playerState.playing, playerState.played, episode]);
 
   const updateEpisode = async (id, episode, status, rewatches = 0) => {
     const query = `
