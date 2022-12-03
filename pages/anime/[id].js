@@ -260,6 +260,7 @@ const Anime = ({ _anime }) => {
           {anime.bannerImage ? (
             <Image
               fill
+              priority
               className="banner--image | object-cover  -z-10"
               src={anime.bannerImage}
               alt={`Banner for ${anime.title.userPreferred}`}
@@ -274,6 +275,7 @@ const Anime = ({ _anime }) => {
             <div className="flex-shrink-0 overflow-hidden flex items-center">
               <Image
                 className="aspect-auto object-contain"
+                priority
                 width={128}
                 height={228}
                 src={anime.coverImage.large}
