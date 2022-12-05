@@ -26,14 +26,19 @@ export default async function handler(
               id
               status
               siteUrl
+              chapters
+              
               coverImage {
                 large
               }
               title {
                 userPreferred
+                english
               }
+              description
               averageScore
               format
+              genres
               mediaListEntry{
                 id
                 score

@@ -36,6 +36,8 @@ export default async function handler(
           seasonYear
           type
           genres
+          chapters
+          volume
           season
           studios {
             edges {
