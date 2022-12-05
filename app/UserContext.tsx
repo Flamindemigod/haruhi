@@ -44,7 +44,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const userData = await fetch("http://136.243.175.33:8080/api/getUser")
       .then(handleResponse)
       .catch(handleError);
-    console.log(userData);
     if (userData) {
       setUser({
         userAuth: true,

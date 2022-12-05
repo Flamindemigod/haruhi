@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Card from "../../Components/CardMain";
+import Card from "../CardMain";
 import Carosel from "../../primitives/Carosel";
 
 const Trending = ({ season, type }: { season?: boolean; type: string }) => {
@@ -12,7 +12,7 @@ const Trending = ({ season, type }: { season?: boolean; type: string }) => {
         season ? "&season" : ""
       }`
     ).then((res) => res.json());
-    setAnimeArray(animeArray);
+    setAnimeArray(data);
   };
 
   useEffect(() => {
