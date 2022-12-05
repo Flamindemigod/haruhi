@@ -1,3 +1,75 @@
 @tailwind base;
+
+:root {
+  --clr-primary: #ca006b;
+  --clr-secondary: #00000000;
+  --clr-status-current: #42a5f5;
+  --clr-status-planning: #f79a63;
+  --clr-status-paused: #fa7a7a;
+  --clr-status-completed: #7bd555;
+  --clr-status-dropped: #e85d75;
+}
+
+/*Custom Scroll Bars */
+* {
+  --scrollbar-foreground: var(--clr-primary);
+  --scrollbar-background: var(--clr-secondary);
+  /* Foreground, Background */
+  scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  /* Mostly for vertical scrollbars */
+  height: 7px;
+  /* Mostly for horizontal scrollbars */
+}
+
+*::-webkit-scrollbar-thumb {
+  /* Foreground */
+  background: var(--scrollbar-foreground);
+}
+
+*::-webkit-scrollbar-track {
+  /* Background */
+  background: var(--scrollbar-background);
+}
+
+div[data-nextjs-scroll-focus-boundary] {
+  width: 100%;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+.styled-scrollbar {
+  scrollbar-width: thin;
+}
+
+.caroselCard {
+  transition-property: scale;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.caroselCard[data-state="open"] {
+  scale: 1.05;
+}
+
+.card--description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
 @tailwind components;
 @tailwind utilities;

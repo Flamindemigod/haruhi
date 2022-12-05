@@ -10,7 +10,7 @@ export default (data: any): any => {
       ) {
         recommendationList =
           mediaArray[media].media.recommendations.edges[edge].node.rating >
-            25 &&
+            20 &&
           !mediaArray[media].media.recommendations.edges[edge].node
             .mediaRecommendation.mediaListEntry
             ? [

@@ -77,6 +77,8 @@ export default async function handler(
     },  ${shouldGetSeason ? `seasonYear: ${year}` : ""}) {
             id
             type
+            description
+            chapters
             title{
               userPreferred
             }

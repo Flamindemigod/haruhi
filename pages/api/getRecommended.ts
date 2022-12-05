@@ -28,9 +28,12 @@ export default async function handler(
                           mediaRecommendation {
                             episodes
                             id
+                            chapters
                             type
+                            format
                             status
                             siteUrl
+                            description
                             coverImage {
                               large
                             }
