@@ -13,7 +13,6 @@ export default async function handler(
     const mangakakalot = new MANGA.MangaKakalot();
 
     const consumetMangaid = await mangakakalot.search(malTitle);
-    console.log(consumetMangaid);
     const consumetMangaInfo = await await mangakakalot.fetchMangaInfo(
       consumetMangaid.results[0].id
     );

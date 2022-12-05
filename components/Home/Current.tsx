@@ -2,7 +2,7 @@
 
 import { useContext, useEffect, useState } from "react";
 import { userContext } from "../../app/UserContext";
-import Card from "../../Components/CardMain";
+import Card from "../CardMain";
 import Carosel from "../../primitives/Carosel";
 
 const Current = ({ type }: { type: string }) => {
@@ -22,39 +22,46 @@ const Current = ({ type }: { type: string }) => {
     }
   }, [user]);
   return (
-    <div className="bg-white dark:bg-offWhite-900 ">
-      <div className="text-xl p-2 text-black dark:text-offWhite-100 capitalize">
-        {type.toLowerCase()} In Progress
-      </div>
-      <Carosel width="95vw" height={270}>
-        {animeArray.map((el) => (
-          <Card
-            key={el.media.id}
-            href={`/${el.media.id}`}
-            imgWidth={156}
-            imgHeight={220}
-            imgSrc={el.media.coverImage.large}
-            contentTitle={el.media.title.userPreferred}
-            contentTitleEnglish={el.media.title.english}
-            contentSubtitle={el.media.description}
-            contentProgress={el.progress}
-            contentEpisodes={
-              el.media.format === "MANGA"
-                ? el.media.chapters
-                : el.media.episodes
-            }
-            contentNextAiringEpisode={
-              el.media.nextAiring && el.media.nextAiring.node.episode
-            }
-            contentNextAiringEpisodeTime={
-              el.media.nextAiring && el.media.nextAiring.node.timeUntilAiring
-            }
-            contentType={el.media.format}
-            contentStatus={el.media.status}
-          />
-        ))}
-      </Carosel>
-    </div>
+    <>
+      {user.userAuth ? (
+        <div className="bg-white dark:bg-offWhite-900 ">
+          <div className="text-xl p-2 text-black dark:text-offWhite-100 capitalize">
+            {type.toLowerCase()} In Progress
+          </div>
+          <Carosel width="95vw" height={270}>
+            {animeArray.map((el) => (
+              <Card
+                key={el.media.id}
+                href={`/${el.media.id}`}
+                imgWidth={156}
+                imgHeight={220}
+                imgSrc={el.media.coverImage.large}
+                contentTitle={el.media.title.userPreferred}
+                contentTitleEnglish={el.media.title.english}
+                contentSubtitle={el.media.description}
+                contentProgress={el.progress}
+                contentEpisodes={
+                  el.media.format === "MANGA"
+                    ? el.media.chapters
+                    : el.media.episodes
+                }
+                contentNextAiringEpisode={
+                  el.media.nextAiring && el.media.nextAiring.node.episode
+                }
+                contentNextAiringEpisodeTime={
+                  el.media.nextAiring &&
+                  el.media.nextAiring.node.timeUntilAiring
+                }
+                contentType={el.media.format}
+                contentStatus={el.media.status}
+              />
+            ))}
+          </Carosel>
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 
