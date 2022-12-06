@@ -74,7 +74,7 @@ const Layout = async ({
             <Characters characters={entryData.characters.edges} />
             <Relations relations={entryData.relations.edges} />
             {children}
-            {/* <Recommended recommended={entryData.recommendations.edges} /> */}
+            <Recommended recommended={entryData.recommendations.edges} />
           </div>
         </div>
       </section>

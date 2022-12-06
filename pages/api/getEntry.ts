@@ -118,8 +118,12 @@ export default async function handler(
             edges {
               node {
                 mediaRecommendation {
+                  description
+                  episodes
+                  chapters
                   type
                   id
+                  format
                   status
                   title {
                     userPreferred

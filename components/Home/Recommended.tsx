@@ -24,7 +24,7 @@ const Recommended = ({ type }: { type: string }) => {
   return (
     <>
       {user.userAuth && animeArray.length !== 0 ? (
-        <div className="bg-white dark:bg-offWhite-900 relative z-0">
+        <div className="bg-offWhite-50 dark:bg-offWhite-900 relative z-0">
           <div className="text-xl p-2 text-black dark:text-offWhite-100 capitalize">
             {type.toLowerCase()} You Might Like
           </div>

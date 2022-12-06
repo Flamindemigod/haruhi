@@ -11,7 +11,7 @@ type Props = {
 
 const CharacterCard = (props: Props) => {
   return (
-    <div className="flex gap-2 bg-offWhite-800 text-white p-1 min-w-[480px]">
+    <div className="flex gap-2 bg-offWhite-200 dark:bg-offWhite-800 text-black dark:text-white p-1 min-w-[480px]">
       <Link
         href={`/character/${props.character.id}`}
         className="flex gap-2 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"

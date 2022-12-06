@@ -5,6 +5,7 @@ import Description from "../../../components/Anime-Manga/Description";
 import Sidebar from "../../../components/Anime-Manga/Sidebar";
 import Characters from "../../../components/Anime-Manga/Characters";
 import Relations from "../../../components/Anime-Manga/Relations";
+import Recommended from "../../../components/Anime-Manga/Recommended";
 type Params = {
   slug: any[];
 };
@@ -73,6 +74,7 @@ const Layout = async ({
             <Characters characters={entryData.characters.edges} />
             <Relations relations={entryData.relations.edges} />
             {children}
+            <Recommended recommended={entryData.recommendations.edges} />
           </div>
         </div>
       </section>

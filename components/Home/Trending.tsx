@@ -20,7 +20,7 @@ const Trending = ({ season, type }: { season?: boolean; type: string }) => {
   }, []);
 
   return (
-    <div className="bg-white dark:bg-offWhite-900 relative z-0">
+    <div className="bg-offWhite-50 dark:bg-offWhite-900 relative z-0">
       <div className="text-xl p-2 text-black dark:text-offWhite-100 capitalize">
         Trending {type.toLowerCase()} {season && "This Season"}
       </div>

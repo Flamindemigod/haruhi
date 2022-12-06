@@ -20,7 +20,7 @@ const HoverCard = (props: Props) => {
         className={cx(
           "z-30 radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down",
           "max-w-md rounded-lg p-4 md:w-full",
-          "bg-white dark:bg-offWhite-800",
+          "bg-offWhite-50 dark:bg-offWhite-800",
           "focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
         )}
       >
