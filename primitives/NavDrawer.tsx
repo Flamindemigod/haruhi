@@ -9,7 +9,10 @@ const NavDrawer = () => {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen} modal={false}>
       <DialogPrimitive.Trigger asChild>
-        <button className="btn text-white font-medium ">
+        <button
+          className="btn text-white font-medium hover:scale-105 hover:-rotate-12 target:rotate-12 transition-all"
+          aria-aria-label="Navigation"
+        >
           <svg
             style={{ scale: "2" }}
             width="15"
@@ -28,22 +31,22 @@ const NavDrawer = () => {
         </button>
       </DialogPrimitive.Trigger>
       <Transition.Root show={open}>
-        <DialogPrimitive.Portal>
+        <DialogPrimitive.Portal forceMount>
           <Transition.Child
             as={React.Fragment}
-            enter="ease-out duration-1000"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
+            enter="ease-out duration-300"
+            enterFrom="-translate-x-full scale-70"
+            enterTo="translate-x-0 scale-100"
             leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
+            leaveFrom="translate-x-0 scale-100"
+            leaveTo="-translate-x-full scale-70"
           >
             <DialogPrimitive.DialogContent
               forceMount
               style={{ width: "80vw" }}
               className={cx(
                 "fixed z-50 block",
-                "max-w-md rounded-lg p-4",
+                "max-w-[15rem] rounded-lg p-4",
                 "top-0 left-0 bottom-0",
                 "bg-white dark:bg-offWhite-800",
                 "focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
@@ -52,8 +55,12 @@ const NavDrawer = () => {
               <DialogPrimitive.Title className="text-xl font-medium text-offWhite-900 dark:text-offWhite-100">
                 Haruhi
               </DialogPrimitive.Title>
-              <nav aria-label="Navigation" style={{ marginTop: "2rem" }}>
-                <ul className="grid gap-4">
+              <nav
+                className="text-offWhite-900 dark:text-offWhite-100"
+                aria-label="Navigation"
+                style={{ marginTop: "2rem" }}
+              >
+                <ul className="grid gap-6">
                   <li className="p-2">
                     <Link
                       onClick={() => {
@@ -104,7 +111,7 @@ const NavDrawer = () => {
               <DialogPrimitive.Close
                 className={cx(
                   "absolute top-3.5 right-3.5 inline-flex items-center justify-center rounded-full p-1",
-                  "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
+                  "focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
                 )}
               >
                 <div className="h-4 w-4 text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400">

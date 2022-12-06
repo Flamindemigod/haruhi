@@ -23,7 +23,7 @@ const Recommended = ({ type }: { type: string }) => {
   }, [user]);
   return (
     <>
-      {user.userAuth ? (
+      {user.userAuth && animeArray.length !== 0 ? (
         <div className="bg-white dark:bg-offWhite-900 relative z-0">
           <div className="text-xl p-2 text-black dark:text-offWhite-100 capitalize">
             {type.toLowerCase()} You Might Like
@@ -32,7 +32,7 @@ const Recommended = ({ type }: { type: string }) => {
             {animeArray.map((el) => (
               <Card
                 key={el.id}
-                href={`/${el.id}`}
+                href={`/${String(el.type).toLowerCase()}/${el.id}`}
                 imgWidth={156}
                 imgHeight={220}
                 imgSrc={el.coverImage.large}
@@ -49,7 +49,8 @@ const Recommended = ({ type }: { type: string }) => {
                 contentNextAiringEpisodeTime={
                   el.nextAiring && el.nextAiring.node.timeUntilAiring
                 }
-                contentType={el.format}
+                contentFormat={el.format}
+                contentType={el.type}
                 contentStatus={el.status}
               />
             ))}

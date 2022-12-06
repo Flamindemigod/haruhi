@@ -1,12 +1,12 @@
 import "./globals.css";
 import { UserContextProvider } from "./UserContext";
 
-import { Analytics } from "@vercel/analytics/react";
 import QueryProvider from "./QueryProvider";
 import Footer from "./Footer";
 
 import Header from "./Header";
 import Image from "next/image";
+import AnalyticsWrapper from "./AnalyticsWrapper";
 
 export default function RootLayout({
   children,
@@ -42,6 +42,7 @@ export default function RootLayout({
                 <Footer />
               </footer>
             </div>
+            <AnalyticsWrapper />
           </UserContextProvider>
         </QueryProvider>
       </body>

@@ -28,7 +28,7 @@ const Trending = ({ season, type }: { season?: boolean; type: string }) => {
         {animeArray.map((el: any) => (
           <Card
             key={el.id}
-            href={`/${el.id}`}
+            href={`/${String(el.type).toLowerCase()}/${el.id}`}
             imgWidth={156}
             imgHeight={220}
             imgSrc={el.coverImage.large}
@@ -43,7 +43,8 @@ const Trending = ({ season, type }: { season?: boolean; type: string }) => {
             contentNextAiringEpisodeTime={
               el.nextAiring && el.nextAiring.node.timeUntilAiring
             }
-            contentType={el.format}
+            contentFormat={el.format}
+            contentType={el.type}
             contentStatus={el.status}
           />
         ))}
