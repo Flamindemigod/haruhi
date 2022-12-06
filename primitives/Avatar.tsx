@@ -17,7 +17,7 @@ const Avatar = () => {
           width={56}
           height={56}
           className={
-            "object-cover rounded-full hover:animate-spin cursor-pointer"
+            "object-cover rounded-full hover:animate-spin hover:motion-reduce:animate-none cursor-pointer"
           }
         />
       </DropdownMenuPrimitive.Trigger>

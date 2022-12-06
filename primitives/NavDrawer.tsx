@@ -10,11 +10,11 @@ const NavDrawer = () => {
     <DialogPrimitive.Root open={open} onOpenChange={setOpen} modal={false}>
       <DialogPrimitive.Trigger asChild>
         <button
-          className="btn dark:text-white font-medium hover:scale-105 hover:-rotate-12 target:rotate-12 transition-all"
+          className="btn text-white bg-black bg-opacity-30 p-2 px-4 font-medium hover:scale-105 hover:-rotate-12 target:rotate-12 transition-all"
           aria-aria-label="Navigation"
         >
           <svg
-            style={{ scale: "2" }}
+            style={{ scale: "1.5" }}
             width="15"
             height="15"
             viewBox="0 0 15 15"

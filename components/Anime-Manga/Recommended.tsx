@@ -14,28 +14,44 @@ const Recommended = (props: Props) => {
             Recommended
           </div>
           <div>
-            <Carosel width="95vw" height={150}>
+            <Carosel width="95vw" height={270}>
               {props.recommended.map((edge) => (
                 <Card
-                  key={edge.node.id}
-                  href={`/${edge.node.type.toLowerCase()}/${edge.node.id}`}
-                  imgSrc={edge.node.coverImage.large}
-                  imgWidth={96}
-                  imgHeight={128}
-                  contentTitle={edge.node.title.userPreferred}
-                  contentTitleEnglish={edge.node.title.english}
-                  contentSubtitle={edge.node.description}
-                  contentProgress={edge.node.mediaListEntry?.progress}
-                  contentEpisodes={
-                    edge.node.format === "MANGA"
-                      ? edge.node.chapters
-                      : edge.node.episodes
+                  key={edge.node.mediaRecommendation.id}
+                  href={`/${edge.node.mediaRecommendation.type.toLowerCase()}/${
+                    edge.node.mediaRecommendation.id
+                  }`}
+                  imgSrc={edge.node.mediaRecommendation.coverImage.large}
+                  imgWidth={156}
+                  imgHeight={220}
+                  contentTitle={
+                    edge.node.mediaRecommendation.title.userPreferred
                   }
-                  contentNextAiringEpisode={0}
-                  contentNextAiringEpisodeTime={0}
-                  contentFormat={edge.node.format.replaceAll("_", " ")}
-                  contentType={edge.node.type}
-                  contentStatus={edge.node.status.replaceAll("_", " ")}
+                  contentTitleEnglish={
+                    edge.node.mediaRecommendation.title.english
+                  }
+                  contentSubtitle={edge.node.mediaRecommendation.description}
+                  contentProgress={
+                    edge.node.mediaRecommendation.mediaListEntry?.progress
+                  }
+                  contentEpisodes={
+                    edge.node.mediaRecommendation.format === "MANGA"
+                      ? edge.node.mediaRecommendation.chapters
+                      : edge.node.mediaRecommendation.episodes
+                  }
+                  contentNextAiringEpisode={edge.node.mediaRecommendation.null}
+                  contentNextAiringEpisodeTime={
+                    edge.node.mediaRecommendation.null
+                  }
+                  contentFormat={edge.node.mediaRecommendation.format.replaceAll(
+                    "_",
+                    " "
+                  )}
+                  contentType={edge.node.mediaRecommendation.type}
+                  contentStatus={edge.node.mediaRecommendation.status.replaceAll(
+                    "_",
+                    " "
+                  )}
                 />
               ))}
             </Carosel>

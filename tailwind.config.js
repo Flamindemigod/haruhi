@@ -34,6 +34,7 @@ module.exports = {
           900: "#280015",
         },
         offWhite: {
+          50: "#efefef",
           100: "#d5d5d5",
           200: "#ababab",
           300: "#828282",
