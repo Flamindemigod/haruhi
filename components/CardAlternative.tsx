@@ -14,12 +14,10 @@ interface Props {
   contentSubtitle: string;
   contentFormat: string;
   contentType: string;
-
+  contentRelation: string;
   contentStatus: string;
   contentEpisodes: number;
   contentProgress: number | null;
-  contentNextAiringEpisode: number;
-  contentNextAiringEpisodeTime: number | null;
 }
 
 interface PropsCountdown {
@@ -58,10 +56,10 @@ const Card = (props: Props) => {
       Trigger={
         <Link
           href={props.href}
-          className="caroselCard | focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+          className="caroselCard | flex gap-2 bg-offWhite-900 p-1 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
         >
           <div
-            className=" relative transition-all"
+            className="relative transition-all"
             style={{
               width: props.imgWidth,
               height: props.imgHeight,
@@ -77,35 +75,13 @@ const Card = (props: Props) => {
               className={"object-cover "}
               alt={props.contentTitle}
             />
-            {props.contentProgress &&
-              props.contentProgress !== props.contentNextAiringEpisode - 1 &&
-              props.contentType !== "MANGA" && (
-                <div
-                  className="absolute bg-primary-500 text-white"
-                  style={{
-                    borderBottomRightRadius: 9999,
-                    paddingRight: "0.5rem",
-                    paddingBottom: "0.5rem",
-                  }}
-                >
-                  +
-                  {(props.contentNextAiringEpisode
-                    ? props.contentNextAiringEpisode - 1
-                    : props.contentEpisodes) - props.contentProgress}
-                </div>
-              )}
           </div>
-          <h3
-            className="text-sm overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
-            style={{
-              width: props.imgWidth,
-              height: 20,
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {props.contentTitle}
-          </h3>
+          <div className="  text-black dark:text-offWhite-100 w-64 flex flex-col justify-between py-4">
+            <div className="text-xl">{props.contentTitle}</div>
+            <div>
+              {props.contentFormat} - {props.contentRelation}
+            </div>
+          </div>
         </Link>
       }
       Card={
@@ -132,17 +108,6 @@ const Card = (props: Props) => {
               }`}
             </div>
           )}
-          <div>
-            {props.contentNextAiringEpisodeTime && (
-              <div>
-                {`Ep ${props.contentNextAiringEpisode} airing in `}
-                <Countdown
-                  date={Date.now() + props.contentNextAiringEpisodeTime * 1000}
-                  renderer={countdownRenderer}
-                />
-              </div>
-            )}
-          </div>
 
           <div style={{ marginTop: "2rem" }}>
             {props.contentFormat} - {props.contentStatus}
