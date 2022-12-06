@@ -8,7 +8,7 @@ type Props = {
 const Relations = (props: Props) => {
   return (
     <>
-      {props.relations && (
+      {props.relations?.length ? (
         <div>
           <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
             Relations
@@ -42,6 +42,8 @@ const Relations = (props: Props) => {
             </Carosel>
           </div>
         </div>
+      ) : (
+        <></>
       )}
     </>
   );
