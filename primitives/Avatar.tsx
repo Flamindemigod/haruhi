@@ -10,13 +10,15 @@ const Avatar = () => {
   const user = useContext(userContext);
   return (
     <DropdownMenuPrimitive.Root>
-      <DropdownMenuPrimitive.Trigger>
+      <DropdownMenuPrimitive.Trigger asChild>
         <Image
           src={user.userAvatar || ""}
           alt="Avatar"
           width={56}
           height={56}
-          className={"object-cover rounded-full"}
+          className={
+            "object-cover rounded-full hover:animate-spin cursor-pointer"
+          }
         />
       </DropdownMenuPrimitive.Trigger>
       <DropdownMenuPrimitive.Portal>

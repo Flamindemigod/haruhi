@@ -14,6 +14,7 @@ export default async function handler(
           idMal
           coverImage {
             large
+            medium
           }
           bannerImage
           title {
@@ -37,7 +38,7 @@ export default async function handler(
           type
           genres
           chapters
-          volume
+          volumes
           season
           studios {
             edges {
@@ -91,6 +92,10 @@ export default async function handler(
                   userPreferred
                 }
                 id
+                description
+                format
+                episodes
+                chapters
                 type
                 status
                 coverImage {
@@ -140,12 +145,13 @@ export default async function handler(
                 }
               }
               role
-              voiceActors(language: JAPANESE, sort: ROLE) {
+              voiceActors(sort: ROLE) {
                 id
                 name {
       
                   userPreferred
                 }
+                language
                 image {
                   large
                 }
@@ -160,6 +166,7 @@ export default async function handler(
       variables: {},
       token: req.cookies.access_token,
     });
+
     res.status(200).json(data);
   } else {
     res.status(400).json({ error: "id must be specified" });

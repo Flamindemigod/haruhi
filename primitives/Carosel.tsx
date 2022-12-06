@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 interface Props {
   width: string;
-  height: number;
+  height: number | string;
   children?: React.ReactNode;
 }
 
@@ -15,10 +15,10 @@ const Carosel = ({ width = "100vw", height = 195, children }: Props) => {
   const [showRightButton, setShowRightButton] = useState(true);
 
   const scrollBack = () => {
-    caroselTrack.current.scrollLeft -= window.innerWidth / 2;
+    caroselTrack.current.scrollLeft -= window.innerWidth / 1.5;
   };
   const scrollForward = () => {
-    caroselTrack.current.scrollLeft += window.innerWidth / 2;
+    caroselTrack.current.scrollLeft += window.innerWidth / 1.5;
   };
 
   useEffect(() => {

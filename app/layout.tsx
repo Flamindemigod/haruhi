@@ -20,19 +20,9 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className="dark:bg-gray-700 relative">
+      <body className="bg-gray-100 dark:bg-offWhite-700 relative">
         <QueryProvider>
           <UserContextProvider>
-            <div className="fixed w-screen h-screen  -z-50">
-              <Image
-                src={"/haruhiHomeBg.webp"}
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-                alt={""}
-              />
-            </div>
             <div className="flex flex-col overflow-x-hidden min-h-screen">
               <header className=" ">
                 <Header />
