@@ -8,7 +8,7 @@ type Props = {
 const Recommended = (props: Props) => {
   return (
     <>
-      {props.recommended && (
+      {props.recommended?.length ? (
         <div>
           <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
             Recommended
@@ -57,6 +57,8 @@ const Recommended = (props: Props) => {
             </Carosel>
           </div>
         </div>
+      ) : (
+        <></>
       )}
     </>
   );

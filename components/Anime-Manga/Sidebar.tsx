@@ -180,44 +180,62 @@ const Sidebar = ({ anime }: { anime: any }) => {
       {anime.averageScore && (
         <Content title="Average Score" content={`${anime.averageScore}%`} />
       )}
-      <Content
-        title="Studios"
-        content={
-          <div className="flex flex-col">
-            {anime.studios.edges
-              .filter((edge: any) => {
-                if (edge.isMain) {
-                  return true;
-                }
-                return false;
-              })
-              .map((edge: any) => (
-                <Link key={edge.node.id} href={`/studio/${edge.node.id}`}>
-                  <div className="">{edge.node.name}</div>
-                </Link>
-              ))}
-          </div>
+      {anime.studios.edges.filter((edge: any) => {
+        if (edge.isMain) {
+          return true;
         }
-      />
-      <Content
-        title="Producers"
-        content={
-          <div className="flex flex-col">
-            {anime.studios.edges
-              .filter((edge: any) => {
-                if (edge.isMain) {
+        return false;
+      }).length ? (
+        <Content
+          title="Studios"
+          content={
+            <div className="flex flex-col">
+              {anime.studios.edges
+                .filter((edge: any) => {
+                  if (edge.isMain) {
+                    return true;
+                  }
                   return false;
-                }
-                return true;
-              })
-              .map((edge: any) => (
-                <Link key={edge.node.id} href={`/studio/${edge.node.id}`}>
-                  <div className="">{edge.node.name}</div>
-                </Link>
-              ))}
-          </div>
+                })
+                .map((edge: any) => (
+                  <Link key={edge.node.id} href={`/studio/${edge.node.id}`}>
+                    <div className="">{edge.node.name}</div>
+                  </Link>
+                ))}
+            </div>
+          }
+        />
+      ) : (
+        <></>
+      )}
+      {anime.studios.edges.filter((edge: any) => {
+        if (edge.isMain) {
+          return false;
         }
-      />
+        return true;
+      }).length ? (
+        <Content
+          title="Producers"
+          content={
+            <div className="flex flex-col">
+              {anime.studios.edges
+                .filter((edge: any) => {
+                  if (edge.isMain) {
+                    return false;
+                  }
+                  return true;
+                })
+                .map((edge: any) => (
+                  <Link key={edge.node.id} href={`/studio/${edge.node.id}`}>
+                    <div className="">{edge.node.name}</div>
+                  </Link>
+                ))}
+            </div>
+          }
+        />
+      ) : (
+        <></>
+      )}
       <Content
         title="Genres"
         content={

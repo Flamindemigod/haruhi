@@ -21,7 +21,7 @@ const Characters = (props: Props) => {
   ];
   return (
     <>
-      {props.characters ? (
+      {props.characters?.length ? (
         <div className="">
           <div className="flex justify-between py-2">
             <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
