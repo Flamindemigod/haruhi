@@ -21,9 +21,12 @@ export default async function handler(
                     medium
                 }
               }
+
               status
               progress
               media {
+                format
+                type
                 id
                 title {
                   userPreferred

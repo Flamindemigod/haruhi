@@ -12,7 +12,9 @@ interface Props {
   contentTitle: string;
   contentTitleEnglish: string;
   contentSubtitle: string;
+  contentFormat: string;
   contentType: string;
+
   contentStatus: string;
   contentEpisodes: number;
   contentProgress: number;
@@ -74,7 +76,8 @@ const Card = (props: Props) => {
             />
             {props.contentProgress !== null &&
               props.contentProgress !== 0 &&
-              props.contentProgress !== props.contentNextAiringEpisode - 1 && (
+              props.contentProgress !== props.contentNextAiringEpisode - 1 &&
+              props.contentType !== "MANGA" && (
                 <div
                   className="absolute bg-primary-500 text-white"
                   style={{
@@ -140,7 +143,7 @@ const Card = (props: Props) => {
           </div>
 
           <div style={{ marginTop: "2rem" }}>
-            {props.contentType} - {props.contentStatus}
+            {props.contentFormat} - {props.contentStatus}
           </div>
         </div>
       }

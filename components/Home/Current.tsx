@@ -23,7 +23,7 @@ const Current = ({ type }: { type: string }) => {
   }, [user]);
   return (
     <>
-      {user.userAuth ? (
+      {user.userAuth && animeArray.length !== 0 ? (
         <div className="bg-white dark:bg-offWhite-900 ">
           <div className="text-xl p-2 text-black dark:text-offWhite-100 capitalize">
             {type.toLowerCase()} In Progress
@@ -32,7 +32,7 @@ const Current = ({ type }: { type: string }) => {
             {animeArray.map((el) => (
               <Card
                 key={el.media.id}
-                href={`/${el.media.id}`}
+                href={`/${String(el.media.type).toLowerCase()}/${el.media.id}`}
                 imgWidth={156}
                 imgHeight={220}
                 imgSrc={el.media.coverImage.large}
@@ -41,7 +41,7 @@ const Current = ({ type }: { type: string }) => {
                 contentSubtitle={el.media.description}
                 contentProgress={el.progress}
                 contentEpisodes={
-                  el.media.format === "MANGA"
+                  el.media.type === "MANGA"
                     ? el.media.chapters
                     : el.media.episodes
                 }
@@ -52,7 +52,8 @@ const Current = ({ type }: { type: string }) => {
                   el.media.nextAiring &&
                   el.media.nextAiring.node.timeUntilAiring
                 }
-                contentType={el.media.format}
+                contentType={el.media.type}
+                contentFormat={el.media.format}
                 contentStatus={el.media.status}
               />
             ))}

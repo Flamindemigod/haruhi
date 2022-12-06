@@ -24,10 +24,10 @@ export default async function handler(
             media {
               episodes
               id
+              type
               status
               siteUrl
               chapters
-              
               coverImage {
                 large
               }

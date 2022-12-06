@@ -82,6 +82,7 @@ export default async function handler(
             title{
               userPreferred
             }
+            format
             episodes
             status
             coverImage{
