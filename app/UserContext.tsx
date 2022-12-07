@@ -53,15 +53,15 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         userPreferenceShowEndDialog: JSON.parse(
           localStorage.getItem("UserPrefShowEndDialog") || "{}"
         )
-          ? JSON.parse(localStorage.getItem("UserPrefShowEndDialog") || "{}")
+          ? JSON.parse(localStorage.getItem("UserPrefShowEndDialog") || "true")
           : true,
         userPreferenceSkipOpening: localStorage.getItem("UserPrefSkipOpening")
-          ? parseInt(localStorage.getItem("UserPrefSkipOpening") || "{}")
+          ? parseInt(localStorage.getItem("UserPrefSkipOpening") || "")
           : 85,
         userPreferenceDubbed: JSON.parse(
-          localStorage.getItem("UserPrefDubbed") || "{}"
+          localStorage.getItem("UserPrefDubbed") || "false"
         )
-          ? JSON.parse(localStorage.getItem("UserPrefDubbed") || "{}")
+          ? JSON.parse(localStorage.getItem("UserPrefDubbed") || "false")
           : false,
         userPreferenceEpisodeUpdateTreshold: localStorage.getItem(
           "UserPrefEpisodeTreshold"

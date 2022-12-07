@@ -8,5 +8,5 @@ export default async (
   if (data.type === "Light Novel") {
     return data.data.title;
   }
-  return data.data.title_english;
+  return data.data.title;
 };
