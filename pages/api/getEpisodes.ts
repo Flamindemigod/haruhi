@@ -7,20 +7,25 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response>
 ) {
-  if (req.query.idMal !== undefined) {
-    const malTitle = await getMalTitle("anime", String(req.query.idMal));
-    const gogoanime = new ANIME.Gogoanime();
-    const consumetAnimeid = await gogoanime.search(malTitle);
-    const consumetAnimeIdResults = consumetAnimeid.results.filter(
-      (el: any) => el.subOrDub === (req.query.format || "sub")
-    );
+  try {
+    if (req.query.idMal !== undefined) {
+      const malTitle = await getMalTitle("anime", String(req.query.idMal));
+      const gogoanime = new ANIME.Gogoanime();
 
-    const consumetAnimeInfo = await gogoanime.fetchAnimeInfo(
-      consumetAnimeIdResults[0].id
-    );
+      const consumetAnimeid = await gogoanime.search(malTitle);
 
-    res.status(200).json(consumetAnimeInfo.episodes);
-  } else {
-    res.status(400).json({ error: "idMal must be specified" });
+      const consumetAnimeIdResults = consumetAnimeid.results.filter(
+        (el: any) => el.subOrDub === (req.query.format || "sub")
+      );
+      const consumetAnimeInfo = await gogoanime.fetchAnimeInfo(
+        consumetAnimeIdResults[0].id
+      );
+
+      res.status(200).json(consumetAnimeInfo.episodes);
+    } else {
+      res.status(400).json({ error: "idMal must be specified" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err });
   }
 }

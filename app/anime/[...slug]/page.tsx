@@ -6,14 +6,25 @@ import Sidebar from "../../../components/Anime-Manga/Sidebar";
 import Characters from "../../../components/Anime-Manga/Characters";
 import Relations from "../../../components/Anime-Manga/Relations";
 import Recommended from "../../../components/Anime-Manga/Recommended";
+import Streaming from "../../../components/Anime/Streaming";
+import { cookies } from "next/headers";
+
 type Params = {
   slug: any[];
 };
 
 const Page = async ({ params }: { params: Params }) => {
+  const nextCookies = cookies();
   const fetchEntry = async () => {
     const data = await fetch(
-      `http://136.243.175.33:8080/api/getEntry?id=${params.slug[0]}`
+      `http://136.243.175.33:8080/api/getEntry?id=${params.slug[0]}`,
+      {
+        headers: {
+          cookie: nextCookies.get("access_token")
+            ? `access_token=${nextCookies.get("access_token")?.value}`
+            : "",
+        },
+      }
     ).then((res) => res.json());
     return data.data.Media;
   };
@@ -67,7 +78,7 @@ const Page = async ({ params }: { params: Params }) => {
           >
             <Characters characters={entryData.characters.edges} />
             <Relations relations={entryData.relations.edges} />
-
+            <Streaming entry={entryData} syncCode={params.slug[1]} />
             <Recommended recommended={entryData.recommendations.edges} />
           </div>
         </div>

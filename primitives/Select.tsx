@@ -1,8 +1,3 @@
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from "@radix-ui/react-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import cx from "classnames";
 import React from "react";
@@ -13,6 +8,7 @@ type Props = {
   value: any;
   onValueChange: any;
   values: any[];
+  buttonNoColor?: boolean;
 };
 
 const Select = (props: Props) => {
@@ -23,9 +19,14 @@ const Select = (props: Props) => {
       onValueChange={props.onValueChange}
     >
       <SelectPrimitive.Trigger asChild aria-label={props.triggerAriaLabel}>
-        <button className="flex gap-2 justify-center items-center p-2 bg-primary-500 font-medium text-white rounded-md">
+        <button
+          className={cx(
+            "flex gap-2 justify-center items-center p-2 font-medium text-white rounded-md",
+            !props.buttonNoColor && "bg-primary-500"
+          )}
+        >
           <SelectPrimitive.Value />
-          <SelectPrimitive.Icon className="ml-2">
+          <SelectPrimitive.Icon className="">
             <svg
               width="15"
               height="15"

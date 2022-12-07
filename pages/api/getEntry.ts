@@ -12,6 +12,7 @@ export default async function handler(
         Media(id: ${req.query.id}) {
           id
           idMal
+          countryOfOrigin
           coverImage {
             large
             medium
