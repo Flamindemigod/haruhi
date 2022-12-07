@@ -126,42 +126,46 @@ const Streaming = (props: Props) => {
 
   return (
     <>
-      <div>
-        <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
-          Streaming
+      {fetching || episodesListDub.length || episodesListDub.length ? (
+        <div>
+          <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
+            Streaming
+          </div>
+          {fetching && !playerState.ready ? (
+            <VideoPlayerSkeleton />
+          ) : (
+            <VideoPlayer
+              playerState={playerState}
+              setPlayerState={setPlayerState}
+              videoPlayer={videoPlayer}
+              hasNextEpisode={
+                (isDubbed ? episodesListDub.length : episodesListSub.length) >=
+                episode
+              }
+              onNextEpisode={() => {
+                setEpisode((state) => state + 1);
+              }}
+              seekTo={seekTo}
+            />
+          )}
+          <div className="flex">
+            <label
+              className="Label"
+              htmlFor="Dubbed-Subbed Toggle"
+              style={{ paddingRight: 15 }}
+            >
+              {isDubbed ? "Dubbed" : "Subbed"}
+            </label>
+            <Switch
+              checked={isDubbed}
+              onChecked={setIsDubbed}
+              disabled={episodesListDub.length === 0}
+            />
+          </div>
         </div>
-        {fetching && !playerState.ready ? (
-          <VideoPlayerSkeleton />
-        ) : (
-          <VideoPlayer
-            playerState={playerState}
-            setPlayerState={setPlayerState}
-            videoPlayer={videoPlayer}
-            hasNextEpisode={
-              (isDubbed ? episodesListDub.length : episodesListSub.length) >=
-              episode
-            }
-            onNextEpisode={() => {
-              setEpisode((state) => state + 1);
-            }}
-            seekTo={seekTo}
-          />
-        )}
-        <div className="flex">
-          <label
-            className="Label"
-            htmlFor="Dubbed-Subbed Toggle"
-            style={{ paddingRight: 15 }}
-          >
-            {isDubbed ? "Dubbed" : "Subbed"}
-          </label>
-          <Switch
-            checked={isDubbed}
-            onChecked={setIsDubbed}
-            disabled={episodesListDub.length === 0}
-          />
-        </div>
-      </div>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
