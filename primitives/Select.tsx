@@ -9,6 +9,7 @@ type Props = {
   onValueChange: any;
   values: any[];
   buttonNoColor?: boolean;
+  prefix?: string;
 };
 
 const Select = (props: Props) => {
@@ -73,7 +74,9 @@ const Select = (props: Props) => {
                   "focus:outline-none select-none"
                 )}
               >
-                <SelectPrimitive.ItemText>{f}</SelectPrimitive.ItemText>
+                <SelectPrimitive.ItemText>
+                  {(props.prefix ? props.prefix : "") + f}
+                </SelectPrimitive.ItemText>
                 <SelectPrimitive.ItemIndicator className="absolute left-2 inline-flex items-center">
                   <svg
                     width="15"

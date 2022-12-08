@@ -33,9 +33,12 @@ type Props = {
   playerState: PlayerState;
   setPlayerState: any;
   hasNextEpisode: boolean;
-  onNextEpisode: any;
   videoPlayer: any;
-  seekTo: any;
+  onNextEpisode: () => void;
+  onPlay: () => void;
+  onPause: () => void;
+  onSeek: (seekTo: number, seekType: string) => void;
+  onProgress: (playedSeconds: number) => void;
 };
 
 function format(seconds: number) {
@@ -130,7 +133,20 @@ const VideoPlayer = (props: Props) => {
         onReady={(e) => {
           props.setPlayerState((state: any) => ({ ...state, ready: true }));
         }}
+        onPlay={() => {
+          props.onPlay();
+          props.setPlayerState((state: any) => ({ ...state, playing: true }));
+        }}
+        onPause={() => {
+          props.onPause();
+          props.setPlayerState((state: any) => ({ ...state, playing: false }));
+        }}
+        // onBuffer={props.onPause}
+        // onBufferEnd={props.onPlay}
         onProgress={(newState) => {
+          if (props.playerState.playing) {
+            props.onProgress(newState.playedSeconds);
+          }
           props.setPlayerState((state: any) => ({ ...state, ...newState }));
         }}
         onDuration={(duration) => {
@@ -149,7 +165,11 @@ const VideoPlayer = (props: Props) => {
           <div
             className="w-full h-full"
             onDoubleClick={() => {
-              props.seekTo(
+              props.onSeek(
+                props.videoPlayer.current.getCurrentTime() - 10,
+                "seconds"
+              );
+              props.videoPlayer.current.seekTo(
                 props.videoPlayer.current.getCurrentTime() - 10,
                 "seconds"
               );
@@ -158,7 +178,11 @@ const VideoPlayer = (props: Props) => {
           <div
             className="w-full h-full"
             onDoubleClick={() => {
-              props.seekTo(
+              props.onSeek(
+                props.videoPlayer.current.getCurrentTime() + 10,
+                "seconds"
+              );
+              props.videoPlayer.current.seekTo(
                 props.videoPlayer.current.getCurrentTime() + 10,
                 "seconds"
               );
@@ -217,7 +241,12 @@ const VideoPlayer = (props: Props) => {
           <div className="absolute bottom-2/4 sm:bottom-1/4 right-10 ">
             <button
               onClick={() => {
-                props.seekTo(
+                props.onSeek(
+                  props.videoPlayer.current.getCurrentTime() +
+                    user.userPreferenceSkipOpening,
+                  "seconds"
+                );
+                props.videoPlayer.current.seekTo(
                   props.videoPlayer.current.getCurrentTime() +
                     user.userPreferenceSkipOpening,
                   "seconds"
@@ -272,7 +301,8 @@ const VideoPlayer = (props: Props) => {
               max={1}
               step={0.0001}
               onValueChange={(value) => {
-                props.seekTo(value[0], "fraction");
+                props.onSeek(value[0], "fraction");
+                props.videoPlayer.current.seekTo(value[0], "fraction");
               }}
               className="absolute inset-0 flex items-center"
             >
