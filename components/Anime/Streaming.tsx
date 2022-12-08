@@ -29,6 +29,7 @@ const Streaming = (props: Props) => {
   const [episodesListDub, setEpisodeListDub] = useState<any>([]);
   const [episode, setEpisode] = useState(0);
   const [syncCode, setSyncCode] = useState<string>(props.syncCode || uuidv4());
+  const [syncPlayedSeconds, setSyncPlayedSeconds] = useState<number>(0);
   let locked = false;
   let episodeLock = false;
 
@@ -124,64 +125,67 @@ const Streaming = (props: Props) => {
     }
   }, [episode, isDubbed, episodesListSub, episodesListDub]);
 
+  const syncPlaying = (payload: any) => {
+    if (isSameAnime(payload.animeID)) {
+      setEpisode(payload.episode);
+
+      setPlayerState((state) => ({ ...state, playing: payload.playing }));
+    }
+  };
+
+  useEffect(() => {
+    console.log(Math.abs(syncPlayedSeconds - playerState.playedSeconds));
+    if (
+      Math.abs(syncPlayedSeconds - playerState.playedSeconds) > 5 &&
+      playerState.ready &&
+      playerState.url
+    ) {
+      setTimeout(() => {
+        setPlayerState((state) => ({ ...state, playing: true }));
+      }, 300);
+      throttleedSeek(videoPlayer, syncPlayedSeconds, "seconds");
+    }
+  }, [syncPlayedSeconds]);
+  const syncPlayed = (payload: any) => {
+    if (isSameAnime(payload.animeID)) {
+      setEpisode(payload.episode);
+      setSyncPlayedSeconds(payload.played);
+    }
+  };
+  const syncSeekTo = (payload: any) => {
+    if (isSameAnime(payload.animeID)) {
+      videoPlayer.current.seekTo(payload.seekTo, payload.seekType);
+      // locked = true;
+      // setTimeout(() => {
+      //   locked = false;
+      // }, 1000);
+    }
+  };
+  const syncEpisodes = (payload: any) => {
+    if (isSameAnime(payload.animeID) && !episodeLock) {
+      setEpisode(parseInt(payload.episode));
+    }
+  };
+
   useEffect(() => {
     if (props.syncCode) {
       syncChannelRef.current = supabase.channel(syncCode);
       syncChannelRef.current
-        .on("broadcast", { event: "playing" }, (payload: any) => {
-          if (isSameAnime(payload.animeID)) {
-            setPlayerState((state) => ({ ...state, playing: payload.playing }));
-            // setPlayerState((state) => ({
-            //   ...state,
-            //   playing: payload.playedSeconds,
-            // }));
-            // throttleedSeek(videoPlayer, payload.played, "seconds");
-            // if (!episodeLock) {
-            //   setEpisode(parseInt(payload.episode));
-            //   episodeLock = true;
-            // }
-            // setTimeout(() => {
-            //   episodeLock = false;
-            // }, 5000);
-            // locked = true;
-            // setTimeout(() => {
-            //   locked = false;
-            // }, 5000);
-          }
-        })
-        .on("broadcast", { event: "played" }, (payload: any) => {
-          if (isSameAnime(payload.animeID)) {
-            setEpisode(payload.episode);
-            if (Math.abs(payload.played - playerState.playedSeconds) > 5) {
-              //   setPlayerState((state) => ({ ...state, playing: true }));
-              throttleedSeek(videoPlayer, payload.played, "seconds");
-            }
-          }
-        })
-        .on("broadcast", { event: "seekTo" }, (payload: any) => {
-          if (isSameAnime(payload.animeID)) {
-            videoPlayer.current.seekTo(payload.seekTo, payload.seekType);
-            // locked = true;
-            // setTimeout(() => {
-            //   locked = false;
-            // }, 1000);
-          }
-        })
-        .on("broadcast", { event: "episodes" }, (payload: any) => {
-          if (isSameAnime(payload.animeID) && !episodeLock) {
-            setEpisode(payload.episode);
-          }
-        })
+        .on("broadcast", { event: "playing" }, syncPlaying)
+        .on("broadcast", { event: "played" }, syncPlayed)
+        .on("broadcast", { event: "seekTo" }, syncSeekTo)
+        .on("broadcast", { event: "episodes" }, syncEpisodes)
         .subscribe();
 
       return () => {
-        syncChannelRef.current.unsubscribe();
+        supabase.removeChannel(syncChannelRef.current);
+        // syncChannelRef.current.unsubscribe();
       };
     }
   }, []);
 
   const dispatchSyncChannelRef = (props: any) => {
-    if (syncChannelRef.current && playerState.ready) {
+    if (syncChannelRef.current) {
       syncChannelRef.current.send({
         type: "broadcast",
         ...props,
@@ -204,7 +208,7 @@ const Streaming = (props: Props) => {
               setPlayerState={setPlayerState}
               videoPlayer={videoPlayer}
               hasNextEpisode={
-                (isDubbed ? episodesListDub.length : episodesListSub.length) >=
+                (isDubbed ? episodesListDub.length : episodesListSub.length) >
                 episode
               }
               onPlay={() => {
@@ -212,6 +216,7 @@ const Streaming = (props: Props) => {
                   event: "playing",
                   playing: true,
                   animeID: props.entry.id,
+                  episode: episode,
                 });
               }}
               onPause={() => {
@@ -219,6 +224,7 @@ const Streaming = (props: Props) => {
                   event: "playing",
                   playing: false,
                   animeID: props.entry.id,
+                  episode: episode,
                 });
               }}
               onSeek={(seekTo: number, seekType: string) => {
@@ -238,6 +244,8 @@ const Streaming = (props: Props) => {
                 });
               }}
               onNextEpisode={() => {
+                console.log(episode);
+                setPlayerState((state) => ({ ...state, ready: false }));
                 dispatchSyncChannelRef({
                   event: "episodes",
                   episode: episode + 1,
@@ -295,6 +303,8 @@ const Streaming = (props: Props) => {
                 prefix="Episode "
                 value={String(episode)}
                 onValueChange={(value: number) => {
+                  setPlayerState((state) => ({ ...state, ready: false }));
+
                   dispatchSyncChannelRef({
                     event: "episodes",
                     episode: value,
