@@ -24,7 +24,7 @@ const Footer = () => {
             by Flamindemigod
           </div>
           <a
-            className="btn bg-primary-500 text-white"
+            className="btn flex justify-center items-center bg-primary-500 text-white"
             href={"https://ko-fi.com/flamindemigod"}
           >
             <Image
