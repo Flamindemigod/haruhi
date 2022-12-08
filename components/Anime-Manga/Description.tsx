@@ -21,9 +21,9 @@ const Description = ({ text }: { text: string }) => {
 
   return (
     <div
-      className={`description--container   before:from-gray-100 dark:before:from-offWhite-700 before:to-transparent before:bg-gradient-to-t ${
+      className={`description--container  |  before:from-gray-100 dark:before:from-offWhite-700 before:to-transparent before:bg-gradient-to-t ${
         readMore && "readMore"
-      } | p-8 mb-4 relative`}
+      } p-8 mb-4 relative`}
       ref={descriptionContainer}
       data-open={open}
       onClick={toggleOpen}

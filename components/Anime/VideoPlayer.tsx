@@ -141,10 +141,8 @@ const VideoPlayer = (props: Props) => {
           props.onPause();
           props.setPlayerState((state: any) => ({ ...state, playing: false }));
         }}
-        // onBuffer={props.onPause}
-        // onBufferEnd={props.onPlay}
         onProgress={(newState) => {
-          if (props.playerState.playing) {
+          if (props.playerState.ready && props.playerState.playing) {
             props.onProgress(newState.playedSeconds);
           }
           props.setPlayerState((state: any) => ({ ...state, ...newState }));
@@ -197,6 +195,11 @@ const VideoPlayer = (props: Props) => {
             transform: "translate(-50%, -50%) scale(2.5)",
           }}
           onClick={() => {
+            if (props.playerState.playing) {
+              props.onPause();
+            } else {
+              props.onPlay();
+            }
             props.setPlayerState((state: any) => ({
               ...state,
               playing: !state.playing,
@@ -325,6 +328,11 @@ const VideoPlayer = (props: Props) => {
                 transform: "scale(1.6)",
               }}
               onClick={() => {
+                if (props.playerState.playing) {
+                  props.onPause();
+                } else {
+                  props.onPlay();
+                }
                 props.setPlayerState((state: any) => ({
                   ...state,
                   playing: !state.playing,
