@@ -35,6 +35,8 @@ type Props = {
   hasNextEpisode: boolean;
   videoPlayer: any;
   onNextEpisode: () => void;
+  onReady: () => void;
+
   onPlay: () => void;
   onPause: () => void;
   onSeek: (seekTo: number, seekType: string) => void;
@@ -131,6 +133,7 @@ const VideoPlayer = (props: Props) => {
         volume={props.playerState.volume}
         pip={props.playerState.pip}
         onReady={(e) => {
+          props.onReady();
           props.setPlayerState((state: any) => ({ ...state, ready: true }));
         }}
         onPlay={() => {

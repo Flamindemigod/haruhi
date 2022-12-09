@@ -17,7 +17,7 @@ export default async function handler(
                   hasNextPage
                   total
                 }
-                mediaList(userName: $userName, type: ${req.query.type}, sort:[UPDATED_TIME_DESC]) {
+                mediaList(userName: $userName, type: ${req.query.type}, sort:[SCORE_DESC]) {
                   progress
                   score
                   media {

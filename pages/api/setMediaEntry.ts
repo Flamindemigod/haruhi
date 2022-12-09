@@ -14,14 +14,14 @@ export default async function handler(
         }
       }`;
     const variables = {
-      id: req.query.id,
       mediaId: req.query.mediaId,
       status: req.query.status,
       score: req.query.score,
       progress: req.query.progress,
       repeat: req.query.repeat,
-      startedAt: req.query.startedAt,
-      completedAt: req.query.completedAt,
+      startedAt: req.query.startedAt && JSON.parse(String(req.query.startedAt)),
+      completedAt:
+        req.query.completedAt && JSON.parse(String(req.query.completedAt)),
     };
     let data = await makeQuery({
       query,
