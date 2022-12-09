@@ -4,12 +4,16 @@ import Image from "next/image";
 import { Transition } from "@headlessui/react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import cx from "classnames";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../../app/UserContext";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import Rating from "./Rating";
 import { median } from "../../utils/median";
-import Calender from "../../primitives/Calender";
+import Calender from "../../primitives/Calendar";
+import * as Separator from "@radix-ui/react-separator";
+import { MdDelete, MdSave } from "react-icons/md";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
 const SelectItem = ({
   value,
   displayText,
@@ -48,6 +52,7 @@ const SelectItem = ({
 };
 
 const MediaListEditor = ({ entry }: { entry: any }) => {
+  const queryClient = useQueryClient();
   const user = useContext(userContext);
   const [open, setOpen] = useState<boolean>(false);
   const [mediaStatus, setMediaStatus] = useState<string>(
@@ -59,11 +64,113 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
   const [mediaProgress, setMediaProgress] = useState<number>(
     entry.mediaListEntry?.progress || 0
   );
-  const [mediaStartDate, setMediaStartDate] = useState<Date | null>(null);
-  const [mediaEndDate, setMediaEndDate] = useState<Date | null>(null);
+  const [mediaStartDate, setMediaStartDate] = useState<Date | null>(
+    entry.mediaListEntry?.startedAt.year ||
+      entry.mediaListEntry?.startedAt.month ||
+      entry.mediaListEntry?.startedAt.day
+      ? new Date(
+          entry.mediaListEntry.startedAt.year,
+          entry.mediaListEntry.startedAt.month - 1,
+          entry.mediaListEntry.startedAt.day
+        )
+      : null
+  );
+  const [mediaEndDate, setMediaEndDate] = useState<Date | null>(
+    entry.mediaListEntry?.completedAt.year ||
+      entry.mediaListEntry?.completedAt.month ||
+      entry.mediaListEntry?.completedAt.day
+      ? new Date(
+          entry.mediaListEntry.completedAt.year,
+          entry.mediaListEntry.completedAt.month - 1,
+          entry.mediaListEntry.completedAt.day
+        )
+      : null
+  );
   const [mediaRewatches, setMediaRewatches] = useState<number>(
     entry.mediaListEntry?.repeat || 0
   );
+  const media = useQuery({
+    queryKey: ["mediaListEntry", entry.id],
+    queryFn: async () => {
+      const data = await fetch(
+        `http://136.243.175.33:8080/api/getEntry?id=${entry.id}`
+      );
+      return data.json();
+    },
+    onSuccess(data) {
+      if (data.data.Media.mediaListEntry !== null) {
+        setMediaStatus(data.data.Media.mediaListEntry.status);
+        setMediaScore(data.data.Media.mediaListEntry.score);
+        setMediaProgress(data.data.Media.mediaListEntry.progress);
+        setMediaStartDate(
+          data.data.Media.mediaListEntry?.startedAt.year ||
+            data.data.Media.mediaListEntry?.startedAt.month ||
+            data.data.Media.mediaListEntry?.startedAt.day
+            ? new Date(
+                data.data.Media.mediaListEntry.startedAt.year,
+                data.data.Media.mediaListEntry.startedAt.month - 1,
+                data.data.Media.mediaListEntry.startedAt.day
+              )
+            : null
+        );
+        setMediaEndDate(
+          data.data.Media.mediaListEntry?.completedAt.year ||
+            data.data.Media.mediaListEntry?.completedAt.month ||
+            data.data.Media.mediaListEntry?.completedAt.day
+            ? new Date(
+                data.data.Media.mediaListEntry.completedAt.year,
+                data.data.Media.mediaListEntry.completedAt.month - 1,
+                data.data.Media.mediaListEntry.completedAt.day
+              )
+            : null
+        );
+
+        setMediaRewatches(data.data.Media.mediaListEntry.repeat);
+      } else {
+        setMediaStatus("");
+        setMediaScore(0);
+        setMediaProgress(0);
+        setMediaStartDate(null);
+        setMediaEndDate(null);
+
+        setMediaRewatches(0);
+      }
+    },
+  });
+
+  const saveMediaEntry = async () => {
+    const data = await fetch(
+      `http://136.243.175.33:8080/api/setMediaEntry?id=${
+        entry.mediaListEntry ? entry.mediaListEntry.id : 0
+      }&mediaId=${
+        entry.id
+      }&status=${mediaStatus}&score=${mediaScore}&progress=${mediaProgress}&repeat=${mediaRewatches}&startedAt=${JSON.stringify(
+        {
+          year: mediaStartDate ? new Date(mediaStartDate).getFullYear() : null,
+          month: mediaStartDate ? new Date(mediaStartDate).getMonth() : null,
+          day: mediaStartDate ? new Date(mediaStartDate).getDate() : null,
+        }
+      )}&completedAt=${JSON.stringify({
+        year: mediaEndDate ? new Date(mediaEndDate).getFullYear() : null,
+        month: mediaEndDate ? new Date(mediaEndDate).getMonth() : null,
+        day: mediaEndDate ? new Date(mediaEndDate).getDate() : null,
+      })}`
+    );
+    queryClient.invalidateQueries({
+      queryKey: ["mediaListEntry", entry.id],
+      type: "all",
+    });
+  };
+
+  const deleteMediaEntry = async () => {
+    const data = await fetch(
+      `http://136.243.175.33:8080/api/deleteMediaEntry?id=${media.data.data.Media.mediaListEntry.id}`
+    );
+    await queryClient.invalidateQueries({
+      queryKey: ["mediaListEntry", entry.id],
+      type: "all",
+    });
+  };
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Trigger asChild>
@@ -74,7 +181,11 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
           )}
           disabled={!user.userAuth}
         >
-          {entry.mediaListEntry ? (
+          {(
+            media.isSuccess
+              ? media.data.data.Media.mediaListEntry
+              : entry.mediaListEntry
+          ) ? (
             <>
               <svg
                 transform="scale(1.4)"
@@ -91,7 +202,9 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
                   clipRule="evenodd"
                 ></path>
               </svg>
-              {entry.mediaListEntry.status}
+              {media.isSuccess
+                ? media.data.data.Media.mediaListEntry.status
+                : entry.mediaListEntry.status}
             </>
           ) : (
             <>
@@ -362,9 +475,46 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
                 >
                   Start Date
                 </label>
-                <Calender date={mediaStartDate} setDate={setMediaStartDate} />
+                <Calender
+                  date={mediaStartDate}
+                  setDate={setMediaStartDate}
+                  maxDate={new Date()}
+                />
+              </fieldset>
+
+              <fieldset>
+                <label
+                  htmlFor="Media List End Date"
+                  className="text-md font-medium text-offWhite-700 dark:text-offWhite-100"
+                >
+                  End Date
+                </label>
+                <Calender
+                  date={mediaEndDate}
+                  setDate={setMediaEndDate}
+                  maxDate={new Date()}
+                />
               </fieldset>
             </form>
+            <Separator.Root className="w-full h-px bg-primary-100 mb-4" />
+            <div className="flex justify-end text-white gap-2">
+              <DialogPrimitive.Close asChild>
+                <button
+                  onClick={saveMediaEntry}
+                  className="btn | w-24 flex gap-1 justify-center items-center bg-primary-500"
+                >
+                  <MdSave size={20} /> Save
+                </button>
+              </DialogPrimitive.Close>
+              <DialogPrimitive.Close asChild>
+                <button
+                  onClick={deleteMediaEntry}
+                  className="btn | w-24 flex gap-1 justify-center items-center bg-red-700"
+                >
+                  <MdDelete size={20} /> Delete
+                </button>
+              </DialogPrimitive.Close>
+            </div>
           </DialogPrimitive.Content>
         </Transition.Child>
       </Transition.Root>
