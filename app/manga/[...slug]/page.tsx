@@ -6,6 +6,7 @@ import Sidebar from "../../../components/Anime-Manga/Sidebar";
 import Characters from "../../../components/Anime-Manga/Characters";
 import Relations from "../../../components/Anime-Manga/Relations";
 import Recommended from "../../../components/Anime-Manga/Recommended";
+import MediaListEditor from "../../../components/Anime-Manga/MediaListEditor";
 type Params = {
   slug: any[];
 };
@@ -55,6 +56,7 @@ const Page = async ({ params }: { params: Params }) => {
             className="flex flex-col gap-4"
             style={{ flex: "1 1 15%", width: "-webkit-fill-available" }}
           >
+            <MediaListEditor entry={entryData} />
             <Sidebar anime={entryData} />
           </div>
           {/* Content */}
