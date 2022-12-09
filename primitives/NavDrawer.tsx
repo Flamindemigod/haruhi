@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import cx from "classnames";
 import Link from "next/link";
+import Image from "next/image";
 const NavDrawer = () => {
   const [open, setOpen] = useState<boolean>(false);
   return (
@@ -52,6 +53,17 @@ const NavDrawer = () => {
                 "focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
               )}
             >
+              <Image
+                src={
+                  "/__suzumiya_haruhi_and_kyon_suzumiya_haruhi_no_yuuutsu_drawn_by_haruhisky__a8956f16b38c2ea599f155246bf3e24c.png"
+                }
+                alt=""
+                fill
+                className="object-cover -z-50 blur-sm"
+                sizes="80vw"
+                priority
+              />
+              <div className="absolute inset-0 bg-black/50 -z-40 blur-sm"></div>
               <DialogPrimitive.Title className="text-xl font-medium text-offWhite-900 dark:text-offWhite-100">
                 Haruhi
               </DialogPrimitive.Title>
@@ -61,50 +73,42 @@ const NavDrawer = () => {
                 style={{ marginTop: "2rem" }}
               >
                 <ul className="grid gap-6">
-                  <li className="p-2">
-                    <Link
-                      onClick={() => {
-                        setOpen(false);
-                      }}
-                      className="w-full block focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
-                      href={"/"}
-                    >
-                      Home
-                    </Link>
-                  </li>
-                  <li className="p-2">
-                    <Link
-                      onClick={() => {
-                        setOpen(false);
-                      }}
-                      className="w-full block focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
-                      href={"/anime"}
-                    >
-                      Anime Lists
-                    </Link>
-                  </li>
-                  <li className="p-2">
-                    <Link
-                      onClick={() => {
-                        setOpen(false);
-                      }}
-                      className="w-full block focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
-                      href={"/manga"}
-                    >
-                      Manga Lists
-                    </Link>
-                  </li>
-                  <li className="p-2">
-                    <Link
-                      onClick={() => {
-                        setOpen(false);
-                      }}
-                      className="w-full block focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75 "
-                      href={"/seasonal"}
-                    >
-                      Seasonal
-                    </Link>
-                  </li>
+                  <Link
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                    className="w-full block hover:bg-offWhite-300 dark:hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                    href={"/"}
+                  >
+                    <li className="p-2">Home</li>
+                  </Link>
+                  <Link
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                    className="w-full block hover:bg-offWhite-300 dark:hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                    href={"/anime"}
+                  >
+                    <li className="p-2">Anime Lists</li>
+                  </Link>
+                  <Link
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                    className="w-full block hover:bg-offWhite-300 dark:hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                    href={"/manga"}
+                  >
+                    <li className="p-2">Manga Lists</li>
+                  </Link>
+                  <Link
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                    className="w-full block hover:bg-offWhite-300 dark:hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75 "
+                    href={"/seasonal"}
+                  >
+                    <li className="p-2">Seasonal</li>
+                  </Link>
                 </ul>
               </nav>
 
