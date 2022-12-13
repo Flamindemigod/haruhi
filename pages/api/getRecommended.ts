@@ -36,6 +36,7 @@ export default async function handler(
                             description
                             coverImage {
                               large
+                              medium
                             }
                             title {
                               userPreferred

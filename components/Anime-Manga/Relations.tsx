@@ -22,6 +22,7 @@ const Relations = (props: Props) => {
                     relation.node.id
                   }`}
                   imgSrc={relation.node.coverImage.large}
+                  imgSrcSmall={relation.node.coverImage.medium}
                   imgWidth={96}
                   imgHeight={128}
                   contentTitle={relation.node.title.userPreferred}

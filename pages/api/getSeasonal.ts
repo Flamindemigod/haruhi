@@ -24,6 +24,7 @@ export default async function handler(
             }
             coverImage{
               large
+              medium
             }
             episodes
             startDate{

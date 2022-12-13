@@ -21,6 +21,7 @@ const Recommended = (props: Props) => {
                   href={`/${edge.node.mediaRecommendation.type.toLowerCase()}/${
                     edge.node.mediaRecommendation.id
                   }`}
+                  imgSrcSmall={edge.node.mediaRecommendation.coverImage.medium}
                   imgSrc={edge.node.mediaRecommendation.coverImage.large}
                   imgWidth={156}
                   imgHeight={220}

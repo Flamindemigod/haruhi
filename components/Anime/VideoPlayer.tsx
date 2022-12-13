@@ -158,7 +158,7 @@ const VideoPlayer = (props: Props) => {
         className={cx(
           "player--controls | absolute inset-0 z-10 cursor-auto",
           controlsHidden && "opacity-0 pointer-events-none",
-          "focus-within:opacity-100 focus-within:pointer-events-auto",
+          // "focus-within:opacity-100 focus-within:pointer-events-auto",
           !props.playerState.playing && "opacity-100 pointer-events-auto"
         )}
       >

@@ -8,6 +8,7 @@ interface Props {
   href: string;
   imgWidth: number;
   imgHeight: number;
+  imgSrcSmall: string;
   imgSrc: string;
   contentTitle: string;
   contentTitleEnglish: string;
@@ -71,8 +72,8 @@ const Card = (props: Props) => {
             <Image
               src={props.imgSrc}
               fill
-              // width={props.imgWidth}
-              // height={props.imgHeight}
+              placeholder="blur"
+              blurDataURL={props.imgSrcSmall}
               sizes="20vw"
               className={"object-cover "}
               alt={props.contentTitle}

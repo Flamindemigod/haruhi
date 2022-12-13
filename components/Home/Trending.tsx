@@ -32,6 +32,7 @@ const Trending = ({ season, type }: { season?: boolean; type: string }) => {
             imgWidth={156}
             imgHeight={220}
             imgSrc={el.coverImage.large}
+            imgSrcSmall={el.coverImage.medium}
             contentTitle={el.title.userPreferred}
             contentTitleEnglish={el.title.english}
             contentSubtitle={el.description}

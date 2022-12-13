@@ -101,6 +101,8 @@ export default async function handler(
                 status
                 coverImage {
                   large
+            medium
+
                 }
               }
             }
@@ -128,10 +130,13 @@ export default async function handler(
                   status
                   title {
                     userPreferred
+                    
                   }
                   type
                   coverImage {
                     large
+            medium
+
                   }
                 }
               }
