@@ -264,12 +264,16 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
           >
             <DialogPrimitive.Title className="text-white bg-gradient-to-r from-black/50 to-transparent  dark:from-black/80">
               <div className="flex items-center gap-2 relative">
-                <Image
-                  fill
-                  src={entry.bannerImage}
-                  className="object-cover -z-50 blur-sm"
-                  alt={`Banner for ${entry.title.userPreferred}`}
-                />
+                {entry.bannerImage ? (
+                  <Image
+                    fill
+                    src={entry.bannerImage}
+                    className="object-cover -z-50 blur-sm"
+                    alt={`Banner for ${entry.title.userPreferred}`}
+                  />
+                ) : (
+                  <div className="background--empty | absolute inset-0 object-cover -z-10" />
+                )}
                 <Image
                   src={entry.coverImage.large}
                   width={128}

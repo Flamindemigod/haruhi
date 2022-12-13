@@ -35,6 +35,7 @@ const Recommended = ({ type }: { type: string }) => {
                 href={`/${String(el.type).toLowerCase()}/${el.id}`}
                 imgWidth={156}
                 imgHeight={220}
+                imgSrcSmall={el.coverImage.medium}
                 imgSrc={el.coverImage.large}
                 contentTitle={el.title.userPreferred}
                 contentTitleEnglish={el.title.english}

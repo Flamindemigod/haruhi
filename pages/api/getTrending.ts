@@ -87,6 +87,7 @@ export default async function handler(
             status
             coverImage{
               large
+              medium
             }
             mediaListEntry{
               progress

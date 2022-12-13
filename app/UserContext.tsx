@@ -11,6 +11,7 @@ type iUser = {
   userPreferenceSkipOpening?: number;
   userPreferenceDubbed?: boolean;
   userPreferenceEpisodeUpdateTreshold?: number;
+  userPreferenceMangaUpdateTreshold?: number;
   userScoreFormat?: string;
 };
 
@@ -22,7 +23,8 @@ const userDefaults = {
   userPreferenceShowEndDialog: false,
   userPreferenceSkipOpening: 85,
   userPreferenceDubbed: false,
-  userPreferenceEpisodeUpdateTreshold: 0.9,
+  userPreferenceEpisodeUpdateTreshold: 0.85,
+  userPreferenceEpisodeMangaTreshold: 0.85,
   userScoreFormat: "POINT_10_DECIMAL",
 } as iUser;
 
@@ -67,7 +69,12 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
           "UserPrefEpisodeTreshold"
         )
           ? parseFloat(localStorage.getItem("UserPrefEpisodeTreshold") || "{}")
-          : 0.9,
+          : 0.85,
+        userPreferenceMangaUpdateTreshold: localStorage.getItem(
+          "UserPrefMangaTreshold"
+        )
+          ? parseFloat(localStorage.getItem("UserPrefMangaTreshold") || "{}")
+          : 0.85,
         userScoreFormat: userData.data.Viewer.mediaListOptions.scoreFormat,
       });
     }

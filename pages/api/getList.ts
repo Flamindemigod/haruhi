@@ -30,6 +30,7 @@ export default async function handler(
               chapters
               coverImage {
                 large
+                medium
               }
               title {
                 userPreferred

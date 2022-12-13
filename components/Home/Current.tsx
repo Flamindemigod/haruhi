@@ -35,6 +35,7 @@ const Current = ({ type }: { type: string }) => {
                 href={`/${String(el.media.type).toLowerCase()}/${el.media.id}`}
                 imgWidth={156}
                 imgHeight={220}
+                imgSrcSmall={el.media.coverImage.medium}
                 imgSrc={el.media.coverImage.large}
                 contentTitle={el.media.title.userPreferred}
                 contentTitleEnglish={el.media.title.english}

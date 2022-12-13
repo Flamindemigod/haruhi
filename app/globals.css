@@ -1,7 +1,7 @@
 @tailwind base;
 
 :root {
-  --clr-primary: #ca006b;
+  --clr-primary: #cc006d;
   --clr-secondary: #00000000;
   --clr-status-current: #42a5f5;
   --clr-status-planning: #f79a63;
