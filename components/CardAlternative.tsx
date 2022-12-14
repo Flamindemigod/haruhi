@@ -57,7 +57,7 @@ const Card = (props: Props) => {
       Trigger={
         <Link
           href={props.href}
-          className="caroselCard | flex gap-2 bg-offWhite-200 dark:bg-offWhite-900 text-black dark:text-white p-1 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+          className="caroselCard | flex items-center gap-2 bg-offWhite-200 dark:bg-offWhite-900 text-black dark:text-white p-1 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
         >
           <div
             className="relative transition-all"

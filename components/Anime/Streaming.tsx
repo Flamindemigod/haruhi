@@ -15,7 +15,7 @@ import { supabase } from "../../utils/supabaseClient";
 import { useQueryClient } from "@tanstack/react-query";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import cx from "classnames";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdSkipNext, MdSkipPrevious } from "react-icons/md";
 type Props = {
   entry: any;
   syncCode: string | undefined;
@@ -379,6 +379,15 @@ const Streaming = (props: Props) => {
                 )}
               </div>
               <div className="flex justify-center items-center">
+                <button
+                  className="btn | flex justify-center disabled:text-gray-400 dark:text-white disabled:dark:text-white/25"
+                  disabled={episode === 0}
+                  onClick={() => {
+                    setEpisode((state) => state - 1);
+                  }}
+                >
+                  <MdSkipPrevious size={24} />
+                </button>
                 <Select
                   defaultValue={1}
                   triggerAriaLabel="Episode Selector"
@@ -400,6 +409,19 @@ const Streaming = (props: Props) => {
                       : episodesListSub.map((el: any) => el.number)
                   }
                 />
+                <button
+                  className="btn | flex justify-center disabled:text-gray-400 dark:text-white disabled:dark:text-white/25"
+                  disabled={
+                    props.entry.episodes
+                      ? episode + 1 === props.entry.episodes
+                      : false
+                  }
+                  onClick={() => {
+                    setEpisode((state) => state + 1);
+                  }}
+                >
+                  <MdSkipNext size={24} />
+                </button>
               </div>
               <div className="flex gap-2 items-center justify-end">
                 <label

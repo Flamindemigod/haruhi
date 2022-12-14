@@ -64,7 +64,7 @@ const NavDrawer = () => {
                 priority
               />
               <div className="absolute inset-0 bg-black/50 -z-40 blur-sm"></div>
-              <DialogPrimitive.Title className="text-xl font-medium text-offWhite-900 dark:text-offWhite-100">
+              <DialogPrimitive.Title className="text-xl font-medium text-white">
                 Haruhi
               </DialogPrimitive.Title>
               <nav
@@ -77,37 +77,37 @@ const NavDrawer = () => {
                     onClick={() => {
                       setOpen(false);
                     }}
-                    className="w-full block hover:bg-offWhite-300 dark:hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                    className="w-full block hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
                     href={"/"}
                   >
-                    <li className="p-2">Home</li>
+                    <li className="p-2 text-white">Home</li>
                   </Link>
                   <Link
                     onClick={() => {
                       setOpen(false);
                     }}
-                    className="w-full block hover:bg-offWhite-300 dark:hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                    className="w-full block hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
                     href={"/anime"}
                   >
-                    <li className="p-2">Anime Lists</li>
+                    <li className="p-2 text-white">Anime Lists</li>
                   </Link>
                   <Link
                     onClick={() => {
                       setOpen(false);
                     }}
-                    className="w-full block hover:bg-offWhite-300 dark:hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                    className="w-full block hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
                     href={"/manga"}
                   >
-                    <li className="p-2">Manga Lists</li>
+                    <li className="p-2 text-white">Manga Lists</li>
                   </Link>
                   <Link
                     onClick={() => {
                       setOpen(false);
                     }}
-                    className="w-full block hover:bg-offWhite-300 dark:hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75 "
+                    className="w-full block hover:bg-offWhite-600/50 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75 "
                     href={"/seasonal"}
                   >
-                    <li className="p-2">Seasonal</li>
+                    <li className="p-2 text-white">Seasonal</li>
                   </Link>
                 </ul>
               </nav>
