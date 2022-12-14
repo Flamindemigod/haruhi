@@ -316,15 +316,21 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
                       {(() => {
                         switch (mediaStatus) {
                           case "CURRENT":
-                            return "Watching";
+                            return entry.type === "ANIME"
+                              ? "Watching"
+                              : "Reading";
                           case "PLANNING":
-                            return "Planning";
+                            return entry.type === "ANIME"
+                              ? "Plan to watch"
+                              : "Plan to read";
                           case "COMPLETED":
                             return "Completed";
                           case "PAUSED":
                             return "On Hold";
                           case "REPEATING":
-                            return "Rewatching";
+                            return entry.type === "ANIME"
+                              ? "Rewatching"
+                              : "Rereading";
                           case "DROPPED":
                             return "Dropped";
                         }
@@ -366,15 +372,26 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
                     </SelectPrimitive.ScrollUpButton>
                     <SelectPrimitive.Viewport className="bg-white dark:bg-offWhite-800 p-2 rounded-lg shadow-lg relative z-50">
                       <SelectPrimitive.Group>
-                        <SelectItem value="CURRENT" displayText="Watching" />
+                        <SelectItem
+                          value="CURRENT"
+                          displayText={
+                            entry.type === "ANIME" ? "Watching" : "Reading"
+                          }
+                        />
                         <SelectItem
                           value="PLANNING"
-                          displayText="Plan to watch"
+                          displayText={
+                            entry.type === "ANIME"
+                              ? "Plan to watch"
+                              : "Plan to read"
+                          }
                         />
                         <SelectItem value="COMPLETED" displayText="Completed" />
                         <SelectItem
                           value="REPEATING"
-                          displayText="Rewatching"
+                          displayText={
+                            entry.type === "ANIME" ? "Rewatching" : "Rereading"
+                          }
                         />
                         <SelectItem value="PAUSED" displayText="On Hold" />
                         <SelectItem value="DROPPED" displayText="Dropped" />
