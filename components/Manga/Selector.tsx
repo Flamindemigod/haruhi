@@ -12,7 +12,7 @@ const Selector = (props: Props) => {
     <SelectPrimitive.Root
       value={String(props.value)}
       onValueChange={(value) => {
-        props.onValueChange(parseFloat(value));
+        props.onValueChange(parseInt(value));
       }}
     >
       <SelectPrimitive.Trigger asChild aria-label={"Chapter Selector"}>
@@ -64,7 +64,7 @@ const Selector = (props: Props) => {
               <SelectPrimitive.Item
                 key={`${f.id}-${i}`}
                 //prettier-ignore
-                value={String(f.id).match(new RegExp("chapter-(.*)$"))![1]}
+                value={String(props.chapterList.length -1 - i)}
                 className={cx(
                   "relative flex items-center px-8 py-2 rounded-md text-sm text-offWhite-700 dark:text-offWhite-300 font-medium focus:bg-offWhite-100 dark:focus:bg-offWhite-900",
                   "radix-disabled:opacity-50",

@@ -123,7 +123,7 @@ const Sidebar = ({ anime }: { anime: any }) => {
         <></>
       )}
       {anime.volumes ? (
-        <Content title="Volumes" content={`${anime.volumes} mins`} />
+        <Content title="Volumes" content={`${anime.volumes}`} />
       ) : (
         <></>
       )}
