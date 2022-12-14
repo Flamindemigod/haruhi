@@ -24,7 +24,7 @@ const userDefaults = {
   userPreferenceSkipOpening: 85,
   userPreferenceDubbed: false,
   userPreferenceEpisodeUpdateTreshold: 0.85,
-  userPreferenceEpisodeMangaTreshold: 0.85,
+  userPreferenceEpisodeMangaTreshold: 0.6,
   userScoreFormat: "POINT_10_DECIMAL",
 } as iUser;
 
@@ -74,7 +74,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
           "UserPrefMangaTreshold"
         )
           ? parseFloat(localStorage.getItem("UserPrefMangaTreshold") || "{}")
-          : 0.85,
+          : 0.6,
         userScoreFormat: userData.data.Viewer.mediaListOptions.scoreFormat,
       });
     }
