@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Countdown, { zeroPad } from "react-countdown";
+import { useLocale } from "@react-aria/i18n";
+import { DateFormatter } from "@internationalized/date";
 
 interface PropsCountdown {
   days: number;
@@ -40,20 +42,31 @@ interface PropsDateRenderer {
 }
 
 const dateRenderer = (props: PropsDateRenderer) => {
+  const { locale } = useLocale();
+  console.log(locale);
+  const date = new Date(
+    Date.UTC(props.year || 0, (props.month || 1) - 1, props.day || 0)
+  );
+
   let dateString = "";
-  if (props.day !== null) {
-    dateString = dateString.concat(String(props.day));
-  }
+
   if (props.month !== null) {
     dateString = dateString.concat(
-      props.day !== null ? "/" : "",
-      String(props.month)
+      date.toLocaleString("en-US", { month: "short" }),
+      " "
     );
+  }
+  if (props.day !== null) {
+    dateString = dateString.concat(
+      date.toLocaleString("en-US", { day: "numeric" })
+    );
+  }
+  if (props.day !== null || props.month != null) {
+    dateString = dateString.concat(", ");
   }
   if (props.year !== null) {
     dateString = dateString.concat(
-      props.month !== null ? "/" : "",
-      String(props.year)
+      date.toLocaleString("en-US", { year: "numeric" })
     );
   }
   if (dateString.length === 0) {
