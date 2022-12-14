@@ -101,7 +101,7 @@ const Reader = (props: Props) => {
     if (user.userAuth) {
       if (
         progress / mangaPages.data?.length >=
-          (user.userPreferenceMangaUpdateTreshold || 0.85) &&
+          (user.userPreferenceMangaUpdateTreshold || 0.6) &&
         !statusUpdated.current
       ) {
         statusUpdated.current = true;
