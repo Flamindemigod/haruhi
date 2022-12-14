@@ -21,6 +21,7 @@ export default async function handler(
           title {
             userPreferred
             english
+            romaji
           }
           description(asHtml:true)
           format
