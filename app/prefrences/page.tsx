@@ -84,14 +84,14 @@ const Page = () => {
           classes="fixed inset-0"
           backgroundImage="/haruhiHomeBg.webp"
         />
-        <div className="w-11/12 text-black dark:text-white p-4 bg-black/25 rounded-md">
+        <div className="w-11/12 text-black dark:text-white p-4 bg-white/50 dark:bg-black/50 rounded-md">
           <div className="text-2xl  font-semibold">User Prefrences</div>
           <Separator.Root className="h-px w-full bg-black dark:bg-white my-4" />
           <div
             className="w-full p-2 grid gap-2"
             style={{ gridTemplateColumns: "1fr min(40vw, 20rem)" }}
           >
-            <div className="text-xl p-4 dark:bg-offWhite-900/50 w-full col-span-2 text-primary-500 font-medium rounded-md">
+            <div className="text-xl p-4 bg-offWhite-100/50 dark:bg-offWhite-900/50 w-full col-span-2 text-primary-500 font-medium rounded-md">
               Anime Prefrences
             </div>
             <div className="p-2">Prefers Dubbed</div>
@@ -190,7 +190,7 @@ const Page = () => {
               />
             </div>
 
-            <div className="text-xl p-4 dark:bg-offWhite-900/50 w-full col-span-2 text-primary-500 font-medium rounded-md">
+            <div className="text-xl p-4 bg-offWhite-100/50 dark:bg-offWhite-900/50 w-full col-span-2 text-primary-500 font-medium rounded-md">
               Manga Prefrences
             </div>
             <div className="p-2">Chapter Update Threshold</div>
