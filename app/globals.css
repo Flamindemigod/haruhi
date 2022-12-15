@@ -1,5 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Georama:wght@400;500&display=swap");
 @tailwind base;
-
 :root {
   --clr-primary: #cc006d;
   --clr-secondary: #00000000;
