@@ -26,6 +26,6 @@ export default async function handler(
       res.status(400).json({ error: "idMal must be specified" });
     }
   } catch (err) {
-    res.status(500).json({ error: err });
+    res.status(200).json([]);
   }
 }

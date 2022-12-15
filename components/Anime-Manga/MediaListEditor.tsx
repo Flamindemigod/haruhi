@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Transition } from "@headlessui/react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import cx from "classnames";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { userContext } from "../../app/UserContext";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import Rating from "./Rating";

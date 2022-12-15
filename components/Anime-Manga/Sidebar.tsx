@@ -43,7 +43,6 @@ interface PropsDateRenderer {
 
 const dateRenderer = (props: PropsDateRenderer) => {
   const { locale } = useLocale();
-  console.log(locale);
   const date = new Date(
     Date.UTC(props.year || 0, (props.month || 1) - 1, props.day || 0)
   );
