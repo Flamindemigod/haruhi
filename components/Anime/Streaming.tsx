@@ -12,7 +12,7 @@ import Select from "../../primitives/Select";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../utils/supabaseClient";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import cx from "classnames";
 import { MdClose, MdShare, MdSkipNext, MdSkipPrevious } from "react-icons/md";
@@ -25,15 +25,13 @@ const Streaming = (props: Props) => {
   const queryClient = useQueryClient();
   const pathname = usePathname();
   const user = useContext(userContext);
-  const [fetching, setFetching] = useState<boolean>(true);
   const [isDubbed, setIsDubbed] = useState<boolean>(false);
-  const [episodesListSub, setEpisodeListSub] = useState<any>([]);
-  const [episodesListDub, setEpisodeListDub] = useState<any>([]);
   const [episode, setEpisode] = useState(0);
   const [syncCode, setSyncCode] = useState<string>(props.syncCode || uuidv4());
   const [syncPlayedSeconds, setSyncPlayedSeconds] = useState<number>(0);
   const [videoEnd, setVideoEnd] = useState<boolean>(false);
   const [openToast, setOpenToast] = useState<boolean>(false);
+  const [episodeID, setEpisodeID] = useState<string>("");
   const [playerState, setPlayerState] = useState({
     ready: false,
     url: "",
@@ -69,26 +67,48 @@ const Streaming = (props: Props) => {
     return props.entry.id === id;
   };
 
-  const fetchEpisodesList = async (malId: number, origin: string) => {
-    setFetching(true);
-    const dataSub = await fetch(
-      `http://136.243.175.33:8080/api/getEpisodes?idMal=${malId}&format=sub&origin=${origin}`
-    ).then((res) => res.json());
-    setEpisodeListSub(dataSub);
-    const dataDub = await fetch(
-      `http://136.243.175.33:8080/api/getEpisodes?idMal=${malId}&format=dub&origin=${origin}`
-    ).then((res) => res.json());
-    setEpisodeListDub(dataDub);
-
-    setFetching(false);
-  };
+  const {
+    isSuccess: isSuccessEpisodesSub,
+    isFetching: isFetchingEpisodesSub,
+    data: episodesListSub,
+  } = useQuery({
+    queryKey: ["episodeSubList", props.entry.idMal],
+    queryFn: async () => {
+      const data = await fetch(
+        `http://136.243.175.33:8080/api/getEpisodes?idMal=${props.entry.idMal}&format=sub`
+      );
+      return data.json();
+    },
+  });
+  const {
+    isSuccess: isSuccessEpisodesDub,
+    isFetching: isFetchingEpisodesDub,
+    data: episodesListDub,
+  } = useQuery({
+    queryKey: ["episodeDubList", props.entry.idMal],
+    queryFn: async () => {
+      const data = await fetch(
+        `http://136.243.175.33:8080/api/getEpisodes?idMal=${props.entry.idMal}&format=dub`
+      );
+      return data.json();
+    },
+  });
+  const { refetch: episodeRefetch } = useQuery({
+    enabled: !!(isSuccessEpisodesDub || isSuccessEpisodesSub),
+    queryKey: ["episode", episodeID],
+    queryFn: async () => {
+      const data = await fetch(
+        `http://136.243.175.33:8080/api/getStream?id=${episodeID}`
+      );
+      return data.json();
+    },
+    onSuccess(data) {
+      setPlayerState((state) => ({ ...state, url: data[0]?.url }));
+    },
+  });
 
   useEffect(() => {
-    fetchEpisodesList(props.entry.idMal, props.entry.countryOfOrigin);
-  }, []);
-
-  useEffect(() => {
-    if (episodesListDub.length === 0) {
+    if (episodesListDub?.length === 0) {
       setIsDubbed(false);
     } else {
       setIsDubbed(user.userPreferenceDubbed || false);
@@ -112,28 +132,15 @@ const Streaming = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    // setPlayerState((state) => ({ ...state, playing: false }));
-
-    const getVideoURL = async () => {
-      console.log(episode);
-      if (
-        isDubbed ? episodesListDub[episode - 1] : episodesListSub[episode - 1]
-      ) {
-        const data = await fetch(
-          `http://136.243.175.33:8080/api/getStream?id=${
-            isDubbed
-              ? episodesListDub[episode - 1]?.id
-              : episodesListSub[episode - 1]?.id
-          }`
-        ).then((res) => res.json());
-        setPlayerState((state) => ({ ...state, url: data[0]?.url }));
-      }
-    };
-
-    if (episode) {
-      getVideoURL();
+    if (episodesListSub || episodesListDub) {
+      setEpisodeID(
+        isDubbed
+          ? episodesListDub[episode - 1]?.id
+          : episodesListSub[episode - 1]?.id
+      );
+      episodeRefetch();
     }
-  }, [episode, isDubbed, episodesListSub, episodesListDub]);
+  }, [episode, isDubbed, isSuccessEpisodesDub, isSuccessEpisodesSub]);
 
   const syncPlaying = (payload: any) => {
     if (isSameAnime(payload.animeID)) {
@@ -283,13 +290,17 @@ const Streaming = (props: Props) => {
   }, [playerState.played]);
   return (
     <>
-      {fetching || episodesListSub.length || episodesListDub.length ? (
+      {isFetchingEpisodesSub ||
+      isFetchingEpisodesDub ||
+      isSuccessEpisodesSub ||
+      isSuccessEpisodesDub ? (
         <div>
           <ToastPrimitive.Provider>
             <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
               Streaming
             </div>
-            {fetching && !playerState.ready ? (
+            {(isFetchingEpisodesSub || isFetchingEpisodesDub) &&
+            !playerState.ready ? (
               <VideoPlayerSkeleton />
             ) : (
               <VideoPlayer
@@ -407,9 +418,11 @@ const Streaming = (props: Props) => {
                     setEpisode(value);
                   }}
                   values={
-                    isDubbed
-                      ? episodesListDub.map((el: any) => el.number)
-                      : episodesListSub.map((el: any) => el.number)
+                    isSuccessEpisodesDub || isSuccessEpisodesSub
+                      ? isDubbed
+                        ? episodesListDub?.map((el: any) => el.number) || []
+                        : episodesListSub?.map((el: any) => el.number) || []
+                      : []
                   }
                 />
                 <button
@@ -436,7 +449,7 @@ const Streaming = (props: Props) => {
                 <Switch
                   checked={isDubbed}
                   onChecked={setIsDubbed}
-                  disabled={episodesListDub.length === 0}
+                  disabled={episodesListDub?.length === 0}
                 />
               </div>
             </div>
