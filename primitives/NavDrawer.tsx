@@ -64,7 +64,8 @@ const NavDrawer = () => {
                 priority
               />
               <div className="absolute inset-0 bg-black/50 -z-40 blur-sm"></div>
-              <DialogPrimitive.Title className="text-xl font-medium text-white">
+              <DialogPrimitive.Title className="text-xl font-medium font-georama text-white flex flex-row gap-2 items-center">
+                <Image src={"/Logo.png"} alt="Logo" width={64} height={64} />
                 Haruhi
               </DialogPrimitive.Title>
               <nav

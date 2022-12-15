@@ -10,6 +10,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        georama: ["Georama", "sans-serif"],
+      },
       colors: {
         secondary: {
           100: "#d9edfd",
