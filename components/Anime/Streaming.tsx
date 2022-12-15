@@ -26,9 +26,7 @@ const Streaming = (props: Props) => {
   const pathname = usePathname();
   const user = useContext(userContext);
   const [fetching, setFetching] = useState<boolean>(true);
-  const [isDubbed, setIsDubbed] = useState<boolean>(
-    user.userPreferenceDubbed || false
-  );
+  const [isDubbed, setIsDubbed] = useState<boolean>(false);
   const [episodesListSub, setEpisodeListSub] = useState<any>([]);
   const [episodesListDub, setEpisodeListDub] = useState<any>([]);
   const [episode, setEpisode] = useState(0);
@@ -90,6 +88,14 @@ const Streaming = (props: Props) => {
   }, []);
 
   useEffect(() => {
+    if (episodesListDub.length === 0) {
+      setIsDubbed(false);
+    } else {
+      setIsDubbed(user.userPreferenceDubbed || false);
+    }
+  }, [episodesListDub]);
+
+  useEffect(() => {
     if (props.entry.mediaListEntry) {
       setEpisode(
         median([
@@ -109,6 +115,7 @@ const Streaming = (props: Props) => {
     // setPlayerState((state) => ({ ...state, playing: false }));
 
     const getVideoURL = async () => {
+      console.log(episode);
       if (
         isDubbed ? episodesListDub[episode - 1] : episodesListSub[episode - 1]
       ) {
@@ -222,7 +229,9 @@ const Streaming = (props: Props) => {
     if (user.userAuth) {
       if (
         playerState.played >=
-          (user.userPreferenceEpisodeUpdateTreshold || 0.85) &&
+          (user.userPreferenceEpisodeUpdateTreshold !== undefined
+            ? user.userPreferenceEpisodeUpdateTreshold
+            : 0.85) &&
         !videoEnd
       ) {
         setVideoEnd(true);

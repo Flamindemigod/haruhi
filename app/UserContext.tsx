@@ -7,6 +7,7 @@ type iUser = {
   userAuth?: boolean;
   userName?: string;
   userAvatar?: string;
+  userPreferenceMangaEndDialog?: boolean;
   userPreferenceShowEndDialog?: boolean;
   userPreferenceSkipOpening?: number;
   userPreferenceDubbed?: boolean;
@@ -20,6 +21,7 @@ const userDefaults = {
   userName: "",
   userID: 0,
   userAvatar: "",
+  userPreferenceMangaEndDialog: false,
   userPreferenceShowEndDialog: false,
   userPreferenceSkipOpening: 85,
   userPreferenceDubbed: false,
@@ -52,35 +54,39 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         userName: userData.data.Viewer.name,
         userID: userData.data.Viewer.id,
         userAvatar: userData.data.Viewer.avatar.medium,
-        userPreferenceShowEndDialog: JSON.parse(
-          localStorage.getItem("UserPrefShowEndDialog") || "{}"
+
+        userPreferenceMangaEndDialog:
+          localStorage.getItem("UserPrefMangaEndDialog") === "true"
+            ? true
+            : false,
+        userPreferenceShowEndDialog:
+          localStorage.getItem("UserPrefShowEndDialog") === "true"
+            ? true
+            : false,
+        userPreferenceSkipOpening: !Number.isNaN(
+          parseFloat(String(localStorage.getItem("UserPrefSkipOpening")))
         )
-          ? JSON.parse(localStorage.getItem("UserPrefShowEndDialog") || "true")
-          : true,
-        userPreferenceSkipOpening: localStorage.getItem("UserPrefSkipOpening")
-          ? parseInt(localStorage.getItem("UserPrefSkipOpening") || "")
-          : 85,
-        userPreferenceDubbed: JSON.parse(
-          localStorage.getItem("UserPrefDubbed") || "false"
+          ? parseFloat(String(localStorage.getItem("UserPrefSkipOpening")))
+          : undefined,
+        userPreferenceDubbed:
+          localStorage.getItem("UserPrefDubbed") === "true" ? true : false,
+        userPreferenceEpisodeUpdateTreshold: !Number.isNaN(
+          parseFloat(String(localStorage.getItem("UserPrefEpisodeTreshold")))
         )
-          ? JSON.parse(localStorage.getItem("UserPrefDubbed") || "false")
-          : false,
-        userPreferenceEpisodeUpdateTreshold: localStorage.getItem(
-          "UserPrefEpisodeTreshold"
+          ? parseFloat(String(localStorage.getItem("UserPrefEpisodeTreshold")))
+          : undefined,
+        userPreferenceMangaUpdateTreshold: !Number.isNaN(
+          parseFloat(String(localStorage.getItem("UserPrefMangaTreshold")))
         )
-          ? parseFloat(localStorage.getItem("UserPrefEpisodeTreshold") || "{}")
-          : 0.85,
-        userPreferenceMangaUpdateTreshold: localStorage.getItem(
-          "UserPrefMangaTreshold"
-        )
-          ? parseFloat(localStorage.getItem("UserPrefMangaTreshold") || "{}")
-          : 0.6,
+          ? parseFloat(String(localStorage.getItem("UserPrefMangaTreshold")))
+          : undefined,
         userScoreFormat: userData.data.Viewer.mediaListOptions.scoreFormat,
       });
     }
   };
   useEffect(() => {
     setUserData();
+    window.addEventListener("userUpdate", setUserData);
   }, []);
   return (
     <>

@@ -38,6 +38,19 @@ const Avatar = () => {
             )}
             asChild
           >
+            <a href={"https://anilist.co/settings"}>
+              <span className="flex-grow text-offWhite-700 dark:text-offWhite-100 text-center">
+                Anilist Settings
+              </span>
+            </a>
+          </DropdownMenuPrimitive.Item>
+          <DropdownMenuPrimitive.Item
+            className={cx(
+              "flex select-none items-center rounded-md px-2 py-2 text-base outline-none cursor-pointer",
+              "text-offWhite-400 focus:bg-offWhite-100 hover:bg-offWhite-100 dark:text-offWhite-500 dark:focus:bg-offWhite-900"
+            )}
+            asChild
+          >
             <Link href={"/prefrences"}>
               <span className="flex-grow text-offWhite-700 dark:text-offWhite-100 text-center">
                 Prefrences
@@ -51,11 +64,11 @@ const Avatar = () => {
             )}
             asChild
           >
-            <Link href={"/logout"}>
+            <a href={"/api/logout"}>
               <span className="flex-grow text-red-700 dark:text-red-400 text-center">
                 Logout
               </span>
-            </Link>
+            </a>
           </DropdownMenuPrimitive.Item>
         </DropdownMenuPrimitive.Content>
       </DropdownMenuPrimitive.Portal>
