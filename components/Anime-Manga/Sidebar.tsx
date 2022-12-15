@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import Countdown, { zeroPad } from "react-countdown";
-import { useLocale } from "@react-aria/i18n";
-import { DateFormatter } from "@internationalized/date";
 
 interface PropsCountdown {
   days: number;
@@ -42,7 +40,6 @@ interface PropsDateRenderer {
 }
 
 const dateRenderer = (props: PropsDateRenderer) => {
-  const { locale } = useLocale();
   const date = new Date(
     Date.UTC(props.year || 0, (props.month || 1) - 1, props.day || 0)
   );
