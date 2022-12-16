@@ -13,12 +13,14 @@ export default async function handler(
     req.query.status !== undefined &&
     req.query.username !== undefined
   ) {
-    let query = `query usersAiringSchedule($perPage: Int = 50, $page: Int = 1, $userName: String) {
+    let query = `query usersAiringSchedule($perPage: Int = 50, $page: Int = 1, $userName: String, $sort: [MediaListSort]) {
         Page(perPage: $perPage, page: $page) {
           pageInfo {
+            currentPage
             hasNextPage
           }
-          mediaList(userName: $userName, type: ${req.query.type}, status:${req.query.status}, sort: [UPDATED_TIME_DESC]) {
+          mediaList(userName: $userName, type: ${req.query.type}, status:${req.query.status}, sort: $sort) {
+            score
             progress
             status
             media {
@@ -64,6 +66,7 @@ export default async function handler(
       perPage: 50,
       page: req.query.page || 1,
       userName: req.query.username,
+      sort: req.query.sort || "UPDATED_TIME_DESC",
     };
 
     let data = await makeQuery({
@@ -74,7 +77,7 @@ export default async function handler(
     data.data.Page.mediaList = data.data.Page.mediaList.map(
       (mediaListEntry: any) => getAiringHelper(mediaListEntry)
     );
-    res.status(200).json(data.data.Page);
+    res.status(200).json(data.data);
   } else {
     res
       .status(400)
