@@ -55,7 +55,7 @@ const List = (props: Props) => {
     isFetching,
   } = useInfiniteQuery({
     enabled: user.userAuth,
-    queryKey: ["MediaList", props.type, props.list],
+    queryKey: ["MediaList", props.type, props.list, props.sort],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
         `http://136.243.175.33:8080/api/getList?type=${props.type}&status=${props.list}&username=${user.userName}&sort=${props.sort}&page=${pageParam}`
@@ -77,7 +77,7 @@ const List = (props: Props) => {
   }
   return (
     <div
-      className="grid gap-2 dark:text-white text-sm md:text-xl "
+      className="grid gap-x-2 dark:text-white text-sm md:text-xl "
       style={{ gridTemplateColumns: "1fr 3fr 0.5fr 0.5fr 1fr" }}
     >
       <div
