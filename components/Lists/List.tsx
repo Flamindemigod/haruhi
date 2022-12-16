@@ -1,19 +1,14 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import React, { useContext, useEffect, useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import React, { useContext } from "react";
 import { userContext } from "../../app/UserContext";
 import ListEntry from "./ListEntry";
 
 type Props = {
   type: "ANIME" | "MANGA";
-  list:
-    | "CURRENT"
-    | "PLANNING"
-    | "COMPLETED"
-    | "DROPPED"
-    | "PAUSED"
-    | "REPEATING";
+  list: "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED";
+
   sort:
     | "MEDIA_ID"
     | "MEDIA_ID_DESC"
