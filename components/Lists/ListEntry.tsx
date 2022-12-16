@@ -9,7 +9,7 @@ const ListEntry = (props: Props) => {
   return (
     <Link
       href={`${props.entry.media.type.toLowerCase()}/${props.entry.media.id}`}
-      className="grid col-span-full min-h-[5rem] justify-center items-center odd:bg-offWhite-300 dark:odd:bg-offWhite-600"
+      className="grid col-span-full min-h-[5rem] justify-center items-center odd:bg-offWhite-300/50 dark:odd:bg-offWhite-600/50"
       style={{ gridTemplateColumns: "subgrid" }}
     >
       <div className="w-full h-full relative">
