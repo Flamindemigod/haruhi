@@ -13,7 +13,7 @@ const Current = ({ type }: { type: string }) => {
     const data = await fetch(
       `http://136.243.175.33:8080/api/getList?username=${user.userName}&type=${type}&status=CURRENT`
     ).then((res) => res.json());
-    setAnimeArray(data.mediaList);
+    setAnimeArray(data.Page.mediaList);
   };
 
   useEffect(() => {
