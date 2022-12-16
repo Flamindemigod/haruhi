@@ -262,7 +262,7 @@ const page = () => {
       </div>
       {/* Content */}
       <div className="sm:p-4" style={{ flexBasis: "0", flexGrow: "999" }}>
-        <List type="ANIME" sort={sort} list={list} isBottom={isBottom} />
+        <List type="MANGA" sort={sort} list={list} isBottom={isBottom} />
         <div ref={bottomRef}></div>
       </div>
     </div>
