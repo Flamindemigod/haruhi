@@ -5,6 +5,7 @@ import HoverCard from "../primitives/Card";
 import Countdown, { zeroPad } from "react-countdown";
 import Link from "next/link";
 interface Props {
+  cardDirection?: "right" | "top" | "bottom" | "left";
   href: string;
   imgWidth: number;
   imgHeight: number;
@@ -15,7 +16,6 @@ interface Props {
   contentSubtitle: string;
   contentFormat: string;
   contentType: string;
-
   contentStatus: string;
   contentEpisodes: number;
   contentProgress: number | null;
@@ -56,6 +56,7 @@ const countdownRenderer = ({
 const Card = (props: Props) => {
   return (
     <HoverCard
+      cardDirection={props.cardDirection ?? "right"}
       Trigger={
         <Link
           href={props.href}
@@ -78,7 +79,7 @@ const Card = (props: Props) => {
               className={"object-cover "}
               alt={props.contentTitle}
             />
-            {props.contentProgress &&
+            {(props.contentProgress &&
               props.contentProgress !== props.contentNextAiringEpisode - 1 &&
               props.contentType !== "MANGA" && (
                 <div
@@ -94,7 +95,7 @@ const Card = (props: Props) => {
                     ? props.contentNextAiringEpisode - 1
                     : props.contentEpisodes) - props.contentProgress}
                 </div>
-              )}
+              )) || <></>}
           </div>
           <h3
             className="text-sm overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"

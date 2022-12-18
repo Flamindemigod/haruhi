@@ -3,6 +3,7 @@ import cx from "classnames";
 import React from "react";
 
 interface Props {
+  cardDirection?: "right" | "top" | "bottom" | "left";
   Trigger: React.ReactNode;
   Card: React.ReactNode;
 }
@@ -14,7 +15,7 @@ const HoverCard = (props: Props) => {
         {props.Trigger}
       </HoverCardPrimitive.Trigger>
       <HoverCardPrimitive.Content
-        side="right"
+        side={props.cardDirection}
         align="center"
         sideOffset={4}
         className={cx(

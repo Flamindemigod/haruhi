@@ -15,6 +15,9 @@ export default async function handler(
           avatar {
             medium
           }
+          options{
+            displayAdultContent
+          }
           mediaListOptions{
             scoreFormat
           }

@@ -7,6 +7,7 @@ type iUser = {
   userAuth?: boolean;
   userName?: string;
   userAvatar?: string;
+  userShowAdult?: boolean;
   userPreferenceMangaEndDialog?: boolean;
   userPreferenceShowEndDialog?: boolean;
   userPreferenceSkipOpening?: number;
@@ -21,6 +22,7 @@ const userDefaults = {
   userName: "",
   userID: 0,
   userAvatar: "",
+  userShowAdult: false,
   userPreferenceMangaEndDialog: false,
   userPreferenceShowEndDialog: false,
   userPreferenceSkipOpening: 85,
@@ -54,7 +56,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         userName: userData.data.Viewer.name,
         userID: userData.data.Viewer.id,
         userAvatar: userData.data.Viewer.avatar.medium,
-
+        userShowAdult: userData.data.Viewer.options.displayAdultContent,
         userPreferenceMangaEndDialog:
           localStorage.getItem("UserPrefMangaEndDialog") === "true"
             ? true
