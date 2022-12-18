@@ -296,8 +296,8 @@ const Streaming = (props: Props) => {
     <>
       {isFetchingEpisodesSub ||
       isFetchingEpisodesDub ||
-      isSuccessEpisodesSub ||
-      isSuccessEpisodesDub ? (
+      episodesListDub.length ||
+      episodesListSub.length ? (
         <div>
           <ToastPrimitive.Provider>
             <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">

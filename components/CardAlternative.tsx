@@ -54,6 +54,7 @@ const countdownRenderer = ({
 const Card = (props: Props) => {
   return (
     <HoverCard
+      cardDirection="right"
       Trigger={
         <Link
           href={props.href}
@@ -78,8 +79,8 @@ const Card = (props: Props) => {
             />
           </div>
           <div className="  text-black dark:text-offWhite-100 w-64 flex flex-col justify-between py-4">
-            <div className="text-xl">{props.contentTitle}</div>
-            <div>
+            <div className="text-lg">{props.contentTitle}</div>
+            <div className="text-sm">
               {props.contentFormat} - {props.contentRelation}
             </div>
           </div>
@@ -89,7 +90,7 @@ const Card = (props: Props) => {
         <div className="text-black dark:text-offWhite-100">
           <div>
             <h3 className="text-xl ">{props.contentTitle}</h3>
-            <h2 className="text-sm ">{props.contentTitleEnglish}</h2>
+            <h2 className="text-xs ">{props.contentTitleEnglish}</h2>
           </div>
           <div
             className="card--description"
