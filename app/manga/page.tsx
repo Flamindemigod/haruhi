@@ -8,7 +8,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { useQueryClient } from "@tanstack/react-query";
 
-const page = () => {
+const Page = () => {
   const [list, setList] = useState<
     "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED"
   >("CURRENT");
@@ -269,4 +269,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -32,6 +32,7 @@ export default async function handler(
           bloodType
           characterMedia(sort: START_DATE_DESC, perPage: 25, page: $page) {
             pageInfo {
+              currentPage
               hasNextPage
             }
             edges {

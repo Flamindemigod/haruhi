@@ -13,7 +13,7 @@ type Season = {
   year: number;
 };
 
-const page = () => {
+const Page = () => {
   const currentSeason = getSeason();
   const [season, setSeason] = useState<Season>(currentSeason);
   const seasons: Season[] = [
@@ -87,4 +87,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -18,7 +18,6 @@ function useIntersectionObserver(
   const frozen = entry?.isIntersecting && freezeOnceVisible;
 
   const updateEntry = ([entry]: IntersectionObserverEntry[]): void => {
-    console.log(entry);
     setEntry(entry);
   };
 

@@ -6,13 +6,11 @@ import List from "../../components/Lists/List";
 import useIntersectionObserver from "../../primitives/useIntersectionObserver";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { useQueryClient } from "@tanstack/react-query";
 
-const page = () => {
+const Page = () => {
   const [list, setList] = useState<
     "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED"
   >("CURRENT");
-  const queryClient = useQueryClient();
   const [sort, setSort] = useState<
     | "MEDIA_ID"
     | "MEDIA_ID_DESC"
@@ -269,4 +267,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
