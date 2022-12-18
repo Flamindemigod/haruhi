@@ -4,7 +4,7 @@ import * as Separator from "@radix-ui/react-separator";
 import * as Slider from "@radix-ui/react-slider";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import cx from "classnames";
-import { use, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Background from "../../components/Background";
 import Select from "../../primitives/Select";
 import Switch from "../../primitives/Switch";

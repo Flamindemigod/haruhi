@@ -1,7 +1,7 @@
 export default (mediaListEntry: any) => {
-  const airingSchedule = mediaListEntry.media.airingSchedule;
+  const airingSchedule = mediaListEntry.media?.airingSchedule;
 
-  delete mediaListEntry.media.airingSchedule;
+  delete mediaListEntry.media?.airingSchedule;
 
   if (airingSchedule) {
     const nextAiringIndex = airingSchedule.edges.findIndex(

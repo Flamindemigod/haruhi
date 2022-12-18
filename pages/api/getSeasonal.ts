@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import getAiringHelper from "../../utils/getAiringHelper";
+import getSeasonalHelper from "../../utils/getSeasonalHelper";
 import makeQuery from "../../utils/makeQuery";
 
 type Response = {} | [];
@@ -16,17 +16,21 @@ export default async function handler(
           media(season: ${req.query.season}, seasonYear: ${
       req.query.year
     }, type:ANIME, sort: [POPULARITY_DESC], ${
-      req.query.adult === "" ? "" : "isAdult:false"
+      req.query.adult === "true" ? "" : "isAdult:false"
     }) {
             id
             title {
               userPreferred
             }
+            description
             coverImage{
               large
               medium
             }
+            type
+            format
             episodes
+            status
             startDate{
               year
             }
@@ -66,7 +70,7 @@ export default async function handler(
       accumalatedMedia = accumalatedMedia.concat(data.data.Page.media);
     }
     for (const media in accumalatedMedia) {
-      accumalatedMedia[media] = getAiringHelper(accumalatedMedia[media]);
+      accumalatedMedia[media] = getSeasonalHelper(accumalatedMedia[media]);
     }
     res.status(200).json(accumalatedMedia);
   } else {
