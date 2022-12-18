@@ -8,7 +8,7 @@ export default async function handler(
   res: NextApiResponse<Response>
 ) {
   if (req.query.id !== undefined) {
-    const query = `query getCharacterData($id: Int = 1, $page: Int = 1) {
+    const query = `query getCharacterData($id: Int = 1, $page: Int = 1, $onList: Boolean, $sort: [MediaSort]) {
         Character(id: $id) {
           id
           name {
@@ -28,8 +28,9 @@ export default async function handler(
             month
             day
           }
-          media(page: $page) {
+          media(page: $page, onList: $onList, sort:$sort) {
             pageInfo {
+                currentPage
               hasNextPage
             }
             edges{
@@ -70,6 +71,9 @@ export default async function handler(
                   userPreferred
                   alternative
                 }
+                image{
+                    medium
+                }
                 description(asHtml:true)
                 languageV2
               }
@@ -81,6 +85,8 @@ export default async function handler(
     const variables = {
       id: req.query.id,
       page: req.query.page ?? 1,
+      onList: req.query.onList === "true" ? true : undefined,
+      sort: req.query.sort || "START_DATE_DESC",
     };
     let data = await makeQuery({
       query,
