@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // darkMode: "class",
+  variants: {
+    extend: {
+      display: ["group-hover"],
+    },
+  },
   safelist: ["text-primary-500"],
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",

@@ -287,7 +287,7 @@ const VideoPlayer = (props: Props) => {
         {/* Bottom Controls */}
         <div className="absolute -bottom-1  left-0 right-0 flex flex-col gap-2 bg-gradient-to-t from-black to-transparent">
           <div
-            className="relative"
+            className="relative group"
             onMouseMove={setTooltip}
             onTouchStart={setTooltip}
           >
@@ -322,6 +322,12 @@ const VideoPlayer = (props: Props) => {
                 )}
               />
             </Slider.Root>
+            <div
+              className="hidden group-hover:flex absolute -top-10  h-4 min-w-min p-4 items-center justify-center rounded-lg bg-primary-500 bg-opacity-40 text-white"
+              style={{ left: `${sliderTooltip.absoluteX}px` }}
+            >
+              {format(sliderTooltip.relativeX * props.playerState.duration)}
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <button
