@@ -133,7 +133,7 @@ div[data-nextjs-scroll-focus-boundary] {
   cursor: pointer;
   padding-inline: 0.5rem;
   padding-block: 0.25rem;
-  color: white;
+  color: var(--clr-primary);
   border-radius: 5rem;
 }
 
