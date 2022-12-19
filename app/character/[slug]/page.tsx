@@ -13,6 +13,7 @@ import { userContext } from "../../UserContext";
 import Select from "../../../primitives/Select";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import cx from "classnames";
+import Loading from "../../loading";
 
 interface Tab {
   title: string;
@@ -187,7 +188,7 @@ const Page = ({ params }: { params: any }) => {
   });
 
   if (isLoading) {
-    return <div className="dark:text-white">Loading ....</div>;
+    return <Loading />;
   }
 
   const availableLanguages = [
