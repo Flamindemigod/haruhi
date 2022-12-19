@@ -19,7 +19,9 @@ const SearchBasic = (props: Props) => {
     queryKey: ["search", searchString, user.userShowAdult],
     queryFn: async () => {
       const res = await fetch(
-        `http://136.243.175.33:8080/api/getSearchResultsBasic?search=${searchString}`
+        `http://136.243.175.33:8080/api/getSearchResultsBasic?search=${searchString}${
+          user.userShowAdult ? "" : "&isAdult=false"
+        }`
       );
       return res.json();
     },
