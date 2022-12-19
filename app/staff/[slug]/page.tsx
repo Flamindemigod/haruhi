@@ -374,225 +374,85 @@ const Page = ({ params }: { params: any }) => {
             {page.data.Staff.characterMedia.edges.map(
               (edge: any, mediaIndex: number) => (
                 <Fragment key={`${edge.node.id} - ${mediaIndex}`}>
-                  {
-                    edge.characters?.map((character: any) => (
-                      <HoverCard
-                        key={`${edge.node.id} - ${character.id}`}
-                        cardDirection={"bottom"}
-                        Trigger={
-                          <Link
-                            href={`character/${character.id}`}
-                            className="caroselCard | focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                  {edge.characters?.map((character: any) => (
+                    <HoverCard
+                      key={`${edge.node.id} - ${character.id}`}
+                      cardDirection={"bottom"}
+                      Trigger={
+                        <Link
+                          href={`character/${character.id}`}
+                          className="caroselCard | focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                        >
+                          <div
+                            className="relative"
+                            style={{
+                              width: "100%",
+                              aspectRatio: "3/4",
+                              overflowY: "hidden",
+                            }}
                           >
+                            <Image
+                              src={character.image.large}
+                              fill
+                              placeholder="blur"
+                              blurDataURL={character.image.medium}
+                              sizes="20vw"
+                              className={"object-cover"}
+                              alt={character.name.userPreferred}
+                            />
+                            <SmallImage el={edge.node} />
+                          </div>
+                          <div>
                             <div
-                              className="relative"
+                              className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
                               style={{
-                                width: "100%",
-                                aspectRatio: "3/4",
-                                overflowY: "hidden",
+                                height: 20,
+                                whiteSpace: "nowrap",
+                                textOverflow: "ellipsis",
                               }}
                             >
-                              <Image
-                                src={character.image.large}
-                                fill
-                                placeholder="blur"
-                                blurDataURL={character.image.medium}
-                                sizes="20vw"
-                                className={"object-cover"}
-                                alt={character.name.userPreferred}
-                              />
-                              <SmallImage el={edge.node} />
-                            </div>
-                            <div>
-                              <div
-                                className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
-                                style={{
-                                  height: 20,
-                                  whiteSpace: "nowrap",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                {character.name.userPreferred}
-                              </div>
-                              <div
-                                className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
-                                style={{
-                                  height: 20,
-                                  whiteSpace: "nowrap",
-                                  textOverflow: "ellipsis",
-                                }}
-                              >
-                                {edge.node.title.userPreferred}
-                              </div>
-                            </div>
-                          </Link>
-                        }
-                        Card={
-                          <div className="text-black dark:text-offWhite-100">
-                            <div>
-                              <h3 className="text-xl ">
-                                {character.name.userPreferred}
-                              </h3>
-                              <h2 className="text-sm ">
-                                {character.name.alternative.map(
-                                  (name: string) => `| ${name} |`
-                                )}
-                              </h2>
+                              {character.name.userPreferred}
                             </div>
                             <div
-                              className="card--description"
-                              dangerouslySetInnerHTML={{
-                                __html: character.description,
+                              className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
+                              style={{
+                                height: 20,
+                                whiteSpace: "nowrap",
+                                textOverflow: "ellipsis",
                               }}
-                            />
-                            <div style={{ marginTop: "2rem" }}>
+                            >
                               {edge.node.title.userPreferred}
-                              {" - "}
-                              {edge.characterRole}
                             </div>
                           </div>
-                        }
-                      />
-                    ))
-                    //   JSON.stringify(edge)
-                    // !!edge.node.characters && (
-                    //   <HoverCard
-                    //     key={edge.node.id}
-                    //     cardDirection={"bottom"}
-                    //     Trigger={
-                    //       <Link
-                    //         href={`character/${edge.node.characters.id}`}
-                    //         className="caroselCard | focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
-                    //       >
-                    //         <div
-                    //           className="relative"
-                    //           style={{
-                    //             width: "100%",
-                    //             aspectRatio: "3/4",
-                    //             overflowY: "hidden",
-                    //           }}
-                    //         >
-                    //           <Image
-                    //             src={edge.node.characters.image.large}
-                    //             fill
-                    //             placeholder="blur"
-                    //             blurDataURL={edge.node.characters.image.medium}
-                    //             sizes="20vw"
-                    //             className={"object-cover"}
-                    //             alt={edge.node.characters.name.userPreferred}
-                    //           />
-                    //           <SmallImage el={edge.node} />
-                    //         </div>
-                    //         <div>
-                    //           <div
-                    //             className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
-                    //             style={{
-                    //               height: 20,
-                    //               whiteSpace: "nowrap",
-                    //               textOverflow: "ellipsis",
-                    //             }}
-                    //           >
-                    //             {edge.node.title.userPreferred}
-                    //           </div>
-                    //           <div
-                    //             className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
-                    //             style={{
-                    //               height: 20,
-                    //               whiteSpace: "nowrap",
-                    //               textOverflow: "ellipsis",
-                    //             }}
-                    //           >
-                    //             {
-                    //               edge.voiceActors.filter(
-                    //                 (va: any) => va.languageV2 === language
-                    //               )[0]?.name.userPreferred
-                    //             }
-                    //           </div>
-                    //         </div>
-                    //       </Link>
-                    //     }
-                    //     Card={
-                    //       <div className="text-black dark:text-offWhite-100">
-                    //         <div>
-                    //           <h3 className="text-xl ">
-                    //             {edge.node.title.userPreferred}
-                    //           </h3>
-                    //           <h2 className="text-sm ">
-                    //             {edge.node.title.english}
-                    //           </h2>
-                    //         </div>
-                    //         <div
-                    //           className="card--description"
-                    //           dangerouslySetInnerHTML={{
-                    //             __html: edge.node.description,
-                    //           }}
-                    //         />
-                    //         <div
-                    //           className="text-primary-500"
-                    //           style={{ marginTop: "2rem" }}
-                    //         >
-                    //           {edge.node.mediaListEntry?.progress
-                    //             ? `Progress: ${edge.node.mediaListEntry.progress} ${
-                    //                 (
-                    //                   edge.node.type === "ANIME"
-                    //                     ? edge.node.episodes
-                    //                     : edge.node.chapters
-                    //                 )
-                    //                   ? "/"
-                    //                   : "+"
-                    //               } ${
-                    //                 (
-                    //                   edge.node.type === "ANIME"
-                    //                     ? edge.node.episodes
-                    //                     : edge.node.chapters
-                    //                 )
-                    //                   ? edge.node.type === "ANIME"
-                    //                     ? edge.node.episodes
-                    //                     : edge.node.chapters
-                    //                   : ""
-                    //               }`
-                    //             : ""}
-                    //         </div>
-                    //         {!!(edge.node.type === "ANIME"
-                    //           ? edge.node.episodes
-                    //           : edge.node.chapters) && (
-                    //           <div className="text-primary-500">
-                    //             {`${
-                    //               edge.node.type === "ANIME"
-                    //                 ? edge.node.episodes
-                    //                 : edge.node.chapters
-                    //             } ${
-                    //               edge.node.type === "MANGA"
-                    //                 ? "Chapters"
-                    //                 : "Episodes"
-                    //             }`}
-                    //           </div>
-                    //         )}
-                    //         <div>
-                    //           {edge.node.nextAiringEpisode && (
-                    //             <div>
-                    //               {`Ep ${edge.node.nextAiringEpisode.episode} airing in `}
-                    //               <Countdown
-                    //                 date={
-                    //                   Date.now() +
-                    //                   edge.node.nextAiringEpisode.timeUntilAiring *
-                    //                     1000
-                    //                 }
-                    //                 renderer={countdownRenderer}
-                    //               />
-                    //             </div>
-                    //           )}
-                    //         </div>
-
-                    //         <div style={{ marginTop: "2rem" }}>
-                    //           {edge.node.format.replaceAll("_", " ")} -{" "}
-                    //           {edge.node.status.replaceAll("_", " ")}
-                    //         </div>
-                    //       </div>
-                    //     }
-                    //   />
-                    // )
-                  }
+                        </Link>
+                      }
+                      Card={
+                        <div className="text-black dark:text-offWhite-100">
+                          <div>
+                            <h3 className="text-xl ">
+                              {character.name.userPreferred}
+                            </h3>
+                            <h2 className="text-sm ">
+                              {character.name.alternative.map(
+                                (name: string) => `| ${name} |`
+                              )}
+                            </h2>
+                          </div>
+                          <div
+                            className="card--description"
+                            dangerouslySetInnerHTML={{
+                              __html: character.description,
+                            }}
+                          />
+                          <div style={{ marginTop: "2rem" }}>
+                            {edge.node.title.userPreferred}
+                            {" - "}
+                            {edge.characterRole}
+                          </div>
+                        </div>
+                      }
+                    />
+                  ))}
                 </Fragment>
               )
             )}
