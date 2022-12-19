@@ -8,6 +8,7 @@ import { median } from "../../utils/median";
 import Selector from "./Selector";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import cx from "classnames";
+import VideoPlayerSkeleton from "../Anime/VideoPlayerSkeleton";
 type Props = {
   entry: any;
 };
@@ -157,7 +158,9 @@ const Reader = (props: Props) => {
       <ToastPrimitive.Provider>
         {(mangaChapters.isFetching || mangaChapters.data?.length) && (
           <>
-            {mangaPages.isSuccess && (
+            {mangaChapters.isFetching ? (
+              <VideoPlayerSkeleton />
+            ) : (
               <div className="">
                 <ComicViewer
                   onChangeCurrentPage={(e) => setProgress(e)}
