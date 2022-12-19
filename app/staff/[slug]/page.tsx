@@ -380,54 +380,52 @@ const Page = ({ params }: { params: any }) => {
                         key={`${edge.node.id} - ${character.id}`}
                         cardDirection={"bottom"}
                         Trigger={
-                          <>
-                            <Link
-                              href={`character/${character.id}`}
-                              className="caroselCard | focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                          <Link
+                            href={`character/${character.id}`}
+                            className="caroselCard | focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                          >
+                            <div
+                              className="relative"
+                              style={{
+                                width: "100%",
+                                aspectRatio: "3/4",
+                                overflowY: "hidden",
+                              }}
                             >
+                              <Image
+                                src={character.image.large}
+                                fill
+                                placeholder="blur"
+                                blurDataURL={character.image.medium}
+                                sizes="20vw"
+                                className={"object-cover"}
+                                alt={character.name.userPreferred}
+                              />
+                              <SmallImage el={edge.node} />
+                            </div>
+                            <div>
                               <div
-                                className="relative"
+                                className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
                                 style={{
-                                  width: "100%",
-                                  aspectRatio: "3/4",
-                                  overflowY: "hidden",
+                                  height: 20,
+                                  whiteSpace: "nowrap",
+                                  textOverflow: "ellipsis",
                                 }}
                               >
-                                <Image
-                                  src={character.image.large}
-                                  fill
-                                  placeholder="blur"
-                                  blurDataURL={character.image.medium}
-                                  sizes="20vw"
-                                  className={"object-cover"}
-                                  alt={character.name.userPreferred}
-                                />
-                                <SmallImage el={edge.node} />
+                                {character.name.userPreferred}
                               </div>
-                              <div>
-                                <div
-                                  className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
-                                  style={{
-                                    height: 20,
-                                    whiteSpace: "nowrap",
-                                    textOverflow: "ellipsis",
-                                  }}
-                                >
-                                  {character.name.userPreferred}
-                                </div>
-                                <div
-                                  className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
-                                  style={{
-                                    height: 20,
-                                    whiteSpace: "nowrap",
-                                    textOverflow: "ellipsis",
-                                  }}
-                                >
-                                  {edge.node.title.userPreferred}
-                                </div>
+                              <div
+                                className="text-sm w-full overflow-hidden whitespace-nowrap text-black dark:text-offWhite-100"
+                                style={{
+                                  height: 20,
+                                  whiteSpace: "nowrap",
+                                  textOverflow: "ellipsis",
+                                }}
+                              >
+                                {edge.node.title.userPreferred}
                               </div>
-                            </Link>
-                          </>
+                            </div>
+                          </Link>
                         }
                         Card={
                           <div className="text-black dark:text-offWhite-100">
