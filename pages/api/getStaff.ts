@@ -8,75 +8,82 @@ export default async function handler(
   res: NextApiResponse<Response>
 ) {
   if (req.query.id !== undefined) {
-    const query = `query getStaffData($id: Int = 119331, $page: Int = 1) {
-        Staff(id: $id) {
-          name {
-            userPreferred
-            alternative
+    const query = `query getStaffData($id: Int = 119331, $page: Int = 1, $sort: [MediaSort], $onList: Boolean) {
+      Staff(id: $id) {
+        name {
+          userPreferred
+          alternative
+        }
+        languageV2
+        image {
+          large
+          medium
+        }
+        description(asHtml: true)
+        dateOfBirth {
+          year
+          month
+          day
+        }
+        age
+        gender
+        yearsActive
+        homeTown
+        bloodType
+        characterMedia(sort: $sort, perPage: 25, page: $page, onList: $onList) {
+          pageInfo {
+            currentPage
+            hasNextPage
           }
-          languageV2
-          image {
-            large
-            medium
-          }
-          description(asHtml: true)
-          dateOfBirth {
-            year
-            month
-            day
-          }
-          age
-          gender
-          yearsActive
-          homeTown
-          bloodType
-          characterMedia(sort: START_DATE_DESC, perPage: 25, page: $page) {
-            pageInfo {
-              currentPage
-              hasNextPage
-            }
-            edges {
-              node {
-                mediaListEntry {
-                  status
-                  progress
-                }
-                id
-                title {
-                  userPreferred
-                  english
-                }
-                coverImage {
-                  large
-                }
-                chapters
-                format
-                type
-                nextAiringEpisode{
-                    airingAt
-                    timeUntilAiring
-                    episode
-                  }
-                }
+          edges {
+            node {
+              mediaListEntry {
+                status
+                progress
               }
-              characters {
-                name {
-                  userPreferred
-                  alternative
-                }
-                description
-                image {
-                  large
-                }
+              id
+              title {
+                userPreferred
+                english
               }
-              characterRole
+              coverImage {
+                large
+                medium
+              }
+              status
+              format
+              chapters
+              format
+              type
+              nextAiringEpisode {
+                airingAt
+                timeUntilAiring
+                episode
+              }
             }
+            characters {
+              id
+              name {
+                userPreferred
+                alternative
+              }
+              description(asHtml:true)
+              image {
+                large
+                medium
+              }
+            }
+            characterRole
           }
         }
-      }`;
+      }
+    }
+    `;
     const variables = {
       id: req.query.id,
       page: req.query.page ?? 1,
+      sort: req.query.sort || "START_DATE_DESC",
+      onList: req.query.onList === "true" ? true : undefined,
     };
     let data = await makeQuery({
       query,
