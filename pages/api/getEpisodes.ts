@@ -11,11 +11,11 @@ export default async function handler(
     if (req.query.idMal !== undefined) {
       const malTitle = await getMalTitle("anime", String(req.query.idMal));
       const gogoanime = new ANIME.Gogoanime();
-
       const consumetAnimeid = await gogoanime.search(malTitle);
+      console.log(malTitle);
 
       const consumetAnimeIdResults = consumetAnimeid.results.filter(
-        (el: any) => el.subOrDub === (req.query.format || "sub")
+        (el: any) => el.subOrDub === (req.query.format ?? "sub")
       );
       const consumetAnimeInfo = await gogoanime.fetchAnimeInfo(
         consumetAnimeIdResults[0].id
