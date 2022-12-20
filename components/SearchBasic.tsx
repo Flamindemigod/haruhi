@@ -59,6 +59,7 @@ const SearchBasic = (props: Props) => {
               <div className="bg-white/50 dark:bg-black/50 p-2 flex flex-col gap-2 h-full">
                 {data?.anime.results.map((result: any) => (
                   <Link
+                    key={result.id}
                     onClick={() => {
                       props.setIsOpen(false);
                     }}
@@ -91,6 +92,7 @@ const SearchBasic = (props: Props) => {
               <div className="bg-white/50 dark:bg-black/50 p-2 flex flex-col gap-2 h-full">
                 {data?.manga.results.map((result: any) => (
                   <Link
+                    key={result.id}
                     onClick={() => {
                       props.setIsOpen(false);
                     }}
@@ -123,6 +125,7 @@ const SearchBasic = (props: Props) => {
               <div className="bg-white/50 dark:bg-black/50 p-2 flex flex-col gap-2 h-full">
                 {data?.characters.results.map((result: any) => (
                   <Link
+                    key={result.id}
                     onClick={() => {
                       props.setIsOpen(false);
                     }}
@@ -152,6 +155,7 @@ const SearchBasic = (props: Props) => {
               <div className="bg-white/50 dark:bg-black/50 p-2 flex flex-col gap-2 h-full">
                 {data?.staff.results.map((result: any) => (
                   <Link
+                    key={result.id}
                     onClick={() => {
                       props.setIsOpen(false);
                     }}
@@ -170,9 +174,11 @@ const SearchBasic = (props: Props) => {
                         {result.name.userPreferred}
                       </div>
                       <div className="text-offWhite-800 dark:text-offWhite-100">
-                        {result.primaryOccupations.map((occupation: string) => (
-                          <span>| {occupation} |</span>
-                        ))}
+                        {result.primaryOccupations.map(
+                          (occupation: string, index: number) => (
+                            <span key={index}>| {occupation} |</span>
+                          )
+                        )}
                       </div>
                     </div>
                   </Link>
@@ -186,6 +192,7 @@ const SearchBasic = (props: Props) => {
               <div className="bg-white/50 dark:bg-black/50 p-2 flex flex-col gap-2 h-full">
                 {data?.studios.results.map((result: any) => (
                   <Link
+                    key={result.id}
                     onClick={() => {
                       props.setIsOpen(false);
                     }}
