@@ -29,7 +29,7 @@ const Drawer = (props: Props) => {
               forceMount
               style={{ width: "80vw" }}
               className={cx(
-                "fixed z-50 block",
+                "fixed z-50 block overflow-y-auto",
                 "max-w-xl rounded-lg p-4",
                 "top-0 left-0 bottom-0",
                 "bg-white dark:bg-offWhite-800",

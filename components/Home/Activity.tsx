@@ -44,7 +44,7 @@ const Activity = async () => {
         </button>
       }
       content={
-        <>
+        <div>
           <h1 className="text-xl dark:text-offWhite-100">Activity</h1>
           <div className="flex flex-col gap-2 p-2 w-full h-full overflow-auto dark:text-offWhite-100">
             {activityFeed.map((data: any) => (
@@ -86,7 +86,7 @@ const Activity = async () => {
               </div>
             ))}
           </div>
-        </>
+        </div>
       }
     />
   );
