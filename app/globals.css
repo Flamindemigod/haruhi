@@ -100,6 +100,9 @@ div[data-nextjs-scroll-focus-boundary] {
 .description--container {
   pointer-events: none;
 }
+.description--container a {
+  pointer-events: auto;
+}
 
 .description--container.readMore {
   max-height: 170px;
