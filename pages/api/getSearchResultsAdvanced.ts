@@ -102,7 +102,26 @@ export default async function handler(
       };
       variables.isAdult = parseBoolOrUndefined(String(req.query.isAdult));
       variables.onList = parseBoolOrUndefined(String(req.query.onList));
-
+      variables.genres = !!req.query.genres
+        ? String(req.query.genres)
+            .split(",")
+            .filter((el) => !(el === "true" || el === "false"))
+        : undefined;
+      variables.excludedGenres = !!req.query.excludedGenres
+        ? String(req.query.excludedGenres)
+            .split(",")
+            .filter((el) => !(el === "true" || el === "false"))
+        : undefined;
+      variables.tags = !!req.query.tags
+        ? String(req.query.tags)
+            .split(",")
+            .filter((el) => !(el === "true" || el === "false"))
+        : undefined;
+      variables.excludedTags = !!req.query.excludedTags
+        ? String(req.query.excludedTags)
+            .split(",")
+            .filter((el) => !(el === "true" || el === "false"))
+        : undefined;
       variables.yearLesser = req.query.yearLesser
         ? parseInt(String(req.query.yearLesser))
         : undefined;
@@ -136,7 +155,7 @@ export default async function handler(
       break;
     case "STAFF":
       query = `query ($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [StaffSort] = [FAVOURITES_DESC]) {
-            Page(page: $page, perPage: 20) {
+            Page(page: $page, perPage: 50) {
               pageInfo {
                 total
                 perPage
@@ -148,7 +167,11 @@ export default async function handler(
                 id
                 name {
                   userPreferred
+                  alternative
                 }
+                languageV2
+                primaryOccupations
+                description(asHtml:true)
                 image {
                   large
                 }
@@ -157,15 +180,14 @@ export default async function handler(
           }`;
       variables = {
         page: req.query.page,
-        id: req.query.id,
         search: req.query.search,
-        isBirthday: req.query.isBirthday,
+        isBirthday: parseBoolOrUndefined(String(req.query.isBirthday)),
         sort: req.query.sort,
       };
       break;
     case "CHARACTER":
       query = `query ($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [CharacterSort] = [FAVOURITES_DESC]) {
-        Page(page: $page, perPage: 20) {
+        Page(page: $page, perPage: 50) {
           pageInfo {
             total
             perPage
@@ -177,7 +199,9 @@ export default async function handler(
             id
             name {
               userPreferred
+              alternative
             }
+            description(asHtml:true)
             image {
               large
             }
@@ -186,9 +210,8 @@ export default async function handler(
       }`;
       variables = {
         page: req.query.page,
-        id: req.query.id,
         search: req.query.search,
-        isBirthday: req.query.isBirthday,
+        isBirthday: parseBoolOrUndefined(String(req.query.isBirthday)),
         sort: req.query.sort,
       };
       break;

@@ -9,6 +9,10 @@ import Filter from "../../components/Search/Filters/Anime-Manga/Filter";
 import SearchResultsAnime from "../../components/Search/SearchResultsAnime";
 import Grid from "../../components/Search/Grid";
 import SearchResultsManga from "../../components/Search/SearchResultsManga";
+import FilterStaffCharacter from "../../components/Search/Filters/Staff-Character/Filter";
+import SearchResultsStaff from "../../components/Search/SearchResultsStaff";
+import SearchResultsCharacter from "../../components/Search/SearchResultsCharacter";
+
 interface Tab {
   title: string;
   value: string;
@@ -148,6 +152,7 @@ const page = () => {
   const [sort, setSort] = useState<string>("SEARCH_MATCH");
   const [filters, setFilters] = useState<any>({
     isAdult: undefined,
+    isBirthday: undefined,
     format: "",
     status: "",
     countryOfOrigin: "",
@@ -246,6 +251,13 @@ const page = () => {
             {(type === "ANIME" || type === "MANGA") && (
               <Filter type={type} filters={filters} setFilter={setFilters} />
             )}
+            {(type === "CHARACTER" || type === "STAFF") && (
+              <FilterStaffCharacter
+                type={type}
+                filters={filters}
+                setFilter={setFilters}
+              />
+            )}
           </div>
           {/* Content */}
           <div
@@ -263,6 +275,20 @@ const page = () => {
               )}
               {type === "MANGA" && (
                 <SearchResultsManga
+                  searchString={searchString}
+                  filters={filters}
+                  sort={sort}
+                />
+              )}
+              {type === "STAFF" && (
+                <SearchResultsStaff
+                  searchString={searchString}
+                  filters={filters}
+                  sort={sort}
+                />
+              )}
+              {type === "CHARACTER" && (
+                <SearchResultsCharacter
                   searchString={searchString}
                   filters={filters}
                   sort={sort}
