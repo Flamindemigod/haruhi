@@ -6,7 +6,7 @@ type Props = {
 
 const Grid = (props: Props) => {
   return (
-    <div className="mt-4 grid justify-center items-center gap-4 w-full p-2 grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-10 3xl:grid-cols-12">
+    <div className="mt-4 w-max grid justify-center items-center gap-4 p-2 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7">
       {props.children}
     </div>
   );

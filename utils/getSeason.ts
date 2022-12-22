@@ -39,7 +39,10 @@ const getSeason = () => {
   let season = seasonArray
     .filter(({ date }) => date <= currentTime.getTime())
     .slice(-1)[0] || { name: "WINTER" };
-  return { season: season.name, year: currentYear };
+  return {
+    season: season.name,
+    year: season.name === "WINTER" ? currentYear + 1 : currentYear,
+  };
 };
 
 export default getSeason;

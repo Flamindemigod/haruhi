@@ -80,6 +80,7 @@ const Card = (props: Props) => {
               alt={props.contentTitle}
             />
             {(props.contentProgress &&
+              props.contentProgress !== props.contentEpisodes &&
               props.contentProgress !== props.contentNextAiringEpisode - 1 &&
               props.contentType !== "MANGA" && (
                 <div
