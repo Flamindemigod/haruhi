@@ -248,7 +248,12 @@ const Page = ({ params }: { params: any }) => {
               <></>
             )}
             {data?.pages[0].data.Staff.description ? (
-              <Description text={data?.pages[0].data.Staff.description} />
+              <Description
+                text={data?.pages[0].data.Staff.description.replaceAll(
+                  "href=",
+                  `target="_blank" href=`
+                )}
+              />
             ) : (
               <></>
             )}
