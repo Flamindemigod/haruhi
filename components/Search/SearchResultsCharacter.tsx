@@ -36,7 +36,6 @@ const SearchResultsCharacter = (props: Props) => {
       return res.json();
     },
     getNextPageParam: (lastPage, pages) => {
-      console.log(lastPage);
       return lastPage.Page.pageInfo.hasNextPage
         ? lastPage.Page.pageInfo.currentPage + 1
         : false;
@@ -48,6 +47,7 @@ const SearchResultsCharacter = (props: Props) => {
         <Fragment key={index}>
           {page.Page.characters.map((character: any) => (
             <HoverCard
+              key={character.id}
               cardDirection="bottom"
               Trigger={
                 <Link href={`/character/${character.id}`}>

@@ -79,7 +79,6 @@ const SearchResultsManga = (props: Props) => {
       return res.json();
     },
     getNextPageParam: (lastPage, pages) => {
-      console.log(lastPage);
       return lastPage.Page.pageInfo.hasNextPage
         ? lastPage.Page.pageInfo.currentPage + 1
         : false;

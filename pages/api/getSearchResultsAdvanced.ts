@@ -26,7 +26,6 @@ export default async function handler(
   }
   let query = "";
   var variables: any = {};
-  console.log(req.query);
   switch (req.query.type) {
     case "ANIME":
     case "MANGA":
@@ -220,7 +219,6 @@ export default async function handler(
       res.status(400).json({ error: "type must be specified" });
       return;
   }
-  console.log(variables);
   let data = await makeQuery({
     query,
     variables,

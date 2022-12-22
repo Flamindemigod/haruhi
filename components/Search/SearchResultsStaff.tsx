@@ -31,7 +31,6 @@ const SearchResultsStaff = (props: Props) => {
       return res.json();
     },
     getNextPageParam: (lastPage, pages) => {
-      console.log(lastPage);
       return lastPage.Page.pageInfo.hasNextPage
         ? lastPage.Page.pageInfo.currentPage + 1
         : false;
@@ -43,6 +42,7 @@ const SearchResultsStaff = (props: Props) => {
         <Fragment key={index}>
           {page.Page.staff.map((staff: any) => (
             <HoverCard
+              key={staff.id}
               cardDirection="bottom"
               Trigger={
                 <Link href={`/staff/${staff.id}`}>
