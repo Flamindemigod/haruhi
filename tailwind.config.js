@@ -1,10 +1,23 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
+  // darkMode: "class",
+  variants: {
+    extend: {
+      display: ["group-hover"],
+    },
+  },
+  safelist: ["text-primary-500"],
   content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
+    "./primitives/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
+      fontFamily: {
+        georama: ["Georama", "sans-serif"],
+      },
       colors: {
         secondary: {
           100: "#d9edfd",
@@ -15,7 +28,7 @@ module.exports = {
           600: "#3584c4",
           700: "#286393",
           800: "#1a4262",
-          900: "#0d2131"
+          900: "#0d2131",
         },
         primary: {
           100: "#f4cce1",
@@ -26,9 +39,10 @@ module.exports = {
           600: "#a20056",
           700: "#790040",
           800: "#51002b",
-          900: "#280015"
+          900: "#280015",
         },
         offWhite: {
+          50: "#efefef",
           100: "#d5d5d5",
           200: "#ababab",
           300: "#828282",
@@ -37,11 +51,13 @@ module.exports = {
           600: "#252525",
           700: "#1c1c1c",
           800: "#121212",
-          900: "#090909"
+          900: "#090909",
         },
-
-      }
+      },
     },
   },
-  plugins: [],
-}
+  plugins: [
+    // Initialize with default values (see options below)
+    require("tailwindcss-radix")(),
+  ],
+};

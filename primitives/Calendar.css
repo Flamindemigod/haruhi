@@ -1,0 +1,31 @@
+.react-calendar {
+  background: inherit;
+  border: none;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus,
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #4f4f4f4f;
+}
+
+.react-calendar__tile--now {
+  background-color: var(--clr-primary);
+  color: white;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background-color: var(--clr-primary);
+  color: white;
+}
+
+abbr:where([title]) {
+  text-decoration: none;
+}
+
+.react-calendar__navigation button:disabled,
+.react-calendar__tile:disabled {
+  background-color: rgba(128, 128, 128, 0.37);
+}
