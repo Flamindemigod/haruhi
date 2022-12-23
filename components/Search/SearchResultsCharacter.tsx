@@ -5,6 +5,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import HoverCard from "../../primitives/Card";
 import Image from "next/image";
 import Link from "next/link";
+import useDebounce from "../../utils/useDebounce";
 
 type Props = {
   searchString: string;
@@ -13,12 +14,13 @@ type Props = {
 };
 
 const SearchResultsCharacter = (props: Props) => {
+  const debouncedFilter = useDebounce(props.filters, 1000);
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: [
       "characterSearch",
       props.searchString,
       props.sort,
-      props.filters,
+      debouncedFilter,
     ],
 
     queryFn: async ({ pageParam = 1 }) => {
@@ -28,8 +30,8 @@ const SearchResultsCharacter = (props: Props) => {
             ? props.sort
             : "FAVOURITES_DESC"
         }${!!props.searchString ? `&search=${props.searchString}` : ""}${
-          props.filters.isBirthday !== undefined
-            ? `&isBirthday=${props.filters.isBirthday}`
+          debouncedFilter.isBirthday !== undefined
+            ? `&isBirthday=${debouncedFilter.isBirthday}`
             : ""
         }`
       );
