@@ -12,7 +12,7 @@ const SearchBasicDialog = () => {
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
       <DialogPrimitive.Trigger asChild>
-        <button className="btn | flex gap-2 items-center dark:text-white bg-black/25 dark:bg-black/50 border-white border">
+        <button className="btn | flex gap-2 items-center dark:text-white bg-black/25 dark:bg-black/75 border-white border">
           Search <MdSearch />
         </button>
       </DialogPrimitive.Trigger>
