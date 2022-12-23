@@ -8,7 +8,7 @@ export default function FixLoading() {
   const router = useRouter();
 
   useEffect(() => {
-    const timeouts = [100, 500, 1000, 2000, 3000, 5000, 10000].map((t) =>
+    const timeouts = [100].map((t) =>
       setTimeout(() => router.replace(String(path)), t)
     );
     return () => {
