@@ -271,18 +271,15 @@ const Page = ({ params }: { params: any }) => {
                 contentTitle={edge.node.title.userPreferred}
                 contentTitleEnglish={edge.node.title.english}
                 contentSubtitle={edge.node.description}
-                contentProgress={edge.progress}
+                contentProgress={edge.node.mediaListEntry?.progress}
                 contentEpisodes={
                   edge.node.type === "MANGA"
                     ? edge.node.chapters
                     : edge.node.episodes
                 }
-                contentNextAiringEpisode={
-                  edge.node.nextAiring && edge.node.nextAiring.node.episode
-                }
+                contentNextAiringEpisode={edge.node.nextAiringEpisode?.episode}
                 contentNextAiringEpisodeTime={
-                  edge.node.nextAiring &&
-                  edge.node.nextAiring.node.timeUntilAiring
+                  edge.node.nextAiringEpisode?.timeUntilAiring
                 }
                 contentFormat={edge.node.format.replaceAll("_", " ")}
                 contentType={edge.node.type}
