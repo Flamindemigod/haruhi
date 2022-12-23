@@ -208,7 +208,7 @@ const Sidebar = ({ anime }: { anime: any }) => {
                 })
                 .map((edge: any) => (
                   <Link key={edge.node.id} href={`/studio/${edge.node.id}`}>
-                    <div className="">{edge.node.name}</div>
+                    <div className="hover:underline">{edge.node.name}</div>
                   </Link>
                 ))}
             </div>
@@ -236,7 +236,7 @@ const Sidebar = ({ anime }: { anime: any }) => {
                 })
                 .map((edge: any) => (
                   <Link key={edge.node.id} href={`/studio/${edge.node.id}`}>
-                    <div className="">{edge.node.name}</div>
+                    <div className="hover:underline">{edge.node.name}</div>
                   </Link>
                 ))}
             </div>
