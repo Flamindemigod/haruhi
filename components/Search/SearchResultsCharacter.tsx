@@ -25,7 +25,7 @@ const SearchResultsCharacter = (props: Props) => {
 
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `http://136.243.175.33:8080/api/getSearchResultsAdvanced?page=${pageParam}&type=CHARACTER&sort=${
+        `https://haruhi.flamindemigod.com/api/getSearchResultsAdvanced?page=${pageParam}&type=CHARACTER&sort=${
           !!props.searchString || props.sort !== "SEARCH_MATCH"
             ? props.sort
             : "FAVOURITES_DESC"

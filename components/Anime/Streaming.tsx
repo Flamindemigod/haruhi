@@ -77,7 +77,7 @@ const Streaming = (props: Props) => {
     queryKey: ["episodeSubList", props.entry.idMal],
     queryFn: async () => {
       const data = await fetch(
-        `http://136.243.175.33:8080/api/getEpisodes?idMal=${props.entry.idMal}&format=sub`
+        `https://haruhi.flamindemigod.com/api/getEpisodes?idMal=${props.entry.idMal}&format=sub`
       );
       return data.json();
     },
@@ -91,7 +91,7 @@ const Streaming = (props: Props) => {
     queryKey: ["episodeDubList", props.entry.idMal],
     queryFn: async () => {
       const data = await fetch(
-        `http://136.243.175.33:8080/api/getEpisodes?idMal=${props.entry.idMal}&format=dub`
+        `https://haruhi.flamindemigod.com/api/getEpisodes?idMal=${props.entry.idMal}&format=dub`
       );
       return data.json();
     },
@@ -102,7 +102,7 @@ const Streaming = (props: Props) => {
     queryKey: ["episode", episodeID],
     queryFn: async () => {
       const data = await fetch(
-        `http://136.243.175.33:8080/api/getStream?id=${episodeID}`
+        `https://haruhi.flamindemigod.com/api/getStream?id=${episodeID}`
       );
       return data.json();
     },
@@ -220,7 +220,7 @@ const Streaming = (props: Props) => {
     rewatches = 0
   ) => {
     const data = await fetch(
-      `http://136.243.175.33:8080/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${episode}&repeat=${rewatches}`
+      `https://haruhi.flamindemigod.com/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${episode}&repeat=${rewatches}`
     );
     queryClient.invalidateQueries({
       queryKey: ["mediaListEntry"],

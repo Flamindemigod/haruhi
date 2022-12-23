@@ -8,7 +8,7 @@ const Trending = ({ season, type }: { season?: boolean; type: string }) => {
   const [animeArray, setAnimeArray] = useState<any[]>([]);
   const fetchTrending = async () => {
     const data = await fetch(
-      `http://136.243.175.33:8080/api/getTrending?type=${type}${
+      `https://haruhi.flamindemigod.com/api/getTrending?type=${type}${
         season ? "&season" : ""
       }`
     ).then((res) => res.json());
