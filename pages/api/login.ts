@@ -12,8 +12,8 @@ export default async function handler(
     },
     body: JSON.stringify({
       grant_type: "authorization_code",
-      client_id: 9465,
-      client_secret: "c9m4A289qNqPs91nZtQBBS0OTvgTF76pBULxB65P",
+      client_id: 8343,
+      client_secret: "yH9BxKnQLgxeLvNIwadIdKgx8OlwYjJ6qnR6iuXd",
       redirect_uri: "https://haruhi.flamindemigod.com/api/login",
       code: req.query.code,
     }),
