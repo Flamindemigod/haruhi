@@ -19,11 +19,8 @@ type Props = {
 
 const Select = (props: Props) => {
   useEffect(() => {
-    props.onValueChange(
-      props.values.filter((value) => value.value === props.value).length
-        ? props.value
-        : props.defaultValue
-    );
+    props.values.filter((value) => value.value === props.value).length === 0 &&
+      props.onValueChange(props.defaultValue);
   }, [props.values]);
 
   return (
