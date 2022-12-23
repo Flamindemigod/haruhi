@@ -6,7 +6,7 @@ const SignIn = () => {
     <button className="btn flex justify-center items-center bg-primary-500">
       <Link
         href={
-          "https://anilist.co/api/v2/oauth/authorize?client_id=9465&redirect_uri=http://136.243.175.33:8080/api/login&response_type=code"
+          "https://anilist.co/api/v2/oauth/authorize?client_id=9465&redirect_uri=https://haruhi.flamindemigod.com/api/login&response_type=code"
         }
         className={"text-white flex gap-2 justify-center items-center"}
       >

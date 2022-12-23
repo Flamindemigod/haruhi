@@ -17,7 +17,7 @@ const Lists = (props: Props) => {
     queryKey: ["Seasonal", props.season, props.year, user.userShowAdult],
     queryFn: async () => {
       const res = await fetch(
-        `http://136.243.175.33:8080/api/getSeasonal?season=${props.season}&year=${props.year}&adult=${user.userShowAdult}`
+        `https://haruhi.flamindemigod.com/api/getSeasonal?season=${props.season}&year=${props.year}&adult=${user.userShowAdult}`
       );
       return res.json();
     },

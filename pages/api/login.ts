@@ -14,7 +14,7 @@ export default async function handler(
       grant_type: "authorization_code",
       client_id: 9465,
       client_secret: "c9m4A289qNqPs91nZtQBBS0OTvgTF76pBULxB65P",
-      redirect_uri: "http://136.243.175.33:8080/api/login",
+      redirect_uri: "https://haruhi.flamindemigod.com/api/login",
       code: req.query.code,
     }),
   };

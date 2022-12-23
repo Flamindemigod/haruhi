@@ -28,7 +28,7 @@ const Reader = (props: Props) => {
     ],
     queryFn: async () => {
       const data = await fetch(
-        `http://136.243.175.33:8080/api/getMangaChapters?title=${
+        `https://haruhi.flamindemigod.com/api/getMangaChapters?title=${
           props.entry.title.english || props.entry.title.romaji
         }`
       );
@@ -67,7 +67,7 @@ const Reader = (props: Props) => {
     queryKey: ["mangaPanels", chapterId],
     queryFn: async () => {
       const data = await fetch(
-        `http://136.243.175.33:8080/api/getMangaPanels?id=${chapterId}`
+        `https://haruhi.flamindemigod.com/api/getMangaPanels?id=${chapterId}`
       );
       return data.json();
     },
@@ -80,7 +80,7 @@ const Reader = (props: Props) => {
     rewatches = 0
   ) => {
     const data = await fetch(
-      `http://136.243.175.33:8080/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${Math.floor(
+      `https://haruhi.flamindemigod.com/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${Math.floor(
         chapterIndex + 1
       )}&repeat=${rewatches}`
     );

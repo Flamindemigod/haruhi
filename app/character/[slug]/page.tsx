@@ -174,7 +174,7 @@ const Page = ({ params }: { params: any }) => {
     queryKey: ["Character", params.slug, onList, sort],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `http://136.243.175.33:8080/api/getCharacter?id=${
+        `https://haruhi.flamindemigod.com/api/getCharacter?id=${
           params.slug
         }&page=${pageParam}${onList ? "&onList=true" : ""}&sort=${sort}`
       );

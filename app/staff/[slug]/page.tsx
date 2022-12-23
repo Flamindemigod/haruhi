@@ -176,7 +176,7 @@ const Page = ({ params }: { params: any }) => {
     queryKey: ["Staff", params.slug, onList, sort],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `http://136.243.175.33:8080/api/getStaff?id=${
+        `https://haruhi.flamindemigod.com/api/getStaff?id=${
           params.slug
         }&page=${pageParam}${onList ? "&onList=true" : ""}&sort=${sort}`
       );

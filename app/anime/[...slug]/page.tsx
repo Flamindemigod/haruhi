@@ -18,7 +18,7 @@ const Page = async ({ params }: { params: Params }) => {
   const nextCookies = cookies();
   const fetchEntry = async () => {
     const data = await fetch(
-      `http://136.243.175.33:8080/api/getEntry?id=${params.slug[0]}`,
+      `https://haruhi.flamindemigod.com/api/getEntry?id=${params.slug[0]}`,
       {
         headers: {
           cookie: nextCookies.get("access_token")

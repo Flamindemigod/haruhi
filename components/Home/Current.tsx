@@ -11,7 +11,7 @@ const Current = ({ type }: { type: string }) => {
 
   const fetchUserData = async () => {
     const data = await fetch(
-      `http://136.243.175.33:8080/api/getList?username=${user.userName}&type=${type}&status=CURRENT`
+      `https://haruhi.flamindemigod.com/api/getList?username=${user.userName}&type=${type}&status=CURRENT`
     ).then((res) => res.json());
     setAnimeArray(data.Page.mediaList);
   };

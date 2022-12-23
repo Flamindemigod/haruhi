@@ -47,7 +47,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       console.error(error);
       return null;
     }
-    const userData = await fetch("http://136.243.175.33:8080/api/getUser")
+    const userData = await fetch("https://haruhi.flamindemigod.com/api/getUser")
       .then(handleResponse)
       .catch(handleError);
     if (userData) {
