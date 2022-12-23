@@ -1,9 +1,10 @@
 import DefaultTags from "../../DefaultTags";
 
-export default async function Head({ params }: { params: { slug: string } }) {
+export default async function Head({ params }: { params: { slug: string[] } }) {
   const data = await fetch(
-    `http://136.243.175.33:8080/api/getEntry?id=${params.slug}`
+    `http://136.243.175.33:8080/api/getEntry?id=${params.slug[0]}`
   ).then((res) => res.json());
+
   return (
     <>
       <DefaultTags />

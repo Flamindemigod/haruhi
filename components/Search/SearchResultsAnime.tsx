@@ -91,7 +91,7 @@ const SearchResultsAnime = (props: Props) => {
           {page.Page.media.map((media: any) => (
             <Card
               key={media.id}
-              href={`${media.type.toLowerCase()}/${media.id}`}
+              href={`/${media.type.toLowerCase()}/${media.id}`}
               imgSrc={media.coverImage.large}
               imgSrcSmall={media.coverImage.medium}
               contentEpisodes={
