@@ -3,6 +3,7 @@
 import { Fragment } from "react";
 import Card from "../CardMain";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import useDebounce from "../../utils/useDebounce";
 
 type Props = {
   searchString: string;
@@ -11,8 +12,9 @@ type Props = {
 };
 
 const SearchResultsManga = (props: Props) => {
+  const debouncedFilter = useDebounce(props.filters, 1000);
   const { data, hasNextPage, fetchNextPage } = useInfiniteQuery({
-    queryKey: ["mangaSearch", props.searchString, props.sort, props.filters],
+    queryKey: ["mangaSearch", props.searchString, props.sort, debouncedFilter],
 
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
@@ -21,58 +23,66 @@ const SearchResultsManga = (props: Props) => {
             ? props.sort
             : "POPULARITY_DESC"
         }${!!props.searchString ? `&search=${props.searchString}` : ""}${
-          props.filters.isAdult !== undefined
-            ? `&isAdult=${props.filters.isAdult}`
-            : ""
-        }${!!props.filters.format ? `&format=${props.filters.format}` : ""}${
-          !!props.filters.status ? `&status=${props.filters.status}` : ""
-        }${
-          !!props.filters.countryOfOrigin
-            ? `&countryOfOrigin=${props.filters.countryOfOrigin}`
-            : ""
-        }${!!props.filters.season ? `&season=${props.filters.season}` : ""}${
-          !!props.filters.seasonYear
-            ? `&seasonYear=${props.filters.seasonYear}`
+          debouncedFilter.isAdult !== undefined
+            ? `&isAdult=${debouncedFilter.isAdult}`
             : ""
         }${
-          props.filters.onList !== undefined
-            ? `&onList=${props.filters.onList}`
+          !!debouncedFilter.format ? `&format=${debouncedFilter.format}` : ""
+        }${
+          !!debouncedFilter.status ? `&status=${debouncedFilter.status}` : ""
+        }${
+          !!debouncedFilter.countryOfOrigin
+            ? `&countryOfOrigin=${debouncedFilter.countryOfOrigin}`
             : ""
         }${
-          props.filters.yearLesser !== new Date().getFullYear() + 1 ||
-          props.filters.yearGreater !== 1970
-            ? `&yearLesser=${props.filters.yearLesser}0000`
+          !!debouncedFilter.season ? `&season=${debouncedFilter.season}` : ""
+        }${
+          !!debouncedFilter.seasonYear
+            ? `&seasonYear=${debouncedFilter.seasonYear}`
             : ""
         }${
-          props.filters.yearGreater !== 1970 ||
-          props.filters.yearLesser !== new Date().getFullYear() + 1
-            ? `&yearGreater=${props.filters.yearGreater}0000`
+          debouncedFilter.onList !== undefined
+            ? `&onList=${debouncedFilter.onList}`
             : ""
         }${
-          props.filters.chapterLesser !== 500
-            ? `&chapterLesser=${props.filters.chapterLesser}`
+          debouncedFilter.yearLesser !== new Date().getFullYear() + 1 ||
+          debouncedFilter.yearGreater !== 1970
+            ? `&yearLesser=${debouncedFilter.yearLesser}0000`
             : ""
         }${
-          props.filters.chapterGreater !== 0
-            ? `&chapterGreater=${props.filters.chapterGreater}`
+          debouncedFilter.yearGreater !== 1970 ||
+          debouncedFilter.yearLesser !== new Date().getFullYear() + 1
+            ? `&yearGreater=${debouncedFilter.yearGreater}0000`
             : ""
         }${
-          props.filters.volumeLesser !== 50
-            ? `&volumeLesser=${props.filters.volumeLesser}`
+          debouncedFilter.chapterLesser !== 500
+            ? `&chapterLesser=${debouncedFilter.chapterLesser}`
             : ""
         }${
-          props.filters.volumeGreater !== 0
-            ? `&volumeGreater=${props.filters.volumeGreater}`
+          debouncedFilter.chapterGreater !== 0
+            ? `&chapterGreater=${debouncedFilter.chapterGreater}`
             : ""
         }${
-          !!props.filters.genres.length ? `&genres=${props.filters.genres}` : ""
-        }${
-          !!props.filters.excludedGenres.length
-            ? `&excludedGenres=${props.filters.excludedGenres}`
+          debouncedFilter.volumeLesser !== 50
+            ? `&volumeLesser=${debouncedFilter.volumeLesser}`
             : ""
-        }${!!props.filters.tags.length ? `&tags=${props.filters.tags}` : ""}${
-          !!props.filters.excludedTags.length
-            ? `&excludedTags=${props.filters.excludedTags}`
+        }${
+          debouncedFilter.volumeGreater !== 0
+            ? `&volumeGreater=${debouncedFilter.volumeGreater}`
+            : ""
+        }${
+          !!debouncedFilter.genres.length
+            ? `&genres=${debouncedFilter.genres}`
+            : ""
+        }${
+          !!debouncedFilter.excludedGenres.length
+            ? `&excludedGenres=${debouncedFilter.excludedGenres}`
+            : ""
+        }${
+          !!debouncedFilter.tags.length ? `&tags=${debouncedFilter.tags}` : ""
+        }${
+          !!debouncedFilter.excludedTags.length
+            ? `&excludedTags=${debouncedFilter.excludedTags}`
             : ""
         }`
       );
