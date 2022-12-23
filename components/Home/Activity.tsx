@@ -25,7 +25,10 @@ const Activity = async () => {
   return (
     <Drawer
       trigger={
-        <button className="absolute left-0 top-0 bottom-0 p-2 bg-primary-500 bg-opacity-30 hover:bg-opacity-100">
+        <button
+          aria-label="Show Global/Friends Activity"
+          className="absolute left-0 top-0 bottom-0 p-2 bg-primary-500 bg-opacity-30 hover:bg-opacity-100"
+        >
           <svg
             className="scale-150 text-white"
             width="15"

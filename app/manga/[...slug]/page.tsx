@@ -37,7 +37,7 @@ const Page = async ({ params }: { params: Params }) => {
           classes="col-span-full "
           backgroundImage={entryData.bannerImage}
         />
-        <div className="flex gap-4 text-offWhite-100 bg-offWhite-800 bg-opacity-60 row-start-2 self-center col-span-full md:col-span-3 md:col-start-2">
+        <div className="flex gap-4 text-offWhite-100 bg-offWhite-800 bg-opacity-75 row-start-2 self-center col-span-full md:col-span-3 md:col-start-2">
           <div className="flex-shrink-0 overflow-hidden flex items-center">
             <Image
               className="aspect-auto object-contain"

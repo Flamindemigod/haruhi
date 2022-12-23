@@ -28,15 +28,18 @@ const Characters = (props: Props) => {
               Characters
             </div>
             {availableLanguages.length !== 0 && (
-              <Select
-                defaultValue={"JAPANESE"}
-                values={availableLanguages}
-                triggerAriaLabel={"Language Selector"}
-                value={language}
-                onValueChange={(value: string) => {
-                  setLanguage(value);
-                }}
-              />
+              <div className="dark:text-white flex gap-2 items-center">
+                <label className="text-lg">Language:</label>
+                <Select
+                  defaultValue={"JAPANESE"}
+                  values={availableLanguages}
+                  triggerAriaLabel={"Language Selector"}
+                  value={language}
+                  onValueChange={(value: string) => {
+                    setLanguage(value);
+                  }}
+                />
+              </div>
             )}
           </div>
           <Carosel width="95vw" height={"100%"}>

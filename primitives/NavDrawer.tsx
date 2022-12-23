@@ -12,9 +12,10 @@ const NavDrawer = () => {
       <DialogPrimitive.Trigger asChild>
         <button
           className="btn flex justify-center items-center text-white bg-black bg-opacity-30 p-2 px-4 font-medium hover:scale-105 hover:-rotate-12 target:rotate-12 transition-all"
-          aria-label="Navigation"
+          aria-label="Navigation Button"
         >
           <svg
+            aria-aria-label="Navigation Button"
             style={{ scale: "1.5" }}
             width="15"
             height="15"

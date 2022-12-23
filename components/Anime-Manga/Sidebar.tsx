@@ -102,7 +102,7 @@ const Sidebar = ({ anime }: { anime: any }) => {
               />
             </>
           }
-          containerClass="text-primary-500"
+          containerClass="text-primary-500 dark:text-primary-300"
         />
       )}
       <Content title="Format" content={anime.format} />
