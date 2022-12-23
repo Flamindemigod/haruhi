@@ -7,6 +7,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import Image from "next/image";
 import AnalyticsWrapper from "./AnalyticsWrapper";
+import FixLoading from "./FixLoading";
 
 export default function RootLayout({
   children,
@@ -34,6 +35,7 @@ export default function RootLayout({
                 <Footer />
               </footer>
             </div>
+            <FixLoading />
             <AnalyticsWrapper />
           </UserContextProvider>
         </QueryProvider>
