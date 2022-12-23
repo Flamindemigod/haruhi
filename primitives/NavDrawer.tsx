@@ -15,7 +15,6 @@ const NavDrawer = () => {
           aria-label="Navigation Button"
         >
           <svg
-            aria-aria-label="Navigation Button"
             style={{ scale: "1.5" }}
             width="15"
             height="15"
