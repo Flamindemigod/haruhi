@@ -38,7 +38,7 @@ const getSeason = () => {
   ];
   let season = seasonArray
     .filter(({ date }) => date <= currentTime.getTime())
-    .slice(-1)[0] || { name: "WINTER" };
+    .slice(-1)[0] || { name: "WINTER", date: currentTime.getTime() };
   return {
     season: season.name,
     year: new Date(season.date).getUTCFullYear(),
