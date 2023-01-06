@@ -11,7 +11,7 @@ const Recommended = ({ type }: { type: string }) => {
 
   const fetchUserData = async () => {
     const data = await fetch(
-      `https://haruhi.flamindemigod.com/api/getRecommended?username=${user.userName}&type=${type}`
+      `${process.env.NEXT_SERVER}/api/getRecommended?username=${user.userName}&type=${type}`
     ).then((res) => res.json());
     setAnimeArray(data);
   };

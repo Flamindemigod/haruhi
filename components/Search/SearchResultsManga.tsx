@@ -18,7 +18,9 @@ const SearchResultsManga = (props: Props) => {
 
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `https://haruhi.flamindemigod.com/api/getSearchResultsAdvanced?page=${pageParam}&type=MANGA&sort=${
+        `${
+          process.env.NEXT_SERVER
+        }/api/getSearchResultsAdvanced?page=${pageParam}&type=MANGA&sort=${
           !!props.searchString || props.sort !== "SEARCH_MATCH"
             ? props.sort
             : "POPULARITY_DESC"
