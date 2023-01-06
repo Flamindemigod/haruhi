@@ -58,7 +58,7 @@ const List = (props: Props) => {
     queryKey: ["MediaList", props.type, props.list, props.sort],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `https://haruhi.flamindemigod.com/api/getList?type=${props.type}&status=${props.list}&username=${user.userName}&sort=${props.sort}&page=${pageParam}`
+        `${process.env.NEXT_SERVER}/api/getList?type=${props.type}&status=${props.list}&username=${user.userName}&sort=${props.sort}&page=${pageParam}`
       );
       return res.json();
     },

@@ -10,7 +10,7 @@ const Activity = async () => {
 
   const fetchActivityFeed = async () => {
     const data = await fetch(
-      "https://haruhi.flamindemigod.com/api/getFriendActivity",
+      "${process.env.NEXT_SERVER}/api/getFriendActivity",
       {
         headers: {
           cookie: nextCookies.get("access_token")

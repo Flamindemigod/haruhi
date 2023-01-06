@@ -2,7 +2,7 @@ import DefaultTags from "../../DefaultTags";
 
 export default async function Head({ params }: { params: { slug: string[] } }) {
   const data = await fetch(
-    `https://haruhi.flamindemigod.com/api/getEntry?id=${params.slug[0]}`
+    `${process.env.NEXT_SERVER}/api/getEntry?id=${params.slug[0]}`
   ).then((res) => res.json());
 
   return (

@@ -113,7 +113,7 @@ const Page = ({ params }: { params: any }) => {
     queryKey: ["studio", params.slug, onList, sort],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `https://haruhi.flamindemigod.com/api/getStudio?id=${
+        `${process.env.NEXT_SERVER}/api/getStudio?id=${
           params.slug
         }&page=${pageParam}${onList ? "&onList=true" : ""}&sort=${sort}`
       );

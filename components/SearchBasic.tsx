@@ -19,7 +19,9 @@ const SearchBasic = (props: Props) => {
     queryKey: ["search", searchString, user.userShowAdult],
     queryFn: async () => {
       const res = await fetch(
-        `https://haruhi.flamindemigod.com/api/getSearchResultsBasic?search=${searchString}${
+        `${
+          process.env.NEXT_SERVER
+        }/api/getSearchResultsBasic?search=${searchString}${
           user.userShowAdult ? "" : "&isAdult=false"
         }`
       );

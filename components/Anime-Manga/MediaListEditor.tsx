@@ -93,7 +93,7 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
     queryKey: ["mediaListEntry", entry.id],
     queryFn: async () => {
       const data = await fetch(
-        `https://haruhi.flamindemigod.com/api/getEntry?id=${entry.id}`
+        `${process.env.NEXT_SERVER}/api/getEntry?id=${entry.id}`
       );
       return data.json();
     },
@@ -140,7 +140,7 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
 
   const saveMediaEntry = async () => {
     const data = await fetch(
-      `https://haruhi.flamindemigod.com/api/setMediaEntry?id=${
+      `${process.env.NEXT_SERVER}/api/setMediaEntry?id=${
         entry.mediaListEntry ? entry.mediaListEntry.id : 0
       }&mediaId=${
         entry.id
@@ -164,7 +164,7 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
 
   const deleteMediaEntry = async () => {
     const data = await fetch(
-      `https://haruhi.flamindemigod.com/api/deleteMediaEntry?id=${media.data.data.Media.mediaListEntry.id}`
+      `${process.env.NEXT_SERVER}/api/deleteMediaEntry?id=${media.data.data.Media.mediaListEntry.id}`
     );
     await queryClient.invalidateQueries({
       queryKey: ["mediaListEntry", entry.id],

@@ -3,7 +3,7 @@ const DefaultTags = () => {
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link href="/favicon.ico" rel="shortcut icon" />
-      <meta property="og:url" content="https://haruhi.flamindemigod.com" />
+      <meta property="og:url" content={process.env.NEXT_SERVER} />
       <meta property="og:site_name" content="Haruhi" />
       <meta property="og:type" content="website" />
       <meta
