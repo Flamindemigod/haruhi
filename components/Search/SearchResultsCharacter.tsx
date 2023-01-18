@@ -6,7 +6,6 @@ import HoverCard from "../../primitives/Card";
 import Image from "next/image";
 import Link from "next/link";
 import useDebounce from "../../utils/useDebounce";
-
 type Props = {
   searchString: string;
   sort: string;
@@ -26,7 +25,7 @@ const SearchResultsCharacter = (props: Props) => {
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
         `${
-          process.env.NEXT_SERVER
+          process.env.NEXT_PUBLIC_SERVER
         }/api/getSearchResultsAdvanced?page=${pageParam}&type=CHARACTER&sort=${
           !!props.searchString || props.sort !== "SEARCH_MATCH"
             ? props.sort

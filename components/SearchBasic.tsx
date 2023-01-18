@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useContext, useState } from "react";
 import { userContext } from "../app/UserContext";
-
 type Props = {
   setIsOpen: any;
 };
@@ -20,7 +19,7 @@ const SearchBasic = (props: Props) => {
     queryFn: async () => {
       const res = await fetch(
         `${
-          process.env.NEXT_SERVER
+          process.env.NEXT_PUBLIC_SERVER
         }/api/getSearchResultsBasic?search=${searchString}${
           user.userShowAdult ? "" : "&isAdult=false"
         }`

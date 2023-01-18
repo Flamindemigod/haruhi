@@ -4,13 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import Drawer from "../../primitives/Drawer";
 import timeSince from "../../utils/timeSince";
-
 const Activity = async () => {
   const nextCookies = cookies();
 
   const fetchActivityFeed = async () => {
     const data = await fetch(
-      "${process.env.NEXT_SERVER}/api/getFriendActivity",
+      `${process.env.NEXT_PUBLIC_SERVER}/api/getFriendActivity`,
       {
         headers: {
           cookie: nextCookies.get("access_token")

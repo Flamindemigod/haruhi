@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import Card from "../CardMain";
 import Carosel from "../../primitives/Carosel";
-
 const Trending = ({ season, type }: { season?: boolean; type: string }) => {
   const [animeArray, setAnimeArray] = useState<any[]>([]);
   const fetchTrending = async () => {
     const data = await fetch(
-      `${process.env.NEXT_SERVER}/api/getTrending?type=${type}${
+      `${process.env.NEXT_PUBLIC_SERVER}/api/getTrending?type=${type}${
         season ? "&season" : ""
       }`
     ).then((res) => res.json());

@@ -4,7 +4,6 @@ import { Fragment } from "react";
 import Card from "../CardMain";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import useDebounce from "../../utils/useDebounce";
-
 type Props = {
   searchString: string;
   sort: string;
@@ -19,7 +18,7 @@ const SearchResultsAnime = (props: Props) => {
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
         `${
-          process.env.NEXT_SERVER
+          process.env.NEXT_PUBLIC_SERVER
         }/api/getSearchResultsAdvanced?page=${pageParam}&type=ANIME&sort=${
           !!props.searchString || props.sort !== "SEARCH_MATCH"
             ? props.sort

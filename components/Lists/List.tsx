@@ -4,7 +4,6 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import { userContext } from "../../app/UserContext";
 import ListEntry from "./ListEntry";
-
 type Props = {
   type: "ANIME" | "MANGA";
   list: "CURRENT" | "PLANNING" | "COMPLETED" | "DROPPED" | "PAUSED";
@@ -58,7 +57,7 @@ const List = (props: Props) => {
     queryKey: ["MediaList", props.type, props.list, props.sort],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `${process.env.NEXT_SERVER}/api/getList?type=${props.type}&status=${props.list}&username=${user.userName}&sort=${props.sort}&page=${pageParam}`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getList?type=${props.type}&status=${props.list}&username=${user.userName}&sort=${props.sort}&page=${pageParam}`
       );
       return res.json();
     },
