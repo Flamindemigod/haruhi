@@ -4,14 +4,13 @@ import { useContext, useEffect, useState } from "react";
 import { userContext } from "../../app/UserContext";
 import Card from "../CardMain";
 import Carosel from "../../primitives/Carosel";
-
 const Recommended = ({ type }: { type: string }) => {
   const user = useContext(userContext);
   const [animeArray, setAnimeArray] = useState<any[]>([]);
 
   const fetchUserData = async () => {
     const data = await fetch(
-      `${process.env.NEXT_SERVER}/api/getRecommended?username=${user.userName}&type=${type}`
+      `${process.env.NEXT_PUBLIC_SERVER}/api/getRecommended?username=${user.userName}&type=${type}`
     ).then((res) => res.json());
     setAnimeArray(data);
   };

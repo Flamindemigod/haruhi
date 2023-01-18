@@ -7,14 +7,12 @@ import { Fragment, useContext, useState } from "react";
 import Description from "../../../components/Anime-Manga/Description";
 import HoverCard from "../../../primitives/Card";
 import Grid from "../../../primitives/Grid";
-import Countdown, { zeroPad } from "react-countdown";
+import { zeroPad } from "react-countdown";
 import Switch from "../../../primitives/Switch";
 import { userContext } from "../../UserContext";
-import Select from "../../../primitives/Select";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import cx from "classnames";
 import Loading from "../../loading";
-
 interface Tab {
   title: string;
   value: string;
@@ -176,7 +174,7 @@ const Page = ({ params }: { params: any }) => {
     queryKey: ["Staff", params.slug, onList, sort],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `${process.env.NEXT_SERVER}/api/getStaff?id=${
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getStaff?id=${
           params.slug
         }&page=${pageParam}${onList ? "&onList=true" : ""}&sort=${sort}`
       );

@@ -1,21 +1,14 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import Link from "next/link";
 import { Fragment, useContext, useState } from "react";
-import Description from "../../../components/Anime-Manga/Description";
-import HoverCard from "../../../primitives/Card";
 import Grid from "../../../primitives/Grid";
-import Countdown, { zeroPad } from "react-countdown";
 import Switch from "../../../primitives/Switch";
 import { userContext } from "../../UserContext";
-import Select from "../../../primitives/Select";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import cx from "classnames";
 import Loading from "../../loading";
 import Card from "../../../components/CardMain";
-
 interface Tab {
   title: string;
   value: string;
@@ -113,7 +106,7 @@ const Page = ({ params }: { params: any }) => {
     queryKey: ["studio", params.slug, onList, sort],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `${process.env.NEXT_SERVER}/api/getStudio?id=${
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getStudio?id=${
           params.slug
         }&page=${pageParam}${onList ? "&onList=true" : ""}&sort=${sort}`
       );

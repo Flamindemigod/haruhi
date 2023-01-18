@@ -28,7 +28,7 @@ const Reader = (props: Props) => {
     ],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_SERVER}/api/getMangaChapters?title=${
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaChapters?title=${
           props.entry.title.english || props.entry.title.romaji
         }`
       );
@@ -67,7 +67,7 @@ const Reader = (props: Props) => {
     queryKey: ["mangaPanels", chapterId],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_SERVER}/api/getMangaPanels?id=${chapterId}`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaPanels?id=${chapterId}`
       );
       return data.json();
     },
@@ -81,7 +81,7 @@ const Reader = (props: Props) => {
   ) => {
     const data = await fetch(
       `${
-        process.env.NEXT_SERVER
+        process.env.NEXT_PUBLIC_SERVER
       }/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${Math.floor(
         chapterIndex + 1
       )}&repeat=${rewatches}`

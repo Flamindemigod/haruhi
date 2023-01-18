@@ -1,8 +1,7 @@
 import DefaultTags from "../../DefaultTags";
-
 export default async function Head({ params }: { params: { slug: string } }) {
   const data = await fetch(
-    `${process.env.NEXT_SERVER}/api/getEntry?id=${params.slug}`
+    `${process.env.NEXT_PUBLIC_SERVER}/api/getEntry?id=${params.slug}`
   ).then((res) => res.json());
   return (
     <>

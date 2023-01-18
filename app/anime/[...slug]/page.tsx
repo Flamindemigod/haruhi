@@ -9,7 +9,6 @@ import Recommended from "../../../components/Anime-Manga/Recommended";
 import Streaming from "../../../components/Anime/Streaming";
 import { cookies } from "next/headers";
 import MediaListEditor from "../../../components/Anime-Manga/MediaListEditor";
-
 type Params = {
   slug: any[];
 };
@@ -18,7 +17,7 @@ const Page = async ({ params }: { params: Params }) => {
   const nextCookies = cookies();
   const fetchEntry = async () => {
     const data = await fetch(
-      `${process.env.NEXT_SERVER}/api/getEntry?id=${params.slug[0]}`,
+      `${process.env.NEXT_PUBLIC_SERVER}/api/getEntry?id=${params.slug[0]}`,
       {
         headers: {
           cookie: nextCookies.get("access_token")

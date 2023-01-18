@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-
 type iUser = {
   userID?: number;
   userAuth?: boolean;
@@ -47,7 +46,10 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       console.error(error);
       return null;
     }
-    const userData = await fetch(`${process.env.NEXT_SERVER}/api/getUser`)
+    console.log(process.env.NEXT_PUBLIC_SERVER);
+    const userData = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER}/api/getUser`
+    )
       .then(handleResponse)
       .catch(handleError);
     if (userData) {

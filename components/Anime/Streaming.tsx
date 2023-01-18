@@ -16,7 +16,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import cx from "classnames";
 import { MdClose, MdShare, MdSkipNext, MdSkipPrevious } from "react-icons/md";
-
 type Props = {
   entry: any;
   syncCode: string | undefined;
@@ -77,7 +76,7 @@ const Streaming = (props: Props) => {
     queryKey: ["episodeSubList", props.entry.idMal],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_SERVER}/api/getEpisodes?idMal=${props.entry.idMal}&format=sub`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?idMal=${props.entry.idMal}&format=sub`
       );
       return data.json();
     },
@@ -91,7 +90,7 @@ const Streaming = (props: Props) => {
     queryKey: ["episodeDubList", props.entry.idMal],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_SERVER}/api/getEpisodes?idMal=${props.entry.idMal}&format=dub`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?idMal=${props.entry.idMal}&format=dub`
       );
       return data.json();
     },
@@ -102,7 +101,7 @@ const Streaming = (props: Props) => {
     queryKey: ["episode", episodeID],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_SERVER}/api/getStream?id=${episodeID}`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getStream?id=${episodeID}`
       );
       return data.json();
     },
@@ -220,7 +219,7 @@ const Streaming = (props: Props) => {
     rewatches = 0
   ) => {
     const data = await fetch(
-      `${process.env.NEXT_SERVER}/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${episode}&repeat=${rewatches}`
+      `${process.env.NEXT_PUBLIC_SERVER}/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${episode}&repeat=${rewatches}`
     );
     queryClient.invalidateQueries({
       queryKey: ["mediaListEntry"],

@@ -5,7 +5,6 @@ import React, { useContext } from "react";
 import { userContext } from "../../app/UserContext";
 import Grid from "../../primitives/Grid";
 import Card from "../CardMain";
-
 type Props = {
   season: string;
   year: number;
@@ -17,7 +16,7 @@ const Lists = (props: Props) => {
     queryKey: ["Seasonal", props.season, props.year, user.userShowAdult],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.NEXT_SERVER}/api/getSeasonal?season=${props.season}&year=${props.year}&adult=${user.userShowAdult}`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getSeasonal?season=${props.season}&year=${props.year}&adult=${user.userShowAdult}`
       );
       return res.json();
     },

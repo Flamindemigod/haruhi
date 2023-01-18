@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ANIME } from "@consumet/extensions";
+import { ANIME, StreamingServers } from "@consumet/extensions";
 type Response = {};
 
 export default async function handler(
@@ -9,6 +9,7 @@ export default async function handler(
   try {
     if (req.query.id !== undefined) {
       const gogoanime = new ANIME.Gogoanime();
+      console.log(req.query.id);
       const data = await gogoanime.fetchEpisodeSources(String(req.query.id));
       return res
         .status(200)

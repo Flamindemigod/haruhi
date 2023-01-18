@@ -13,7 +13,6 @@ import Calender from "../../primitives/Calendar";
 import * as Separator from "@radix-ui/react-separator";
 import { MdDelete, MdSave } from "react-icons/md";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-
 const SelectItem = ({
   value,
   displayText,
@@ -93,7 +92,7 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
     queryKey: ["mediaListEntry", entry.id],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_SERVER}/api/getEntry?id=${entry.id}`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEntry?id=${entry.id}`
       );
       return data.json();
     },
@@ -140,7 +139,7 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
 
   const saveMediaEntry = async () => {
     const data = await fetch(
-      `${process.env.NEXT_SERVER}/api/setMediaEntry?id=${
+      `${process.env.NEXT_PUBLIC_SERVER}/api/setMediaEntry?id=${
         entry.mediaListEntry ? entry.mediaListEntry.id : 0
       }&mediaId=${
         entry.id
@@ -164,7 +163,7 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
 
   const deleteMediaEntry = async () => {
     const data = await fetch(
-      `${process.env.NEXT_SERVER}/api/deleteMediaEntry?id=${media.data.data.Media.mediaListEntry.id}`
+      `${process.env.NEXT_PUBLIC_SERVER}/api/deleteMediaEntry?id=${media.data.data.Media.mediaListEntry.id}`
     );
     await queryClient.invalidateQueries({
       queryKey: ["mediaListEntry", entry.id],

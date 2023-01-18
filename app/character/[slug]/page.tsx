@@ -14,7 +14,6 @@ import Select from "../../../primitives/Select";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import cx from "classnames";
 import Loading from "../../loading";
-
 interface Tab {
   title: string;
   value: string;
@@ -174,7 +173,7 @@ const Page = ({ params }: { params: any }) => {
     queryKey: ["Character", params.slug, onList, sort],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(
-        `${process.env.NEXT_SERVER}/api/getCharacter?id=${
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getCharacter?id=${
           params.slug
         }&page=${pageParam}${onList ? "&onList=true" : ""}&sort=${sort}`
       );

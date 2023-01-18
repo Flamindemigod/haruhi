@@ -14,7 +14,7 @@ export default async function handler(
       grant_type: "authorization_code",
       client_id: 8343,
       client_secret: "yH9BxKnQLgxeLvNIwadIdKgx8OlwYjJ6qnR6iuXd",
-      redirect_uri: `${process.env.NEXT_SERVER}/api/login`,
+      redirect_uri: `${process.env.NEXT_PUBLIC_SERVER}/api/login`,
       code: req.query.code,
     }),
   };
