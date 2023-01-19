@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import makeQuery from "../../utils/makeQuery";
+import { verifySession } from "../../utils/supabaseClient";
 
 type Response = {};
 
@@ -7,7 +8,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response>
 ) {
-  if (req.cookies["access_token"] === undefined) {
+  if (
+    req.cookies["access_token"] === undefined &&
+    !(await verifySession(
+      parseInt(String(req.headers.userId)),
+      String(req.headers.sessionId)
+    ))
+  ) {
     res.status(401).json({ error: "Unauthorized" });
   } else if (req.query.id === undefined) {
     res.status(400).json({ error: "id must be specified" });

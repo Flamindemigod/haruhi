@@ -219,7 +219,13 @@ const Streaming = (props: Props) => {
     rewatches = 0
   ) => {
     const data = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${episode}&repeat=${rewatches}`
+      `${process.env.NEXT_PUBLIC_SERVER}/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${episode}&repeat=${rewatches}`,
+      {
+        headers: {
+          userId: user.userID?.toString() ?? "",
+          sessionId: user.sessionID,
+        },
+      }
     );
     queryClient.invalidateQueries({
       queryKey: ["mediaListEntry"],

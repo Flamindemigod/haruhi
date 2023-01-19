@@ -14,6 +14,7 @@ type iUser = {
   userPreferenceEpisodeUpdateTreshold?: number;
   userPreferenceMangaUpdateTreshold?: number;
   userScoreFormat?: string;
+  sessionID: string;
 };
 
 const userDefaults = {
@@ -29,6 +30,7 @@ const userDefaults = {
   userPreferenceEpisodeUpdateTreshold: 0.85,
   userPreferenceEpisodeMangaTreshold: 0.6,
   userScoreFormat: "POINT_10_DECIMAL",
+  sessionID: "",
 } as iUser;
 
 const userContext = createContext(userDefaults);
@@ -46,7 +48,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       console.error(error);
       return null;
     }
-    console.log(process.env.NEXT_PUBLIC_SERVER);
     const userData = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER}/api/getUser`
     )
@@ -55,6 +56,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     if (userData) {
       setUser({
         userAuth: true,
+        sessionID: userData.sessionKey,
         userName: userData.data.Viewer.name,
         userID: userData.data.Viewer.id,
         userAvatar: userData.data.Viewer.avatar.medium,
