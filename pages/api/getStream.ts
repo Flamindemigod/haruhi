@@ -9,7 +9,6 @@ export default async function handler(
   try {
     if (req.query.id !== undefined) {
       const gogoanime = new ANIME.Gogoanime();
-      console.log(req.query.id);
       const data = await gogoanime.fetchEpisodeSources(String(req.query.id));
       return res
         .status(200)
