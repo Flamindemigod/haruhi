@@ -84,7 +84,13 @@ const Reader = (props: Props) => {
         process.env.NEXT_PUBLIC_SERVER
       }/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${Math.floor(
         chapterIndex + 1
-      )}&repeat=${rewatches}`
+      )}&repeat=${rewatches}`,
+      {
+        headers: {
+          userId: user.userID?.toString() ?? "",
+          sessionId: user.sessionID,
+        },
+      }
     );
     queryClient.invalidateQueries({
       queryKey: ["mediaListEntry"],

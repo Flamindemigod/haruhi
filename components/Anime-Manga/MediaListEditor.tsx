@@ -153,7 +153,13 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
         year: mediaEndDate ? new Date(mediaEndDate).getFullYear() : null,
         month: mediaEndDate ? new Date(mediaEndDate).getMonth() : null,
         day: mediaEndDate ? new Date(mediaEndDate).getDate() : null,
-      })}`
+      })}`,
+      {
+        headers: {
+          userId: user.userID?.toString() ?? "",
+          sessionId: user.sessionID,
+        },
+      }
     );
     queryClient.invalidateQueries({
       queryKey: ["mediaListEntry", entry.id],
@@ -163,7 +169,13 @@ const MediaListEditor = ({ entry }: { entry: any }) => {
 
   const deleteMediaEntry = async () => {
     const data = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/deleteMediaEntry?id=${media.data.data.Media.mediaListEntry.id}`
+      `${process.env.NEXT_PUBLIC_SERVER}/api/deleteMediaEntry?id=${media.data.data.Media.mediaListEntry.id}`,
+      {
+        headers: {
+          userId: user.userID?.toString() ?? "",
+          sessionId: user.sessionID,
+        },
+      }
     );
     await queryClient.invalidateQueries({
       queryKey: ["mediaListEntry", entry.id],
