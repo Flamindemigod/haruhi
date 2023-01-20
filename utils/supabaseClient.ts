@@ -17,6 +17,7 @@ export const supabaseServer = () =>
 export const verifySession = async (id: number, sessionId: string) => {
   const supabase = supabaseServer();
   const { data, error } = await supabase.from("users").select().eq("id", id);
+  console.log(error);
   if (data![0].sessionId === sessionId) {
     return true;
   }

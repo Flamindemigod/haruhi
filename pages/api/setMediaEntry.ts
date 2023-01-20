@@ -1,3 +1,4 @@
+import { parseInt } from "lodash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import makeQuery from "../../utils/makeQuery";
 import { verifySession } from "../../utils/supabaseClient";
@@ -8,11 +9,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response>
 ) {
+  console.log(req.headers);
   if (
     req.cookies["access_token"] &&
     (await verifySession(
-      parseInt(String(req.headers.userId)),
-      String(req.headers.sessionId)
+      parseInt(String(req.headers.userid)),
+      String(req.headers.sessionid)
     ))
   ) {
     const query = `mutation saveMediaEntry($id: Int, $mediaId: Int, $status: MediaListStatus, $score: Float, $progress: Int, $repeat: Int, $startedAt: FuzzyDateInput, $completedAt: FuzzyDateInput) {

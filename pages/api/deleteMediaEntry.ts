@@ -9,10 +9,10 @@ export default async function handler(
   res: NextApiResponse<Response>
 ) {
   if (
-    req.cookies["access_token"] === undefined &&
+    req.cookies["access_token"] === undefined ||
     !(await verifySession(
-      parseInt(String(req.headers.userId)),
-      String(req.headers.sessionId)
+      parseInt(String(req.headers.userid)),
+      String(req.headers.sessionid)
     ))
   ) {
     res.status(401).json({ error: "Unauthorized" });
