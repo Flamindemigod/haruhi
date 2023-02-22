@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { serialize } from "cookie";
+import { clientSecret } from "../../utils/anilistClientSecret";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response>
@@ -12,8 +13,8 @@ export default async function handler(
     },
     body: JSON.stringify({
       grant_type: "authorization_code",
-      client_id: 8343,
-      client_secret: "yH9BxKnQLgxeLvNIwadIdKgx8OlwYjJ6qnR6iuXd",
+      client_id: process.env.NEXT_PUBLIC_ANILIST,
+      client_secret: clientSecret,
       redirect_uri: `${process.env.NEXT_PUBLIC_SERVER}/api/login`,
       code: req.query.code,
     }),
@@ -21,7 +22,8 @@ export default async function handler(
   const access_token = await fetch(
     "https://anilist.co/api/v2/oauth/token",
     options
-  ).then((data) => data.json());
+    ).then((data) => data.json());
+    console.log(access_token)
   const d = new Date();
   d.setTime(d.getTime() + access_token.expires_in * 1000);
   res.setHeader(
