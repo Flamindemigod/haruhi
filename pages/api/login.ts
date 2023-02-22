@@ -23,7 +23,6 @@ export default async function handler(
     "https://anilist.co/api/v2/oauth/token",
     options
     ).then((data) => data.json());
-    console.log(access_token)
   const d = new Date();
   d.setTime(d.getTime() + access_token.expires_in * 1000);
   res.setHeader(
