@@ -16,9 +16,29 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import cx from "classnames";
 import { MdClose, MdShare, MdSkipNext, MdSkipPrevious } from "react-icons/md";
+import ReactPlayer from "react-player";
+import useMediaSync from "../../utils/useMediaSync";
 type Props = {
   entry: any;
   syncCode: string | undefined;
+};
+
+export type playerProps = {
+  ready: boolean;
+  url: string;
+  pip: boolean;
+  playing: boolean;
+  controls: boolean;
+  light: boolean;
+  volume: number;
+  muted: boolean;
+  duration: number;
+  played: number;
+  playedSeconds: number;
+  loaded: number;
+  loadedSeconds: number;
+  playbackRate: number;
+  loop: boolean;
 };
 
 const Streaming = (props: Props) => {
@@ -32,7 +52,7 @@ const Streaming = (props: Props) => {
   const [videoEnd, setVideoEnd] = useState<boolean>(false);
   const [openToast, setOpenToast] = useState<boolean>(false);
   const [episodeID, setEpisodeID] = useState<string>("");
-  const [playerState, setPlayerState] = useState({
+  const [playerState, setPlayerState] = useState<playerProps>({
     ready: false,
     url: "",
     pip: false,
@@ -49,7 +69,7 @@ const Streaming = (props: Props) => {
     playbackRate: 1.0,
     loop: false,
   });
-  const videoPlayer = useRef<any>(null);
+  const videoPlayer = useRef<ReactPlayer>(null);
   const syncChannelRef = useRef<any>(null);
 
   const throttleedSeek = useCallback(
@@ -63,9 +83,53 @@ const Streaming = (props: Props) => {
     []
   );
 
-  const isSameAnime = (id: number) => {
+  const validateAnime = (id: number) => {
     return props.entry.id === id;
   };
+  const validatePacketTime = (packetTime: number) => {
+    const currentTime = Date.now();
+    if ((currentTime - packetTime) / 1000 > 2) return false;
+    return true;
+  };
+
+  const syncPlaying = (payload: any) => {
+    setEpisode(payload.episode);
+    setPlayerState((state) => ({ ...state, playing: payload.playing }));
+  };
+
+  useEffect(() => {
+    if (
+      Math.abs(syncPlayedSeconds - playerState.playedSeconds) > 5 &&
+      playerState.ready &&
+      playerState.url
+    ) {
+      setTimeout(() => {
+        setPlayerState((state) => ({ ...state, playing: true }));
+      }, 300);
+      throttleedSeek(videoPlayer, syncPlayedSeconds, "seconds");
+    }
+  }, [syncPlayedSeconds]);
+
+  const syncPlayed = (payload: any) => {
+    setEpisode(payload.episode);
+    setSyncPlayedSeconds(payload.played);
+  };
+  const syncSeekTo = (payload: any) => {
+    videoPlayer.current?.seekTo(payload.seekTo, payload.seekType);
+  };
+  const syncEpisodes = (payload: any) => {
+    setEpisode(parseInt(payload.episode));
+  };
+
+  const dispatchSyncChannelRef = useMediaSync(
+    syncCode,
+    (payload: any) =>
+      validateAnime(payload.animeID) && validatePacketTime(payload.packetTime),
+    syncPlaying,
+    syncPlayed,
+    syncSeekTo,
+    syncEpisodes
+  );
 
   const {
     isSuccess: isSuccessEpisodesSub,
@@ -144,73 +208,6 @@ const Streaming = (props: Props) => {
       episodeRefetch();
     }
   }, [episode, isDubbed, isSuccessEpisodesDub, isSuccessEpisodesSub]);
-
-  const syncPlaying = (payload: any) => {
-    if (isSameAnime(payload.animeID)) {
-      setEpisode(payload.episode);
-
-      setPlayerState((state) => ({ ...state, playing: payload.playing }));
-    }
-  };
-
-  useEffect(() => {
-    if (
-      Math.abs(syncPlayedSeconds - playerState.playedSeconds) > 5 &&
-      playerState.ready &&
-      playerState.url
-    ) {
-      setTimeout(() => {
-        setPlayerState((state) => ({ ...state, playing: true }));
-      }, 300);
-      throttleedSeek(videoPlayer, syncPlayedSeconds, "seconds");
-    }
-  }, [syncPlayedSeconds]);
-  const syncPlayed = (payload: any) => {
-    if (isSameAnime(payload.animeID)) {
-      setEpisode(payload.episode);
-      setSyncPlayedSeconds(payload.played);
-    }
-  };
-  const syncSeekTo = (payload: any) => {
-    if (isSameAnime(payload.animeID)) {
-      videoPlayer.current.seekTo(payload.seekTo, payload.seekType);
-      // locked = true;
-      // setTimeout(() => {
-      //   locked = false;
-      // }, 1000);
-    }
-  };
-  const syncEpisodes = (payload: any) => {
-    if (isSameAnime(payload.animeID)) {
-      setEpisode(parseInt(payload.episode));
-    }
-  };
-
-  useEffect(() => {
-    if (props.syncCode) {
-      syncChannelRef.current = supabase.channel(syncCode);
-      syncChannelRef.current
-        .on("broadcast", { event: "playing" }, syncPlaying)
-        .on("broadcast", { event: "played" }, syncPlayed)
-        .on("broadcast", { event: "seekTo" }, syncSeekTo)
-        .on("broadcast", { event: "episodes" }, syncEpisodes)
-        .subscribe();
-
-      return () => {
-        supabase.removeChannel(syncChannelRef.current);
-        // syncChannelRef.current.unsubscribe();
-      };
-    }
-  }, []);
-
-  const dispatchSyncChannelRef = (props: any) => {
-    if (syncChannelRef.current) {
-      syncChannelRef.current.send({
-        type: "broadcast",
-        ...props,
-      });
-    }
-  };
 
   const updateEpisode = async (
     id: number,
@@ -329,6 +326,7 @@ const Streaming = (props: Props) => {
                     playing: true,
                     animeID: props.entry.id,
                     episode: episode,
+                    packetTime: Date.now(),
                   });
                 }}
                 onPause={() => {
@@ -337,6 +335,7 @@ const Streaming = (props: Props) => {
                     playing: false,
                     animeID: props.entry.id,
                     episode: episode,
+                    packetTime: Date.now(),
                   });
                 }}
                 onSeek={(seekTo: number, seekType: string) => {
@@ -345,6 +344,7 @@ const Streaming = (props: Props) => {
                     seekTo,
                     seekType,
                     animeID: props.entry.id,
+                    packetTime: Date.now(),
                   });
                 }}
                 onProgress={(playedSeconds: number) => {
@@ -353,6 +353,7 @@ const Streaming = (props: Props) => {
                     played: playedSeconds,
                     animeID: props.entry.id,
                     episode: episode,
+                    packetTime: Date.now(),
                   });
                 }}
                 onNextEpisode={() => {
@@ -361,6 +362,7 @@ const Streaming = (props: Props) => {
                     event: "episodes",
                     episode: episode + 1,
                     animeID: props.entry.id,
+                    packetTime: Date.now(),
                   });
                   setEpisode((state) => state + 1);
                 }}
