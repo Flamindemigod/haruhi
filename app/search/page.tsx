@@ -146,7 +146,7 @@ const sortValues = (type: string) => {
       return [];
   }
 };
-const page = () => {
+const Page = () => {
   const [searchString, setSearchString] = useState<string>("");
   const [type, setType] = useState<string>("ANIME");
   const [sort, setSort] = useState<string>("SEARCH_MATCH");
@@ -302,4 +302,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
