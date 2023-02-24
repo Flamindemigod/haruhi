@@ -1,6 +1,14 @@
 "use client";
 
-import { useContext, useMemo, useRef, useState } from "react";
+import {
+  LegacyRef,
+  MutableRefObject,
+  RefObject,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import ReactPlayer from "react-player/lazy";
 import _ from "lodash";
 import { useMediaQuery } from "react-responsive";
@@ -33,7 +41,7 @@ type Props = {
   playerState: PlayerState;
   setPlayerState: any;
   hasNextEpisode: boolean;
-  videoPlayer: any;
+  videoPlayer: RefObject<ReactPlayer>;
   onNextEpisode: () => void;
   onReady: () => void;
 
@@ -167,10 +175,10 @@ const VideoPlayer = (props: Props) => {
             className="w-full h-full"
             onDoubleClick={() => {
               props.onSeek(
-                props.videoPlayer.current.getCurrentTime() - 10,
+                props.videoPlayer.current?.getCurrentTime()! - 10,
                 "seconds"
               );
-              props.videoPlayer.current.seekTo(
+              props.videoPlayer.current?.seekTo(
                 props.videoPlayer.current.getCurrentTime() - 10,
                 "seconds"
               );
@@ -180,10 +188,10 @@ const VideoPlayer = (props: Props) => {
             className="w-full h-full"
             onDoubleClick={() => {
               props.onSeek(
-                props.videoPlayer.current.getCurrentTime() + 10,
+                props.videoPlayer.current?.getCurrentTime()! + 10,
                 "seconds"
               );
-              props.videoPlayer.current.seekTo(
+              props.videoPlayer.current?.seekTo(
                 props.videoPlayer.current.getCurrentTime() + 10,
                 "seconds"
               );
@@ -248,13 +256,13 @@ const VideoPlayer = (props: Props) => {
             <button
               onClick={() => {
                 props.onSeek(
-                  props.videoPlayer.current.getCurrentTime() +
-                    user.userPreferenceSkipOpening,
+                  props.videoPlayer.current?.getCurrentTime()! +
+                    user.userPreferenceSkipOpening!,
                   "seconds"
                 );
-                props.videoPlayer.current.seekTo(
+                props.videoPlayer.current?.seekTo(
                   props.videoPlayer.current.getCurrentTime() +
-                    user.userPreferenceSkipOpening,
+                    user.userPreferenceSkipOpening!,
                   "seconds"
                 );
               }}
@@ -308,7 +316,7 @@ const VideoPlayer = (props: Props) => {
               step={0.0001}
               onValueChange={(value) => {
                 props.onSeek(value[0], "fraction");
-                props.videoPlayer.current.seekTo(value[0], "fraction");
+                props.videoPlayer.current?.seekTo(value[0], "fraction");
               }}
               className="absolute inset-0 flex items-center"
             >
@@ -497,14 +505,14 @@ const VideoPlayer = (props: Props) => {
                 triggerAriaLabel="Resolution"
                 onValueChange={(value: string) => {
                   if (value === "Auto") {
-                    return (props.videoPlayer.current.getInternalPlayer(
+                    return (props.videoPlayer.current!.getInternalPlayer(
                       "hls"
                     ).currentLevel = -1);
                   }
-                  props.videoPlayer.current.getInternalPlayer(
+                  props.videoPlayer.current!.getInternalPlayer(
                     "hls"
-                  ).currentLevel = props.videoPlayer.current
-                    .getInternalPlayer("hls")
+                  ).currentLevel = props.videoPlayer
+                    .current!.getInternalPlayer("hls")
                     .levels.findIndex(
                       (level: any) => `${level.height}p` === value
                     );
