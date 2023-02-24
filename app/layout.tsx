@@ -35,7 +35,6 @@ export default function RootLayout({
                 <Footer />
               </footer>
             </div>
-            <FixLoading />
             <AnalyticsWrapper />
           </UserContextProvider>
         </QueryProvider>
