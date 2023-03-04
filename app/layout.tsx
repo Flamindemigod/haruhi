@@ -5,9 +5,7 @@ import QueryProvider from "./QueryProvider";
 import Footer from "./Footer";
 
 import Header from "./Header";
-import Image from "next/image";
 import AnalyticsWrapper from "./AnalyticsWrapper";
-import FixLoading from "./FixLoading";
 
 export default function RootLayout({
   children,
