@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@consumet/extensions": "^1.4.9",
+    "@consumet/extensions": "^1.4.15",
     "@headlessui/react": "^1.7.4",
     "@internationalized/date": "^3.0.1",
     "@radix-ui/react-avatar": "^1.0.1",

@@ -135,7 +135,7 @@ const VideoPlayer = (props: Props) => {
       <ReactPlayer
         width="100%"
         height="100%"
-        url={props.playerState.url}
+        url={process.env.NEXT_PUBLIC_MEDIA_PROXY + props.playerState.url}
         ref={props.videoPlayer}
         playing={props.playerState.playing}
         volume={props.playerState.volume}
@@ -257,12 +257,12 @@ const VideoPlayer = (props: Props) => {
               onClick={() => {
                 props.onSeek(
                   props.videoPlayer.current?.getCurrentTime()! +
-                    user.userPreferenceSkipOpening!,
+                  user.userPreferenceSkipOpening!,
                   "seconds"
                 );
                 props.videoPlayer.current?.seekTo(
                   props.videoPlayer.current.getCurrentTime() +
-                    user.userPreferenceSkipOpening!,
+                  user.userPreferenceSkipOpening!,
                   "seconds"
                 );
               }}
@@ -522,13 +522,12 @@ const VideoPlayer = (props: Props) => {
                   props.videoPlayer.current.getInternalPlayer("hls")
                     .currentLevel === -1
                     ? "Auto"
-                    : `${
-                        props.videoPlayer.current.getInternalPlayer("hls")
-                          .levels[
-                          props.videoPlayer.current.getInternalPlayer("hls")
-                            .currentLevel
-                        ].height
-                      }p`
+                    : `${props.videoPlayer.current.getInternalPlayer("hls")
+                      .levels[
+                      props.videoPlayer.current.getInternalPlayer("hls")
+                        .currentLevel
+                    ].height
+                    }p`
                 }
                 values={[
                   "Auto",
