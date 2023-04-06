@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse<Response>
 ) {
   if (req.query.id !== undefined) {
-    const MangaKakalot = new MANGA.MangaDex();
+    const MangaKakalot = new MANGA.MangaKakalot();
     const data = await MangaKakalot.fetchChapterPages(String(req.query.id));
     res.status(200).json(data);
   } else {

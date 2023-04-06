@@ -62,7 +62,7 @@ const Selector = (props: Props) => {
           <SelectPrimitive.Group>
             {props.chapterList.map((f, i) => (
               <SelectPrimitive.Item
-                key={`${f.chapterNumber}-${i}`}
+                key={`${f.title}-${i}`}
                 //prettier-ignore
                 value={String(props.chapterList.length - 1 - i)}
                 className={cx(
@@ -72,7 +72,7 @@ const Selector = (props: Props) => {
                 )}
               >
                 <SelectPrimitive.ItemText>
-                  Chapter {String(f.chapterNumber)}
+                  {String(f.title)}
                 </SelectPrimitive.ItemText>
                 <SelectPrimitive.ItemIndicator className="absolute left-2 inline-flex items-center">
                   <svg
