@@ -62,9 +62,9 @@ const Selector = (props: Props) => {
           <SelectPrimitive.Group>
             {props.chapterList.map((f, i) => (
               <SelectPrimitive.Item
-                key={`${f.id}-${i}`}
+                key={`${f.chapterNumber}-${i}`}
                 //prettier-ignore
-                value={String(props.chapterList.length -1 - i)}
+                value={String(props.chapterList.length - 1 - i)}
                 className={cx(
                   "relative flex items-center px-8 py-2 rounded-md text-sm text-offWhite-700 dark:text-offWhite-300 font-medium focus:bg-offWhite-100 dark:focus:bg-offWhite-900",
                   "radix-disabled:opacity-50",
@@ -72,7 +72,7 @@ const Selector = (props: Props) => {
                 )}
               >
                 <SelectPrimitive.ItemText>
-                  Chapter {String(f.id).match(new RegExp("chapter-(.*)$"))![1]}
+                  Chapter {String(f.chapterNumber)}
                 </SelectPrimitive.ItemText>
                 <SelectPrimitive.ItemIndicator className="absolute left-2 inline-flex items-center">
                   <svg
