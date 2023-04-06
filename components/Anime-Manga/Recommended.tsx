@@ -18,9 +18,8 @@ const Recommended = (props: Props) => {
               {props.recommended.map((edge) => (
                 <Card
                   key={edge.node.mediaRecommendation.id}
-                  href={`/${edge.node.mediaRecommendation.type.toLowerCase()}/${
-                    edge.node.mediaRecommendation.id
-                  }`}
+                  href={`/${edge.node.mediaRecommendation.type.toLowerCase()}/${edge.node.mediaRecommendation.id
+                    }`}
                   imgSrcSmall={edge.node.mediaRecommendation.coverImage.medium}
                   imgSrc={edge.node.mediaRecommendation.coverImage.large}
                   imgWidth={156}
@@ -49,7 +48,7 @@ const Recommended = (props: Props) => {
                     " "
                   )}
                   contentType={edge.node.mediaRecommendation.type}
-                  contentStatus={edge.node.mediaRecommendation.status.replaceAll(
+                  contentStatus={edge.node.mediaRecommendation.status?.replaceAll(
                     "_",
                     " "
                   )}
