@@ -14,13 +14,13 @@ export default async function handler(
         "Mushoku Tensei - Jobless Reincarnation",
       ["[Oshi no Ko]"]: "Oshi no Ko",
     };
-    const mangakakalot = new MANGA.Mangasee123();
+    const mangakakalot = new MANGA.MangaDex();
 
     const consumetMangaid = await mangakakalot.search(
       titleBlacklist[String(req.query.title) as keyof typeof titleBlacklist] ||
         String(req.query.title).replaceAll(",", "")
     );
-    const consumetMangaInfo = await await mangakakalot.fetchMangaInfo(
+    const consumetMangaInfo = await mangakakalot.fetchMangaInfo(
       consumetMangaid.results[0].id
     );
 

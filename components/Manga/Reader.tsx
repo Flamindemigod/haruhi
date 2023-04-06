@@ -28,8 +28,7 @@ const Reader = (props: Props) => {
     ],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaChapters?title=${
-          props.entry.title.english || props.entry.title.romaji
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaChapters?title=${props.entry.title.english || props.entry.title.romaji
         }`
       );
       return data.json();
@@ -53,7 +52,7 @@ const Reader = (props: Props) => {
     if (mangaChapters.isSuccess) {
       setChapterId(
         mangaChapters.data[mangaChapters.data.length - 1 - chapterIndex]?.id ||
-          mangaChapters.data[0]?.id
+        mangaChapters.data[0]?.id
       );
       queryClient.invalidateQueries({
         queryKey: ["mangaPanels"],
@@ -80,8 +79,7 @@ const Reader = (props: Props) => {
     rewatches = 0
   ) => {
     const data = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_SERVER
+      `${process.env.NEXT_PUBLIC_SERVER
       }/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${Math.floor(
         chapterIndex + 1
       )}&repeat=${rewatches}`,
@@ -110,7 +108,7 @@ const Reader = (props: Props) => {
     if (user.userAuth) {
       if (
         progress / mangaPages.data?.length >=
-          (user.userPreferenceMangaUpdateTreshold || 0.6) &&
+        (user.userPreferenceMangaUpdateTreshold || 0.6) &&
         !statusUpdated.current
       ) {
         statusUpdated.current = true;
@@ -172,7 +170,7 @@ const Reader = (props: Props) => {
               <div className="">
                 <ComicViewer
                   onChangeCurrentPage={(e) => setProgress(e)}
-                  pages={mangaPages.data?.map((el: any) => el.img) || []}
+                  pages={mangaPages.data?.map((el: any) => process.env.NEXT_PUBLIC_MEDIA_PROXY + el.img) || []}
                 />
               </div>
             )}
