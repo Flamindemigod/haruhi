@@ -24,11 +24,11 @@ const Reader = (props: Props) => {
   const mangaChapters = useQuery({
     queryKey: [
       "mangaPages",
-      props.entry.title.english || props.entry.title.romaji,
+      props.entry.title.romaji || props.entry.title.english,
     ],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaChapters?title=${props.entry.title.english || props.entry.title.romaji
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaChapters?title=${props.entry.title.romaji || props.entry.title.english
         }`
       );
       return data.json();

@@ -14,7 +14,7 @@ export default async function handler(
         "Mushoku Tensei - Jobless Reincarnation",
       ["[Oshi no Ko]"]: "Oshi no Ko",
     };
-    const mangakakalot = new MANGA.MangaDex();
+    const mangakakalot = new MANGA.MangaKakalot();
 
     const consumetMangaid = await mangakakalot.search(
       titleBlacklist[String(req.query.title) as keyof typeof titleBlacklist] ||
