@@ -4,6 +4,7 @@ import Trending from "../components/Home/Trending";
 import Hero from "../components/Home/Hero";
 import Activity from "../components/Home/Activity";
 import Background from "../components/Background";
+import Popular from "../components/Home/Popular";
 export default function Home() {
   return (
     <>
@@ -22,8 +23,8 @@ export default function Home() {
         <Recommended type="ANIME" />
         <Recommended type="MANGA" />
         <Trending season type="ANIME" />
-        <Trending type="ANIME" />
-        <Trending type="MANGA" />
+        <Popular type="ANIME" />
+        <Popular type="MANGA" />
       </div>
     </>
   );
