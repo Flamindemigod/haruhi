@@ -29,7 +29,7 @@ export default async function handler(
           pageInfo{
             hasNextPage
           }
-          media(sort:[TRENDING_DESC], type:${req.query.type}, ${
+          media(sort:[POPULARITY_DESC], type:${req.query.type}, ${
       shouldGetSeason ? `season: ${season}` : ""
     },  ${shouldGetSeason ? `seasonYear: ${year}` : ""}) {
             id
