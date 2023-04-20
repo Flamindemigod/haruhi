@@ -9,13 +9,23 @@ export default async function handler(
 ) {
   try {
     if (req.query.idMal !== undefined) {
-      const malTitle = await getMalTitle("anime", String(req.query.idMal));
+      const idBlacklist = {
+        41514:
+          "Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu. 2",
+        38790:
+          "Itai no wa Iya nano de Bougyoryoku ni Kyokufuri Shitai to Omoimasu.",
+      };
+      const malTitle =
+        idBlacklist[
+          parseInt(String(req.query.idMal)) as keyof typeof idBlacklist
+        ] || (await getMalTitle("anime", String(req.query.idMal)));
       const gogoanime = new ANIME.Gogoanime();
       const consumetAnimeid = await gogoanime.search(malTitle);
 
       const consumetAnimeIdResults = consumetAnimeid.results.filter(
         (el: any) => el.subOrDub === (req.query.format ?? "sub")
       );
+      console.log(malTitle);
       const consumetAnimeInfo = await gogoanime.fetchAnimeInfo(
         consumetAnimeIdResults[0].id
       );
@@ -25,6 +35,7 @@ export default async function handler(
       res.status(400).json({ error: "idMal must be specified" });
     }
   } catch (err) {
+    console.log(err);
     res.status(200).json([]);
   }
 }
