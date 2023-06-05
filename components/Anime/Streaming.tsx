@@ -170,7 +170,12 @@ const Streaming = (props: Props) => {
       return data.json();
     },
     onSuccess(data) {
-      setPlayerState((state) => ({ ...state, url: data[0]?.url }));
+      setPlayerState((state) => ({
+        ...state,
+        url: `${
+          process.env.NEXT_PUBLIC_MEDIA_PROXY
+        }/m3u8-proxy?url=${encodeURIComponent(data.source[0]?.url)}`,
+      }));
     },
   });
 
