@@ -137,10 +137,10 @@ const Streaming = (props: Props) => {
     data: episodesListSub,
   } = useQuery({
     refetchOnWindowFocus: false,
-    queryKey: ["episodeSubList", props.entry.idMal],
+    queryKey: ["episodeSubList", props.entry.id],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?idMal=${props.entry.idMal}&format=sub`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}&format=sub`
       );
       return data.json();
     },
@@ -151,10 +151,10 @@ const Streaming = (props: Props) => {
     data: episodesListDub,
   } = useQuery({
     refetchOnWindowFocus: false,
-    queryKey: ["episodeDubList", props.entry.idMal],
+    queryKey: ["episodeDubList", props.entry.id],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?idMal=${props.entry.idMal}&format=dub`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}&format=dub`
       );
       return data.json();
     },
