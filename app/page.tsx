@@ -19,12 +19,12 @@ export default function Home() {
           <Activity />
         </div>
         <Current type="ANIME" />
-        <Current type="MANGA" />
+        {/* <Current type="MANGA" /> */}
         <Recommended type="ANIME" />
-        <Recommended type="MANGA" />
+        {/* <Recommended type="MANGA" /> */}
         <Trending season type="ANIME" />
         <Popular type="ANIME" />
-        <Popular type="MANGA" />
+        {/* <Popular type="MANGA" /> */}
       </div>
     </>
   );
