@@ -388,7 +388,6 @@ const Streaming = (props: Props) => {
                 }}
               />
             )}
-            {JSON.stringify(skipTo)}
             <div className="grid grid-cols-1 sm:grid-cols-3 w-full p-4 items-center">
               <div className="h-full flex">
                 {!props.syncCode ? (
