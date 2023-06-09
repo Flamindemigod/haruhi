@@ -145,6 +145,7 @@ const Streaming = (props: Props) => {
       return data.json();
     },
   });
+
   const {
     isSuccess: isSuccessEpisodesDub,
     isFetching: isFetchingEpisodesDub,
@@ -174,11 +175,22 @@ const Streaming = (props: Props) => {
         ...state,
         url: `${
           process.env.NEXT_PUBLIC_MEDIA_PROXY
-        }/m3u8-proxy?url=${encodeURIComponent(data.source[0]?.url)}`,
+        }/m3u8-proxy?url=${encodeURIComponent(data.source?.[0]?.url)}`,
       }));
     },
   });
 
+  const { data: skipTo } = useQuery({
+    refetchOnWindowFocus: false,
+    enabled: !!playerState.url,
+    queryKey: ["SkipTiming", props.entry.idMal, episode, playerState.duration],
+    queryFn: async () => {
+      const data = await fetch(
+        `https://api.aniskip.com/v2/skip-times/${props.entry.idMal}/${episode}?types[]=op&episodeLength=${playerState.duration}`
+      );
+      return data.json();
+    },
+  });
   useEffect(() => {
     if (episodesListDub?.length === 0) {
       setIsDubbed(false);
@@ -204,14 +216,15 @@ const Streaming = (props: Props) => {
   }, []);
 
   useEffect(() => {
+    let episodeList = [];
     if (isDubbed ? episodesListDub : episodesListSub) {
-      setEpisodeID(
-        isDubbed
-          ? episodesListDub[episode - 1]?.id
-          : episodesListSub[episode - 1]?.id
-      );
-      episodeRefetch();
+      episodeList = [
+        ...(isDubbed ? episodesListDub : episodesListSub),
+      ].reverse();
+      // episodeRefetch();
     }
+
+    setEpisodeID(episodeList[episode - 1]?.id);
   }, [episode, isDubbed, isSuccessEpisodesDub, isSuccessEpisodesSub]);
 
   const updateEpisode = async (
@@ -318,6 +331,8 @@ const Streaming = (props: Props) => {
                 playerState={playerState}
                 setPlayerState={setPlayerState}
                 videoPlayer={videoPlayer}
+                startTime={skipTo?.results?.[0]?.interval.startTime ?? 0}
+                endTime={skipTo?.results?.[0]?.interval.endTime ?? 0}
                 hasNextEpisode={
                   (isDubbed ? episodesListDub.length : episodesListSub.length) >
                   episode
@@ -373,6 +388,7 @@ const Streaming = (props: Props) => {
                 }}
               />
             )}
+            {JSON.stringify(skipTo)}
             <div className="grid grid-cols-1 sm:grid-cols-3 w-full p-4 items-center">
               <div className="h-full flex">
                 {!props.syncCode ? (
