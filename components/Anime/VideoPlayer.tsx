@@ -44,6 +44,7 @@ type Props = {
   onPause: () => void;
   onSeek: (seekTo: number, seekType: string) => void;
   onProgress: (playedSeconds: number) => void;
+  onPlaybackRateChange: (playbackRate: number) => void;
 };
 
 function format(seconds: number) {
@@ -537,10 +538,8 @@ const VideoPlayer = (props: Props) => {
                 buttonNoColor
                 triggerAriaLabel="Playback Rate"
                 onValueChange={(value: string) => {
-                  props.setPlayerState((state: PlayerState) => ({
-                    ...state,
-                    playbackRate: toNumber(value.replace("x", "")),
-                  }));
+                  const playbackRate = toNumber(value.replace("x", ""));
+                  props.onPlaybackRateChange(playbackRate);
                 }}
                 defaultValue={"1x"}
                 value={`${props.playerState.playbackRate}x`}
