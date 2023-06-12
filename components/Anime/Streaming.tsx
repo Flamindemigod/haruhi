@@ -120,6 +120,12 @@ const Streaming = (props: Props) => {
   const syncEpisodes = (payload: any) => {
     setEpisode(parseInt(payload.episode));
   };
+  const syncPlaybackrate = (payload: any) => {
+    setPlayerState((state) => ({
+      ...state,
+      playbackRate: payload.playbackRate,
+    }));
+  };
 
   const dispatchSyncChannelRef = useMediaSync(
     syncCode,
@@ -128,7 +134,8 @@ const Streaming = (props: Props) => {
     syncPlaying,
     syncPlayed,
     syncSeekTo,
-    syncEpisodes
+    syncEpisodes,
+    syncPlaybackrate
   );
 
   const {
@@ -385,6 +392,19 @@ const Streaming = (props: Props) => {
                     packetTime: Date.now(),
                   });
                   setEpisode((state) => state + 1);
+                }}
+                onPlaybackRateChange={(playbackRate: number) => {
+                  setPlayerState((state) => ({
+                    ...state,
+                    playbackRate: playbackRate,
+                  }));
+                  dispatchSyncChannelRef({
+                    event: "playbackRate",
+                    episode: episode,
+                    animeID: props.entry.id,
+                    packetTime: Date.now(),
+                    playbackRate: playbackRate,
+                  });
                 }}
               />
             )}

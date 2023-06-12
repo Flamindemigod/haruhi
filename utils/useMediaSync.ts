@@ -9,7 +9,8 @@ const useMediaSync = (
   syncPlaying: (payload: any) => void,
   syncPlayed: (payload: any) => void,
   syncSeekTo: (payload: any) => void,
-  syncEpisodes: (payload: any) => void
+  syncEpisodes: (payload: any) => void,
+  syncPlaybackrate: (payload: any) => void
 ) => {
   const syncChannelRef = useRef<RealtimeChannel | null>(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -24,6 +25,7 @@ const useMediaSync = (
       .on("broadcast", { event: "played" }, (e)=>{if(validationFunction(e)){syncPlayed(e)}})
       .on("broadcast", { event: "seekTo" }, (e)=>{if(validationFunction(e)){syncSeekTo(e)}})
       .on("broadcast", { event: "episodes" }, (e)=>{if(validationFunction(e)){syncEpisodes(e)}})
+      .on("broadcast", { event: "playbackRate" }, (e)=>{if(validationFunction(e)){syncPlaybackrate(e)}})
       .subscribe();
 
     return () => {
