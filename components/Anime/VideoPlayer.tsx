@@ -2,7 +2,7 @@
 
 import { RefObject, useContext, useMemo, useRef, useState } from "react";
 import ReactPlayer from "react-player/lazy";
-import _ from "lodash";
+import _, { toNumber } from "lodash";
 import { useMediaQuery } from "react-responsive";
 import cx from "classnames";
 import { median } from "../../utils/median";
@@ -135,6 +135,7 @@ const VideoPlayer = (props: Props) => {
         playing={props.playerState.playing}
         volume={props.playerState.volume}
         pip={props.playerState.pip}
+        playbackRate={props.playerState.playbackRate}
         onReady={(e) => {
           props.onReady();
           props.setPlayerState((state: any) => ({ ...state, ready: true }));
@@ -534,6 +535,23 @@ const VideoPlayer = (props: Props) => {
             {props.playerState.ready && props.videoPlayer.current ? (
               <Select
                 buttonNoColor
+                triggerAriaLabel="Playback Rate"
+                onValueChange={(value: string) => {
+                  props.setPlayerState((state: PlayerState) => ({
+                    ...state,
+                    playbackRate: toNumber(value.replace("x", "")),
+                  }));
+                }}
+                defaultValue={"1x"}
+                value={`${props.playerState.playbackRate}x`}
+                values={["1x", "1.25x", "1.5x", "1.75x", "2x", "3x"]}
+              />
+            ) : (
+              <></>
+            )}
+            {props.playerState.ready && props.videoPlayer.current ? (
+              <Select
+                buttonNoColor
                 triggerAriaLabel="Resolution"
                 onValueChange={(value: string) => {
                   if (value === "Auto") {
@@ -572,6 +590,7 @@ const VideoPlayer = (props: Props) => {
             ) : (
               <></>
             )}
+
             {document.pictureInPictureEnabled && (
               <button
                 className="p-1 md:p-2 m-2"
