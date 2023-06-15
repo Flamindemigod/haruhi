@@ -225,9 +225,9 @@ const Streaming = (props: Props) => {
   useEffect(() => {
     let episodeList = [];
     if (isDubbed ? episodesListDub : episodesListSub) {
-      episodeList = [
-        ...(isDubbed ? episodesListDub : episodesListSub),
-      ].reverse();
+      episodeList = [...(isDubbed ? episodesListDub : episodesListSub)].sort(
+        (a, b) => a.number - b.number
+      );
       // episodeRefetch();
     }
 
