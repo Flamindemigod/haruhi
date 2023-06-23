@@ -51,7 +51,7 @@
     "node-loader": "^2.0.0",
     "react": "^18.2.0",
     "react-aria": "^3.21.0",
-    "react-calendar": "^4.0.0",
+    "react-calendar": "4.0.0",
     "react-comic-viewer": "^0.4.0",
     "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
