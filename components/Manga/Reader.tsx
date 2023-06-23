@@ -9,6 +9,9 @@ import Selector from "./Selector";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import cx from "classnames";
 import VideoPlayerSkeleton from "../Anime/VideoPlayerSkeleton";
+import Image from "next/image";
+import decryptImage from "../../utils/decrypt";
+import Switch from "../../primitives/Switch";
 type Props = {
   entry: any;
 };
@@ -20,16 +23,14 @@ const Reader = (props: Props) => {
   const [chapterId, setChapterId] = useState<string>("");
   const [progress, setProgress] = useState<number>(0);
   const statusUpdated = useRef<boolean>(false);
+  const [isShuffled, setIsShuffled] = useState<boolean>(false);
+  const [frames, setFrames] = useState<string[]>([]);
   const [openToast, setOpenToast] = useState<boolean>(false);
   const mangaChapters = useQuery({
-    queryKey: [
-      "mangaPages",
-      props.entry.title.romaji || props.entry.title.english,
-    ],
+    queryKey: ["mangaPages", props.entry.id],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaChapters?title=${props.entry.title.romaji || props.entry.title.english
-        }`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaChapters?id=${props.entry.id}`
       );
       return data.json();
     },
@@ -52,7 +53,7 @@ const Reader = (props: Props) => {
     if (mangaChapters.isSuccess) {
       setChapterId(
         mangaChapters.data[mangaChapters.data.length - 1 - chapterIndex]?.id ||
-        mangaChapters.data[0]?.id
+          mangaChapters.data[0]?.id
       );
       queryClient.invalidateQueries({
         queryKey: ["mangaPanels"],
@@ -70,6 +71,16 @@ const Reader = (props: Props) => {
       );
       return data.json();
     },
+    onSuccess: async (data: any[]) => {
+      const promises = data.map(async (el: any) => {
+        const k = await decryptImage(el.img);
+        return k;
+      });
+
+      const dataurls: string[] = (await Promise.all(promises)) as string[];
+
+      setFrames(dataurls);
+    },
   });
 
   const updateChapter = async (
@@ -79,7 +90,8 @@ const Reader = (props: Props) => {
     rewatches = 0
   ) => {
     const data = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER
+      `${
+        process.env.NEXT_PUBLIC_SERVER
       }/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${Math.floor(
         chapterIndex + 1
       )}&repeat=${rewatches}`,
@@ -107,8 +119,8 @@ const Reader = (props: Props) => {
   useEffect(() => {
     if (user.userAuth) {
       if (
-        progress / mangaPages.data?.length >=
-        (user.userPreferenceMangaUpdateTreshold || 0.6) &&
+        progress / mangaPages.data?.length! >=
+          (user.userPreferenceMangaUpdateTreshold || 0.6) &&
         !statusUpdated.current
       ) {
         statusUpdated.current = true;
@@ -168,40 +180,74 @@ const Reader = (props: Props) => {
               <VideoPlayerSkeleton />
             ) : (
               <div className="">
-                <ComicViewer
-                  onChangeCurrentPage={(e) => setProgress(e)}
-                  pages={mangaPages.data?.map((el: any) => process.env.NEXT_PUBLIC_MEDIA_PROXY + el.img) || []}
-                />
+                {isShuffled ? (
+                  <ComicViewer
+                    onChangeCurrentPage={(e) => setProgress(e)}
+                    pages={
+                      mangaPages.data?.map(
+                        (el: any) =>
+                          `https://server.flamindemigod.com/image-proxy?url=${encodeURIComponent(
+                            el.img
+                          )}`
+                      ) || []
+                    }
+                  />
+                ) : (
+                  <ComicViewer
+                    onChangeCurrentPage={(e) => setProgress(e)}
+                    pages={frames.map((frame: string, i: number) => (
+                      <Image
+                        key={i}
+                        width={500}
+                        height={300}
+                        alt=""
+                        src={frame}
+                      />
+                    ))}
+                  />
+                )}
               </div>
             )}
-            <div className="flex justify-center items-center">
-              <button
-                className="btn | flex justify-center dark:text-white"
-                disabled={
-                  props.entry.chapters
-                    ? chapterIndex + 1 === props.entry.chapters
-                    : false
-                }
-                onClick={() => {
-                  setChapterIndex((state) => state + 1);
-                }}
-              >
-                <MdSkipPrevious size={24} />
-              </button>
-              <Selector
-                chapterList={mangaChapters.data || []}
-                value={chapterIndex}
-                onValueChange={setChapterIndex}
-              />
-              <button
-                className="btn | flex justify-center dark:text-white"
-                disabled={chapterIndex === 0}
-                onClick={() => {
-                  setChapterIndex((state) => state - 1);
-                }}
-              >
-                <MdSkipNext size={24} />
-              </button>
+            <div className="grid grid-cols-1 sm:grid-cols-3 w-full p-4 items-center">
+              <div></div>
+              <div className="flex justify-center items-center">
+                <button
+                  className="btn | flex justify-center dark:text-white"
+                  disabled={
+                    props.entry.chapters
+                      ? chapterIndex + 1 === props.entry.chapters
+                      : false
+                  }
+                  onClick={() => {
+                    setChapterIndex((state) => state + 1);
+                  }}
+                >
+                  <MdSkipPrevious size={24} />
+                </button>
+                <Selector
+                  chapterList={mangaChapters.data || []}
+                  value={chapterIndex}
+                  onValueChange={setChapterIndex}
+                />
+                <button
+                  className="btn | flex justify-center dark:text-white"
+                  disabled={chapterIndex === 0}
+                  onClick={() => {
+                    setChapterIndex((state) => state - 1);
+                  }}
+                >
+                  <MdSkipNext size={24} />
+                </button>
+              </div>
+              <div className="flex gap-2 items-center justify-end">
+                <label
+                  className="text-offWhite-900 dark:text-offWhite-100"
+                  htmlFor="Shuffle Toggle"
+                >
+                  Shuffled
+                </label>
+                <Switch checked={isShuffled} onChecked={setIsShuffled} />
+              </div>
             </div>
           </>
         )}
