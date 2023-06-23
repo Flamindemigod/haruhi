@@ -28,6 +28,7 @@ const Reader = (props: Props) => {
   const [openToast, setOpenToast] = useState<boolean>(false);
   const mangaChapters = useQuery({
     queryKey: ["mangaPages", props.entry.id],
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const data = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaChapters?id=${props.entry.id}`
@@ -65,6 +66,7 @@ const Reader = (props: Props) => {
 
   const mangaPages = useQuery({
     queryKey: ["mangaPanels", chapterId],
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       const data = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaPanels?id=${chapterId}`
