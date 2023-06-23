@@ -182,11 +182,7 @@ const Streaming = (props: Props) => {
         ...state,
         url: `${
           process.env.NEXT_PUBLIC_MEDIA_PROXY
-        }/m3u8-proxy?url=${encodeURIComponent(
-          data.source?.[0]?.url
-        )}&headers=${encodeURIComponent(
-          JSON.stringify({ referer: data.header })
-        )}`,
+        }/m3u8-proxy?url=${encodeURIComponent(data.source?.[0]?.url)}`,
       }));
     },
   });
