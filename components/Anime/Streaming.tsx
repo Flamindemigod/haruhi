@@ -448,6 +448,11 @@ const Streaming = (props: Props) => {
                   className="btn | flex justify-center disabled:text-gray-400 dark:text-white disabled:dark:text-white/25"
                   disabled={episode === 0}
                   onClick={() => {
+                    dispatchSyncChannelRef({
+                      event: "episodes",
+                      episode: episode - 1,
+                      animeID: props.entry.id,
+                    });
                     setEpisode((state) => state - 1);
                   }}
                 >
@@ -484,6 +489,11 @@ const Streaming = (props: Props) => {
                       : false
                   }
                   onClick={() => {
+                    dispatchSyncChannelRef({
+                      event: "episodes",
+                      episode: episode + 1,
+                      animeID: props.entry.id,
+                    });
                     setEpisode((state) => state + 1);
                   }}
                 >
