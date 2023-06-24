@@ -52,9 +52,9 @@ const Current = ({ type }: { type: string }) => {
                   el.media.nextAiring &&
                   el.media.nextAiring.node.timeUntilAiring
                 }
-                contentFormat={el.media.format.replaceAll("_", " ")}
+                contentFormat={el.media.format?.replaceAll("_", " ")}
                 contentType={el.media.type}
-                contentStatus={el.media.status.replaceAll("_", " ")}
+                contentStatus={el.media.status?.replaceAll("_", " ")}
               />
             ))}
           </Carosel>

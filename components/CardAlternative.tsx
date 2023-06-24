@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import HoverCard from "../primitives/Card";
-import Countdown, { zeroPad } from "react-countdown";
+import { zeroPad } from "react-countdown";
 import Link from "next/link";
 interface Props {
   href: string;

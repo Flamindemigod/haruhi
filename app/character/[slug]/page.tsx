@@ -520,8 +520,8 @@ const Page = ({ params }: { params: any }) => {
                     </div>
 
                     <div style={{ marginTop: "2rem" }}>
-                      {edge.node.format.replaceAll("_", " ")} -{" "}
-                      {edge.node.status.replaceAll("_", " ")}
+                      {edge.node.format?.replaceAll("_", " ")} -{" "}
+                      {edge.node.status?.replaceAll("_", " ")}
                     </div>
                   </div>
                 }
