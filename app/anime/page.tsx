@@ -3,7 +3,7 @@ import cx from "classnames";
 import { useContext, useRef, useState } from "react";
 import Background from "../../components/Background";
 import List from "../../components/Lists/List";
-import useIntersectionObserver from "../../primitives/useIntersectionObserver";
+import useIntersectionObserver from "../../utils/useIntersectionObserver";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { userContext } from "../UserContext";

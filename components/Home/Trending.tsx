@@ -43,9 +43,9 @@ const Trending = ({ season, type }: { season?: boolean; type: string }) => {
             contentNextAiringEpisodeTime={
               el.nextAiring && el.nextAiring.node.timeUntilAiring
             }
-            contentFormat={el.format.replaceAll("_", " ")}
+            contentFormat={el.format?.replaceAll("_", " ")}
             contentType={el.type}
-            contentStatus={el.status.replaceAll("_", " ")}
+            contentStatus={el.status?.replaceAll("_", " ")}
           />
         ))}
       </Carosel>

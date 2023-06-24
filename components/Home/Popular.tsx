@@ -7,7 +7,8 @@ const Popular = ({ season, type }: { season?: boolean; type: string }) => {
   const [animeArray, setAnimeArray] = useState<any[]>([]);
   const fetchTrending = async () => {
     const data = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/getPopular?type=${type}${season ? "&season" : ""
+      `${process.env.NEXT_PUBLIC_SERVER}/api/getPopular?type=${type}${
+        season ? "&season" : ""
       }`
     ).then((res) => res.json());
     setAnimeArray(data);
@@ -42,9 +43,9 @@ const Popular = ({ season, type }: { season?: boolean; type: string }) => {
             contentNextAiringEpisodeTime={
               el.nextAiring && el.nextAiring.node.timeUntilAiring
             }
-            contentFormat={el.format.replaceAll("_", " ")}
+            contentFormat={el.format?.replaceAll("_", " ")}
             contentType={el.type}
-            contentStatus={el.status.replaceAll("_", " ")}
+            contentStatus={el.status?.replaceAll("_", " ")}
           />
         ))}
       </Carosel>

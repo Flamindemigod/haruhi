@@ -35,9 +35,9 @@ const Relations = (props: Props) => {
                       : relation.node.episodes
                   }
                   contentRelation={relation.relationType}
-                  contentFormat={relation.node.format}
+                  contentFormat={relation.node.format?.replaceAll("_", " ")}
                   contentType={relation.node.type}
-                  contentStatus={relation.node.status}
+                  contentStatus={relation.node.status?.replaceAll("_", " ")}
                 />
               ))}
             </Carosel>
