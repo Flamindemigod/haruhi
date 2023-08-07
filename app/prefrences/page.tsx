@@ -42,7 +42,10 @@ const Page = () => {
   );
   const updateLocalStorage = (key: string, value: any) => {
     localStorage.setItem(key, String(value));
-    window.dispatchEvent(new Event("userUpdate"));
+    if (user.broadcastChannel) {
+      user.broadcastChannel.postMessage("userUpdate");
+      console.log(user.broadcastChannel);
+    }
   };
 
   useEffect(() => {

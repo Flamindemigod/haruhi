@@ -15,6 +15,7 @@ type iUser = {
   userPreferenceMangaUpdateTreshold?: number;
   userScoreFormat?: string;
   sessionID: string;
+  broadcastChannel?: BroadcastChannel;
 };
 
 const userDefaults = {
@@ -37,7 +38,10 @@ const userContext = createContext(userDefaults);
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<iUser>(userDefaults);
 
-  const setUserData = async () => {
+  const setUserData = async (
+    broadcastChannel: BroadcastChannel,
+    newSesh: boolean = false
+  ) => {
     function handleResponse(response: any) {
       return response.json().then(function (json: any) {
         return response.ok ? json : Promise.reject(json);
@@ -49,7 +53,9 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       return null;
     }
     const userData = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/getUser`
+      `${process.env.NEXT_PUBLIC_SERVER}/api/getUser?${
+        newSesh ? "newSesh" : ""
+      }`
     )
       .then(handleResponse)
       .catch(handleError);
@@ -57,6 +63,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       setUser({
         userAuth: true,
         sessionID: userData.sessionKey,
+        broadcastChannel: broadcastChannel,
         userName: userData.data.Viewer.name,
         userID: userData.data.Viewer.id,
         userAvatar: userData.data.Viewer.avatar.medium,
@@ -91,8 +98,19 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
   useEffect(() => {
-    setUserData();
-    window.addEventListener("userUpdate", setUserData);
+    const broadcastChannel = new BroadcastChannel("haruhi-user-updates");
+    setUserData(broadcastChannel, true);
+    broadcastChannel.postMessage("newPage");
+    broadcastChannel.onmessage = (event) => {
+      console.log(event);
+      if (event.data === "userUpdate") {
+        setUserData(broadcastChannel);
+        console.log("update recieved");
+      }
+      if (event.data === "newPage") {
+        setUserData(broadcastChannel);
+      }
+    };
   }, []);
   return (
     <>
