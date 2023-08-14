@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-type iUser = {
+export type iUser = {
   userID?: number;
   userAuth?: boolean;
   userName?: string;
@@ -53,8 +53,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       return null;
     }
     const userData = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/getUser?${
-        newSesh ? "newSesh" : ""
+      `${process.env.NEXT_PUBLIC_SERVER}/api/getUser?${newSesh ? "newSesh" : ""
       }`
     )
       .then(handleResponse)
