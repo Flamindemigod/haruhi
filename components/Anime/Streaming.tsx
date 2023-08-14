@@ -538,7 +538,6 @@ const Streaming = (props: Props) => {
         },
       }
     );
-    console.log(data);
     queryClient.invalidateQueries({
       queryKey: ["mediaListEntry"],
       type: "all",
@@ -611,9 +610,6 @@ const Streaming = (props: Props) => {
           <ToastPrimitive.Provider>
             <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
               Streaming
-              {episodeUpdaterState.value}
-              {JSON.stringify(episodeUpdaterState.context)}
-
             </div>
             {(isFetchingEpisodesSub || isFetchingEpisodesDub) &&
               !playerState.ready ? (
