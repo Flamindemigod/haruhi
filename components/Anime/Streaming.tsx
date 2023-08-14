@@ -1,8 +1,15 @@
 "use client";
 
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
-import { userContext } from "../../app/UserContext";
+import { iUser, userContext } from "../../app/UserContext";
 import VideoPlayer from "./VideoPlayer";
 import VideoPlayerSkeleton from "./VideoPlayerSkeleton";
 import _ from "lodash";
@@ -18,10 +25,8 @@ import cx from "classnames";
 import { MdClose, MdShare, MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import ReactPlayer from "react-player";
 import useMediaSync from "../../utils/useMediaSync";
-import { useMachine } from '@xstate/react';
-import { createMachine, assign } from 'xstate';
-
-
+import { useMachine } from "@xstate/react";
+import { createMachine, assign } from "xstate";
 
 type Props = {
   entry: any;
@@ -46,12 +51,7 @@ export type playerProps = {
   loop: boolean;
 };
 
-
-
-
-
 const Streaming = (props: Props) => {
-
   const queryClient = useQueryClient();
   const pathname = usePathname();
   const user = useContext(userContext);
@@ -82,261 +82,284 @@ const Streaming = (props: Props) => {
   const videoPlayer = useRef<ReactPlayer>(null);
   const syncChannelRef = useRef<any>(null);
 
-
-  const episodeUpdaterMachine = useMemo(() =>
-    createMachine(
-      {
-        /** @xstate-layout N4IgpgJg5mDOIC5RgA4EtYHsJgKoogEMAXMAJwFlCBjACzQDswBiWMYgUXSxwG0AGALqJQKTLDTE0mBiJAAPRAEYAzPwAsAOgCsAdm0rdADl0qjAJmPmANCACeyowDZNK9e6UBOI-yV7tTgC+gbaoGNh4BCTkVHSMLGzEFJBohADKxCQArrACwkggYhJSMnKKCErmJppGKirm2lXqTk6entq2Dgie-K6elf0mSrrG-LrBodwR+ESklDT0TKzsyRCpXOE4uUJyRZLSsgXllcaa5uZmDT7aFrqdiAC02jpOSrVO-De+nupGE+BTHAzaLzOJLRIAJTAAHcSHQ4HlduJ9qUjspzJ4VJpfj89LonI11Od7ggHkpfDolOpMVZapZPv8wjxIrMYgt4poAJIMfaEAA2AAJYJlSMxEQU9iVDqBjj1enV6iMek4zLolCTdP1XM5apVtAYnBZGYCWSDYoswFyeVJ+UKRSxeEp8qJkVKyso5a46pZNfwVUMSZisXU2mr1LoLl4giEAZtTXNzRyAIKw-YMKACjbMgXA0iZgBuYAYxGYWYiAoAKrQyHBaJg+RABVCFpBxS7igd3RVPQqfcrVer7IgVAFNJrdOG1PqjN5tMa47m2WDLSnCGmM2WcDmonmOIXi6WTZXq7X643m-CII7nYVXZ20QhzqcnOoAmr-GrzE4SS1ntolG83gqJ45heG887MouoIWpoAAimACgAcpgxCLFAzA5OQSZZKhADCtCEOmYBtreHaojKiDmPwni6Joryvr85wmJ8JK1LRZiGuoI5Eo05gQdMO5LjB+FgNQADWmZHhk2SwGKOwSne5EKMOdTYkSuifBG-TqNRJLaNRZxUlRbjqG8SitPxQKCdBHIieJklxgK0nEDkYpOkiZHSspCAKmp9J6BiVK6UO3SnM0RKfOSpj8EYc4xkyAmsjZTCaHZEmbmATkiq5vDmDekr3hRPmqe4-laUFngalRhlElR5LklU0aTAu1mJilaUCmgABmnWwAKAAyhDCg52ZKHJ+WKV55RWK4-BUU4+jUS0Xh6XNY40YSaqfDcniWfGQm2bQokSd1vUDUNxAjeWY3Xh5KJTYgM1qPNi2eMtlUhR8RhnBtC39D8RjhntUFtZaHWnRg53DRlArmONd1ug+T1zX6r3vYGEaaBo+hcUYfhbXx8UmiD7LtUd9kQ31g3Q0ecO3QpnldsjL36W9rwfV05KYj9+gjsYAFeMDrWk2D5MnT1kPU5dMMqPDDP3UzFizSzS3s6xI5Y+GHxqJieMzkLSWg6lYudRLVMXVdW6y-T7YK0jSvPajrPoyFapYuO04+D8U4G2aItWtQNYALZFtLR6EY2aTsAKQ0CrhmBBygfLsJAcu24jRVUtzNHAb8vx+EYzireYmu86BdS-CqvsJv73KB2AIfFpbDryenhXeVnWI5wD+c3EXn1jDo4b+G45imaB1cHSlUdh45sdKDHDCR9Hsfx4nyekI2EcCnXweh02MJwkdskkQVSnHNSXemD3eN99+IU0UoPP6pUHGGLtRMtYb-sz83Md9Qvbev9Y4AHUj6MAzNvXeDd95QlhMQeEJ9W6kTtpnS+mhu551voXe+nNqIl20MPLiVEdLhUnslS0v8Ybz0XsvS6q8E5JxThANOKCM4d3QZgwG2D+5dFqFoDE+gbheBGC0JqsZILC2XJoKh4cAG0KcivPqYCEFoVYWfB6FROHXywQXXhj1VClwCE4C4Fw9Af2apI7+0jVzrj-vhQiMAsrREPI5BxRFtyslPpNLsXh+Dym9EqP0A4fztDOLFRqkUFomOCDGBgER4AFASlZaxFoEbt3KOGVwOJ9T+OooQ8kuDKKtB5tSApFxMQXHIUbbkvJBTCmiOk8+yh9BP3OMBGK+k9CxXUKxfxlI3gMVeIQzU1T-a2KkOmP+i4CyhyaZo0xf4qj6RRoUmwrtQJYwAs4eiwxrhjOkfBJCKE0LzK7IsnQyz-F1T9Osvhho6JvVadoHoM5KgHOEibGGzkchnIfGEtwM5cn+PaKZEkKgFrZInL6fEzRtIfMOsdU2Z0pZ-yUH8oqhCS4EhMQYfQHwIwqFWrRcKwwQzmS8K+BFZMkWUyhrPbM5gMXeSxXRKkxjQJ6mpBjFwYYnyGA+P0alotaVm3pX-FQzLyisvohygCDRuWuzeNiF8Y8LitDxkoYVAc95N2oUvRR9C+pryYZvKVyhIp0SdviECNx9AknDLREZvwda+FuOMT+Vi-bSOgY3BlERzUVFUFiLwlhg34j8CBPStQjHGFeD4QuHrLGJW9TBWRc95FAKUXHRhG9IAKN9bAw+qi4CBrZjUF8LyNI9HDFUQMKgn7Y31G4MwsU-DavTdmGhWajUChUWCSBBrC1NzgUfUt8t2HlDep4DBAFXwGB0m0V8JJCnfSbeFccTEO3R2oZmg1wDjW5uYYGwpvQunnE5YQ-gdQNQ-CMdrGi3hr3bv9Vubt+7s39tOROjJFqWhY0aDFa9BJbWDi6Iab6IyAjtCA24OKyaUmpuTKmSZG4jzuKcc5MAJ7BVY2idfH4XMikIFaM8XwbxCF6HMnNWJgQgA */
-        id: "episodeUpdaterMachine",
-        context: {
-          isUserAuth: false,
-          canUpdate: true,
-          mediaStatus: '',
-          episode: 0,
-          mediaEpisodes: 0,
-          rewatches: 0,
-          id: 0
-        },
-        initial: "Initial state",
-        states: {
-          "Initial state": {
-            always: [
-              {
-                target: "Awaiting Episode Update Event",
-                cond: "isUserAuth",
-              },
-              {
-                target: "Do Nothing",
-              },
-            ],
+  const episodeUpdaterMachine = useMemo(
+    () =>
+      createMachine(
+        {
+          /** @xstate-layout N4IgpgJg5mDOIC5RgA4EtYHsJgKoogEMAXMAJwFlCBjACzQDswBiWMYgUXSxwG0AGALqJQKTLDTE0mBiJAAPRAEYAzPwAsAOgCsAdm0rdADl0qjAJmPmANCACeyowDZNK9e6UBOI-yV7tTgC+gbaoGNh4BCTkVHSMLGzEFJBohADKxCQArrACwkggYhJSMnKKCErmJppGKirm2lXqTk6entq2Dgie-K6elf0mSrrG-LrBodwR+ESklDT0TKzsyRCpXOE4uUJyRZLSsgXllcaa5uZmDT7aFrqdiAC02jpOSrVO-De+nupGE+BTHAzaLzOJLRIAJTAAHcSHQ4HlduJ9qUjspzJ4VJpfj89LonI11Od7ggHkpfDolOpMVZapZPv8wjxIrMYgt4poAJIMfaEAA2AAJYJlSMxEQU9iVDqBjj1enV6iMek4zLolCTdP1XM5apVtAYnBZGYCWSDYoswFyeVJ+UKRSxeEp8qJkVKyso5a46pZNfwVUMSZisXU2mr1LoLl4giEAZtTXNzRyAIKw-YMKACjbMgXA0iZgBuYAYxGYWYiAoAKrQyHBaJg+RABVCFpBxS7igd3RVPQqfcrVer7IgVAFNJrdOG1PqjN5tMa47m2WDLSnCGmM2WcDmonmOIXi6WTZXq7X643m-CII7nYVXZ20QhzqcnOoAmr-GrzE4SS1ntolG83gqJ45heG887MouoIWpoAAimACgAcpgxCLFAzA5OQSZZKhADCtCEOmYBtreHaojKiDmPwni6Joryvr85wmJ8JK1LRZiGuoI5Eo05gQdMO5LjB+FgNQADWmZHhk2SwGKOwSne5EKMOdTYkSuifBG-TqNRJLaNRZxUlRbjqG8SitPxQKCdBHIieJklxgK0nEDkYpOkiZHSspCAKmp9J6BiVK6UO3SnM0RKfOSpj8EYc4xkyAmsjZTCaHZEmbmATkiq5vDmDekr3hRPmqe4-laUFngalRhlElR5LklU0aTAu1mJilaUCmgABmnWwAKAAyhDCg52ZKHJ+WKV55RWK4-BUU4+jUS0Xh6XNY40YSaqfDcniWfGQm2bQokSd1vUDUNxAjeWY3Xh5KJTYgM1qPNi2eMtlUhR8RhnBtC39D8RjhntUFtZaHWnRg53DRlArmONd1ug+T1zX6r3vYGEaaBo+hcUYfhbXx8UmiD7LtUd9kQ31g3Q0ecO3QpnldsjL36W9rwfV05KYj9+gjsYAFeMDrWk2D5MnT1kPU5dMMqPDDP3UzFizSzS3s6xI5Y+GHxqJieMzkLSWg6lYudRLVMXVdW6y-T7YK0jSvPajrPoyFapYuO04+D8U4G2aItWtQNYALZFtLR6EY2aTsAKQ0CrhmBBygfLsJAcu24jRVUtzNHAb8vx+EYzireYmu86BdS-CqvsJv73KB2AIfFpbDryenhXeVnWI5wD+c3EXn1jDo4b+G45imaB1cHSlUdh45sdKDHDCR9Hsfx4nyekI2EcCnXweh02MJwkdskkQVSnHNSXemD3eN99+IU0UoPP6pUHGGLtRMtYb-sz83Md9Qvbev9Y4AHUj6MAzNvXeDd95QlhMQeEJ9W6kTtpnS+mhu551voXe+nNqIl20MPLiVEdLhUnslS0v8Ybz0XsvS6q8E5JxThANOKCM4d3QZgwG2D+5dFqFoDE+gbheBGC0JqsZILC2XJoKh4cAG0KcivPqYCEFoVYWfB6FROHXywQXXhj1VClwCE4C4Fw9Af2apI7+0jVzrj-vhQiMAsrREPI5BxRFtyslPpNLsXh+Dym9EqP0A4fztDOLFRqkUFomOCDGBgER4AFASlZaxFoEbt3KOGVwOJ9T+OooQ8kuDKKtB5tSApFxMQXHIUbbkvJBTCmiOk8+yh9BP3OMBGK+k9CxXUKxfxlI3gMVeIQzU1T-a2KkOmP+i4CyhyaZo0xf4qj6RRoUmwrtQJYwAs4eiwxrhjOkfBJCKE0LzK7IsnQyz-F1T9Osvhho6JvVadoHoM5KgHOEibGGzkchnIfGEtwM5cn+PaKZEkKgFrZInL6fEzRtIfMOsdU2Z0pZ-yUH8oqhCS4EhMQYfQHwIwqFWrRcKwwQzmS8K+BFZMkWUyhrPbM5gMXeSxXRKkxjQJ6mpBjFwYYnyGA+P0alotaVm3pX-FQzLyisvohygCDRuWuzeNiF8Y8LitDxkoYVAc95N2oUvRR9C+pryYZvKVyhIp0SdviECNx9AknDLREZvwda+FuOMT+Vi-bSOgY3BlERzUVFUFiLwlhg34j8CBPStQjHGFeD4QuHrLGJW9TBWRc95FAKUXHRhG9IAKN9bAw+qi4CBrZjUF8LyNI9HDFUQMKgn7Y31G4MwsU-DavTdmGhWajUChUWCSBBrC1NzgUfUt8t2HlDep4DBAFXwGB0m0V8JJCnfSbeFccTEO3R2oZmg1wDjW5uYYGwpvQunnE5YQ-gdQNQ-CMdrGi3hr3bv9Vubt+7s39tOROjJFqWhY0aDFa9BJbWDi6Iab6IyAjtCA24OKyaUmpuTKmSZG4jzuKcc5MAJ7BVY2idfH4XMikIFaM8XwbxCF6HMnNWJgQgA */
+          id: "episodeUpdaterMachine",
+          context: {
+            isUserAuth: false,
+            canUpdate: true,
+            mediaStatus: "",
+            episode: 0,
+            mediaEpisodes: 0,
+            rewatches: 0,
+            id: 0,
+            user: { userID: 0, sessionID: "" }
           },
-          "Awaiting Episode Update Event": {
-            on: {
-              "Episode Threshold Reached": [
-                {
-                  target: "Check Episode Status",
-                  cond: "canUpdate",
-                },
+          initial: "Initial state",
+          states: {
+            "Initial state": {
+              always: [
                 {
                   target: "Awaiting Episode Update Event",
-                  internal: false,
+                  cond: "isUserAuth",
+                },
+                {
+                  target: "Do Nothing",
                 },
               ],
             },
-          },
-          "Do Nothing": {
-            on: {
-              userAuthChange: {
-                target: "Initial state",
-                actions: assign({ isUserAuth: (context, event) => event.userAuthState }),
+            "Awaiting Episode Update Event": {
+              on: {
+                "Episode Threshold Reached": [
+                  {
+                    target: "Check Episode Status",
+                    cond: "canUpdate",
+                  },
+                  {
+                    target: "Awaiting Episode Update Event",
+                    internal: false,
+                  },
+                ],
               },
             },
-          },
-          "Check Episode Status": {
-            always: [
-              {
-                target: "Check if is Last Episode 1",
-                cond: "isWatching",
+            "Do Nothing": {
+              on: {
+                userAuthChange: {
+                  target: "Initial state",
+                  actions: assign({
+                    isUserAuth: (context, event) => event.userAuthState,
+                  }),
+                },
               },
-              {
-                target: "Check if is Last Episode 2",
-                cond: "isCompleted",
-              },
-              {
-                target: "Check if is Last Episode 3",
-              },
-            ],
-          },
-          "Check if is Last Episode 1": {
-            always: [
-              {
-                target: "Increment Episode and Set as Completed",
-                cond: "isLastEpisode",
-              },
-              {
-                target: "Increment Episode",
-              },
-            ],
-          },
-          "Check if is Last Episode 2": {
-            always: [
-              {
-                target: "Set Episode as 1 and Set as Completed and Increment Rewatches",
-                cond: "isLastEpisode",
-              },
-              {
-                target: "Set Episode as 1 and Set as Watching and Increment Rewatches",
-              },
-            ],
-          },
-          "Check if is Last Episode 3": {
-            always: [
-              {
-                target: "Set Episode as 1 and Set as Completed",
-                cond: "isLastEpisode",
-              },
-              {
-                target: "Set Episode as 1 and Set as Watching",
-              },
-            ],
-          },
-          "Increment Episode and Set as Completed": {
-            entry: ["incrementAndComplete"],
+            },
+            "Check Episode Status": {
+              always: [
+                {
+                  target: "Check if is Last Episode 1",
+                  cond: "isWatching",
+                },
+                {
+                  target: "Check if is Last Episode 2",
+                  cond: "isCompleted",
+                },
+                {
+                  target: "Check if is Last Episode 3",
+                },
+              ],
+            },
+            "Check if is Last Episode 1": {
+              always: [
+                {
+                  target: "Increment Episode and Set as Completed",
+                  cond: "isLastEpisode",
+                },
+                {
+                  target: "Increment Episode",
+                },
+              ],
+            },
+            "Check if is Last Episode 2": {
+              always: [
+                {
+                  target:
+                    "Set Episode as 1 and Set as Completed and Increment Rewatches",
+                  cond: "isLastEpisode",
+                },
+                {
+                  target:
+                    "Set Episode as 1 and Set as Watching and Increment Rewatches",
+                },
+              ],
+            },
+            "Check if is Last Episode 3": {
+              always: [
+                {
+                  target: "Set Episode as 1 and Set as Completed",
+                  cond: "isLastEpisode",
+                },
+                {
+                  target: "Set Episode as 1 and Set as Watching",
+                },
+              ],
+            },
+            "Increment Episode and Set as Completed": {
+              entry: ["incrementAndComplete"],
 
-            always: {
-              target: "Awaiting Episode Change State",
+              always: {
+                target: "Awaiting Episode Change State",
+              },
             },
-          },
-          "Increment Episode": {
-            entry: ["increment"],
+            "Increment Episode": {
+              entry: ["increment"],
 
-            always: {
-              target: "Awaiting Episode Change State",
+              always: {
+                target: "Awaiting Episode Change State",
+              },
             },
-          },
-          "Set Episode as 1 and Set as Completed and Increment Rewatches": {
-            description: "set completed\nset episode to 1\nadd 1 to rewatches",
-            entry: ["initAndCompleteAndRewatch"],
+            "Set Episode as 1 and Set as Completed and Increment Rewatches": {
+              description:
+                "set completed\nset episode to 1\nadd 1 to rewatches",
+              entry: ["initAndCompleteAndRewatch"],
 
-            always: {
-              target: "Awaiting Episode Change State",
+              always: {
+                target: "Awaiting Episode Change State",
+              },
             },
-          },
-          "Set Episode as 1 and Set as Watching and Increment Rewatches": {
-            entry: ["initAndWatchingAndRewatch"],
+            "Set Episode as 1 and Set as Watching and Increment Rewatches": {
+              entry: ["initAndWatchingAndRewatch"],
 
-            always: {
-              target: "Awaiting Episode Change State",
+              always: {
+                target: "Awaiting Episode Change State",
+              },
             },
-          },
-          "Set Episode as 1 and Set as Completed": {
-            description: "set completed\nset episode to 1",
-            entry: ["initAndComplete"],
+            "Set Episode as 1 and Set as Completed": {
+              description: "set completed\nset episode to 1",
+              entry: ["initAndComplete"],
 
-            always: {
-              target: "Awaiting Episode Change State",
+              always: {
+                target: "Awaiting Episode Change State",
+              },
             },
-          },
-          "Set Episode as 1 and Set as Watching": {
-            entry: ["initAndWatching"],
+            "Set Episode as 1 and Set as Watching": {
+              entry: ["initAndWatching"],
 
-            always: {
-              target: "Awaiting Episode Change State",
+              always: {
+                target: "Awaiting Episode Change State",
+              },
             },
-          },
-          "Awaiting Episode Change State": {
-            entry: assign({ canUpdate: false }),
-            on: {
-              "Episode Change Update": {
-                target: "Awaiting Episode Update Event",
-                actions: assign({ canUpdate: true }),
+            "Awaiting Episode Change State": {
+              entry: assign({ canUpdate: false }),
+              on: {
+                "Episode Change Update": {
+                  target: "Awaiting Episode Update Event",
+                  actions: assign({ canUpdate: true }),
+                },
               },
             },
           },
+          on: {
+            setEpisode: {
+              actions: assign({ episode: (context, event) => event.episode }),
+              internal: true,
+            },
+            setMediaStatus: {
+              actions: assign({
+                mediaStatus: (context, event) => event.status,
+              }),
+              internal: true,
+            },
+            setMediaEpisodes: {
+              actions: assign({
+                mediaEpisodes: (context, event) => event.episode,
+              }),
+              internal: true,
+            },
+            setRewatches: {
+              actions: assign({
+                rewatches: (context, event) => event.rewatches,
+              }),
+              internal: true,
+            },
+            setId: {
+              actions: assign({ id: (context, event) => event.id }),
+              internal: true,
+            },
+            setUser: {
+              actions: assign({ user: (context, event) => ({ ...context.user, userID: event.userID, sessionID: event.sessionID }) }),
+              internal: true,
+            },
+          },
+          schema: {
+            events: {} as
+              | { type: "Episode Threshold Reached" }
+              | { type: "Episode Change Update" }
+              | { type: "userAuthChange"; userAuthState: boolean }
+              | { type: "setEpisode"; episode: number }
+              | {
+                type: "setMediaStatus";
+                status:
+                | ""
+                | "CURRENT"
+                | "COMPLETED"
+                | "PLANNING"
+                | "DROPPED"
+                | "PAUSED"
+                | "REPEATING";
+              }
+              | { type: "setMediaEpisodes"; episode: number }
+              | { type: "setRewatches"; rewatches: number }
+              | { type: "setId"; id: number }
+              | {
+                type: "setUser", userID: number, sessionID: string
+              },
+          },
+          predictableActionArguments: true,
+          preserveActionOrder: true,
+          tsTypes: {} as import("./Streaming.typegen").Typegen0,
         },
-        on: {
-          "setEpisode": {
-            actions: assign({ episode: (context, event) => event.episode }),
-            internal: true,
+        {
+          actions: {
+            initAndWatchingAndRewatch: (context, event) => {
+              updateEpisode(
+                context.id,
+                context.episode,
+                "CURRENT",
+                context.user,
+                context.rewatches + 1
+              );
+            },
+            initAndCompleteAndRewatch: (context, event) => {
+              updateEpisode(
+                context.id,
+                context.episode,
+                "COMPLETED",
+                context.user,
+                context.rewatches + 1
+              );
+            },
+            initAndComplete: (context, event) => {
+              updateEpisode(context.id, context.episode, "COMPLETED", context.user);
+            },
+            initAndWatching: (context, event) => {
+              updateEpisode(context.id, context.episode, "CURRENT", context.user);
+            },
+            increment: (context, event) => {
+              updateEpisode(context.id, context.episode, "CURRENT", context.user);
+            },
+            incrementAndComplete: (context, event) => {
+              updateEpisode(context.id, context.episode, "COMPLETED", context.user);
+            },
           },
-          "setMediaStatus": {
-            actions: assign({ mediaStatus: (context, event) => event.status }),
-            internal: true,
+          services: {},
+          guards: {
+            isUserAuth: (context, event) => {
+              return context.isUserAuth;
+            },
+            canUpdate: (context, event) => {
+              return context.canUpdate;
+            },
+            isWatching: (context, event) => {
+              return context.mediaStatus === "CURRENT";
+            },
+            isCompleted: (context, event) => {
+              return context.mediaStatus === "COMPLETED";
+            },
+            isLastEpisode: (context, event) => {
+              return context.mediaEpisodes === context.episode;
+            },
           },
-          "setMediaEpisodes": {
-            actions: assign({ mediaEpisodes: (context, event) => event.episode }),
-            internal: true,
-          },
-          "setRewatches": {
-            actions: assign({ rewatches: (context, event) => event.rewatches }),
-            internal: true,
-          },
-          "setId": {
-            actions: assign({ id: (context, event) => event.id }),
-            internal: true,
-          },
-        },
-        schema: {
-          events: {} as
-            | { type: "Episode Threshold Reached" }
-            | { type: "Episode Change Update" }
-            | { type: "userAuthChange", userAuthState: boolean }
-            | { type: "setEpisode", episode: number }
-            | { type: "setMediaStatus", status: "" | "CURRENT" | "COMPLETED" | "PLANNING" | "DROPPED" | "PAUSED" | "REPEATING" }
-            | { type: "setMediaEpisodes", episode: number }
-            | { type: "setRewatches", rewatches: number }
-            | { type: "setId", id: number },
+          delays: {},
+        }
+      ),
+    []
+  );
 
-
-        },
-        predictableActionArguments: true,
-        preserveActionOrder: true,
-        tsTypes: {} as import("./Streaming.typegen").Typegen0,
-      },
-      {
-        actions: {
-          initAndWatchingAndRewatch: (context, event) => {
-            updateEpisode(
-              context.id,
-              context.episode,
-              "CURRENT",
-              context.rewatches + 1
-            );
-          },
-          initAndCompleteAndRewatch: (context, event) => {
-            updateEpisode(
-              context.id,
-              context.episode,
-              "COMPLETED",
-              context.rewatches + 1
-            );
-          },
-          initAndComplete: (context, event) => {
-            updateEpisode(
-              context.id,
-              context.episode,
-              "COMPLETED",
-            );
-          },
-          initAndWatching: (context, event) => {
-            updateEpisode(
-              context.id,
-              context.episode,
-              "CURRENT",
-            );
-          },
-          increment: (context, event) => {
-            updateEpisode(
-              context.id,
-              context.episode,
-              "CURRENT",
-            );
-          },
-          incrementAndComplete: (context, event) => {
-            updateEpisode(
-              context.id,
-              context.episode,
-              "COMPLETED",
-            );
-          },
-        },
-        services: {},
-        guards: {
-          isUserAuth: (context, event) => { return context.isUserAuth },
-          canUpdate: (context, event) => { return context.canUpdate },
-          isWatching: (context, event) => { return context.mediaStatus === "CURRENT" },
-          isCompleted: (context, event) => { return context.mediaStatus === "COMPLETED" },
-          isLastEpisode: (context, event) => { return context.mediaEpisodes === context.episode },
-        },
-        delays: {},
-      },
-    )
-    , [])
-
-
-  const [episodeUpdaterState, episodeUpdaterSend] = useMachine(episodeUpdaterMachine)
-
-
+  const [episodeUpdaterState, episodeUpdaterSend] = useMachine(
+    episodeUpdaterMachine
+  );
 
   const throttleedSeek = useCallback(
     _.debounce(
@@ -503,7 +526,8 @@ const Streaming = (props: Props) => {
     id: number,
     episode: number,
     status: string,
-    rewatches = 0
+    user: Pick<iUser, "userID" | "sessionID">,
+    rewatches: number = 0,
   ) => {
     const data = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER}/api/setMediaEntry?&mediaId=${id}&status=${status}&progress=${episode}&repeat=${rewatches}`,
@@ -514,6 +538,7 @@ const Streaming = (props: Props) => {
         },
       }
     );
+    console.log(data);
     queryClient.invalidateQueries({
       queryKey: ["mediaListEntry"],
       type: "all",
@@ -533,18 +558,48 @@ const Streaming = (props: Props) => {
       playerState.played >=
       (user.userPreferenceEpisodeUpdateTreshold !== undefined
         ? user.userPreferenceEpisodeUpdateTreshold
-        : 0.85)) {
-      episodeUpdaterSend("Episode Threshold Reached")
+        : 0.85)
+    ) {
+      episodeUpdaterSend("Episode Threshold Reached");
     }
-
   }, [playerState.played]);
 
-  useEffect(() => { episodeUpdaterSend({ type: "userAuthChange", userAuthState: user.userAuth ?? false }) }, [user.userAuth])
-  useEffect(() => { episodeUpdaterSend({ type: "setEpisode", episode: episode }); episodeUpdaterSend("Episode Change Update") }, [episode])
-  useEffect(() => { episodeUpdaterSend({ type: "setMediaEpisodes", episode: props.entry.episodes }) }, [props.entry.episodes])
-  useEffect(() => { episodeUpdaterSend({ type: "setMediaStatus", status: props.entry.mediaListEntry?.status ?? "" }) }, [props.entry.mediaListEntry?.status])
-  useEffect(() => { episodeUpdaterSend({ type: "setRewatches", rewatches: props.entry.mediaListEntry?.repeat }) }, [props.entry.mediaListEntry?.repeat])
-  useEffect(() => { episodeUpdaterSend({ type: "setId", id: props.entry.id }) }, [props.entry.id])
+  useEffect(() => {
+    episodeUpdaterSend({
+      type: "userAuthChange",
+      userAuthState: user.userAuth ?? false,
+    });
+    episodeUpdaterSend({
+      type: "setUser",
+      userID: user.userID ?? 0,
+      sessionID: user.sessionID,
+    });
+  }, [user]);
+  useEffect(() => {
+    episodeUpdaterSend({ type: "setEpisode", episode: episode });
+    episodeUpdaterSend("Episode Change Update");
+  }, [episode]);
+  useEffect(() => {
+    episodeUpdaterSend({
+      type: "setMediaEpisodes",
+      episode: props.entry.episodes,
+    });
+  }, [props.entry.episodes]);
+  useEffect(() => {
+    episodeUpdaterSend({
+      type: "setMediaStatus",
+      status: props.entry.mediaListEntry?.status ?? "",
+    });
+  }, [props.entry.mediaListEntry?.status]);
+  useEffect(() => {
+    episodeUpdaterSend({
+      type: "setRewatches",
+      rewatches: props.entry.mediaListEntry?.repeat,
+    });
+  }, [props.entry.mediaListEntry?.repeat]);
+  useEffect(() => {
+    episodeUpdaterSend({ type: "setId", id: props.entry.id });
+  }, [props.entry.id]);
 
   return (
     <>
@@ -556,6 +611,9 @@ const Streaming = (props: Props) => {
           <ToastPrimitive.Provider>
             <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
               Streaming
+              {episodeUpdaterState.value}
+              {JSON.stringify(episodeUpdaterState.context)}
+
             </div>
             {(isFetchingEpisodesSub || isFetchingEpisodesDub) &&
               !playerState.ready ? (
