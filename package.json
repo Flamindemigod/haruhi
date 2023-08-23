@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@consumet/extensions": "github:consumet/consumet.ts",
+    "@consumet/extensions": "github:dopeCape/consumet.ts",
     "@headlessui/react": "^1.7.4",
     "@internationalized/date": "^3.0.1",
     "@radix-ui/react-avatar": "^1.0.1",
