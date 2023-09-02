@@ -56,45 +56,44 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       `${process.env.NEXT_PUBLIC_SERVER}/api/getUser?${newSesh ? "newSesh" : ""
       }`
     )
-      .then(handleResponse)
+      .then(handleResponse).then((userData)=>{
+        setUser({
+          userAuth: true,
+          sessionID: userData.sessionKey,
+          broadcastChannel: broadcastChannel,
+          userName: userData.data.Viewer.name,
+          userID: userData.data.Viewer.id,
+          userAvatar: userData.data.Viewer.avatar.medium,
+          userShowAdult: userData.data.Viewer.options.displayAdultContent,
+          userPreferenceMangaEndDialog:
+            localStorage.getItem("UserPrefMangaEndDialog") === "true"
+              ? true
+              : false,
+          userPreferenceShowEndDialog:
+            localStorage.getItem("UserPrefShowEndDialog") === "true"
+              ? true
+              : false,
+          userPreferenceSkipOpening: !Number.isNaN(
+            parseFloat(String(localStorage.getItem("UserPrefSkipOpening")))
+          )
+            ? parseFloat(String(localStorage.getItem("UserPrefSkipOpening")))
+            : undefined,
+          userPreferenceDubbed:
+            localStorage.getItem("UserPrefDubbed") === "true" ? true : false,
+          userPreferenceEpisodeUpdateTreshold: !Number.isNaN(
+            parseFloat(String(localStorage.getItem("UserPrefEpisodeTreshold")))
+          )
+            ? parseFloat(String(localStorage.getItem("UserPrefEpisodeTreshold")))
+            : undefined,
+          userPreferenceMangaUpdateTreshold: !Number.isNaN(
+            parseFloat(String(localStorage.getItem("UserPrefMangaTreshold")))
+          )
+            ? parseFloat(String(localStorage.getItem("UserPrefMangaTreshold")))
+            : undefined,
+          userScoreFormat: userData.data.Viewer.mediaListOptions.scoreFormat,
+        });
+      })
       .catch(handleError);
-    if (userData) {
-      setUser({
-        userAuth: true,
-        sessionID: userData.sessionKey,
-        broadcastChannel: broadcastChannel,
-        userName: userData.data.Viewer.name,
-        userID: userData.data.Viewer.id,
-        userAvatar: userData.data.Viewer.avatar.medium,
-        userShowAdult: userData.data.Viewer.options.displayAdultContent,
-        userPreferenceMangaEndDialog:
-          localStorage.getItem("UserPrefMangaEndDialog") === "true"
-            ? true
-            : false,
-        userPreferenceShowEndDialog:
-          localStorage.getItem("UserPrefShowEndDialog") === "true"
-            ? true
-            : false,
-        userPreferenceSkipOpening: !Number.isNaN(
-          parseFloat(String(localStorage.getItem("UserPrefSkipOpening")))
-        )
-          ? parseFloat(String(localStorage.getItem("UserPrefSkipOpening")))
-          : undefined,
-        userPreferenceDubbed:
-          localStorage.getItem("UserPrefDubbed") === "true" ? true : false,
-        userPreferenceEpisodeUpdateTreshold: !Number.isNaN(
-          parseFloat(String(localStorage.getItem("UserPrefEpisodeTreshold")))
-        )
-          ? parseFloat(String(localStorage.getItem("UserPrefEpisodeTreshold")))
-          : undefined,
-        userPreferenceMangaUpdateTreshold: !Number.isNaN(
-          parseFloat(String(localStorage.getItem("UserPrefMangaTreshold")))
-        )
-          ? parseFloat(String(localStorage.getItem("UserPrefMangaTreshold")))
-          : undefined,
-        userScoreFormat: userData.data.Viewer.mediaListOptions.scoreFormat,
-      });
-    }
   };
   useEffect(() => {
     const broadcastChannel = new BroadcastChannel("haruhi-user-updates");
