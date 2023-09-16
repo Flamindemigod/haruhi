@@ -49,10 +49,9 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     function handleError(error: any) {
-      console.error(error);
-      return null;
+      console.log(error);
     }
-    const userData = await fetch(
+   await fetch(
       `${process.env.NEXT_PUBLIC_SERVER}/api/getUser?${newSesh ? "newSesh" : ""
       }`
     )
@@ -111,9 +110,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
   return (
-    <>
       <userContext.Provider value={user}>{children}</userContext.Provider>
-    </>
   );
 };
 
