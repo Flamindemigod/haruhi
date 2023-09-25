@@ -187,7 +187,7 @@ const Reader = (props: Props) => {
       <ToastPrimitive.Provider>
         {(mangaChapters.isFetching || mangaChapters.data?.length) && (
           <>
-            {mangaChapters.isFetching && !frames.length ? (
+            {mangaChapters.isFetching || !(frames.length) ? (
               <VideoPlayerSkeleton />
             ) : (
               <MangaReader
