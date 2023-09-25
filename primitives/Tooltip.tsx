@@ -5,7 +5,8 @@ import { ReactNode } from "react";
 interface Props {
   children: ReactNode;
   content: ReactNode;
-  index: number;
+  index?: number;
+  className?: string;
 }
 
 const Tooltip = (props: Props) => {
@@ -32,7 +33,8 @@ const Tooltip = (props: Props) => {
             "radix-side-bottom:animate-slide-up-fade",
             "radix-side-left:animate-slide-right-fade",
             "inline-flex items-center rounded-md px-4 py-2.5",
-            "bg-white dark:bg-offWhite-500"
+            "bg-white dark:bg-offWhite-500",
+            props.className
           )}
         >
           <TooltipPrimitive.Arrow className="fill-current text-white dark:text-offWhite-500" />
