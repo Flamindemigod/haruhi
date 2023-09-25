@@ -2,6 +2,15 @@
 import { createCanvas } from "canvas";
 var seedrandom = require("seedrandom");
 
+export type ImageFrame = {
+  orig: string
+  descrambled: string
+  width: number
+  height: number
+} 
+
+
+
 function baseRange(b, c, d, e) {
   var h = -1,
     k = Math.max(Math.ceil((c - b) / (d || 1)), 0);
@@ -146,7 +155,7 @@ function unShuffle(an, ao) {
   
 
 
-function loadImage(src) {
+function loadImage(src):Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const image = new Image();
 
@@ -166,9 +175,13 @@ function loadImage(src) {
 }
 
 async function imgReverser(dn, dp = 200, dq = "stay") {
+
     const dx = await loadImage(dn);
     const du = createCanvas(dx.width, dx.height);
+    const imageOriginal = createCanvas(dx.width, dx.height);
     const dv = du.getContext("2d");
+    const imageOriginalCanvas = imageOriginal.getContext("2d");
+    imageOriginalCanvas.drawImage(dx, 0, 0)
     
       var dy = Math.ceil(dx.width / dp) * Math.ceil(dx.height / dp);
       du.width = dx.width;
@@ -209,7 +222,8 @@ async function imgReverser(dn, dp = 200, dq = "stay") {
           );
         }
     };
-    return du.toDataURL("image/jpeg", 1)
+    const data : ImageFrame = {descrambled: du.toDataURL("image/jpeg", 1), orig: imageOriginal.toDataURL("image/jpeg", 1), height: dx.height, width: dx.width}
+    return data
     
     // dx.src = dn;
   }

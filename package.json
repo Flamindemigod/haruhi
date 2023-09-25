@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@consumet/extensions": "github:dopeCape/consumet.ts",
+    "@consumet/extensions": "github:consumet/consumet.ts",
     "@headlessui/react": "^1.7.4",
     "@internationalized/date": "^3.0.1",
     "@radix-ui/react-avatar": "^1.0.1",
@@ -62,6 +62,7 @@
     "react-player": "^2.11.0",
     "react-redux": "^8.0.5",
     "react-responsive": "^9.0.2",
+    "react-swipeable": "^7.0.1",
     "redux": "^4.2.0",
     "screenfull": "^6.0.2",
     "seedrandom": "^3.0.5",

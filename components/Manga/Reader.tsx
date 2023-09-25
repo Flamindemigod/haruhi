@@ -1,7 +1,6 @@
 "use client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useRef, useState } from "react";
-import ComicViewer from "react-comic-viewer";
 import { MdClose, MdSkipNext, MdSkipPrevious } from "react-icons/md";
 import { userContext } from "../../app/UserContext";
 import { median } from "../../utils/median";
@@ -9,11 +8,23 @@ import Selector from "./Selector";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import cx from "classnames";
 import VideoPlayerSkeleton from "../Anime/VideoPlayerSkeleton";
-import Image from "next/image";
-import decryptImage from "../../utils/decrypt";
+import decryptImage, { ImageFrame } from "../../utils/decrypt";
 import Switch from "../../primitives/Switch";
+import Tooltip from "../../primitives/Tooltip";
+import MangaReader from "./MangaReader";
 type Props = {
   entry: any;
+};
+
+export type MangaChapter = {
+  id: string;
+  title: string;
+  chapter: string;
+};
+
+type MangaPage = {
+  page: number;
+  img: string;
 };
 
 const Reader = (props: Props) => {
@@ -24,16 +35,22 @@ const Reader = (props: Props) => {
   const [progress, setProgress] = useState<number>(0);
   const statusUpdated = useRef<boolean>(false);
   const [isShuffled, setIsShuffled] = useState<boolean>(false);
-  const [frames, setFrames] = useState<string[]>([]);
+  const [frames, setFrames] = useState<ImageFrame[]>([]);
   const [openToast, setOpenToast] = useState<boolean>(false);
+
   const mangaChapters = useQuery({
     queryKey: ["mangaPages", props.entry.id],
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      const data = await fetch(
+      const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaChapters?id=${props.entry.id}`
       );
-      return data.json();
+      const data = res.json() as Promise<MangaChapter[]>;
+      return data;
+    },
+    onSuccess(data) {
+      data.sort((a, b) => parseFloat(a.chapter) - parseFloat(b.chapter));
+      setChapterId(data[chapterIndex]?.id || data[0]?.id);
     },
   });
   useEffect(() => {
@@ -50,40 +67,32 @@ const Reader = (props: Props) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (mangaChapters.isSuccess) {
-      setChapterId(
-        mangaChapters.data[mangaChapters.data.length - 1 - chapterIndex]?.id ||
-          mangaChapters.data[0]?.id
-      );
-      queryClient.invalidateQueries({
-        queryKey: ["mangaPanels"],
-        type: "all",
-      });
-      statusUpdated.current = false;
-    }
-  }, [chapterIndex, mangaChapters.isSuccess]);
-
   const mangaPages = useQuery({
-    queryKey: ["mangaPanels", chapterId],
+    queryKey: ["mangaPanels", chapterIndex, mangaChapters.data],
     refetchOnWindowFocus: false,
+    enabled: !!mangaChapters.data,
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaPanels?id=${chapterId}`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getMangaPanels?id=${
+          mangaChapters.data![chapterIndex].id
+        }`
       );
-      return data.json();
+      return data.json() as Promise<MangaPage[]>;
     },
-    onSuccess: async (data: any[]) => {
-      const promises = data.map(async (el: any) => {
-        const k = await decryptImage(el.img);
-        return k;
+    onSuccess: async (data) => {
+      const promises = data.map((el) => {
+        return decryptImage(el.img);
       });
 
-      const dataurls: string[] = (await Promise.all(promises)) as string[];
+      const dataurls = (await Promise.all(promises)) as ImageFrame[];
 
       setFrames(dataurls);
     },
   });
+
+  useEffect(() => {
+    statusUpdated.current = false;
+  }, [chapterIndex]);
 
   const updateChapter = async (
     id: number,
@@ -178,79 +187,20 @@ const Reader = (props: Props) => {
       <ToastPrimitive.Provider>
         {(mangaChapters.isFetching || mangaChapters.data?.length) && (
           <>
-            {mangaChapters.isFetching ? (
+            {mangaChapters.isFetching && !frames.length ? (
               <VideoPlayerSkeleton />
             ) : (
-              <div className="">
-                {isShuffled ? (
-                  <ComicViewer
-                    onChangeCurrentPage={(e) => setProgress(e)}
-                    pages={
-                      mangaPages.data?.map(
-                        (el: any) =>
-                          `https://server.flamindemigod.com/image-proxy?url=${encodeURIComponent(
-                            el.img
-                          )}`
-                      ) || []
-                    }
-                  />
-                ) : (
-                  <ComicViewer
-                    onChangeCurrentPage={(e) => setProgress(e)}
-                    pages={frames.map((frame: string, i: number) => (
-                      <Image
-                        key={i}
-                        width={500}
-                        height={300}
-                        alt=""
-                        src={frame}
-                      />
-                    ))}
-                  />
-                )}
-              </div>
+              <MangaReader
+                frames={frames}
+                chapterList={mangaChapters.data || []}
+                chapterIndex={chapterIndex}
+                changeToChapter={(chapterIndex) => {
+                  setChapterIndex(chapterIndex);
+                }}
+              />
+          
             )}
-            <div className="grid grid-cols-1 sm:grid-cols-3 w-full p-4 items-center">
-              <div></div>
-              <div className="flex justify-center items-center">
-                <button
-                  className="btn | flex justify-center dark:text-white"
-                  disabled={
-                    props.entry.chapters
-                      ? chapterIndex + 1 === props.entry.chapters
-                      : false
-                  }
-                  onClick={() => {
-                    setChapterIndex((state) => state + 1);
-                  }}
-                >
-                  <MdSkipPrevious size={24} />
-                </button>
-                <Selector
-                  chapterList={mangaChapters.data || []}
-                  value={chapterIndex}
-                  onValueChange={setChapterIndex}
-                />
-                <button
-                  className="btn | flex justify-center dark:text-white"
-                  disabled={chapterIndex === 0}
-                  onClick={() => {
-                    setChapterIndex((state) => state - 1);
-                  }}
-                >
-                  <MdSkipNext size={24} />
-                </button>
-              </div>
-              <div className="flex gap-2 items-center justify-end">
-                <label
-                  className="text-offWhite-900 dark:text-offWhite-100"
-                  htmlFor="Shuffle Toggle"
-                >
-                  Shuffled
-                </label>
-                <Switch checked={isShuffled} onChecked={setIsShuffled} />
-              </div>
-            </div>
+           
           </>
         )}
         <ToastPrimitive.Root

@@ -4,7 +4,7 @@ interface iQueryProps {
   token: string | undefined;
 }
 
-export default async (props: iQueryProps) => {
+const makeQuery = async (props: iQueryProps) => {
   function handleResponse(response: any) {
     return response.json().then(function (json: any) {
       return response.ok ? json : Promise.reject(json);
@@ -39,3 +39,5 @@ export default async (props: iQueryProps) => {
     .then(handleData)
     .catch(handleError);
 };
+
+export default makeQuery;
