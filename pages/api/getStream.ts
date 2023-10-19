@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ANIME, StreamingServers } from "@consumet/extensions";
+import { ANIME } from "@consumet/extensions";
 type Response = {};
 
 export default async function handler(
@@ -7,10 +7,9 @@ export default async function handler(
   res: NextApiResponse<Response>
 ) {
   try {
-    if (req.query.id !== undefined) {
-      const gogoanime = new ANIME.Gogoanime();
-      const data = await gogoanime.fetchEpisodeSources(String(req.query.id));
-      console.log(req.query.id)
+    if (req.query.id && req.query.episodeNumber && req.query.animeId) {
+      const anify = new ANIME.Anify();
+      const data = await anify.fetchEpisodeSources(String(req.query.id), parseInt(String(req.query.episodeNumber)), String(req.query.animeId));
       console.log(data)
       return res
         .status(200)

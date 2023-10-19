@@ -61,7 +61,7 @@ const Streaming = (props: Props) => {
   const [syncPlayedSeconds, setSyncPlayedSeconds] = useState<number>(0);
   const [videoEnd, setVideoEnd] = useState<boolean>(false);
   const [openToast, setOpenToast] = useState<boolean>(false);
-  const [episodeID, setEpisodeID] = useState<string>("");
+  const [episodeID, setEpisodeID] = useState<{id: string, number: number, title: string}>({id: "", number: 0, title: ""});
   const [playerState, setPlayerState] = useState<playerProps>({
     ready: false,
     url: "",
@@ -436,33 +436,47 @@ const Streaming = (props: Props) => {
     queryKey: ["episodeSubList", props.entry.id],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}&format=sub`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}`
       );
       return data.json();
     },
   });
 
+  // const {
+  //   isSuccess: isSuccessEpisodesDub,
+  //   isFetching: isFetchingEpisodesDub,
+  //   data: episodesListDub,
+  // } = useQuery({
+  //   refetchOnWindowFocus: false,
+  //   queryKey: ["episodeDubList", props.entry.id],
+  //   queryFn: async () => {
+  //     const data = await fetch(
+  //       `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}&format=dub`
+  //     );
+  //     return data.json();
+  //   },
+  // });
+
   const {
-    isSuccess: isSuccessEpisodesDub,
-    isFetching: isFetchingEpisodesDub,
-    data: episodesListDub,
-  } = useQuery({
-    refetchOnWindowFocus: false,
-    queryKey: ["episodeDubList", props.entry.id],
-    queryFn: async () => {
-      const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}&format=dub`
-      );
-      return data.json();
-    },
-  });
+      isSuccess: isSuccessEpisodesDub,
+      isFetching: isFetchingEpisodesDub,
+      data: episodesListDub,
+    } = {
+      isSuccess: true, 
+      isFetching: false, 
+      data: [],
+    }
   const { refetch: episodeRefetch } = useQuery({
     enabled: !!(isSuccessEpisodesDub || isSuccessEpisodesSub),
     refetchOnWindowFocus: false,
-    queryKey: ["episode", episodeID],
+    queryKey: ["episode", episodeID, props.entry.id],
     queryFn: async () => {
+      const queryURL = new URL("/api/getStream", process.env.NEXT_PUBLIC_SERVER);
+      queryURL.searchParams.append("id", encodeURIComponent(episodeID.id));
+      queryURL.searchParams.append("episodeNumber", encodeURIComponent(episodeID.number));
+      queryURL.searchParams.append("animeId", encodeURIComponent(props.entry.id));
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getStream?id=${episodeID}`
+        queryURL
       );
       return data.json();
     },
@@ -518,8 +532,8 @@ const Streaming = (props: Props) => {
       );
       // episodeRefetch();
     }
-
-    setEpisodeID(episodeList[episode - 1]?.id);
+    console.log(episodeList[episode - 1])
+    setEpisodeID(episodeList[episode - 1]);
   }, [episode, isDubbed, isSuccessEpisodesDub, isSuccessEpisodesSub]);
 
   const updateEpisode = async (
