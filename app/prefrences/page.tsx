@@ -9,6 +9,9 @@ import Background from "../../components/Background";
 import Select from "../../primitives/Select";
 import Switch from "../../primitives/Switch";
 import { userContext } from "../UserContext";
+import genMeta from "../../utils/genMeta";
+
+export const metadata = genMeta({title: "Haruhi - Prefrences", description: "Set your User Prefrences for how haruhi interacts with your Anilist. You need to be logged in to use this."});
 
 const Page = () => {
   const user = useContext(userContext);

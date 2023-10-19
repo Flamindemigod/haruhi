@@ -7,6 +7,9 @@ import useIntersectionObserver from "../../utils/useIntersectionObserver";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { userContext } from "../UserContext";
+import genMeta from "../../utils/genMeta";
+
+export const metadata = genMeta({title: "Haruhi - Anime Lists", description: "View your Anime List. You need to be logged in to use this."});
 
 const Page = () => {
   const user = useContext(userContext);
