@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ANIME, StreamingServers } from "@consumet/extensions";
+import { ANIME } from "@consumet/extensions";
 type Response = {};
 
 export default async function handler(

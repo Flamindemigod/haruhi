@@ -9,10 +9,23 @@ import Recommended from "../../../components/Anime-Manga/Recommended";
 import MediaListEditor from "../../../components/Anime-Manga/MediaListEditor";
 import Reader from "../../../components/Manga/Reader";
 import { cookies } from "next/headers";
+import { Metadata, ResolvingMetadata } from "next";
+import genMeta from "../../../utils/genMeta";
 type Params = {
-  slug: any[];
+  slug: string[];
 };
+export async function generateMetadata(
+  { params }: { params: Params },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  console.log(params);
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER}/api/getEntry?id=${params.slug[0]}`
+  ).then((res) => res.json());
 
+
+  return genMeta({title: data.data.Media.title.userPreferred, description: data.data.Media.description, image: data.data.Media.coverImage.large});
+}
 const Page = async ({ params }: { params: Params }) => {
   const nextCookies = cookies();
 

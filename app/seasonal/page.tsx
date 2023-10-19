@@ -7,11 +7,16 @@ import cx from "classnames";
 import Grid from "../../primitives/Grid";
 import Lists from "../../components/Seasonal/Lists";
 import Background from "../../components/Background";
+import genMeta from "../../utils/genMeta";
 
 type Season = {
   season: string;
   year: number;
 };
+
+
+export const metadata = genMeta({title: "Haruhi - Seasonal", description: "View Seasonal Anime for the current airing year"});
+
 
 const Page = () => {
   const currentSeason = getSeason();

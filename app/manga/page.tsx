@@ -8,6 +8,11 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { useQueryClient } from "@tanstack/react-query";
 import { userContext } from "../UserContext";
+import genMeta from "../../utils/genMeta";
+
+
+export const metadata = genMeta({title: "Haruhi - Manga Lists", description: "View your Manga List. You need to be logged in to use this."});
+
 
 const Page = () => {
   const user = useContext(userContext);

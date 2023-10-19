@@ -5,6 +5,11 @@ import Hero from "../components/Home/Hero";
 import Activity from "../components/Home/Activity";
 import Background from "../components/Background";
 import Popular from "../components/Home/Popular";
+import genMeta from "../utils/genMeta";
+
+
+export const metadata = genMeta({});
+
 export default function Home() {
   return (
     <>

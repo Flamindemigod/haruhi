@@ -12,6 +12,11 @@ import SearchResultsManga from "../../components/Search/SearchResultsManga";
 import FilterStaffCharacter from "../../components/Search/Filters/Staff-Character/Filter";
 import SearchResultsStaff from "../../components/Search/SearchResultsStaff";
 import SearchResultsCharacter from "../../components/Search/SearchResultsCharacter";
+import genMeta from "../../utils/genMeta";
+
+
+export const metadata = genMeta({title: "Haruhi - Search", description: "Search for any Anime, Manga, Character or Staff you can think of"});
+
 
 interface Tab {
   title: string;
