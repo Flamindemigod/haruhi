@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ANIME } from "@consumet/extensions";
+import { META } from "@consumet/extensions";
 type Response = {};
 
 export default async function handler(
@@ -8,8 +8,8 @@ export default async function handler(
 ) {
   try {
     if (req.query.id && req.query.episodeNumber && req.query.animeId) {
-      const anify = new ANIME.Anify();
-      const data = await anify.fetchEpisodeSources(String(req.query.id), parseInt(String(req.query.episodeNumber)), String(req.query.animeId));
+      const anilist = new META.Anilist();
+      const data = await anilist.fetchEpisodeSources(String(req.query.id), parseInt(String(req.query.episodeNumber)), String(req.query.animeId));
       console.log(data)
       return res
         .status(200)
@@ -18,6 +18,7 @@ export default async function handler(
       res.status(400).json({ error: "id must be specified" });
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json([]);
   }
 }

@@ -1,4 +1,4 @@
-import { ANIME } from "@consumet/extensions";
+import { META } from "@consumet/extensions";
 import type { NextApiRequest, NextApiResponse } from "next";
 type Response = [] | {} | undefined;
 
@@ -11,9 +11,11 @@ export default async function handler(
   try {
     if (req.query.id !== undefined) {
       
-      const anilist = new ANIME.Anify()
-      const episodesList = (await anilist.fetchAnimeInfo(String(req.query.id))).episodes ?? [];
-      const episodesListReleventFields = episodesList.map(episode => ({id: episode.id, title: episode.title, number: episode.number}))
+      const anilist = new META.Anilist()
+      console.log(`Testinf`);
+      const data = await anilist.fetchAnimeInfo(String(req.query.id));
+      console.log(`data ${JSON.stringify(data)}`);
+      const episodesListReleventFields = (data.episodes ?? []).map(episode => ({id: episode.id, title: episode.title, number: episode.number}))
 
       res.status(200).json(episodesListReleventFields);
     } else {
