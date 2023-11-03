@@ -70,6 +70,9 @@ const MangaReader = (props: Props) => {
     }
   }, [page]);
 
+  useEffect(()=>{
+    setPage(0);
+  }, [props.frames])
   return (
     <div ref={readerRef} >
     <div
