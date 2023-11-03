@@ -106,7 +106,7 @@ interface Tab {
       <>
         {!!el && (
           <Link
-            href={`${el.type.toLowerCase()}/${el.id}`}
+            href={`/${el.type.toLowerCase()}/${el.id}`}
             className="caroselCard | absolute right-0 bottom-0 top-2/3 left-2/3 focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
           >
             <Image
@@ -387,7 +387,7 @@ export const PageInner = (params: {slug: String}) => {
                       cardDirection={"bottom"}
                       Trigger={
                         <Link
-                          href={`character/${character.id}`}
+                          href={`/character/${character.id}`}
                           className="caroselCard | focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
                         >
                           <div

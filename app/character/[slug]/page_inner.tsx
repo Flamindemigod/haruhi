@@ -399,7 +399,7 @@ export const PageInner = (params: {slug :string}) => {
                   cardDirection={"bottom"}
                   Trigger={
                     <Link
-                      href={`${edge.node.type.toLowerCase()}/${edge.node.id}`}
+                      href={`/${edge.node.type.toLowerCase()}/${edge.node.id}`}
                       className="caroselCard | focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
                     >
                       <div
