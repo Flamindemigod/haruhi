@@ -62,7 +62,7 @@ export default async function handler(
       token: req.cookies.access_token,
     });
     let sessionKey = null;
-    if (req.query.newSesh) {
+    if (req.query.newSesh != undefined) {
       sessionKey = await createSession(
         data.data.Viewer.id,
         data.data.Viewer.name
