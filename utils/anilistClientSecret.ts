@@ -1,1 +1,0 @@
-export const clientSecret = process.env.ANILIST_SECRET_KEY;
