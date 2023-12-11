@@ -1,25 +1,10 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /canvas\/build\/Release\/canvas\.node$/,
-      loader: "node-loader",
-    });
+/**
+ * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
+ * for Docker builds.
+ */
+await import("./src/env.js");
 
-    config.module.rules.push({
-      test: /\.(gif|png|jpe?g|svg|woff2?|ttf|eot)$/i,
-      use: "raw-loader",
-    });
-    return config;
-  },
-  reactStrictMode: false,
-  experimental: {
-    appDir: true,
-  },
-  images: {
-    unoptimized: true,
-    domains: ["storage.ko-fi.com", "s4.anilist.co"],
-  },
-};
+/** @type {import("next").NextConfig} */
+const config = {};
 
-module.exports = nextConfig;
+export default config;
