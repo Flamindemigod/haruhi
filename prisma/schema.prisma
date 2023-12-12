@@ -14,17 +14,17 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
 
-    @@index([name])
+model Users{
+        id BigInt @id @unique
+        userName String
+        created_at DateTime @default(now())
+        lastUpdatedAt   DateTime @default(now())
+        sessionId   String  @default(uuid())
+        @@map(name: "users")
 }
+
 
 // Necessary for Next auth
 model Account {
@@ -53,15 +53,26 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum ScoreFormat{
+    POINT_10_DECIMAL
+    POINT_100
+    POINT_10
+    POINT_5
+    POINT_3
+}
+
+
 model User {
     id            String    @id @default(cuid())
+    aniid         Int    @unique
     name          String?
-    email         String?   @unique
-    emailVerified DateTime?
     image         String?
+    scoreFormat   ScoreFormat  @default(POINT_10_DECIMAL)
+    showNSFW      Boolean   @default(false)
+    email         String?
+    emailVerified Boolean? 
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
 }
 
 model VerificationToken {
@@ -71,3 +82,5 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+
