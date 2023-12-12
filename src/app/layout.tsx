@@ -1,7 +1,6 @@
 import "~/styles/globals.css";
 import "@radix-ui/themes/styles.css";
 
-import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
@@ -9,11 +8,8 @@ import ThemeWrapper from "./_components/ThemeWrapper";
 import { Theme } from "@radix-ui/themes";
 import genMeta from "./utils/genMeta";
 import { Viewport } from "next";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+import { Header } from "./_components/Header";
+import SessionWrapper from "./_components/SessionWrapper";
 
 export const viewport: Viewport = {
   themeColor: "#cc006d",
@@ -31,21 +27,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`font-sans`}>
         <TRPCReactProvider cookies={cookies().toString()}>
-          <ThemeWrapper>
-            <Theme
-              accentColor="pink"
-              panelBackground="translucent"
-              radius="full"
-              scaling="90%"
-            >
-              <header></header>
-              <nav></nav>
-              {children}
-              <footer></footer>
-            </Theme>
-          </ThemeWrapper>
+          <SessionWrapper>
+            <ThemeWrapper>
+              <Theme
+                accentColor="pink"
+                panelBackground="translucent"
+                radius="large"
+                scaling="90%"
+              >
+                <Header />
+                <nav></nav>
+                {children}
+                <footer></footer>
+              </Theme>
+            </ThemeWrapper>
+          </SessionWrapper>
         </TRPCReactProvider>
       </body>
     </html>

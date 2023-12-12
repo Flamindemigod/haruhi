@@ -1,21 +1,15 @@
-import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
+import { api } from "~/trpc/server";
 
 export default async function Home() {
-  const session = await getServerAuthSession();
+  const sesh = await getServerAuthSession();
+  var user = await api.user.getUser.query();
+  if (!!sesh?.user) {
+    await api.user.refreshUser.mutate();
+  }
   return (
     <main className="h-screen">
-     
-        <div>Hello there</div>
-          <Link
-              href={session ? "/api/auth/signout" : "/api/auth/signin"}
-              className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-            >
-              {session ? "Sign out" : "Sign in"}
-            </Link>
-      
+      <div>Hello there {JSON.stringify(sesh?.user)}</div>
     </main>
   );
 }
-
-

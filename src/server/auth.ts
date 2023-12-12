@@ -19,11 +19,9 @@ declare module "next-auth" {
   
  
   interface User {
-    id: String,
-    aniid: number,
+    id: string,
     name: string, 
-    scoreFormat: string, 
-    showNSFW: string
+    token: string,
   }
 
   interface Session  {
@@ -46,7 +44,20 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, user}) => {
       if (session?.user) {
-        session.user = user!;
+        
+        session.user.id = user.id!;
+        const getToken = await db.account.findFirst({
+          where: {
+            userId: user.id,
+          },
+        });
+  
+        let accessToken: string | null = null;
+        if (getToken) {
+          accessToken = getToken.access_token!;
+        }
+  
+        session.user.token = accessToken!;
       }
       return session;
     },
@@ -108,15 +119,12 @@ export const authOptions: NextAuthOptions = {
         },
       },
       token: "https://anilist.co/api/v2/oauth/token",
-      
       profile(profile) {
           return {
           id: profile.aniid,
-          aniid: profile.aniid,
           name: profile.name,
           image: profile.image,
-          scoreFormat: profile.scoreFormat,
-          showNSFW: profile.showNSFW,
+          token: profile.token,
         };
       },
      

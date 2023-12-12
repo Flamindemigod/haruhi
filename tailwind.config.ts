@@ -11,8 +11,19 @@ export default {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      backgroundSize:{
+        "500%": "500%"
+      },
+      keyframes: {
+        bg_travel_x: {
+          '0%' : { backgroundPosition: "0 0" },
+          '100%': { backgroundPosition: "100% 100%" },
+        }
+      },
+      animation:{
+          "bg-travel-y": "bg_travel_x 10s ease-in-out infinite alternate"
+      },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
         georama: ["Georama", "sans-serif"],
       },
       colors: {
