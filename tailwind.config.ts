@@ -7,6 +7,7 @@ export default {
       display: ["group-hover"],
     },
   },
+  darkMode: 'class',
   safelist: ["text-primary-500"],
   content: ["./src/**/*.tsx"],
   theme: {

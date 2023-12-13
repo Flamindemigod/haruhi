@@ -1,5 +1,7 @@
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+import Background from "./_components/Background";
+import Hero from "./_components/Hero";
 
 export default async function Home() {
   // const sesh = await getServerAuthSession();
@@ -8,9 +10,15 @@ export default async function Home() {
   // await api.user.refreshUser.mutate();
   // }
   return (
-    <main className="h-screen">
-      <div>Hello there</div>
-      {/* <div>Hello there {JSON.stringify(sesh?.user)}</div> */}
-    </main>
+    <>
+      <Background
+        classes="fixed inset-0"
+        backgroundImage="/haruhiHomeBg.webp"
+      />
+      <div className="relative flex w-full flex-col gap-2">
+        <Hero />
+        {/* <Activity /> */}
+      </div>
+    </>
   );
 }

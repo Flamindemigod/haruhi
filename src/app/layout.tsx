@@ -28,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans`}>
+      <body className="relative  font-sans">
         <TRPCReactProvider cookies={cookies().toString()}>
           <SessionWrapper>
             <ThemeWrapper>
@@ -38,10 +38,17 @@ export default function RootLayout({
                 radius="large"
                 scaling="90%"
               >
-                <Header />
-                <nav></nav>
-                {children}
-                <Footer />
+                <div className="flex min-h-screen flex-col overflow-x-hidden">
+                  <div>
+                    <Header />
+                  </div>
+                  <main className="relative flex w-full flex-grow">
+                    {children}
+                  </main>
+                  <div className="">
+                    <Footer />
+                  </div>
+                </div>
               </Theme>
             </ThemeWrapper>
           </SessionWrapper>

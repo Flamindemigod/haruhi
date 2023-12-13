@@ -17,7 +17,13 @@ export const Header = async () => {
     >
       {/* Logo */}
       <Link href={"/"} className="flex flex-row items-center px-2">
-        <Image alt="Haruhi Logo" src={"./Logo.png"} height={56} width={56} />
+        <Image
+          alt="Haruhi Logo"
+          src={"./Logo.png"}
+          height={56}
+          width={56}
+          priority
+        />
       </Link>
 
       <div className="flex flex-row items-center gap-4 px-2">
