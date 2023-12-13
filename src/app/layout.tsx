@@ -10,6 +10,7 @@ import genMeta from "./utils/genMeta";
 import { Viewport } from "next";
 import { Header } from "./_components/Header";
 import SessionWrapper from "./_components/SessionWrapper";
+import Footer from "./_components/Footer";
 
 export const viewport: Viewport = {
   themeColor: "#cc006d",
@@ -40,7 +41,7 @@ export default function RootLayout({
                 <Header />
                 <nav></nav>
                 {children}
-                <footer></footer>
+                <Footer />
               </Theme>
             </ThemeWrapper>
           </SessionWrapper>

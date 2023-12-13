@@ -18,10 +18,15 @@ export default {
         bg_travel_x: {
           '0%' : { backgroundPosition: "0 0" },
           '100%': { backgroundPosition: "100% 100%" },
-        }
+        },
+        color_morph: {
+          '0%' : { color: "theme(colors.primary.500)" },
+          '100%': { color: "theme(colors.secondary.500)" },
+        },
       },
       animation:{
-          "bg-travel-y": "bg_travel_x 10s ease-in-out infinite alternate"
+        "bg-travel-y": "bg_travel_x 10s ease-in-out infinite alternate",
+        "color_morph": "color_morph 10s ease-in-out infinite alternate"
       },
       fontFamily: {
         georama: ["Georama", "sans-serif"],
