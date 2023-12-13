@@ -123,6 +123,9 @@ export const authOptions: NextAuthOptions = {
           return {
           id: profile.aniid,
           name: profile.name,
+            scoreFormat: profile.scoreFormat,
+            showNSFW: profile.showNSFW,
+            aniid: profile.aniid,
           image: profile.image,
           token: profile.token,
         };
