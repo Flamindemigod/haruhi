@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import {gql, ApolloClient} from "@apollo/client"
+import {gql} from "@apollo/client"
 import {
   getServerSession,
   type NextAuthOptions,
@@ -7,7 +7,6 @@ import {
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { client } from "~/apolloClient";
-import { User } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -16,8 +15,6 @@ import { User } from "@prisma/client";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  
- 
   interface User {
     id: string,
     name: string, 
@@ -27,11 +24,7 @@ declare module "next-auth" {
   interface Session  {
     user: User, 
   }
-
 }
-
-
-
 
 
 /**
@@ -44,7 +37,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session: async ({ session, user}) => {
       if (session?.user) {
-        
         session.user.id = user.id!;
         const getToken = await db.account.findFirst({
           where: {
@@ -56,7 +48,6 @@ export const authOptions: NextAuthOptions = {
         if (getToken) {
           accessToken = getToken.access_token!;
         }
-  
         session.user.token = accessToken!;
       }
       return session;
@@ -69,7 +60,6 @@ export const authOptions: NextAuthOptions = {
   debug: true,
   providers: [
     {
-    
       clientId: env.ANILIST_CLIENT_ID,
       clientSecret: env.ANILIST_SECRET_KEY,
       id: "anilist",
@@ -107,8 +97,6 @@ export const authOptions: NextAuthOptions = {
               },
             },
           });
-          console.log("Got Data:: ", data);
-
           return {
             name: data.Viewer.name,
             aniid: data.Viewer.id as string,
@@ -132,11 +120,6 @@ export const authOptions: NextAuthOptions = {
       },
      
     }
-   
-    // DiscordProvider({
-    //   clientId: env.DISCORD_CLIENT_ID,
-    //   clientSecret: env.DISCORD_CLIENT_SECRET,
-    // }),
     /**
      * ...add more providers here.
      *
