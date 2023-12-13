@@ -118,7 +118,6 @@ export const authOptions: NextAuthOptions = {
           token: profile.token,
         };
       },
-     
     }
     /**
      * ...add more providers here.
