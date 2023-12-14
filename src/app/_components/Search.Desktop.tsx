@@ -1,4 +1,18 @@
+"use client";
+
+import { useHotkeys } from "react-hotkeys-hook";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+
 export default () => {
-  // TODO: IMPLEMENT SEARCH
-  return <div>Search Desktop</div>;
+  return (
+    <button className="inline-flex items-center gap-2 rounded-md bg-offWhite-100 p-2 dark:bg-offWhite-900">
+      <span className="inline-flex items-center">
+        Search...
+        <MagnifyingGlassIcon />
+      </span>
+      <span className="rounded-sm bg-offWhite-200 px-1 font-mono tracking-tighter dark:bg-offWhite-600">
+        Ctrl+K
+      </span>
+    </button>
+  );
 };
