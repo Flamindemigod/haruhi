@@ -12,7 +12,7 @@ export const Navigation = (props: NavigationProps) => {
       <Media lessThan="md">
         <NavigationMobile {...props} />
       </Media>
-      <Media greaterThanOrEqual="md">
+      <Media greaterThanOrEqual="md" className="w-full">
         <NavigationDesktop {...props} />
       </Media>
     </>
