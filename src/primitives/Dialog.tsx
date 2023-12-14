@@ -40,7 +40,7 @@ export default (props: Props) => (
             className={cx(
               "fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2",
               "w-[95vw] max-w-7xl rounded-lg p-4 md:w-full",
-              "shadow-xl",
+              "isolate shadow-xl",
             )}
           >
             <DialogPrimitive.Title asChild>

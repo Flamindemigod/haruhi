@@ -41,31 +41,29 @@ const Select = <T,>(props: Props<T>) => {
       <SelectPrimitive.Trigger asChild aria-label={props.triggerAriaLabel}>
         {props.trigger}
       </SelectPrimitive.Trigger>
-      <SelectPrimitive.Content className="z-20">
+      <SelectPrimitive.Content className="z-[75]" position="popper">
         <SelectPrimitive.ScrollUpButton className="flex items-center justify-center text-offWhite-700 dark:text-offWhite-300">
           <ChevronUpIcon />
         </SelectPrimitive.ScrollUpButton>
-        <SelectPrimitive.Viewport className="relative z-50 rounded-lg bg-white p-2 shadow-lg dark:bg-offWhite-800">
-          <SelectPrimitive.Group>
-            {props.values.map((f, i) => (
-              <SelectPrimitive.Item
-                key={`${f}-${i}`}
-                value={String(f.value)}
-                className={cx(
-                  "relative flex items-center rounded-md px-8 py-2 text-sm font-medium text-offWhite-700 focus:bg-offWhite-100 dark:text-offWhite-300 dark:focus:bg-offWhite-900",
-                  "radix-disabled:opacity-50",
-                  "select-none focus:outline-none",
-                )}
-              >
-                <SelectPrimitive.ItemText>
-                  {f.displayTitle}
-                </SelectPrimitive.ItemText>
-                <SelectPrimitive.ItemIndicator className="absolute left-2 inline-flex items-center">
-                  <ArrowRightIcon className="text-primary-500" />
-                </SelectPrimitive.ItemIndicator>
-              </SelectPrimitive.Item>
-            ))}
-          </SelectPrimitive.Group>
+        <SelectPrimitive.Viewport className="relative z-[80] rounded-lg bg-white p-2 shadow-lg dark:bg-offWhite-800">
+          {props.values.map((f, i) => (
+            <SelectPrimitive.Item
+              key={`${f}-${i}`}
+              value={String(f.value)}
+              className={cx(
+                "relative flex items-center rounded-md px-8 py-2 text-sm font-medium text-offWhite-700 focus:bg-offWhite-100 dark:text-offWhite-300 dark:focus:bg-offWhite-900",
+                "radix-disabled:opacity-50",
+                // "select-none focus:outline-none",
+              )}
+            >
+              <SelectPrimitive.ItemText>
+                {f.displayTitle}
+              </SelectPrimitive.ItemText>
+              <SelectPrimitive.ItemIndicator className="absolute left-2 inline-flex items-center">
+                <ArrowRightIcon className="text-primary-500" />
+              </SelectPrimitive.ItemIndicator>
+            </SelectPrimitive.Item>
+          ))}
         </SelectPrimitive.Viewport>
         <SelectPrimitive.ScrollDownButton className="flex items-center justify-center text-offWhite-700 dark:text-offWhite-300">
           <ChevronDownIcon />
