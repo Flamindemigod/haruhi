@@ -5,6 +5,8 @@ import { getServerAuthSession } from "~/server/auth";
 import Avatar from "./Avatar";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import Link from "next/link";
+import { Navigation } from "./Navigation";
+import { Fragment, Suspense } from "react";
 
 export const Header = async () => {
   const session = await getServerAuthSession();
@@ -25,7 +27,9 @@ export const Header = async () => {
           priority
         />
       </Link>
-
+      <Suspense>
+        <Navigation isUserAuth={!!session?.user} />
+      </Suspense>
       <div className="flex flex-row items-center gap-4 px-2">
         <ThemeSwitcher />
         {/* Sign In Button / User Avatar */}

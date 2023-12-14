@@ -11,6 +11,8 @@ import { Viewport } from "next";
 import { Header } from "./_components/Header";
 import SessionWrapper from "./_components/SessionWrapper";
 import Footer from "./_components/Footer";
+import { mediaStyle } from "./utils/Media";
+import MediaWrapper from "./_components/MediaWrapper";
 
 export const viewport: Viewport = {
   themeColor: "#cc006d",
@@ -28,29 +30,37 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <style
+          type="text/css"
+          dangerouslySetInnerHTML={{ __html: mediaStyle }}
+        />
+      </head>
       <body className="relative  font-sans">
         <TRPCReactProvider cookies={cookies().toString()}>
           <SessionWrapper>
-            <ThemeWrapper>
-              <Theme
-                accentColor="pink"
-                panelBackground="translucent"
-                radius="large"
-                scaling="90%"
-              >
-                <div className="flex min-h-screen flex-col overflow-x-hidden">
-                  <div>
-                    <Header />
+            <MediaWrapper>
+              <ThemeWrapper>
+                <Theme
+                  accentColor="pink"
+                  panelBackground="translucent"
+                  radius="large"
+                  scaling="90%"
+                >
+                  <div className="flex min-h-screen flex-col overflow-x-hidden">
+                    <div>
+                      <Header />
+                    </div>
+                    <main className="relative flex w-full flex-grow">
+                      {children}
+                    </main>
+                    <div className="">
+                      <Footer />
+                    </div>
                   </div>
-                  <main className="relative flex w-full flex-grow">
-                    {children}
-                  </main>
-                  <div className="">
-                    <Footer />
-                  </div>
-                </div>
-              </Theme>
-            </ThemeWrapper>
+                </Theme>
+              </ThemeWrapper>
+            </MediaWrapper>
           </SessionWrapper>
         </TRPCReactProvider>
       </body>
