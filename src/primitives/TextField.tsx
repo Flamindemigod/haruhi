@@ -2,38 +2,41 @@ import { TextField } from "@radix-ui/themes";
 import cx from "classix";
 import { HTMLAttributes, ReactNode } from "react";
 
+type Icon = {
+  icon: ReactNode;
+  color?:
+    | "tomato"
+    | "red"
+    | "ruby"
+    | "crimson"
+    | "pink"
+    | "plum"
+    | "purple"
+    | "violet"
+    | "iris"
+    | "indigo"
+    | "blue"
+    | "cyan"
+    | "teal"
+    | "jade"
+    | "green"
+    | "grass"
+    | "brown"
+    | "orange"
+    | "sky"
+    | "mint"
+    | "lime"
+    | "yellow"
+    | "amber"
+    | "gold"
+    | "bronze"
+    | "gray";
+  gap?: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+};
+
 type Props = {
-  icon?: {
-    icon: ReactNode;
-    color?:
-      | "tomato"
-      | "red"
-      | "ruby"
-      | "crimson"
-      | "pink"
-      | "plum"
-      | "purple"
-      | "violet"
-      | "iris"
-      | "indigo"
-      | "blue"
-      | "cyan"
-      | "teal"
-      | "jade"
-      | "green"
-      | "grass"
-      | "brown"
-      | "orange"
-      | "sky"
-      | "mint"
-      | "lime"
-      | "yellow"
-      | "amber"
-      | "gold"
-      | "bronze"
-      | "gray";
-    gap?: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
-  };
+  startIcon?: Icon;
+  endIcon?: Icon;
   placeholder: string;
   color?:
     | "tomato"
@@ -80,9 +83,9 @@ export default (props: Props) => {
       className={cx("flex items-center", props.rootClasses)}
       radius={props.radius}
     >
-      {!!props.icon ? (
-        <TextField.Slot color={props.icon.color} gap={props.icon.gap}>
-          {props.icon.icon}
+      {!!props.startIcon ? (
+        <TextField.Slot color={props.startIcon.color} gap={props.startIcon.gap}>
+          {props.startIcon.icon}
         </TextField.Slot>
       ) : (
         <></>
@@ -99,6 +102,13 @@ export default (props: Props) => {
           props.onValueChange(e.currentTarget.value);
         }}
       />
+      {!!props.endIcon ? (
+        <TextField.Slot color={props.endIcon.color} gap={props.endIcon.gap}>
+          {props.endIcon.icon}
+        </TextField.Slot>
+      ) : (
+        <></>
+      )}
     </TextField.Root>
   );
 };
