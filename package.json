@@ -41,7 +41,7 @@
     "@trpc/react-query": "^10.43.6",
     "@trpc/server": "^10.43.6",
     "classix": "^2.1.35",
-    "graphql": "^16.8.1",
+    "graphql": "^15.8.0",
     "next": "^14.0.3",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
