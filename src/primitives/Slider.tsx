@@ -43,24 +43,17 @@ const Slider = (props: Props) => {
           )}
         />
       </SliderPrimitive.Track>
-      <Tooltip content={<div>{value[0]}</div>} index={value[0]}>
-        <SliderPrimitive.Thumb
-          className={cx(
-            "block h-5 w-5 rounded-full bg-primary-500 dark:bg-white",
-            "focus:outline-none focus-visible:ring focus-visible:ring-primary-600 focus-visible:ring-opacity-75",
-            props.thumbClasses,
-          )}
-        />
-      </Tooltip>
-      <Tooltip content={<div>{value[1]}</div>} index={value[1]}>
-        <SliderPrimitive.Thumb
-          className={cx(
-            "block h-5 w-5 rounded-full bg-primary-500 dark:bg-white",
-            "focus:outline-none focus-visible:ring focus-visible:ring-primary-600 focus-visible:ring-opacity-75",
-            props.thumbClasses,
-          )}
-        />
-      </Tooltip>
+      {value.map((v, idx) => (
+        <Tooltip key={idx} content={<div>{v}</div>} index={v}>
+          <SliderPrimitive.Thumb
+            className={cx(
+              "block h-5 w-5 rounded-full bg-primary-500 dark:bg-white",
+              "focus:outline-none focus-visible:ring focus-visible:ring-primary-600 focus-visible:ring-opacity-75",
+              props.thumbClasses,
+            )}
+          />
+        </Tooltip>
+      ))}
     </SliderPrimitive.Root>
   );
 };
