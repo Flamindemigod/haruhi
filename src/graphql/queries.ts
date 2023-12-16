@@ -17,3 +17,21 @@ query USER_AUTH{
   }
 }
 `;
+
+export const GET_GENRES = gql`
+query GET_GENRES{
+  GenreCollection
+}
+`;
+
+export const GET_TAGS = gql`
+query GET_TAGS{
+  MediaTagCollection{
+    id
+    name
+    description
+    category
+		isAdult
+  }
+}
+`;

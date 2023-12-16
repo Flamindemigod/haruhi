@@ -14,6 +14,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\nquery USER_AUTH{\n  Viewer {\n    id\n    name\n    avatar {\n      medium\n    }\n    options{\n      displayAdultContent\n    }\n    mediaListOptions{\n      scoreFormat\n    }\n  }\n}\n": types.User_AuthDocument,
+    "\nquery GET_GENRES{\n  GenreCollection\n}\n": types.Get_GenresDocument,
+    "\nquery GET_TAGS{\n  MediaTagCollection{\n    id\n    name\n    description\n    category\n\t\tisAdult\n  }\n}\n": types.Get_TagsDocument,
 };
 
 /**
@@ -34,6 +36,14 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\nquery USER_AUTH{\n  Viewer {\n    id\n    name\n    avatar {\n      medium\n    }\n    options{\n      displayAdultContent\n    }\n    mediaListOptions{\n      scoreFormat\n    }\n  }\n}\n"): (typeof documents)["\nquery USER_AUTH{\n  Viewer {\n    id\n    name\n    avatar {\n      medium\n    }\n    options{\n      displayAdultContent\n    }\n    mediaListOptions{\n      scoreFormat\n    }\n  }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery GET_GENRES{\n  GenreCollection\n}\n"): (typeof documents)["\nquery GET_GENRES{\n  GenreCollection\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery GET_TAGS{\n  MediaTagCollection{\n    id\n    name\n    description\n    category\n\t\tisAdult\n  }\n}\n"): (typeof documents)["\nquery GET_TAGS{\n  MediaTagCollection{\n    id\n    name\n    description\n    category\n\t\tisAdult\n  }\n}\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

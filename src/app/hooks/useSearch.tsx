@@ -1,6 +1,13 @@
 "use client";
 
-import React, { ReactNode, RefObject, useState } from "react";
+import React, {
+  Dispatch,
+  Fragment,
+  ReactNode,
+  RefObject,
+  SetStateAction,
+  useState,
+} from "react";
 import { Root as Label } from "@radix-ui/react-label";
 import Slider from "~/primitives/Slider";
 import RadioGroup from "~/primitives/RadioGroup";
@@ -12,6 +19,9 @@ import {
   MixerHorizontalIcon,
 } from "@radix-ui/react-icons";
 import Drawer from "~/primitives/Drawer";
+import { api } from "~/trpc/react";
+import ThreeToggleChip from "~/primitives/ThreeToggleChip";
+import { MediaTag } from "~/__generated__/graphql";
 
 export enum SearchCategory {
   anime = "Anime",
@@ -56,11 +66,431 @@ enum SearchFormatManga {
   oneShot = "One Shot",
 }
 
+type AnimeFilter = {
+  category: SearchCategory.anime;
+  status: SearchStatus;
+  season: SearchSeason;
+  format: SearchFormatAnime;
+  minYear: number;
+  maxYear: number;
+  minEpisode: number;
+  maxEpisode: number;
+  minDuration: number;
+  maxDuration: number;
+  genre: {
+    whitelist: string[];
+    blacklist: string[];
+  };
+  tag: {
+    percentage: number;
+    whitelist: MediaTag[];
+    blacklist: MediaTag[];
+  };
+};
+
+type MangaFilter = {
+  category: SearchCategory.manga;
+  status: SearchStatus;
+  format: SearchFormatManga;
+  minYear: number;
+  maxYear: number;
+  minChapters: number;
+  maxChapters: number;
+  minVolumes: number;
+  maxVolumes: number;
+  genre: {
+    whitelist: string[];
+    blacklist: string[];
+  };
+  tag: {
+    percentage: number;
+    whitelist: MediaTag[];
+    blacklist: MediaTag[];
+  };
+};
+
+enum TernaryState {
+  true,
+  false,
+  null,
+}
+
+type CharacterFilter = {
+  category: SearchCategory.character;
+  showBirthdaysOnly: TernaryState;
+};
+
+type StaffFilter = {
+  category: SearchCategory.staff;
+  showBirthdaysOnly: TernaryState;
+};
+
+type StudioFilter = {
+  category: SearchCategory.studio;
+};
+
+type Filter =
+  | AnimeFilter
+  | MangaFilter
+  | CharacterFilter
+  | StaffFilter
+  | StudioFilter;
+
 const Wrapper = ({ children }: { children?: ReactNode }) => (
   <div className="flex flex-col gap-2 rounded-md bg-white/10 p-4">
     {children}
   </div>
 );
+
+const FilterSelector = (
+  filter: Filter,
+  setFilter: Dispatch<SetStateAction<Filter>>,
+) => {
+  switch (filter.category) {
+    case SearchCategory.anime:
+      let { data: user } = api.user.getUser.useQuery();
+      let { data: genres } = api.anilist.getGenres.useQuery();
+      let { data: tags } = api.anilist.getTags.useQuery();
+      let category = "";
+      const [genreReset, setGenreReset] = useState<boolean>(false);
+      const [tagReset, setTagReset] = useState<boolean>(false);
+      return (
+        <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+          {/* Airing Status */}
+          <Wrapper>
+            <Label
+              className="text-lg font-semibold text-primary-500"
+              htmlFor="airingStatusSelector"
+            >
+              Airing Status
+            </Label>
+            <RadioGroup
+              name="airingStatusSelector"
+              orientation="horizontal"
+              dataValues={Object.values(SearchStatus).map((v) => ({
+                value: v,
+                displayTitle: v,
+              }))}
+              icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
+              value={filter.status}
+              onValueChange={(s: SearchStatus) => {
+                setFilter((state) => ({
+                  ...state,
+                  status: s,
+                }));
+              }}
+            />
+          </Wrapper>
+          {/* Format */}
+          <Wrapper>
+            <Label
+              className="text-lg font-semibold text-primary-500"
+              htmlFor="formatSelector"
+            >
+              Format
+            </Label>
+            <RadioGroup
+              name="formatSelector"
+              orientation="horizontal"
+              dataValues={Object.values(SearchFormatAnime).map((v) => ({
+                value: v,
+                displayTitle: v,
+              }))}
+              icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
+              value={filter.format}
+              onValueChange={(f: SearchFormatAnime) => {
+                setFilter((state: any) => ({
+                  ...state,
+                  format: f,
+                }));
+              }}
+            />
+          </Wrapper>
+          {/* Season Selector */}
+          <Wrapper>
+            <Label
+              className="text-lg font-semibold text-primary-500"
+              htmlFor="seasonSelector"
+            >
+              Season
+            </Label>
+            <RadioGroup
+              name="seasonSelector"
+              orientation="horizontal"
+              dataValues={Object.values(SearchSeason).map((v) => ({
+                value: v,
+                displayTitle: v,
+              }))}
+              icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
+              value={filter.season}
+              onValueChange={(s: SearchSeason) => {
+                setFilter((state) => ({
+                  ...state,
+                  season: s,
+                }));
+              }}
+            />
+          </Wrapper>
+          {/* Year Range */}
+          <Wrapper>
+            <Label
+              className="text-lg font-semibold text-primary-500"
+              htmlFor="yearRangeSelector"
+            >
+              Year Range {`[${filter.minYear} - ${filter.maxYear}]`}
+            </Label>
+            <Slider
+              id="yearRangeSelector"
+              max={2024}
+              min={1970}
+              step={1}
+              value={[filter.minYear, filter.maxYear]}
+              ariaLabel="Year Range Selector"
+              onChange={(v) => {
+                setFilter((state) => ({
+                  ...state,
+                  minYear: v.sort().at(0)!,
+                  maxYear: v.sort().at(-1)!,
+                }));
+              }}
+              thumbClasses="w-4 h-4"
+              trackClasses="dark:bg-primary-400"
+            />
+          </Wrapper>
+          {/* Episodes Range */}
+          <Wrapper>
+            <Label
+              className="text-lg font-semibold text-primary-500"
+              htmlFor="episodeRangeSelector"
+            >
+              Episode Range{" "}
+              {`[${filter.minEpisode} - ${
+                filter.maxEpisode === 150 ? "150+" : filter.maxEpisode
+              }]`}
+            </Label>
+            <Slider
+              id="episodeRangeSelector"
+              max={150}
+              min={0}
+              step={1}
+              value={[filter.minEpisode, filter.maxEpisode]}
+              ariaLabel="Episode Range Selector"
+              onChange={(v) => {
+                setFilter((state) => ({
+                  ...state,
+                  minEpisode: v.at(0)!,
+                  maxEpisode: v.at(-1)!,
+                }));
+              }}
+              thumbClasses="w-4 h-4"
+              trackClasses="dark:bg-primary-400"
+            />
+          </Wrapper>
+
+          {/* Duration Range */}
+          <Wrapper>
+            <Label
+              className="text-lg font-semibold text-primary-500"
+              htmlFor="durationRangeSelector"
+            >
+              Duration Range{" "}
+              {`[${filter.minDuration} - ${
+                filter.maxDuration === 200 ? "200+" : filter.maxDuration
+              }]`}
+            </Label>
+            <Slider
+              id="durationRangeSelector"
+              max={200}
+              min={0}
+              step={1}
+              value={[filter.minDuration, filter.maxDuration]}
+              ariaLabel="Duration Range Selector"
+              onChange={(v) => {
+                setFilter((state) => ({
+                  ...state,
+                  minDuration: v.at(0)!,
+                  maxDuration: v.at(-1)!,
+                }));
+              }}
+              thumbClasses="w-4 h-4"
+              trackClasses="dark:bg-primary-400"
+            />
+          </Wrapper>
+
+          {/*Genre Selection */}
+          <Wrapper>
+            <div className="flex justify-between">
+              <Label
+                className="text-lg font-semibold text-primary-500"
+                htmlFor="genreSelector"
+              >
+                Genres
+              </Label>
+              <button
+                className="rounded-md bg-primary-500 p-2"
+                onClick={() => {
+                  setGenreReset((state) => !state);
+                }}
+              >
+                Reset Genres
+              </button>
+            </div>
+            {genres?.GenreCollection?.map((genre, idx) => (
+              <ThreeToggleChip
+                key={idx}
+                text={genre!}
+                reset={genreReset}
+                onChange={(c) => {
+                  switch (c) {
+                    case "Enabled":
+                      setFilter((state: any) => ({
+                        ...state,
+                        genre: {
+                          blacklist: state.genre.blacklist.filter(
+                            (si: string) => si !== genre,
+                          ),
+                          whitelist: [...state.genre.whitelist, genre!],
+                        },
+                      }));
+
+                      break;
+                    case "Disabled":
+                      setFilter((state: any) => ({
+                        ...state,
+                        genre: {
+                          whitelist: state.genre.whitelist.filter(
+                            (si: string) => si !== genre,
+                          ),
+                          blacklist: [...state.genre.blacklist, genre!],
+                        },
+                      }));
+
+                      break;
+                    default:
+                      setFilter((state: any) => ({
+                        ...state,
+                        genre: {
+                          whitelist: state.genre.whitelist.filter(
+                            (si: string) => si !== genre,
+                          ),
+                          blacklist: state.genre.blacklist.filter(
+                            (si: string) => si !== genre,
+                          ),
+                        },
+                      }));
+
+                      break;
+                  }
+                }}
+              />
+            ))}
+          </Wrapper>
+
+          {/* TODO: Tag Percentage & Selection */}
+          <Wrapper>
+            <div className="flex justify-between">
+              <Label
+                className="text-lg font-semibold text-primary-500"
+                htmlFor="tagSelector"
+              >
+                Tags
+              </Label>
+              <button
+                className="rounded-md bg-primary-500 p-2"
+                onClick={() => {
+                  setTagReset((state) => !state);
+                }}
+              >
+                Reset Tags
+              </button>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {tags
+                ?.MediaTagCollection!.filter((v) =>
+                  user?.showNSFW ? true : !v!.isAdult,
+                )
+                .sort((a, b) => a!.category!.localeCompare(b!.category!))
+                .map((tag) => {
+                  const showCategorySeperator = category !== tag?.category;
+                  if (showCategorySeperator) {
+                    category = tag?.category!;
+                  }
+                  return (
+                    <Fragment key={tag?.id}>
+                      {showCategorySeperator && (
+                        <div className="w-full rounded-md p-2 dark:bg-white/10 dark:text-white">
+                          {tag?.category}
+                        </div>
+                      )}
+                      <ThreeToggleChip
+                        text={tag?.name!}
+                        reset={tagReset}
+                        onChange={(c) => {
+                          switch (c) {
+                            case "Enabled":
+                              setFilter((state: any) => ({
+                                ...state,
+                                genre: {
+                                  blacklist: state.genre.blacklist.filter(
+                                    (si: string) => si !== tag?.name,
+                                  ),
+                                  whitelist: [
+                                    ...state.genre.whitelist,
+                                    tag?.name!,
+                                  ],
+                                },
+                              }));
+
+                              break;
+                            case "Disabled":
+                              setFilter((state: any) => ({
+                                ...state,
+                                genre: {
+                                  whitelist: state.genre.whitelist.filter(
+                                    (si: string) => si !== tag!.name,
+                                  ),
+                                  blacklist: [
+                                    ...state.genre.blacklist,
+                                    tag!.name!,
+                                  ],
+                                },
+                              }));
+
+                              break;
+                            default:
+                              setFilter((state: any) => ({
+                                ...state,
+                                genre: {
+                                  whitelist: state.genre.whitelist.filter(
+                                    (si: string) => si !== tag!.name,
+                                  ),
+                                  blacklist: state.genre.blacklist.filter(
+                                    (si: string) => si !== tag!.name,
+                                  ),
+                                },
+                              }));
+
+                              break;
+                          }
+                        }}
+                      />
+                    </Fragment>
+                  );
+                })}
+            </div>
+          </Wrapper>
+        </div>
+      );
+    case SearchCategory.manga:
+      return <div className="flex flex-col gap-2 p-2 "></div>;
+    case SearchCategory.character:
+      return <></>;
+    case SearchCategory.staff:
+      return <></>;
+    case SearchCategory.studio:
+      return <></>;
+  }
+};
 
 export default (
   container?: RefObject<HTMLDivElement>,
@@ -71,322 +501,52 @@ export default (
   const [searchCategory, setSeachCategory] = useState<SearchCategory>(
     SearchCategory.anime,
   );
-  const [searchSeason, setSearchSeason] = useState<SearchSeason>(
-    SearchSeason.any,
-  );
-  const [searchStatus, setSearchStatus] = useState<SearchStatus>(
-    SearchStatus.any,
-  );
-  const [searchFormat, setSearchFormat] = useState<
-    SearchFormatAnime | SearchFormatManga
-  >(
-    searchCategory === SearchCategory.manga
-      ? SearchFormatManga.any
-      : SearchFormatAnime.any,
-  );
 
-  const [searchYearStart, setSearchYearStart] = useState<number>(1970);
-  const [searchYearEnd, setSearchYearEnd] = useState<number>(2024);
-
-  const [searchEpisodeMin, setSearchEpisodeMin] = useState<number>(0);
-  const [searchEpisodeMax, setSearchEpisodeMax] = useState<number>(150);
-
-  const [searchDurationMin, setSearchDurationMin] = useState<number>(0);
-  const [searchDurationMax, setSearchDurationMax] = useState<number>(200);
-
-  const filterSelector = (category: SearchCategory) => {
-    switch (category) {
-      case SearchCategory.anime:
-        return (
-          <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
-            {/* Airing Status */}
-            <Wrapper>
-              <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="airingStatusSelector"
-              >
-                Airing Status
-              </Label>
-              <RadioGroup
-                name="airingStatusSelector"
-                orientation="horizontal"
-                dataValues={Object.values(SearchStatus).map((v) => ({
-                  value: v,
-                  displayTitle: v,
-                }))}
-                icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
-                value={searchStatus}
-                onValueChange={setSearchStatus}
-              />
-            </Wrapper>
-            {/* Format */}
-            <Wrapper>
-              <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="formatSelector"
-              >
-                Format
-              </Label>
-              <RadioGroup
-                name="formatSelector"
-                orientation="horizontal"
-                dataValues={Object.values(SearchFormatAnime).map((v) => ({
-                  value: v,
-                  displayTitle: v,
-                }))}
-                icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
-                value={searchFormat}
-                onValueChange={setSearchFormat}
-              />
-            </Wrapper>
-            {/* Season Selector */}
-            <Wrapper>
-              <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="seasonSelector"
-              >
-                Season
-              </Label>
-              <RadioGroup
-                name="seasonSelector"
-                orientation="horizontal"
-                dataValues={Object.values(SearchSeason).map((v) => ({
-                  value: v,
-                  displayTitle: v,
-                }))}
-                icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
-                value={searchSeason}
-                onValueChange={setSearchSeason}
-              />
-            </Wrapper>
-            {/* Year Range */}
-            <Wrapper>
-              <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="yearRangeSelector"
-              >
-                Year Range {`[${searchYearStart} - ${searchYearEnd}]`}
-              </Label>
-              <Slider
-                id="yearRangeSelector"
-                max={2024}
-                min={1970}
-                step={1}
-                value={[searchYearStart, searchYearEnd]}
-                ariaLabel="Year Range Selector"
-                onChange={(v) => {
-                  setSearchYearStart(v.sort().at(0)!);
-                  setSearchYearEnd(v.sort().at(-1)!);
-                }}
-                thumbClasses="w-4 h-4"
-                trackClasses="dark:bg-primary-400"
-              />
-            </Wrapper>
-            {/* Episodes Range */}
-            <Wrapper>
-              <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="episodeRangeSelector"
-              >
-                Episode Range{" "}
-                {`[${searchEpisodeMin} - ${
-                  searchEpisodeMax === 150 ? "150+" : searchEpisodeMax
-                }]`}
-              </Label>
-              <Slider
-                id="episodeRangeSelector"
-                max={150}
-                min={0}
-                step={1}
-                value={[searchEpisodeMin, searchEpisodeMax]}
-                ariaLabel="Episode Range Selector"
-                onChange={(v) => {
-                  setSearchEpisodeMin(v.at(0)!);
-                  setSearchEpisodeMax(v.at(-1)!);
-                }}
-                thumbClasses="w-4 h-4"
-                trackClasses="dark:bg-primary-400"
-              />
-            </Wrapper>
-
-            {/* Duration Range */}
-            <Wrapper>
-              <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="durationRangeSelector"
-              >
-                Duration Range{" "}
-                {`[${searchDurationMin} - ${
-                  searchDurationMax === 200 ? "200+" : searchDurationMax
-                }]`}
-              </Label>
-              <Slider
-                id="durationRangeSelector"
-                max={200}
-                min={0}
-                step={1}
-                value={[searchDurationMin, searchDurationMax]}
-                ariaLabel="Duration Range Selector"
-                onChange={(v) => {
-                  setSearchDurationMin(v.at(0)!);
-                  setSearchDurationMax(v.at(-1)!);
-                }}
-                thumbClasses="w-4 h-4"
-                trackClasses="dark:bg-primary-400"
-              />
-            </Wrapper>
-
-            {/* TODO: Genre Selection */}
-            <Wrapper>
-              <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="genreSelector"
-              >
-                Genres
-              </Label>
-            </Wrapper>
-
-            {/* TODO: Tag Percentage */}
-            <Wrapper>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat
-              modi natus quibusdam ea quod, veritatis eligendi voluptatibus
-              ullam, eaque suscipit, dolore tenetur laboriosam a expedita quae.
-              Aut itaque ipsa saepe! Aliquid tenetur amet quo quibusdam pariatur
-              laborum voluptate. Nesciunt veniam enim ullam odio qui culpa
-              maiores quod neque totam eum facilis ad ab tenetur assumenda,
-              officia dolorum soluta obcaecati consequuntur! Id consequuntur
-              soluta dolorum, qui deserunt in quos, corporis, tempore quidem
-              illum similique. Eaque delectus earum eligendi accusantium totam
-              deleniti veniam saepe esse inventore unde, dolor vero sapiente
-              porro illum! Totam earum consectetur non sunt aperiam doloribus!
-              Incidunt harum, ad perferendis enim esse doloremque, quaerat
-              facere asperiores quas quos velit. Nesciunt, quaerat sint.
-              Expedita, odit cupiditate pariatur debitis at numquam. Rerum iusto
-              reprehenderit, deserunt ullam tempora eligendi sequi excepturi
-              nesciunt ea magnam ipsum repellendus molestias ipsam assumenda,
-              facilis a neque consequuntur quas officia. Quasi, beatae ex.
-              Blanditiis quo dolorum aut. Distinctio commodi minima impedit
-              autem repudiandae dolore quibusdam iusto, tenetur odit dignissimos
-              perferendis, id qui totam dolores maiores neque nam eos incidunt
-              tempora esse unde harum temporibus aliquid. Deleniti, sapiente!
-              Assumenda ex ea adipisci hic repellendus accusamus laboriosam
-              nesciunt nihil ab dolorum, voluptatem a iste minus velit quisquam
-              magni perferendis quo cumque deserunt saepe sint provident
-              corporis. Dicta, eligendi totam. Earum at nemo tempore asperiores.
-              Reiciendis eius delectus temporibus dignissimos eos nam dolor? Nam
-              repudiandae, sunt praesentium, optio nostrum dicta facere quidem
-              mollitia autem vel at deleniti libero soluta. Praesentium. Neque
-              ipsa commodi sed quis eveniet odio possimus voluptatibus aliquid
-              explicabo delectus, alias totam minima sequi amet reiciendis
-              distinctio cum beatae excepturi maxime libero saepe? Et inventore
-              ea similique quaerat? Illum necessitatibus, architecto quos
-              similique nihil corrupti cum vero aliquid ullam ad est,
-              consectetur itaque autem enim tenetur asperiores dolorum? Quo
-              laboriosam ab inventore quis expedita. Voluptas cum reprehenderit
-              corrupti. Amet ratione fugiat molestiae officia incidunt ullam
-              vitae temporibus quas dolores est accusamus ut expedita quisquam,
-              cupiditate numquam quos asperiores. Dolorem nisi assumenda
-              perferendis et. Itaque mollitia voluptatum quibusdam ratione.
-              Earum suscipit nostrum reiciendis, quasi porro ipsa sapiente fugit
-              voluptas blanditiis expedita iste cumque eum nesciunt perspiciatis
-              officia laudantium accusamus aspernatur architecto sit quod! Ut
-              placeat facere quasi expedita ipsa? Error totam iste aliquam
-              maiores. Facilis voluptatum minus ut? Asperiores ratione labore
-              officia dolorum nihil sint, facilis repudiandae optio dicta, rerum
-              iste ducimus in modi incidunt vel quasi fugiat excepturi? Saepe
-              ipsum, odit magnam voluptates nemo animi placeat exercitationem
-              impedit! Deserunt, temporibus, non magni quibusdam perspiciatis
-              cumque harum ratione, tenetur mollitia in eaque! Illum autem odio
-              iste itaque! Minima, suscipit? Iure molestias nostrum, sint error
-              tempore quod. Inventore nisi architecto, quam placeat ratione
-              veritatis reiciendis. Excepturi, molestias dolorum accusamus
-              voluptate magni blanditiis sapiente voluptas, atque aut, a magnam
-              accusantium dignissimos. Autem illum provident nobis unde itaque
-              dolores quae perferendis, veniam soluta sequi accusantium
-              aspernatur officia sed quas nam modi nulla nisi maiores
-              consequuntur laborum amet excepturi nihil. Excepturi, pariatur
-              ipsam! Iure blanditiis amet sequi officia, eius accusantium
-              recusandae aperiam, eum maiores fuga reiciendis mollitia rerum
-              nostrum nesciunt! Totam aspernatur molestiae ad consequatur
-              dignissimos dolore quod minima odio modi! Architecto, vitae. Ipsam
-              numquam quasi tempora dolor sequi cupiditate praesentium animi ex
-              impedit, saepe est rem recusandae doloremque culpa nam perferendis
-              accusamus nisi libero perspiciatis asperiores quis laudantium
-              optio voluptatibus repellat. Quos! Aliquid expedita, omnis,
-              consequatur vel culpa magnam quasi repellat nemo tenetur
-              cupiditate ullam nobis. Quibusdam repudiandae, illo eaque
-              assumenda, vitae nostrum modi voluptate similique quo magnam sed
-              necessitatibus ea expedita? Provident, nihil iure distinctio
-              dignissimos corrupti impedit inventore quod corporis. Iste natus
-              pariatur quo neque excepturi eum cupiditate in, nobis illum
-              repudiandae tenetur, ullam suscipit enim hic delectus. Pariatur,
-              nobis? Ipsa, blanditiis dolorum. Culpa rem placeat maxime nihil
-              quaerat dolore voluptas iure sequi nulla. Recusandae vel ab
-              distinctio, accusantium exercitationem dicta sed provident esse
-              unde, inventore, deleniti debitis dolores dolorem. Commodi nostrum
-              explicabo excepturi nisi, reprehenderit, numquam vel asperiores
-              nobis minus id, placeat itaque inventore. Illo vitae porro eos
-              obcaecati. Corrupti, cumque? Suscipit, consequuntur. Eius modi
-              inventore odit repellat quis? Commodi ipsam, reprehenderit
-              distinctio quidem sint molestias veritatis quas at. Earum,
-              cupiditate quam. Quasi nam porro quibusdam voluptates consequatur.
-              Fugit animi error omnis atque necessitatibus vero beatae saepe
-              officia architecto! Vero tempore dicta minima alias delectus
-              repudiandae consequatur? Delectus, tempore molestiae! Veritatis
-              veniam labore iusto eveniet cum doloremque quo obcaecati sapiente
-              beatae deleniti inventore ab praesentium recusandae, maiores sit
-              aliquid. Natus officiis fugiat, in, consequuntur aspernatur
-              blanditiis hic expedita accusantium quia beatae vero iure aperiam.
-              Dolore ad distinctio libero autem cumque! Magnam, vel. Consequatur
-              odit magnam cupiditate necessitatibus. Delectus, natus.
-            </Wrapper>
-
-            {/* TODO: Tag Selection */}
-            <Wrapper></Wrapper>
-          </div>
-        );
-      case SearchCategory.manga:
-        return (
-          <div className="flex flex-col gap-2 p-2 ">
-            <div className="flex flex-col gap-2 rounded-md bg-white/10 p-4">
-              <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="yearRangeSelector"
-              >
-                Year Range {`[${searchYearStart} - ${searchYearEnd}]`}
-              </Label>
-              <Slider
-                id="yearRangeSelector"
-                max={2024}
-                min={1970}
-                step={1}
-                value={[searchYearStart, searchYearEnd]}
-                ariaLabel="Year Range Selector"
-                onChange={(v) => {
-                  setSearchYearStart(v.sort().at(0)!);
-                  setSearchYearEnd(v.sort().at(-1)!);
-                }}
-                thumbClasses="w-4 h-4"
-                trackClasses="dark:bg-primary-400"
-              />
-            </div>
-          </div>
-        );
-      case SearchCategory.character:
-        return <></>;
-      case SearchCategory.staff:
-        return <></>;
-      case SearchCategory.studio:
-        return <></>;
-    }
-  };
+  const [filters, setFilter] = useState<Filter>({
+    category: SearchCategory.anime,
+    format: SearchFormatAnime.any,
+    genre: {
+      blacklist: [],
+      whitelist: [],
+    },
+    minDuration: 0,
+    maxDuration: 200,
+    maxEpisode: 150,
+    minEpisode: 0,
+    maxYear: 2024,
+    minYear: 1970,
+    season: SearchSeason.any,
+    status: SearchStatus.any,
+    tag: {
+      percentage: 69,
+      blacklist: [],
+      whitelist: [],
+    },
+  });
 
   const setDefault = () => {
-    setSearchSeason(SearchSeason.any);
-    setSearchYearStart(1970);
-    setSearchYearEnd(2024);
     setSearchTerm("");
-    setSeachCategory(SearchCategory.anime);
+    setFilter({
+      category: SearchCategory.anime,
+      format: SearchFormatAnime.any,
+      genre: {
+        blacklist: [],
+        whitelist: [],
+      },
+      minDuration: 0,
+      maxDuration: 200,
+      maxEpisode: 150,
+      minEpisode: 0,
+      maxYear: 2024,
+      minYear: 1970,
+      season: SearchSeason.any,
+      status: SearchStatus.any,
+      tag: {
+        percentage: 69,
+        blacklist: [],
+        whitelist: [],
+      },
+    });
   };
 
   return {
@@ -431,7 +591,7 @@ export default (
                   <MixerHorizontalIcon />
                 </button>
               }
-              content={filterSelector(searchCategory)}
+              content={FilterSelector(filters, setFilter)}
               className="w-2/3 max-w-lg"
             />
           ),

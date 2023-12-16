@@ -4680,8 +4680,20 @@ export type User_AuthQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type User_AuthQuery = { __typename?: 'Query', Viewer?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', medium?: string | null } | null, options?: { __typename?: 'UserOptions', displayAdultContent?: boolean | null } | null, mediaListOptions?: { __typename?: 'MediaListOptions', scoreFormat?: ScoreFormat | null } | null } | null };
 
+export type Get_GenresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type Get_GenresQuery = { __typename?: 'Query', GenreCollection?: Array<string | null> | null };
+
+export type Get_TagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type Get_TagsQuery = { __typename?: 'Query', MediaTagCollection?: Array<{ __typename?: 'MediaTag', id: number, name: string, description?: string | null, category?: string | null, isAdult?: boolean | null } | null> | null };
+
 
 export const User_AuthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"USER_AUTH"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Viewer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"medium"}}]}},{"kind":"Field","name":{"kind":"Name","value":"options"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayAdultContent"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaListOptions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scoreFormat"}}]}}]}}]}}]} as unknown as DocumentNode<User_AuthQuery, User_AuthQueryVariables>;
+export const Get_GenresDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GET_GENRES"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"GenreCollection"}}]}}]} as unknown as DocumentNode<Get_GenresQuery, Get_GenresQueryVariables>;
+export const Get_TagsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GET_TAGS"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"MediaTagCollection"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"isAdult"}}]}}]}}]} as unknown as DocumentNode<Get_TagsQuery, Get_TagsQueryVariables>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -9354,6 +9366,16 @@ export type User_AuthQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type User_AuthQuery = { __typename?: 'Query', Viewer?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', medium?: string | null } | null, options?: { __typename?: 'UserOptions', displayAdultContent?: boolean | null } | null, mediaListOptions?: { __typename?: 'MediaListOptions', scoreFormat?: ScoreFormat | null } | null } | null };
 
+export type Get_GenresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type Get_GenresQuery = { __typename?: 'Query', GenreCollection?: Array<string | null> | null };
+
+export type Get_TagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type Get_TagsQuery = { __typename?: 'Query', MediaTagCollection?: Array<{ __typename?: 'MediaTag', id: number, name: string, description?: string | null, category?: string | null, isAdult?: boolean | null } | null> | null };
+
 export namespace User_Auth {
   export type Variables = User_AuthQueryVariables;
   export type Query = User_AuthQuery;
@@ -9361,4 +9383,15 @@ export namespace User_Auth {
   export type Avatar = User_AuthQuery['Viewer']['avatar'];
   export type Options = User_AuthQuery['Viewer']['options'];
   export type MediaListOptions = User_AuthQuery['Viewer']['mediaListOptions'];
+}
+
+export namespace Get_Genres {
+  export type Variables = Get_GenresQueryVariables;
+  export type Query = Get_GenresQuery;
+}
+
+export namespace Get_Tags {
+  export type Variables = Get_TagsQueryVariables;
+  export type Query = Get_TagsQuery;
+  export type MediaTagCollection = Get_TagsQuery['MediaTagCollection'][number];
 }
