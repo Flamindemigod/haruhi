@@ -7,6 +7,31 @@ import {
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { client } from "~/apolloClient";
+import { USER_AUTH } from "~/graphql/queries";
+import { User_AuthQuery } from "~/__generated__/graphql";
+
+
+enum ScoreFormat{
+  POINT_10_DECIMAL,
+  POINT_100,
+  POINT_10,
+  POINT_5,
+  POINT_3,
+}
+
+type Viewer ={ 
+  id: number
+  name: string
+  avatar: {
+    medium: string
+  }
+  options:{
+    displayAdultContent: boolean
+  }
+  mediaListOptions: {
+    scoreFormat: ScoreFormat
+  }
+}
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -72,25 +97,9 @@ export const authOptions: NextAuthOptions = {
       userinfo: {
         url: "https://graphql.anilist.co",
         async request(context) {
-          const query = gql`
-          query {
-            Viewer {
-              id
-              name
-              avatar {
-                medium
-              }
-              options{
-                displayAdultContent
-              }
-              mediaListOptions{
-                scoreFormat
-              }
-            }
-          }
-            `;
-            const { data} = await client.query<any>({
-            query: query,
+         
+            const { data } = await client.query<User_AuthQuery>({
+            query: USER_AUTH,
             context: {
               headers: {
                 Authorization: "Bearer " + context.tokens.access_token,
@@ -98,11 +107,11 @@ export const authOptions: NextAuthOptions = {
             },
           });
           return {
-            name: data.Viewer.name,
-            aniid: data.Viewer.id as string,
-            image: data.Viewer.avatar.medium,
-            scoreFormat: data.Viewer.mediaListOptions.scoreFormat,
-            showNSFW: data.Viewer.options.displayAdultContent
+            name: data.Viewer?.name ?? "",
+            aniid: data.Viewer?.id ?? 0,
+            image: data.Viewer?.avatar?.medium ?? "",
+            scoreFormat: data.Viewer?.mediaListOptions?.scoreFormat! ?? ScoreFormat.POINT_10_DECIMAL,
+            showNSFW: data.Viewer?.options?.displayAdultContent ?? false
           };
         },
       },

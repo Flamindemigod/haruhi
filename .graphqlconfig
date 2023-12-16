@@ -1,0 +1,12 @@
+{
+  "name": "AniList",
+  "schemaPath": "schema.graphql",
+  "includes": [
+    "./src/**/*"
+  ],
+  "extensions": {
+    "endpoints": {
+      "default": "https://graphql.anilist.co"
+    }
+  }
+}

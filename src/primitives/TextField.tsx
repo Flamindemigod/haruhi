@@ -91,7 +91,7 @@ export default (props: Props) => {
         <></>
       )}
       <TextField.Input
-        autoFocus={true}
+        // autoFocus={true}
         placeholder={props.placeholder}
         value={props.value}
         className={props.className}

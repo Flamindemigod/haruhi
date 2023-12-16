@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
-import { ScoreFormat } from "@prisma/client";
+import { User_AuthQuery } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
+import { USER_AUTH } from "~/graphql/queries";
 import {
     createTRPCRouter,
     protectedProcedure,
@@ -22,26 +22,10 @@ import { api } from "~/trpc/server";
         return user;
       }),
     refreshUser: protectedProcedure.mutation(async ({ ctx }) => {
-        const query = gql`
-          query {
-            Viewer {
-              id
-              name
-              avatar {
-                medium
-              }
-              options{
-                displayAdultContent
-              }
-              mediaListOptions{
-                scoreFormat
-              }
-            }
-          }
-        `;
+       
             
-            const { data } = await client.query<any>({
-            query: query,
+            const { data } = await client.query<User_AuthQuery>({
+            query: USER_AUTH,
             context: {
               headers: {
                 Authorization: "Bearer " + ctx.session.user.token,
@@ -50,8 +34,8 @@ import { api } from "~/trpc/server";
           });
           return db.user.update({
             data: {
-              showNSFW: data.Viewer.options.displayAdultContent as boolean, image: data.Viewer.avatar.medium as string,
-              scoreFormat: data.Viewer.mediaListOptions.scoreFormat as ScoreFormat
+              showNSFW: data.Viewer?.options?.displayAdultContent as boolean, image: data.Viewer?.avatar?.medium,
+              scoreFormat: data.Viewer?.mediaListOptions?.scoreFormat!
             }, where: {
               id: ctx.session.user.id
             },

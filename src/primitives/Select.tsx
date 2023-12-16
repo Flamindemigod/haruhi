@@ -22,6 +22,7 @@ type Props<T> = {
   onValueChange: (val: T) => void;
   values: Value<T>[];
   buttonClass?: string;
+  side?: "top" | "right" | "bottom" | "left";
 };
 
 const Select = <T,>(props: Props<T>) => {
@@ -41,7 +42,11 @@ const Select = <T,>(props: Props<T>) => {
       <SelectPrimitive.Trigger asChild aria-label={props.triggerAriaLabel}>
         {props.trigger}
       </SelectPrimitive.Trigger>
-      <SelectPrimitive.Content className="z-[75]" position="popper">
+      <SelectPrimitive.Content
+        className="z-[75]"
+        position="popper"
+        side={props.side}
+      >
         <SelectPrimitive.ScrollUpButton className="flex items-center justify-center text-offWhite-700 dark:text-offWhite-300">
           <ChevronUpIcon />
         </SelectPrimitive.ScrollUpButton>
