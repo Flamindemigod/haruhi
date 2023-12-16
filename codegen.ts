@@ -8,7 +8,7 @@ const config:CodegenConfig = {
     generates: {
         "./src/__generated__/": {
             overwrite:true,
-            plugins:["typescript", "typescript-operations", "typescript-compatibility", {add: {content: "/* THIS IS A GENERATED FILE */"}}, {add: {content: "/* eslint-disable */"}}],
+            // plugins:["typescript", "typescript-operations", "typescript-compatibility", {add: {content: "/* THIS IS A GENERATED FILE */"}}, {add: {content: "/* eslint-disable */"}}],
             preset:"client",
             presetConfig:{
                 gqlTagName: "gql"
