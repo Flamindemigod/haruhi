@@ -8,7 +8,7 @@ export type Props = Pick<DialogProps, "open" | "onOpenChange">;
 
 export default (props: Props) => {
   const dialogContentRef = useRef<HTMLDivElement>(null);
-  const { render: searchRender } = useSearch(dialogContentRef);
+  const { render: searchRender, filter } = useSearch(dialogContentRef);
   return (
     <Dialog
       contentRef={dialogContentRef}
@@ -16,7 +16,7 @@ export default (props: Props) => {
       content={
         <>
           {searchRender}
-
+          {JSON.stringify(filter)}
           {/* <div className="h-80 w-full bg-green-200"></div>
           <div className="h-80 w-full bg-red-200"></div>
           <div className="h-80 w-full bg-blue-200"></div> */}
