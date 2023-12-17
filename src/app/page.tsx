@@ -4,11 +4,6 @@ import Background from "./_components/Background";
 import Hero from "./_components/Hero";
 
 export default async function Home() {
-  // const sesh = await getServerAuthSession();
-  // var user = await api.user.getUser.query();
-  // if (!!sesh?.user) {
-  // await api.user.refreshUser.mutate();
-  // }
   return (
     <>
       <Background

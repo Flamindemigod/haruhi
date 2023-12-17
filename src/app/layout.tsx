@@ -13,6 +13,8 @@ import SessionWrapper from "./_components/SessionWrapper";
 import Footer from "./_components/Footer";
 import { mediaStyle } from "./utils/Media";
 import MediaWrapper from "./_components/MediaWrapper";
+import { getServerAuthSession } from "~/server/auth";
+import { api } from "~/trpc/server";
 
 export const viewport: Viewport = {
   themeColor: "#cc006d",
@@ -23,11 +25,15 @@ export const viewport: Viewport = {
 
 export const metadata = genMeta({});
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const sesh = await getServerAuthSession();
+  if (!!sesh?.user) {
+    await api.user.refreshUser.mutate();
+  }
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

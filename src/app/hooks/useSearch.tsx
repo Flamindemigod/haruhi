@@ -21,42 +21,15 @@ import {
 import Drawer from "~/primitives/Drawer";
 import { api } from "~/trpc/react";
 import ThreeToggleChip from "~/primitives/ThreeToggleChip";
-
-export enum SearchCategory {
-  anime = "Anime",
-  manga = "Manga",
-  character = "Character",
-  staff = "Staff",
-  studio = "Studio",
-}
-
-enum SearchSeason {
-  any = "Any",
-  winter = "Winter",
-  spring = "Spring",
-  summer = "Summer",
-  fall = "Fall",
-}
-
-enum SearchStatus {
-  any = "Any",
-  releasing = "Releasing",
-  finished = "Finished",
-  notYetReleased = "Not Yet Released",
-  cancelled = "Cancelled",
-  hiatus = "Hiatus",
-}
-
-enum SearchFormatAnime {
-  any = "Any",
-  tv = "TV",
-  tvShort = "TV Short",
-  movie = "Movie",
-  special = "Special",
-  ova = "OVA",
-  ona = "ONA",
-  music = "Music",
-}
+import { useDebounce } from "./useDebounce";
+import {
+  AnimeFilter,
+  SearchAnimeSort,
+  SearchCategory,
+  SearchFormatAnime,
+  SearchSeason,
+  SearchStatus,
+} from "~/types.shared/anilist";
 
 enum SearchFormatManga {
   any = "Any",
@@ -65,29 +38,30 @@ enum SearchFormatManga {
   oneShot = "One Shot",
 }
 
-type AnimeFilter = {
-  category: SearchCategory.anime;
-  status: SearchStatus;
-  season: SearchSeason;
-  format: SearchFormatAnime;
-  minYear: number;
-  maxYear: number;
-  minEpisode: number;
-  maxEpisode: number;
-  minDuration: number;
-  maxDuration: number;
-  genre: {
-    whitelist: string[];
-    blacklist: string[];
-  };
-  tag: {
-    percentage: number;
-    whitelist: string[];
-    blacklist: string[];
-  };
-};
+// type AnimeFilter = {
+//   category: SearchCategory.anime;
+//   status: SearchStatus;
+//   season: SearchSeason;
+//   format: SearchFormatAnime;
+//   minYear: number;
+//   maxYear: number;
+//   minEpisode: number;
+//   maxEpisode: number;
+//   minDuration: number;
+//   maxDuration: number;
+//   genre: {
+//     whitelist: string[];
+//     blacklist: string[];
+//   };
+//   tag: {
+//     percentage: number;
+//     whitelist: string[];
+//     blacklist: string[];
+//   };
+// };
 
 const defaultAnimeFilter: AnimeFilter = {
+  sort: SearchAnimeSort.SearchMatch,
   category: SearchCategory.anime,
   status: SearchStatus.any,
   season: SearchSeason.any,
@@ -185,7 +159,7 @@ const defaultStudioFilter: StudioFilter = {
   category: SearchCategory.studio,
 };
 
-type Filter =
+export type Filter =
   | AnimeFilter
   | MangaFilter
   | CharacterFilter
@@ -300,7 +274,7 @@ const FilterSelector = (
               max={2024}
               min={1970}
               step={1}
-              value={[filter.minYear, filter.maxYear]}
+              value={[filter.minYear!, filter.maxYear!]}
               ariaLabel="Year Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -329,7 +303,7 @@ const FilterSelector = (
               max={150}
               min={0}
               step={1}
-              value={[filter.minEpisode, filter.maxEpisode]}
+              value={[filter.minEpisode!, filter.maxEpisode!]}
               ariaLabel="Episode Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -359,7 +333,7 @@ const FilterSelector = (
               max={200}
               min={0}
               step={1}
-              value={[filter.minDuration, filter.maxDuration]}
+              value={[filter.minDuration!, filter.maxDuration!]}
               ariaLabel="Duration Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -724,12 +698,12 @@ const FilterSelector = (
             >
               Volumes Range{" "}
               {`[${filter.minVolumes} - ${
-                filter.maxVolumes === 200 ? "200+" : filter.maxVolumes
+                filter.maxVolumes === 50 ? "50+" : filter.maxVolumes
               }]`}
             </Label>
             <Slider
               id="volumesRangeSelector"
-              max={200}
+              max={50}
               min={0}
               step={1}
               value={[filter.minVolumes, filter.maxVolumes]}
@@ -980,11 +954,76 @@ const FilterSelector = (
         </div>
       );
     case SearchCategory.character:
-      return <></>;
     case SearchCategory.staff:
-      return <></>;
+      return (
+        <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+          <Wrapper>
+            <Label
+              className="text-lg font-semibold text-primary-500"
+              htmlFor="showBirthday"
+            >
+              Show Birthdays
+            </Label>
+            <ThreeToggleChip
+              text={((f: CharacterFilter | StaffFilter) => {
+                switch (f.showBirthdaysOnly) {
+                  case TernaryState.true:
+                    return "Showing Only Birthdays";
+                  case TernaryState.false:
+                    return "Filtering Out Birthdays";
+                  case TernaryState.null:
+                    return "Showing All";
+                }
+              })(filter as CharacterFilter | StaffFilter)}
+              onChange={(f) => {
+                let state: TernaryState;
+                switch (f) {
+                  case "Enabled":
+                    state = TernaryState.true;
+                    break;
+                  // return "Enabled";
+
+                  case "Disabled":
+                    state = TernaryState.false;
+                    break;
+
+                  // return "Disabled";
+                  case undefined:
+                    state = TernaryState.null;
+                    break;
+                  // return undefined;
+                }
+
+                setFilter((s) => ({
+                  ...s,
+                  showBirthdaysOnly: state,
+                }));
+              }}
+              initState={((f: CharacterFilter | StaffFilter) => {
+                switch (f.showBirthdaysOnly) {
+                  case TernaryState.true:
+                    return "Enabled";
+                  case TernaryState.false:
+                    return "Disabled";
+                  case TernaryState.null:
+                    return undefined;
+                }
+              })(filter as CharacterFilter | StaffFilter)}
+            />
+          </Wrapper>
+        </div>
+      );
+
     case SearchCategory.studio:
-      return <></>;
+      return (
+        <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+          <Wrapper>
+            <div className="grid h-full place-items-center text-xl font-semibold">
+              No Filtering Options
+            </div>
+          </Wrapper>
+        </div>
+      );
   }
 };
 
@@ -992,59 +1031,21 @@ export default (
   container?: RefObject<HTMLDivElement>,
 ): {
   render: React.JSX.Element;
+  searchString: string;
   filter: Filter;
 } => {
-  const [searchTerm, setSearchTerm] = useState<string>();
-
-  const [filters, setFilter] = useState<Filter>({
-    category: SearchCategory.anime,
-    format: SearchFormatAnime.any,
-    genre: {
-      blacklist: [],
-      whitelist: [],
-    },
-    minDuration: 0,
-    maxDuration: 200,
-    maxEpisode: 150,
-    minEpisode: 0,
-    maxYear: 2024,
-    minYear: 1970,
-    season: SearchSeason.any,
-    status: SearchStatus.any,
-    tag: {
-      percentage: 69,
-      blacklist: [],
-      whitelist: [],
-    },
-  });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debounchedSearchString = useDebounce<string>(searchTerm, 1000);
+  const [filters, setFilter] = useState<Filter>(defaultAnimeFilter);
 
   const setDefault = () => {
     setSearchTerm("");
-    setFilter({
-      category: SearchCategory.anime,
-      format: SearchFormatAnime.any,
-      genre: {
-        blacklist: [],
-        whitelist: [],
-      },
-      minDuration: 0,
-      maxDuration: 200,
-      maxEpisode: 150,
-      minEpisode: 0,
-      maxYear: 2024,
-      minYear: 1970,
-      season: SearchSeason.any,
-      status: SearchStatus.any,
-      tag: {
-        percentage: 69,
-        blacklist: [],
-        whitelist: [],
-      },
-    });
+    setFilter(defaultAnimeFilter);
   };
 
   return {
     filter: filters,
+    searchString: debounchedSearchString,
     render: (
       <TextField
         placeholder="Search..."

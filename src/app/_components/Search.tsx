@@ -4,11 +4,22 @@ import Dialog, { Props as DialogProps } from "~/primitives/Dialog";
 
 import useSearch from "../hooks/useSearch";
 import { useRef } from "react";
+import { api } from "~/trpc/react";
+import { AnimeFilter } from "~/types.shared/anilist";
 export type Props = Pick<DialogProps, "open" | "onOpenChange">;
 
 export default (props: Props) => {
   const dialogContentRef = useRef<HTMLDivElement>(null);
-  const { render: searchRender, filter } = useSearch(dialogContentRef);
+  const {
+    render: searchRender,
+    filter,
+    searchString,
+  } = useSearch(dialogContentRef);
+  const { data } = api.anilist.searchAnime.useQuery({
+    searchString,
+    filters: filter as AnimeFilter,
+  });
+  console.log("Rendeder");
   return (
     <Dialog
       contentRef={dialogContentRef}
@@ -16,7 +27,8 @@ export default (props: Props) => {
       content={
         <>
           {searchRender}
-          {JSON.stringify(filter)}
+          {searchString}
+          {JSON.stringify(data)}
           {/* <div className="h-80 w-full bg-green-200"></div>
           <div className="h-80 w-full bg-red-200"></div>
           <div className="h-80 w-full bg-blue-200"></div> */}

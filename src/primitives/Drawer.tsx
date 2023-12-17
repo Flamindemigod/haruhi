@@ -45,6 +45,7 @@ const Drawer = (props: Props) => {
               className={cx(
                 "fixed z-50",
                 "rounded-lg px-2 py-8",
+                "flex flex-col",
                 props.side == "left"
                   ? "bottom-0 left-0 top-0"
                   : "bottom-0 right-0 top-0",
