@@ -24,106 +24,16 @@ import ThreeToggleChip from "~/primitives/ThreeToggleChip";
 import { useDebounce } from "./useDebounce";
 import {
   AnimeFilter,
-  SearchAnimeSort,
+  MangaFilter,
   SearchCategory,
   SearchFormatAnime,
+  SearchFormatManga,
+  SearchSort,
   SearchSeason,
   SearchStatus,
+  defaultAnimeFilter,
+  defaultMangaFilter,
 } from "~/types.shared/anilist";
-
-enum SearchFormatManga {
-  any = "Any",
-  manga = "Manga",
-  novel = "Novel",
-  oneShot = "One Shot",
-}
-
-// type AnimeFilter = {
-//   category: SearchCategory.anime;
-//   status: SearchStatus;
-//   season: SearchSeason;
-//   format: SearchFormatAnime;
-//   minYear: number;
-//   maxYear: number;
-//   minEpisode: number;
-//   maxEpisode: number;
-//   minDuration: number;
-//   maxDuration: number;
-//   genre: {
-//     whitelist: string[];
-//     blacklist: string[];
-//   };
-//   tag: {
-//     percentage: number;
-//     whitelist: string[];
-//     blacklist: string[];
-//   };
-// };
-
-const defaultAnimeFilter: AnimeFilter = {
-  sort: SearchAnimeSort.SearchMatch,
-  category: SearchCategory.anime,
-  status: SearchStatus.any,
-  season: SearchSeason.any,
-  format: SearchFormatAnime.any,
-  minYear: 1970,
-  maxYear: 2024,
-  minEpisode: 0,
-  maxEpisode: 150,
-  minDuration: 0,
-  maxDuration: 200,
-  genre: {
-    whitelist: [],
-    blacklist: [],
-  },
-  tag: {
-    percentage: 69,
-    whitelist: [],
-    blacklist: [],
-  },
-};
-
-type MangaFilter = {
-  category: SearchCategory.manga;
-  status: SearchStatus;
-  format: SearchFormatManga;
-  minYear: number;
-  maxYear: number;
-  minChapters: number;
-  maxChapters: number;
-  minVolumes: number;
-  maxVolumes: number;
-  genre: {
-    whitelist: string[];
-    blacklist: string[];
-  };
-  tag: {
-    percentage: number;
-    whitelist: string[];
-    blacklist: string[];
-  };
-};
-
-const defaultMangaFilter: MangaFilter = {
-  category: SearchCategory.manga,
-  status: SearchStatus.any,
-  format: SearchFormatManga.any,
-  minYear: 1970,
-  maxYear: 2024,
-  minChapters: 0,
-  maxChapters: 500,
-  minVolumes: 0,
-  maxVolumes: 50,
-  genre: {
-    whitelist: [],
-    blacklist: [],
-  },
-  tag: {
-    percentage: 69,
-    whitelist: [],
-    blacklist: [],
-  },
-};
 
 enum TernaryState {
   true,
@@ -175,6 +85,7 @@ const Wrapper = ({ children }: { children?: ReactNode }) => (
 const FilterSelector = (
   filter: Filter,
   setFilter: Dispatch<SetStateAction<Filter>>,
+  container?: RefObject<HTMLDivElement>,
 ) => {
   let { data: user } = api.user.getUser.useQuery();
   let { data: genres } = api.anilist.getGenres.useQuery();
@@ -186,6 +97,36 @@ const FilterSelector = (
     case SearchCategory.anime:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+          {/* Sort */}
+          <Wrapper>
+            <Label
+              className="text-lg font-semibold text-primary-500"
+              htmlFor="sortSelector"
+            >
+              Sort
+            </Label>
+            <Select
+              value={(filter as AnimeFilter).sort}
+              trigger={
+                <div className="rounded-md bg-primary-500 p-2 text-center">
+                  {filter.sort}
+                </div>
+              }
+              defaultValue={SearchSort.SearchMatch}
+              values={Object.values(SearchSort).map((v) => ({
+                value: v,
+                displayTitle: v,
+              }))}
+              triggerAriaLabel="sortSelector"
+              side={"left"}
+              onValueChange={(v: SearchSort) => {
+                setFilter((state) => ({
+                  ...(state as AnimeFilter),
+                  sort: v,
+                }));
+              }}
+            />
+          </Wrapper>
           {/* Airing Status */}
           <Wrapper>
             <Label
@@ -227,7 +168,7 @@ const FilterSelector = (
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
-              value={filter.format}
+              value={(filter as AnimeFilter).format}
               onValueChange={(f: SearchFormatAnime) => {
                 setFilter((state: any) => ({
                   ...state,
@@ -252,7 +193,7 @@ const FilterSelector = (
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
-              value={filter.season}
+              value={(filter as AnimeFilter).season}
               onValueChange={(s: SearchSeason) => {
                 setFilter((state) => ({
                   ...state,
@@ -294,8 +235,10 @@ const FilterSelector = (
               htmlFor="episodeRangeSelector"
             >
               Episode Range{" "}
-              {`[${filter.minEpisode} - ${
-                filter.maxEpisode === 150 ? "150+" : filter.maxEpisode
+              {`[${(filter as AnimeFilter).minEpisode} - ${
+                (filter as AnimeFilter).maxEpisode === 150
+                  ? "150+"
+                  : (filter as AnimeFilter).maxEpisode
               }]`}
             </Label>
             <Slider
@@ -303,7 +246,10 @@ const FilterSelector = (
               max={150}
               min={0}
               step={1}
-              value={[filter.minEpisode!, filter.maxEpisode!]}
+              value={[
+                (filter as AnimeFilter).minEpisode!,
+                (filter as AnimeFilter).maxEpisode!,
+              ]}
               ariaLabel="Episode Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -324,8 +270,10 @@ const FilterSelector = (
               htmlFor="durationRangeSelector"
             >
               Duration Range{" "}
-              {`[${filter.minDuration} - ${
-                filter.maxDuration === 200 ? "200+" : filter.maxDuration
+              {`[${(filter as AnimeFilter).minDuration} - ${
+                (filter as AnimeFilter).maxDuration === 200
+                  ? "200+"
+                  : (filter as AnimeFilter).maxDuration
               }]`}
             </Label>
             <Slider
@@ -333,7 +281,10 @@ const FilterSelector = (
               max={200}
               min={0}
               step={1}
-              value={[filter.minDuration!, filter.maxDuration!]}
+              value={[
+                (filter as AnimeFilter).minDuration!,
+                (filter as AnimeFilter).maxDuration!,
+              ]}
               ariaLabel="Duration Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -583,6 +534,36 @@ const FilterSelector = (
     case SearchCategory.manga:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+          {/* Sort */}
+          <Wrapper>
+            <Label
+              className="text-lg font-semibold text-primary-500"
+              htmlFor="sortSelector"
+            >
+              Sort
+            </Label>
+            <Select
+              value={(filter as AnimeFilter).sort}
+              trigger={
+                <div className="rounded-md bg-primary-500 p-2 text-center">
+                  {filter.sort}
+                </div>
+              }
+              defaultValue={SearchSort.SearchMatch}
+              values={Object.values(SearchSort).map((v) => ({
+                value: v,
+                displayTitle: v,
+              }))}
+              triggerAriaLabel="sortSelector"
+              side={"left"}
+              onValueChange={(v: SearchSort) => {
+                setFilter((state) => ({
+                  ...(state as AnimeFilter),
+                  sort: v,
+                }));
+              }}
+            />
+          </Wrapper>
           {/* Airing Status */}
           <Wrapper>
             <Label
@@ -624,7 +605,7 @@ const FilterSelector = (
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
-              value={filter.format}
+              value={(filter as MangaFilter).format}
               onValueChange={(f: SearchFormatManga) => {
                 setFilter((state: any) => ({
                   ...state,
@@ -647,7 +628,7 @@ const FilterSelector = (
               max={2024}
               min={1970}
               step={1}
-              value={[filter.minYear, filter.maxYear]}
+              value={[filter.minYear!, filter.maxYear!]}
               ariaLabel="Year Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -667,8 +648,10 @@ const FilterSelector = (
               htmlFor="chaptersRangeSelector"
             >
               Chapter Range{" "}
-              {`[${filter.minChapters} - ${
-                filter.maxChapters === 300 ? "300+" : filter.maxChapters
+              {`[${(filter as MangaFilter).minChapters} - ${
+                (filter as MangaFilter).maxChapters === 300
+                  ? "300+"
+                  : (filter as MangaFilter).maxChapters
               }]`}
             </Label>
             <Slider
@@ -676,7 +659,10 @@ const FilterSelector = (
               max={300}
               min={0}
               step={1}
-              value={[filter.minChapters, filter.maxChapters]}
+              value={[
+                (filter as MangaFilter).minChapters!,
+                (filter as MangaFilter).maxChapters!,
+              ]}
               ariaLabel="Chapters Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -697,8 +683,10 @@ const FilterSelector = (
               htmlFor="volumesRangeSelector"
             >
               Volumes Range{" "}
-              {`[${filter.minVolumes} - ${
-                filter.maxVolumes === 50 ? "50+" : filter.maxVolumes
+              {`[${(filter as MangaFilter).minVolumes} - ${
+                (filter as MangaFilter).maxVolumes === 50
+                  ? "50+"
+                  : (filter as MangaFilter).maxVolumes
               }]`}
             </Label>
             <Slider
@@ -706,7 +694,10 @@ const FilterSelector = (
               max={50}
               min={0}
               step={1}
-              value={[filter.minVolumes, filter.maxVolumes]}
+              value={[
+                (filter as MangaFilter).minVolumes!,
+                (filter as MangaFilter).maxVolumes!,
+              ]}
               ariaLabel="Volumes Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -1037,7 +1028,6 @@ export default (
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debounchedSearchString = useDebounce<string>(searchTerm, 1000);
   const [filters, setFilter] = useState<Filter>(defaultAnimeFilter);
-
   const setDefault = () => {
     setSearchTerm("");
     setFilter(defaultAnimeFilter);

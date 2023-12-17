@@ -11,9 +11,7 @@ import {
   } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { api } from "~/trpc/server";
-import { SearchAnimeSort, SearchFormatAnime, SearchSeason, SearchStatus, animeSearchFilter } from "~/types.shared/anilist";
-
-
+import { SearchSort, SearchFormatAnime, SearchSeason, SearchStatus, animeSearchFilter } from "~/types.shared/anilist";
   export const anilistRouter = createTRPCRouter({
     getGenres: publicProcedure.query(async () => {
        const {data}=await client.query<Get_GenresQuery>({
@@ -35,11 +33,12 @@ import { SearchAnimeSort, SearchFormatAnime, SearchSeason, SearchStatus, animeSe
         filters:animeSearchFilter
       }
     )).query(async ( { input } ) => {
-
+      let user = await api.user.getUser.query();
       const vars = {
         page: 1,
         type: "ANIME",
-        sort: convertEnum(SearchAnimeSort, MediaSort, input.filters.sort),
+        isAdult: !user?.showNSFW ? false : undefined,
+        sort: convertEnum(SearchSort, MediaSort, input.filters.sort),
         search: !!input.searchString ? input.searchString : undefined,
         status: convertEnum(SearchStatus, MediaStatus, input.filters.status),
         season: convertEnum(SearchSeason, MediaSeason, input.filters.season),
@@ -54,14 +53,11 @@ import { SearchAnimeSort, SearchFormatAnime, SearchSeason, SearchStatus, animeSe
         genres: input.filters.genre.whitelist.length == 0 ? undefined :input.filters.genre.whitelist ,
         excludedGenres: input.filters.genre.blacklist.length == 0 ? undefined :input.filters.genre.blacklist ,
       }  as Search_Anime_MangaQueryVariables;
-      console.log(vars);
       const { data }=  await client.query<Search_Anime_MangaQuery>({
         query:  SEARCH_ANIME_MANGA,
         variables: vars
       })
-      
       return data;
-
     })  
     });
   

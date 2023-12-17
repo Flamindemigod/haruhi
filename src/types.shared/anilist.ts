@@ -24,6 +24,13 @@ export enum SearchCategory {
     Hiatus = "Hiatus",
   }
   
+  export enum SearchFormatManga {
+    any = "Any",
+    Manga = "Manga",
+    Novel = "Novel",
+    OneShot = "One Shot",
+  }
+
   export enum SearchFormatAnime {
     any = "Any",
     Tv = "TV",
@@ -35,46 +42,20 @@ export enum SearchCategory {
     Music = "Music",
   }
   
-  export enum SearchAnimeSort {
+  export enum SearchSort {
     SearchMatch = 'Search Match',
-    Trending = 'Trending',
-    TrendingDesc = 'Trending Desc',
-    Popularity = 'Popularity',
-    PopularityDesc = 'Popularity Desc',
-    TitleEnglish = 'Title English',
-    TitleEnglishDesc = 'Title English Desc',
-    TitleNative = 'Title Native',
-    TitleNativeDesc = 'Title Native Desc',
-    TitleRomaji = 'Title Romaji',
-    TitleRomajiDesc = 'Title Romaji Desc',
-    Favourites = 'Favourites',
-    FavouritesDesc = 'Favourites Desc',
-    Score = 'Score',
-    ScoreDesc = 'Score Desc',
-    Id = 'Id',
-    IdDesc = 'Id Desc',
-    Status = 'Status',
-    StatusDesc = 'Status Desc',
-    Format = 'Format',
-    FormatDesc = 'Format Desc',
-    Episodes = 'Episodes',
-    EpisodesDesc = 'Episodes Desc',
-    Duration = 'Duration',
-    DurationDesc = 'Duration Desc',
-    StartDate = 'Start Date',
-    StartDateDesc = 'Start Date Desc',
-    EndDate = 'End Date',
-    EndDateDesc = 'End Date Desc',
-    UpdatedAt = 'Updated At',
-    UpdatedAtDesc = 'Updated At Desc',
+    TrendingDesc = 'Trending',
+    PopularityDesc = 'Popularity',
+    ScoreDesc = 'Score',
+    StartDateDesc = 'Start Date',
+    UpdatedAtDesc = 'Updated At',
   }
 
-  
 
   
   export const animeSearchFilter =  z.object(
     {
-      sort: z.nativeEnum(SearchAnimeSort),
+      sort: z.nativeEnum(SearchSort),
       category: z.string().includes("Anime"),
       status: z.nativeEnum(SearchStatus),
       season: z.nativeEnum(SearchSeason),
@@ -98,3 +79,74 @@ export enum SearchCategory {
   );
   
   export type AnimeFilter = z.infer<typeof animeSearchFilter>
+
+  export const defaultAnimeFilter: AnimeFilter = {
+    sort: SearchSort.SearchMatch,
+    category: SearchCategory.anime,
+    status: SearchStatus.any,
+    season: SearchSeason.any,
+    format: SearchFormatAnime.any,
+    minYear: 1970,
+    maxYear: 2024,
+    minEpisode: 0,
+    maxEpisode: 150,
+    minDuration: 0,
+    maxDuration: 200,
+    genre: {
+      whitelist: [],
+      blacklist: [],
+    },
+    tag: {
+      percentage: 69,
+      whitelist: [],
+      blacklist: [],
+    },
+  };
+
+
+ 
+  export const mangaSearchFilter = z.object( {
+    sort: z.nativeEnum(SearchSort),
+    category: z.string().includes("Manga"),
+    status: z.nativeEnum(SearchStatus),
+    format:z.nativeEnum(SearchFormatManga),
+    minYear: z.optional(z.number().min(1970).max(2024).transform((v) => v === 1970 ? undefined : v)),
+    maxYear: z.optional(z.number().min(1970).max(2024).transform((v) => v === 2024 ? undefined : v)),
+    minChapters: z.optional(z.number().min(0).max(500).transform((v) => v === 0 ? undefined : v)),
+    maxChapters: z.optional(z.number().min(0).max(500).transform((v) => v === 500 ? undefined : v)),
+    minVolumes: z.optional(z.number().min(0).max(50).transform((v) => v === 0 ? undefined : v)),
+    maxVolumes: z.optional(z.number().min(0).max(50).transform((v) => v === 50 ? undefined : v)),
+    genre: z.object({
+      whitelist: z.array(z.string()),
+      blacklist: z.array(z.string()),
+    }),
+    tag: z.object({
+    percentage: z.number().min(0).max(100).default(69),
+      whitelist: z.array(z.string()),
+      blacklist: z.array(z.string()),
+    }),
+  });
+
+  export type MangaFilter = z.infer<typeof mangaSearchFilter>
+
+  export const defaultMangaFilter: MangaFilter = {
+    sort: SearchSort.SearchMatch,
+    category: SearchCategory.manga,
+    status: SearchStatus.any,
+    format: SearchFormatManga.any,
+    minYear: 1970,
+    maxYear: 2024,
+    minChapters: 0,
+    maxChapters: 500,
+    minVolumes: 0,
+    maxVolumes: 50,
+    genre: {
+      whitelist: [],
+      blacklist: [],
+    },
+    tag: {
+      percentage: 69,
+      whitelist: [],
+      blacklist: [],
+    },
+  };
