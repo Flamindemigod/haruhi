@@ -416,7 +416,7 @@ const FilterSelector = (
               className="text-lg font-semibold text-primary-500"
               htmlFor="tagSelector"
             >
-              Minimum Tag%
+              {`Minimum Tag ${filter.tag.percentage}%`}
             </Label>
             <Slider
               ariaLabel="tagMinSlider"
@@ -829,7 +829,7 @@ const FilterSelector = (
               className="text-lg font-semibold text-primary-500"
               htmlFor="tagSelector"
             >
-              Minimum Tag%
+              {`Minimum Tag ${filter.tag.percentage}%`}
             </Label>
             <Slider
               ariaLabel="tagMinSlider"
