@@ -67,8 +67,14 @@ export const anilistRouter = createTRPCRouter({
         filters: searchFilter,
       }),
     )
-    .query(async ({ input }) => {
-      let user = await api.user.getUser.query();
+    .query(async ({ ctx,input }) => {
+      let userNsfw;
+      if (ctx.session?.user){
+        let user = await api.user.getUser.query();
+        userNsfw = user?.showNSFW
+      } else{
+        userNsfw = undefined;
+      }
       let query;
       let vars;
       let res;
@@ -78,7 +84,7 @@ export const anilistRouter = createTRPCRouter({
           vars = {
             page: 1,
             type: "ANIME",
-            isAdult: !user?.showNSFW ? false : undefined,
+            isAdult: !userNsfw ? false : undefined,
             sort: convertEnum(SearchSort, MediaSort, input.filters.sort),
             search: !!input.searchString ? input.searchString : undefined,
             status: convertEnum(
@@ -143,7 +149,7 @@ export const anilistRouter = createTRPCRouter({
           vars = {
             page: 1,
             type: "MANGA",
-            isAdult: !user?.showNSFW ? false : undefined,
+            isAdult: !userNsfw ? false : undefined,
             sort: convertEnum(SearchSort, MediaSort, input.filters.sort),
             search: !!input.searchString ? input.searchString : undefined,
             status: convertEnum(
