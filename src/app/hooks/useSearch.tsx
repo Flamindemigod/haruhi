@@ -20,11 +20,14 @@ import {
 } from "@radix-ui/react-icons";
 import Drawer from "~/primitives/Drawer";
 import { api } from "~/trpc/react";
-import ThreeToggleChip from "~/primitives/ThreeToggleChip";
+import ThreeToggleChip, { TernaryState } from "~/primitives/ThreeToggleChip";
 import { useDebounce } from "./useDebounce";
 import {
   AnimeFilter,
   MangaFilter,
+  CharacterFilter,
+  StaffFilter,
+  StudioFilter,
   SearchCategory,
   SearchFormatAnime,
   SearchFormatManga,
@@ -33,41 +36,10 @@ import {
   SearchStatus,
   defaultAnimeFilter,
   defaultMangaFilter,
+  defaultCharacterFilter,
+  defaultStaffFilter,
+  defaultStudioFilter,
 } from "~/types.shared/anilist";
-
-enum TernaryState {
-  true,
-  false,
-  null,
-}
-
-type CharacterFilter = {
-  category: SearchCategory.character;
-  showBirthdaysOnly: TernaryState;
-};
-
-const defaultCharacterFilter: CharacterFilter = {
-  category: SearchCategory.character,
-  showBirthdaysOnly: TernaryState.null,
-};
-
-type StaffFilter = {
-  category: SearchCategory.staff;
-  showBirthdaysOnly: TernaryState;
-};
-
-const defaultStaffFilter: StaffFilter = {
-  category: SearchCategory.staff,
-  showBirthdaysOnly: TernaryState.null,
-};
-
-type StudioFilter = {
-  category: SearchCategory.studio;
-};
-
-const defaultStudioFilter: StudioFilter = {
-  category: SearchCategory.studio,
-};
 
 export type Filter =
   | AnimeFilter
@@ -109,7 +81,7 @@ const FilterSelector = (
               value={(filter as AnimeFilter).sort}
               trigger={
                 <div className="rounded-md bg-primary-500 p-2 text-center">
-                  {filter.sort}
+                  {(filter as AnimeFilter).sort}
                 </div>
               }
               defaultValue={SearchSort.SearchMatch}
@@ -143,7 +115,7 @@ const FilterSelector = (
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
-              value={filter.status}
+              value={(filter as AnimeFilter).status}
               onValueChange={(s: SearchStatus) => {
                 setFilter((state) => ({
                   ...state,
@@ -208,14 +180,20 @@ const FilterSelector = (
               className="text-lg font-semibold text-primary-500"
               htmlFor="yearRangeSelector"
             >
-              Year Range {`[${filter.minYear} - ${filter.maxYear}]`}
+              Year Range{" "}
+              {`[${(filter as AnimeFilter).minYear} - ${
+                (filter as AnimeFilter).maxYear
+              }]`}
             </Label>
             <Slider
               id="yearRangeSelector"
               max={2024}
               min={1970}
               step={1}
-              value={[filter.minYear!, filter.maxYear!]}
+              value={[
+                (filter as AnimeFilter).minYear!,
+                (filter as AnimeFilter).maxYear!,
+              ]}
               ariaLabel="Year Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -321,11 +299,19 @@ const FilterSelector = (
                 key={idx}
                 text={genre!}
                 initState={(() => {
-                  if (filter.genre.whitelist.find((a) => a === genre))
-                    return "Enabled";
-                  if (filter.genre.blacklist.find((a) => a === genre))
-                    return "Disabled";
-                  return undefined;
+                  if (
+                    (filter as AnimeFilter).genre.whitelist.find(
+                      (a) => a === genre,
+                    )
+                  )
+                    return TernaryState.true;
+                  if (
+                    (filter as AnimeFilter).genre.blacklist.find(
+                      (a) => a === genre,
+                    )
+                  )
+                    return TernaryState.false;
+                  return TernaryState.null;
                 })()}
                 reset={genreReset}
                 onReset={() => {
@@ -343,7 +329,7 @@ const FilterSelector = (
                 }}
                 onChange={(c) => {
                   switch (c) {
-                    case "Enabled":
+                    case TernaryState.true:
                       setFilter((state: any) => ({
                         ...state,
                         genre: {
@@ -355,7 +341,7 @@ const FilterSelector = (
                       }));
 
                       break;
-                    case "Disabled":
+                    case TernaryState.false:
                       setFilter((state: any) => ({
                         ...state,
                         genre: {
@@ -416,14 +402,14 @@ const FilterSelector = (
               className="text-lg font-semibold text-primary-500"
               htmlFor="tagSelector"
             >
-              {`Minimum Tag ${filter.tag.percentage}%`}
+              {`Minimum Tag ${(filter as AnimeFilter).tag.percentage}%`}
             </Label>
             <Slider
               ariaLabel="tagMinSlider"
               min={0}
               step={1}
               max={100}
-              value={[filter.tag.percentage]}
+              value={[(filter as AnimeFilter).tag.percentage]}
               onChange={(v) => {
                 setFilter((state: any) => ({
                   ...state,
@@ -454,11 +440,19 @@ const FilterSelector = (
                       )}
                       <ThreeToggleChip
                         initState={(() => {
-                          if (filter.tag.whitelist.find((a) => a === tag!.name))
-                            return "Enabled";
-                          if (filter.tag.blacklist.find((a) => a === tag!.name))
-                            return "Disabled";
-                          return undefined;
+                          if (
+                            (filter as AnimeFilter).tag.whitelist.find(
+                              (a) => a === tag!.name,
+                            )
+                          )
+                            return TernaryState.true;
+                          if (
+                            (filter as AnimeFilter).tag.blacklist.find(
+                              (a) => a === tag!.name,
+                            )
+                          )
+                            return TernaryState.false;
+                          return TernaryState.null;
                         })()}
                         text={tag?.name!}
                         reset={tagReset}
@@ -477,7 +471,7 @@ const FilterSelector = (
                         }}
                         onChange={(c) => {
                           switch (c) {
-                            case "Enabled":
+                            case TernaryState.true:
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
@@ -492,7 +486,7 @@ const FilterSelector = (
                               }));
 
                               break;
-                            case "Disabled":
+                            case TernaryState.false:
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
@@ -543,10 +537,10 @@ const FilterSelector = (
               Sort
             </Label>
             <Select
-              value={(filter as AnimeFilter).sort}
+              value={(filter as MangaFilter).sort}
               trigger={
                 <div className="rounded-md bg-primary-500 p-2 text-center">
-                  {filter.sort}
+                  {(filter as MangaFilter).sort}
                 </div>
               }
               defaultValue={SearchSort.SearchMatch}
@@ -558,7 +552,7 @@ const FilterSelector = (
               side={"left"}
               onValueChange={(v: SearchSort) => {
                 setFilter((state) => ({
-                  ...(state as AnimeFilter),
+                  ...(state as MangaFilter),
                   sort: v,
                 }));
               }}
@@ -580,7 +574,7 @@ const FilterSelector = (
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
-              value={filter.status}
+              value={(filter as MangaFilter).status}
               onValueChange={(s: SearchStatus) => {
                 setFilter((state) => ({
                   ...state,
@@ -621,14 +615,20 @@ const FilterSelector = (
               className="text-lg font-semibold text-primary-500"
               htmlFor="yearRangeSelector"
             >
-              Year Range {`[${filter.minYear} - ${filter.maxYear}]`}
+              Year Range{" "}
+              {`[${(filter as MangaFilter).minYear} - ${
+                (filter as MangaFilter).maxYear
+              }]`}
             </Label>
             <Slider
               id="yearRangeSelector"
               max={2024}
               min={1970}
               step={1}
-              value={[filter.minYear!, filter.maxYear!]}
+              value={[
+                (filter as MangaFilter).minYear!,
+                (filter as MangaFilter).maxYear!,
+              ]}
               ariaLabel="Year Range Selector"
               onChange={(v) => {
                 setFilter((state) => ({
@@ -734,11 +734,19 @@ const FilterSelector = (
                 key={idx}
                 text={genre!}
                 initState={(() => {
-                  if (filter.genre.whitelist.find((a) => a === genre))
-                    return "Enabled";
-                  if (filter.genre.blacklist.find((a) => a === genre))
-                    return "Disabled";
-                  return undefined;
+                  if (
+                    (filter as MangaFilter).genre.whitelist.find(
+                      (a) => a === genre,
+                    )
+                  )
+                    return TernaryState.true;
+                  if (
+                    (filter as MangaFilter).genre.blacklist.find(
+                      (a) => a === genre,
+                    )
+                  )
+                    return TernaryState.false;
+                  return TernaryState.null;
                 })()}
                 reset={genreReset}
                 onReset={() => {
@@ -756,7 +764,7 @@ const FilterSelector = (
                 }}
                 onChange={(c) => {
                   switch (c) {
-                    case "Enabled":
+                    case TernaryState.true:
                       setFilter((state: any) => ({
                         ...state,
                         genre: {
@@ -768,7 +776,7 @@ const FilterSelector = (
                       }));
 
                       break;
-                    case "Disabled":
+                    case TernaryState.false:
                       setFilter((state: any) => ({
                         ...state,
                         genre: {
@@ -829,14 +837,14 @@ const FilterSelector = (
               className="text-lg font-semibold text-primary-500"
               htmlFor="tagSelector"
             >
-              {`Minimum Tag ${filter.tag.percentage}%`}
+              {`Minimum Tag ${(filter as MangaFilter).tag.percentage}%`}
             </Label>
             <Slider
               ariaLabel="tagMinSlider"
               min={0}
               step={1}
               max={100}
-              value={[filter.tag.percentage]}
+              value={[(filter as MangaFilter).tag.percentage]}
               onChange={(v) => {
                 setFilter((state: any) => ({
                   ...state,
@@ -867,11 +875,19 @@ const FilterSelector = (
                       )}
                       <ThreeToggleChip
                         initState={(() => {
-                          if (filter.tag.whitelist.find((a) => a === tag!.name))
-                            return "Enabled";
-                          if (filter.tag.blacklist.find((a) => a === tag!.name))
-                            return "Disabled";
-                          return undefined;
+                          if (
+                            (filter as MangaFilter).tag.whitelist.find(
+                              (a) => a === tag!.name,
+                            )
+                          )
+                            return TernaryState.true;
+                          if (
+                            (filter as MangaFilter).tag.blacklist.find(
+                              (a) => a === tag!.name,
+                            )
+                          )
+                            return TernaryState.false;
+                          return TernaryState.null;
                         })()}
                         text={tag?.name!}
                         reset={tagReset}
@@ -890,7 +906,7 @@ const FilterSelector = (
                         }}
                         onChange={(c) => {
                           switch (c) {
-                            case "Enabled":
+                            case TernaryState.true:
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
@@ -905,7 +921,7 @@ const FilterSelector = (
                               }));
 
                               break;
-                            case "Disabled":
+                            case TernaryState.false:
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
@@ -969,22 +985,16 @@ const FilterSelector = (
               onChange={(f) => {
                 let state: TernaryState;
                 switch (f) {
-                  case "Enabled":
+                  case TernaryState.true:
                     state = TernaryState.true;
                     break;
-                  // return "Enabled";
-
-                  case "Disabled":
+                  case TernaryState.false:
                     state = TernaryState.false;
                     break;
-
-                  // return "Disabled";
                   case undefined:
                     state = TernaryState.null;
                     break;
-                  // return undefined;
                 }
-
                 setFilter((s) => ({
                   ...s,
                   showBirthdaysOnly: state,
@@ -993,11 +1003,11 @@ const FilterSelector = (
               initState={((f: CharacterFilter | StaffFilter) => {
                 switch (f.showBirthdaysOnly) {
                   case TernaryState.true:
-                    return "Enabled";
+                    return TernaryState.true;
                   case TernaryState.false:
-                    return "Disabled";
+                    return TernaryState.false;
                   case TernaryState.null:
-                    return undefined;
+                    return TernaryState.null;
                 }
               })(filter as CharacterFilter | StaffFilter)}
             />
