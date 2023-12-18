@@ -5,7 +5,6 @@ import Dialog, { Props as DialogProps } from "~/primitives/Dialog";
 import useSearch from "../hooks/useSearch";
 import { useRef } from "react";
 import { api } from "~/trpc/react";
-import { AnimeFilter } from "~/types.shared/anilist";
 export type Props = Pick<DialogProps, "open" | "onOpenChange">;
 
 export default (props: Props) => {
@@ -19,7 +18,6 @@ export default (props: Props) => {
     searchString,
     filters: filter,
   });
-  console.log("Rendeder");
   return (
     <Dialog
       contentRef={dialogContentRef}

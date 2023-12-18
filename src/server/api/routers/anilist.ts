@@ -243,6 +243,7 @@ export const anilistRouter = createTRPCRouter({
             variables: vars,
           });
           res = staffData;
+          break;
         case "Studio":
           query = SEARCH_STUDIO;
           vars = {
@@ -255,6 +256,7 @@ export const anilistRouter = createTRPCRouter({
             variables: vars,
           });
           res = studioData;
+          break;
       }
       return res;
     }),
