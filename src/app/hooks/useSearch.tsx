@@ -1038,13 +1038,14 @@ export default (
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debounchedSearchString = useDebounce<string>(searchTerm, 1000);
   const [filters, setFilter] = useState<Filter>(defaultAnimeFilter);
+  const debounchedFilters = useDebounce<Filter>(filters, 1000);
   const setDefault = () => {
     setSearchTerm("");
     setFilter(defaultAnimeFilter);
   };
 
   return {
-    filter: filters,
+    filter: debounchedFilters,
     searchString: debounchedSearchString,
     render: (
       <TextField
