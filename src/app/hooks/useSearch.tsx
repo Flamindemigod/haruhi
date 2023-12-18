@@ -20,7 +20,7 @@ import {
 } from "@radix-ui/react-icons";
 import Drawer from "~/primitives/Drawer";
 import { api } from "~/trpc/react";
-import ThreeToggleChip, { TernaryState } from "~/primitives/ThreeToggleChip";
+import ThreeToggleChip from "~/primitives/ThreeToggleChip";
 import { useDebounce } from "./useDebounce";
 import {
   AnimeFilter,
@@ -39,14 +39,9 @@ import {
   defaultCharacterFilter,
   defaultStaffFilter,
   defaultStudioFilter,
+  Filter,
+  TernaryState,
 } from "~/types.shared/anilist";
-
-export type Filter =
-  | AnimeFilter
-  | MangaFilter
-  | CharacterFilter
-  | StaffFilter
-  | StudioFilter;
 
 const Wrapper = ({ children }: { children?: ReactNode }) => (
   <div className="flex flex-col gap-2 rounded-md bg-white/10 p-4">
@@ -325,7 +320,7 @@ const FilterSelector = (
                     )
                   )
                     return TernaryState.false;
-                  return TernaryState.null;
+                  return TernaryState.none;
                 })()}
                 reset={genreReset}
                 onReset={() => {
@@ -474,7 +469,7 @@ const FilterSelector = (
                             )
                           )
                             return TernaryState.false;
-                          return TernaryState.null;
+                          return TernaryState.none;
                         })()}
                         text={tag?.name!}
                         reset={tagReset}
@@ -789,7 +784,7 @@ const FilterSelector = (
                     )
                   )
                     return TernaryState.false;
-                  return TernaryState.null;
+                  return TernaryState.none;
                 })()}
                 reset={genreReset}
                 onReset={() => {
@@ -931,7 +926,7 @@ const FilterSelector = (
                             )
                           )
                             return TernaryState.false;
-                          return TernaryState.null;
+                          return TernaryState.none;
                         })()}
                         text={tag?.name!}
                         reset={tagReset}
@@ -1039,7 +1034,7 @@ const FilterSelector = (
                     return "Showing Only Birthdays";
                   case TernaryState.false:
                     return "Filtering Out Birthdays";
-                  case TernaryState.null:
+                  case TernaryState.none:
                     return "Showing All";
                 }
               })(filter as CharacterFilter | StaffFilter)}
@@ -1053,7 +1048,7 @@ const FilterSelector = (
                     state = TernaryState.false;
                     break;
                   case undefined:
-                    state = TernaryState.null;
+                    state = TernaryState.none;
                     break;
                 }
                 setFilter((s) => ({
@@ -1067,8 +1062,8 @@ const FilterSelector = (
                     return TernaryState.true;
                   case TernaryState.false:
                     return TernaryState.false;
-                  case TernaryState.null:
-                    return TernaryState.null;
+                  case TernaryState.none:
+                    return TernaryState.none;
                 }
               })(filter as CharacterFilter | StaffFilter)}
             />

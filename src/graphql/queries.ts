@@ -54,8 +54,8 @@ query SEARCH_ANIME_MANGA($page: Int = 1, $id: Int, $type: MediaType, $isAdult: B
         userPreferred
       }
       coverImage {
-        extraLarge
         large
+        medium
         color
       }
       startDate {
@@ -106,3 +106,69 @@ query SEARCH_ANIME_MANGA($page: Int = 1, $id: Int, $type: MediaType, $isAdult: B
 }
 
 `;
+
+
+export const SEARCH_STAFF=gql`
+query SEARCH_STAFF($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [StaffSort] = [FAVOURITES_DESC]) {
+  Page(page: $page, perPage: 20) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    staff(id: $id, search: $search, isBirthday: $isBirthday, sort: $sort) {
+      id
+      name {
+        userPreferred
+      }
+      image {
+        large
+        medium
+      }
+    }
+  }
+}
+`
+
+export const SEARCH_CHARACTERS=gql`
+query SEARCH_CHARACTERS($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [CharacterSort] = [FAVOURITES_DESC]) {
+  Page(page: $page, perPage: 20) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    characters(id: $id, search: $search, isBirthday: $isBirthday, sort: $sort) {
+      id
+      name {
+        userPreferred
+      }
+      image {
+        large
+      }
+    }
+  }
+}
+`
+
+export const SEARCH_STUDIO=gql`
+query SEARCH_STUDIO($page: Int = 1, $id: Int, $search: String, $sort: [StudioSort] = [SEARCH_MATCH]) {
+  Page(page: $page, perPage: 20) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    studios(id: $id, search: $search, sort: $sort) {
+      id
+      name
+    }
+  }
+}
+`

@@ -15,9 +15,9 @@ export default (props: Props) => {
     filter,
     searchString,
   } = useSearch(dialogContentRef);
-  const { data } = api.anilist.searchAnime.useQuery({
+  const { data } = api.anilist.search.useQuery({
     searchString,
-    filters: filter as AnimeFilter,
+    filters: filter,
   });
   console.log("Rendeder");
   return (

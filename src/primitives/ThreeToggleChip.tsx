@@ -1,12 +1,8 @@
 "use client";
 import cx from "classix";
 import { useEffect, useState } from "react";
+import { TernaryState } from "~/types.shared/anilist";
 
-export enum TernaryState {
-  true,
-  false,
-  null,
-}
 type Props = {
   initState: TernaryState;
   className?: string;
@@ -24,7 +20,7 @@ const ThreeToggleChip = (props: Props) => {
       if (!!props.onReset) {
         props.onReset();
       }
-      setState(TernaryState.null);
+      setState(TernaryState.none);
     }
   }, [props.reset]);
 
@@ -34,7 +30,7 @@ const ThreeToggleChip = (props: Props) => {
         "rounded-md p-2",
         state === TernaryState.true && "bg-green-500 text-white",
         state === TernaryState.false && "bg-red-500 text-white",
-        state === TernaryState.null &&
+        state === TernaryState.none &&
           "bg-offWhite-200 text-black dark:bg-offWhite-600 dark:text-white",
       )}
       onClick={() => {
@@ -44,10 +40,10 @@ const ThreeToggleChip = (props: Props) => {
             props.onChange(TernaryState.false);
             break;
           case TernaryState.false:
-            setState(TernaryState.null);
-            props.onChange(TernaryState.null);
+            setState(TernaryState.none);
+            props.onChange(TernaryState.none);
             break;
-          case TernaryState.null:
+          case TernaryState.none:
             setState(TernaryState.true);
             props.onChange(TernaryState.true);
             break;

@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { TernaryState } from "~/primitives/ThreeToggleChip";
+
+export enum TernaryState {
+  none = "None",
+  true = "True",
+  false = "False",
+}
 export enum SearchSeason {
     any = "Any",
     Winter = "Winter",
@@ -57,7 +62,7 @@ export enum SearchCategory {
   export const animeSearchFilter =  z.object(
     {
       sort: z.nativeEnum(SearchSort),
-      category: z.string().includes("Anime"),
+      category: z.literal("Anime"),
       status: z.nativeEnum(SearchStatus),
       season: z.nativeEnum(SearchSeason),
       format:z.nativeEnum(SearchFormatAnime),
@@ -81,7 +86,7 @@ export enum SearchCategory {
   
   export const mangaSearchFilter = z.object( {
     sort: z.nativeEnum(SearchSort),
-    category: z.string().includes("Manga"),
+    category: z.literal("Manga"),
     status: z.nativeEnum(SearchStatus),
     format:z.nativeEnum(SearchFormatManga),
     minYear: z.optional(z.number().min(1970).max(2024).transform((v) => v === 1970 ? undefined : v)),
@@ -103,19 +108,19 @@ export enum SearchCategory {
 
 
   export const characterSearchFilter = z.object({
-    category: z.string().includes("Character"),
+    category: z.literal(SearchCategory.character),
     showBirthdaysOnly: z.nativeEnum(TernaryState),
   })
 
 
   export const staffSearchFilter = z.object({
-    category: z.string().includes("Staff"),
+    category: z.literal(SearchCategory.staff),
     showBirthdaysOnly: z.nativeEnum(TernaryState),
   })
 
 
   export const studioSearchFilter = z.object({
-    category: z.string().includes("Studio"),
+    category: z.literal("Studio"),
   })
 
 
@@ -175,18 +180,23 @@ export enum SearchCategory {
 
   export const defaultCharacterFilter: CharacterFilter = {
     category: SearchCategory.character,
-    showBirthdaysOnly: TernaryState.null,
+    showBirthdaysOnly: TernaryState.none,
   };
   
   export const defaultStaffFilter: StaffFilter = {
     category: SearchCategory.staff,
-    showBirthdaysOnly: TernaryState.null,
+    showBirthdaysOnly: TernaryState.none,
   };
   export const defaultStudioFilter: StudioFilter = {
     category: SearchCategory.studio,
   };
 
 
+  export const searchFilter = z.discriminatedUnion("category", [
+    animeSearchFilter,mangaSearchFilter,characterSearchFilter,staffSearchFilter,studioSearchFilter,
+  ])
+
+  export type Filter = z.infer<typeof searchFilter>
   
   
   
