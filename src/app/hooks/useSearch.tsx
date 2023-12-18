@@ -57,6 +57,7 @@ const Wrapper = ({ children }: { children?: ReactNode }) => (
 const FilterSelector = (
   filter: Filter,
   setFilter: Dispatch<SetStateAction<Filter>>,
+  onReset: () => void,
   container?: RefObject<HTMLDivElement>,
 ) => {
   let { data: user } = api.user.getUser.useQuery();
@@ -69,6 +70,19 @@ const FilterSelector = (
     case SearchCategory.anime:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+          {/* Reset */}
+          <Wrapper>
+            <button
+              className="rounded-md bg-primary-500 p-2"
+              onClick={() => {
+                setGenreReset((s) => !s);
+                setTagReset((s) => !s);
+                onReset();
+              }}
+            >
+              Reset All
+            </button>
+          </Wrapper>
           {/* Sort */}
           <Wrapper>
             <Label
@@ -317,7 +331,9 @@ const FilterSelector = (
                 onReset={() => {
                   setFilter((state: any) => ({
                     ...state,
+
                     genre: {
+                      ...state.tag,
                       whitelist: state.genre.whitelist.filter(
                         (si: string) => si !== genre,
                       ),
@@ -333,6 +349,8 @@ const FilterSelector = (
                       setFilter((state: any) => ({
                         ...state,
                         genre: {
+                          ...state.tag,
+
                           blacklist: state.genre.blacklist.filter(
                             (si: string) => si !== genre,
                           ),
@@ -345,6 +363,8 @@ const FilterSelector = (
                       setFilter((state: any) => ({
                         ...state,
                         genre: {
+                          ...state.tag,
+
                           whitelist: state.genre.whitelist.filter(
                             (si: string) => si !== genre,
                           ),
@@ -357,6 +377,8 @@ const FilterSelector = (
                       setFilter((state: any) => ({
                         ...state,
                         genre: {
+                          ...state.tag,
+
                           whitelist: state.genre.whitelist.filter(
                             (si: string) => si !== genre,
                           ),
@@ -460,6 +482,8 @@ const FilterSelector = (
                           setFilter((state: any) => ({
                             ...state,
                             tag: {
+                              ...state.tag,
+
                               whitelist: state.tag.whitelist.filter(
                                 (si: string) => si !== tag!.name,
                               ),
@@ -475,6 +499,8 @@ const FilterSelector = (
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
+                                  ...state.tag,
+
                                   blacklist: state.tag.blacklist.filter(
                                     (si: string) => si !== tag?.name,
                                   ),
@@ -490,6 +516,8 @@ const FilterSelector = (
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
+                                  ...state.tag,
+
                                   whitelist: state.tag.whitelist.filter(
                                     (si: string) => si !== tag!.name,
                                   ),
@@ -505,6 +533,8 @@ const FilterSelector = (
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
+                                  ...state.tag,
+
                                   whitelist: state.tag.whitelist.filter(
                                     (si: string) => si !== tag!.name,
                                   ),
@@ -528,6 +558,19 @@ const FilterSelector = (
     case SearchCategory.manga:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+          {/* Reset */}
+          <Wrapper>
+            <button
+              className="rounded-md bg-primary-500 p-2"
+              onClick={() => {
+                setGenreReset((s) => !s);
+                setTagReset((s) => !s);
+                onReset();
+              }}
+            >
+              Reset All
+            </button>
+          </Wrapper>
           {/* Sort */}
           <Wrapper>
             <Label
@@ -820,14 +863,15 @@ const FilterSelector = (
               <button
                 className="rounded-md bg-primary-500 p-2"
                 onClick={() => {
-                  setFilter((state: any) => ({
-                    ...state,
+                  setTagReset((state) => !state);
+                  setFilter((state) => ({
+                    ...(state as MangaFilter),
                     tag: {
-                      ...state.tag,
+                      whitelist: [],
+                      blacklist: [],
                       percentage: 69,
                     },
                   }));
-                  setTagReset((state) => !state);
                 }}
               >
                 Reset Tags
@@ -895,6 +939,7 @@ const FilterSelector = (
                           setFilter((state: any) => ({
                             ...state,
                             tag: {
+                              ...state.tag,
                               whitelist: state.tag.whitelist.filter(
                                 (si: string) => si !== tag!.name,
                               ),
@@ -910,6 +955,7 @@ const FilterSelector = (
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
+                                  ...state.tag,
                                   blacklist: state.tag.blacklist.filter(
                                     (si: string) => si !== tag?.name,
                                   ),
@@ -925,6 +971,8 @@ const FilterSelector = (
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
+                                  ...state.tag,
+
                                   whitelist: state.tag.whitelist.filter(
                                     (si: string) => si !== tag!.name,
                                   ),
@@ -940,6 +988,8 @@ const FilterSelector = (
                               setFilter((state: any) => ({
                                 ...state,
                                 tag: {
+                                  ...state.tag,
+
                                   whitelist: state.tag.whitelist.filter(
                                     (si: string) => si !== tag!.name,
                                   ),
@@ -964,6 +1014,17 @@ const FilterSelector = (
     case SearchCategory.staff:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+          {/* Reset */}
+          <Wrapper>
+            <button
+              className="rounded-md bg-primary-500 p-2"
+              onClick={() => {
+                onReset();
+              }}
+            >
+              Reset All
+            </button>
+          </Wrapper>
           <Wrapper>
             <Label
               className="text-lg font-semibold text-primary-500"
@@ -1039,10 +1100,6 @@ export default (
   const debounchedSearchString = useDebounce<string>(searchTerm, 1000);
   const [filters, setFilter] = useState<Filter>(defaultAnimeFilter);
   const debounchedFilters = useDebounce<Filter>(filters, 1000);
-  const setDefault = () => {
-    setSearchTerm("");
-    setFilter(defaultAnimeFilter);
-  };
 
   return {
     filter: debounchedFilters,
@@ -1086,8 +1143,10 @@ export default (
                   case SearchCategory.studio:
                     filter = defaultStudioFilter;
                     break;
+                  default:
+                    filter = defaultAnimeFilter;
                 }
-                setFilter(() => ({ ...filter }));
+                setFilter(filter);
               }}
               triggerAriaLabel="Search Field"
               value={filters.category}
@@ -1107,7 +1166,31 @@ export default (
                   <MixerHorizontalIcon />
                 </button>
               }
-              content={FilterSelector(filters, setFilter)}
+              content={FilterSelector(filters, setFilter, () => {
+                setSearchTerm("");
+                let filter: Filter;
+                switch (filters.category) {
+                  case SearchCategory.anime:
+                    filter = defaultAnimeFilter;
+                    break;
+                  case SearchCategory.manga:
+                    filter = defaultMangaFilter;
+                    break;
+
+                  case SearchCategory.character:
+                    filter = defaultCharacterFilter;
+                    break;
+                  case SearchCategory.staff:
+                    filter = defaultStaffFilter;
+                    break;
+                  case SearchCategory.studio:
+                    filter = defaultStudioFilter;
+                    break;
+                  default:
+                    filter = defaultAnimeFilter;
+                }
+                setFilter(filter);
+              })}
               className="w-2/3 max-w-lg"
             />
           ),
