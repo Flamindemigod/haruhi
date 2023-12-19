@@ -14,10 +14,16 @@ export default (props: Props) => {
     filter,
     searchString,
   } = useSearch(dialogContentRef);
-  const { data } = api.anilist.search.useQuery({
-    searchString,
-    filters: filter,
-  });
+  const { data } = api.anilist.search.useQuery(
+    {
+      searchString,
+      filters: filter,
+    },
+    {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    },
+  );
   return (
     <Dialog
       contentRef={dialogContentRef}

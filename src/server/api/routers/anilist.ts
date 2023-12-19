@@ -3,13 +3,13 @@ import {
   CharacterSort,
   Get_GenresQuery,
   Get_TagsQuery,
+  Maybe,
   MediaFormat,
   MediaSeason,
   MediaSort,
   MediaStatus,
   Search_Anime_MangaQuery,
   Search_Anime_MangaQueryVariables,
-  Search_CharactersDocument,
   Search_CharactersQuery,
   Search_CharactersQueryVariables,
   Search_StaffQuery,
@@ -21,6 +21,7 @@ import {
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
+import { Replace } from "~/app/utils/typescript-utils";
 import {
   GET_GENRES,
   GET_TAGS,
@@ -39,11 +40,12 @@ import { db } from "~/server/db";
 import { api } from "~/trpc/server";
 import {
   SearchSort,
-  SearchFormatAnime,
-  SearchSeason,
-  SearchStatus,
+  FormatAnime,
+  FormatManga,
+  Season,
+  Status,
   searchFilter,
-  SearchFormatManga,
+  Media,
 } from "~/types.shared/anilist";
 export const anilistRouter = createTRPCRouter({
   getGenres: publicProcedure.query(async () => {
@@ -67,12 +69,12 @@ export const anilistRouter = createTRPCRouter({
         filters: searchFilter,
       }),
     )
-    .query(async ({ ctx,input }) => {
+    .query(async ({ ctx, input }) => {
       let userNsfw;
-      if (ctx.session?.user){
+      if (ctx.session?.user) {
         let user = await api.user.getUser.query();
-        userNsfw = user?.showNSFW
-      } else{
+        userNsfw = user?.showNSFW;
+      } else {
         userNsfw = undefined;
       }
       let query;
@@ -87,21 +89,9 @@ export const anilistRouter = createTRPCRouter({
             isAdult: !userNsfw ? false : undefined,
             sort: convertEnum(SearchSort, MediaSort, input.filters.sort),
             search: !!input.searchString ? input.searchString : undefined,
-            status: convertEnum(
-              SearchStatus,
-              MediaStatus,
-              input.filters.status,
-            ),
-            season: convertEnum(
-              SearchSeason,
-              MediaSeason,
-              input.filters.season,
-            ),
-            format: convertEnum(
-              SearchFormatAnime,
-              MediaFormat,
-              input.filters.format,
-            ),
+            status: convertEnum(Status, MediaStatus, input.filters.status),
+            season: convertEnum(Season, MediaSeason, input.filters.season),
+            format: convertEnum(FormatAnime, MediaFormat, input.filters.format),
             yearGreater: input.filters.minYear
               ? input.filters.minYear * 10000
               : undefined,
@@ -142,7 +132,31 @@ export const anilistRouter = createTRPCRouter({
               variables: vars,
             },
           );
-          res = animeData;
+
+          if (!!animeData.Page) {
+            let dAnime: Replace<
+              Search_Anime_MangaQuery,
+              "Page",
+              Replace<
+                NonNullable<Search_Anime_MangaQuery["Page"]>,
+                "media",
+                Maybe<(Media | null)[]>
+              >
+            > = { ...animeData, Page: { ...animeData.Page, media: [] } };
+            dAnime.Page.media = animeData.Page.media!.map((m: any) => {
+              return {
+                ...m,
+                format: convertEnum(
+                  MediaFormat,
+                  FormatAnime,
+                  m.format,
+                ) as FormatAnime,
+                status: convertEnum(MediaStatus, Status, m.status) as Status,
+                season: convertEnum(MediaSeason, Season, m.season) as Season,
+              } as Media;
+            });
+            res = dAnime;
+          }
           break;
         case "Manga":
           query = SEARCH_ANIME_MANGA;
@@ -152,16 +166,8 @@ export const anilistRouter = createTRPCRouter({
             isAdult: !userNsfw ? false : undefined,
             sort: convertEnum(SearchSort, MediaSort, input.filters.sort),
             search: !!input.searchString ? input.searchString : undefined,
-            status: convertEnum(
-              SearchStatus,
-              MediaStatus,
-              input.filters.status,
-            ),
-            format: convertEnum(
-              SearchFormatManga,
-              MediaFormat,
-              input.filters.format,
-            ),
+            status: convertEnum(Status, MediaStatus, input.filters.status),
+            format: convertEnum(FormatManga, MediaFormat, input.filters.format),
             yearGreater: input.filters.minYear
               ? input.filters.minYear * 10000
               : undefined,
@@ -196,15 +202,38 @@ export const anilistRouter = createTRPCRouter({
                 ? undefined
                 : input.filters.genre.blacklist,
           } as Search_Anime_MangaQueryVariables;
-          const { data: mangaData } =
-            await client.query<Search_Anime_MangaQuery>({
+          let { data: mangaData } = await client.query<Search_Anime_MangaQuery>(
+            {
               query: query!,
               variables: vars,
+            },
+          );
+          if (!!mangaData.Page) {
+            let dManga: Replace<
+              Search_Anime_MangaQuery,
+              "Page",
+              Replace<
+                NonNullable<Search_Anime_MangaQuery["Page"]>,
+                "media",
+                Maybe<(Media | null)[]>
+              >
+            > = { ...mangaData, Page: { ...mangaData.Page, media: [] } };
+            dManga.Page.media = mangaData.Page.media!.map((m: any) => {
+              return {
+                ...m,
+                format: convertEnum(
+                  MediaFormat,
+                  FormatManga,
+                  m.format,
+                ) as FormatManga,
+                status: convertEnum(MediaStatus, Status, m.status) as Status,
+              } as Media;
             });
-          res = mangaData;
+            res = dManga;
+          }
           break;
         case "Character":
-          query = Search_CharactersDocument;
+          query = SEARCH_CHARACTERS;
           vars = {
             page: 1,
             sort: CharacterSort.SearchMatch,
@@ -226,7 +255,6 @@ export const anilistRouter = createTRPCRouter({
           });
           res = dChar;
           break;
-
         case "Staff":
           query = SEARCH_STAFF;
           vars = {

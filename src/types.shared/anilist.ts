@@ -1,11 +1,13 @@
 import { z } from "zod";
+import { Media as AniMedia, Maybe } from "~/__generated__/graphql";
+import { Replace } from "~/app/utils/typescript-utils";
 
 export enum TernaryState {
   none = "None",
   true = "True",
   false = "False",
 }
-export enum SearchSeason {
+export enum Season {
   any = "Any",
   Winter = "Winter",
   Spring = "Spring",
@@ -13,7 +15,7 @@ export enum SearchSeason {
   Fall = "Fall",
 }
 
-export enum SearchCategory {
+export enum Category {
   anime = "Anime",
   manga = "Manga",
   character = "Character",
@@ -21,7 +23,7 @@ export enum SearchCategory {
   studio = "Studio",
 }
 
-export enum SearchStatus {
+export enum Status {
   any = "Any",
   Releasing = "Releasing",
   Finished = "Finished",
@@ -30,14 +32,14 @@ export enum SearchStatus {
   Hiatus = "Hiatus",
 }
 
-export enum SearchFormatManga {
+export enum FormatManga {
   any = "Any",
   Manga = "Manga",
   Novel = "Novel",
   OneShot = "One Shot",
 }
 
-export enum SearchFormatAnime {
+export enum FormatAnime {
   any = "Any",
   Tv = "TV",
   TvShort = "TV Short",
@@ -60,9 +62,9 @@ export enum SearchSort {
 export const animeSearchFilter = z.object({
   sort: z.nativeEnum(SearchSort),
   category: z.literal("Anime"),
-  status: z.nativeEnum(SearchStatus),
-  season: z.nativeEnum(SearchSeason),
-  format: z.nativeEnum(SearchFormatAnime),
+  status: z.nativeEnum(Status),
+  season: z.nativeEnum(Season),
+  format: z.nativeEnum(FormatAnime),
   minYear: z.optional(
     z
       .number()
@@ -118,9 +120,9 @@ export const animeSearchFilter = z.object({
 
 export const mangaSearchFilter = z.object({
   sort: z.nativeEnum(SearchSort),
-  category: z.literal("Manga"),
-  status: z.nativeEnum(SearchStatus),
-  format: z.nativeEnum(SearchFormatManga),
+  category: z.literal(Category.manga),
+  status: z.nativeEnum(Status),
+  format: z.nativeEnum(FormatManga),
   minYear: z.optional(
     z
       .number()
@@ -175,12 +177,12 @@ export const mangaSearchFilter = z.object({
 });
 
 export const characterSearchFilter = z.object({
-  category: z.literal(SearchCategory.character),
+  category: z.literal(Category.character),
   showBirthdaysOnly: z.nativeEnum(TernaryState),
 });
 
 export const staffSearchFilter = z.object({
-  category: z.literal(SearchCategory.staff),
+  category: z.literal(Category.staff),
   showBirthdaysOnly: z.nativeEnum(TernaryState),
 });
 
@@ -196,10 +198,10 @@ export type StudioFilter = z.infer<typeof studioSearchFilter>;
 
 export const defaultAnimeFilter: AnimeFilter = {
   sort: SearchSort.SearchMatch,
-  category: SearchCategory.anime,
-  status: SearchStatus.any,
-  season: SearchSeason.any,
-  format: SearchFormatAnime.any,
+  category: Category.anime,
+  status: Status.any,
+  season: Season.any,
+  format: FormatAnime.any,
   minYear: 1970,
   maxYear: 2024,
   minEpisode: 0,
@@ -219,9 +221,9 @@ export const defaultAnimeFilter: AnimeFilter = {
 
 export const defaultMangaFilter: MangaFilter = {
   sort: SearchSort.SearchMatch,
-  category: SearchCategory.manga,
-  status: SearchStatus.any,
-  format: SearchFormatManga.any,
+  category: Category.manga,
+  status: Status.any,
+  format: FormatManga.any,
   minYear: 1970,
   maxYear: 2024,
   minChapters: 0,
@@ -240,16 +242,16 @@ export const defaultMangaFilter: MangaFilter = {
 };
 
 export const defaultCharacterFilter: CharacterFilter = {
-  category: SearchCategory.character,
+  category: Category.character,
   showBirthdaysOnly: TernaryState.none,
 };
 
 export const defaultStaffFilter: StaffFilter = {
-  category: SearchCategory.staff,
+  category: Category.staff,
   showBirthdaysOnly: TernaryState.none,
 };
 export const defaultStudioFilter: StudioFilter = {
-  category: SearchCategory.studio,
+  category: Category.studio,
 };
 
 export const searchFilter = z.discriminatedUnion("category", [
@@ -261,3 +263,16 @@ export const searchFilter = z.discriminatedUnion("category", [
 ]);
 
 export type Filter = z.infer<typeof searchFilter>;
+
+export type Media = Replace<
+                      Replace<
+                        Replace<
+                          AniMedia,
+                          "format",
+                           Maybe<FormatAnime | FormatManga>>,
+                        "status",
+                        Maybe<Status>
+                      >,
+                      "season",
+                      Maybe<Season>
+                    >;

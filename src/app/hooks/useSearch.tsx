@@ -55,9 +55,20 @@ const FilterSelector = (
   onReset: () => void,
   container?: RefObject<HTMLDivElement>,
 ) => {
-  let { data: user } = api.user.getUser.useQuery();
-  let { data: genres } = api.anilist.getGenres.useQuery();
-  let { data: tags } = api.anilist.getTags.useQuery();
+  let { data: user } = api.user.getUser.useQuery(undefined, {
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });
+  let { data: genres } = api.anilist.getGenres.useQuery(undefined, {
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+  });
+  let { data: tags } = api.anilist.getTags.useQuery(undefined, {
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+  });
   let category = "";
   const [genreReset, setGenreReset] = useState<boolean>(false);
   const [tagReset, setTagReset] = useState<boolean>(false);
