@@ -27,13 +27,12 @@ import {
   MangaFilter,
   CharacterFilter,
   StaffFilter,
-  StudioFilter,
-  SearchCategory,
-  SearchFormatAnime,
-  SearchFormatManga,
+  Category,
+  FormatAnime,
+  FormatManga,
   SearchSort,
-  SearchSeason,
-  SearchStatus,
+  Season,
+  Status,
   defaultAnimeFilter,
   defaultMangaFilter,
   defaultCharacterFilter,
@@ -73,7 +72,7 @@ const FilterSelector = (
   const [genreReset, setGenreReset] = useState<boolean>(false);
   const [tagReset, setTagReset] = useState<boolean>(false);
   switch (filter.category) {
-    case SearchCategory.anime:
+    case Category.anime:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
           {/* Reset */}
@@ -130,13 +129,13 @@ const FilterSelector = (
             <RadioGroup
               name="airingStatusSelector"
               orientation="horizontal"
-              dataValues={Object.values(SearchStatus).map((v) => ({
+              dataValues={Object.values(Status).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
               value={(filter as AnimeFilter).status}
-              onValueChange={(s: SearchStatus) => {
+              onValueChange={(s: Status) => {
                 setFilter((state) => ({
                   ...state,
                   status: s,
@@ -155,13 +154,13 @@ const FilterSelector = (
             <RadioGroup
               name="formatSelector"
               orientation="horizontal"
-              dataValues={Object.values(SearchFormatAnime).map((v) => ({
+              dataValues={Object.values(FormatAnime).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
               value={(filter as AnimeFilter).format}
-              onValueChange={(f: SearchFormatAnime) => {
+              onValueChange={(f: FormatAnime) => {
                 setFilter((state: any) => ({
                   ...state,
                   format: f,
@@ -180,13 +179,13 @@ const FilterSelector = (
             <RadioGroup
               name="seasonSelector"
               orientation="horizontal"
-              dataValues={Object.values(SearchSeason).map((v) => ({
+              dataValues={Object.values(Season).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
               value={(filter as AnimeFilter).season}
-              onValueChange={(s: SearchSeason) => {
+              onValueChange={(s: Season) => {
                 setFilter((state) => ({
                   ...state,
                   season: s,
@@ -561,7 +560,7 @@ const FilterSelector = (
           </Wrapper>
         </div>
       );
-    case SearchCategory.manga:
+    case Category.manga:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
           {/* Reset */}
@@ -618,13 +617,13 @@ const FilterSelector = (
             <RadioGroup
               name="airingStatusSelector"
               orientation="horizontal"
-              dataValues={Object.values(SearchStatus).map((v) => ({
+              dataValues={Object.values(Status).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
               value={(filter as MangaFilter).status}
-              onValueChange={(s: SearchStatus) => {
+              onValueChange={(s: Status) => {
                 setFilter((state) => ({
                   ...state,
                   status: s,
@@ -643,13 +642,13 @@ const FilterSelector = (
             <RadioGroup
               name="formatSelector"
               orientation="horizontal"
-              dataValues={Object.values(SearchFormatManga).map((v) => ({
+              dataValues={Object.values(FormatManga).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
               icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
               value={(filter as MangaFilter).format}
-              onValueChange={(f: SearchFormatManga) => {
+              onValueChange={(f: FormatManga) => {
                 setFilter((state: any) => ({
                   ...state,
                   format: f,
@@ -1016,8 +1015,8 @@ const FilterSelector = (
           </Wrapper>
         </div>
       );
-    case SearchCategory.character:
-    case SearchCategory.staff:
+    case Category.character:
+    case Category.staff:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
           {/* Reset */}
@@ -1082,7 +1081,7 @@ const FilterSelector = (
         </div>
       );
 
-    case SearchCategory.studio:
+    case Category.studio:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
           <Wrapper>
@@ -1125,28 +1124,28 @@ export default (
                   {filters.category} <ChevronDownIcon />
                 </button>
               }
-              defaultValue={SearchCategory.anime}
-              values={Object.values(SearchCategory).map((v) => ({
+              defaultValue={Category.anime}
+              values={Object.values(Category).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
               onValueChange={(v) => {
                 let filter: Filter;
                 switch (v) {
-                  case SearchCategory.anime:
+                  case Category.anime:
                     filter = defaultAnimeFilter;
                     break;
-                  case SearchCategory.manga:
+                  case Category.manga:
                     filter = defaultMangaFilter;
                     break;
 
-                  case SearchCategory.character:
+                  case Category.character:
                     filter = defaultCharacterFilter;
                     break;
-                  case SearchCategory.staff:
+                  case Category.staff:
                     filter = defaultStaffFilter;
                     break;
-                  case SearchCategory.studio:
+                  case Category.studio:
                     filter = defaultStudioFilter;
                     break;
                   default:
@@ -1176,20 +1175,20 @@ export default (
                 setSearchTerm("");
                 let filter: Filter;
                 switch (filters.category) {
-                  case SearchCategory.anime:
+                  case Category.anime:
                     filter = defaultAnimeFilter;
                     break;
-                  case SearchCategory.manga:
+                  case Category.manga:
                     filter = defaultMangaFilter;
                     break;
 
-                  case SearchCategory.character:
+                  case Category.character:
                     filter = defaultCharacterFilter;
                     break;
-                  case SearchCategory.staff:
+                  case Category.staff:
                     filter = defaultStaffFilter;
                     break;
-                  case SearchCategory.studio:
+                  case Category.studio:
                     filter = defaultStudioFilter;
                     break;
                   default:
