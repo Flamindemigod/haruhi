@@ -4,7 +4,8 @@ import Dialog, { Props as DialogProps } from "~/primitives/Dialog";
 
 import useSearch from "../hooks/useSearch";
 import { useRef } from "react";
-import { api } from "~/trpc/react";
+
+import SearchResults from "./SearchResults";
 export type Props = Pick<DialogProps, "open" | "onOpenChange">;
 
 export default (props: Props) => {
@@ -14,16 +15,7 @@ export default (props: Props) => {
     filter,
     searchString,
   } = useSearch(dialogContentRef);
-  const { data } = api.anilist.search.useQuery(
-    {
-      searchString,
-      filters: filter,
-    },
-    {
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    },
-  );
+
   return (
     <Dialog
       contentRef={dialogContentRef}
@@ -31,11 +23,9 @@ export default (props: Props) => {
       content={
         <>
           {searchRender}
-          {searchString}
-          {JSON.stringify(data)}
-          {/* <div className="h-80 w-full bg-green-200"></div>
-          <div className="h-80 w-full bg-red-200"></div>
-          <div className="h-80 w-full bg-blue-200"></div> */}
+          <div className="flex flex-col gap-4 rounded-md [&>*:nth-child(even)]:bg-emerald-400 [&>*:nth-child(odd)]:bg-red-500">
+            <SearchResults filter={filter} searchString={searchString} />
+          </div>
         </>
       }
     />

@@ -54,7 +54,6 @@ query SEARCH_ANIME_MANGA($page: Int = 1, $id: Int, $type: MediaType, $isAdult: B
         userPreferred
       }
       coverImage {
-        large
         medium
         color
       }

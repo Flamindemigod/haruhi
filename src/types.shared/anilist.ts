@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Media as AniMedia, Maybe } from "~/__generated__/graphql";
-import { Replace } from "~/app/utils/typescript-utils";
+import { SelectNonNullableFields, Replace } from "~/app/utils/typescript-utils";
 
 export enum TernaryState {
   none = "None",
@@ -61,7 +61,7 @@ export enum SearchSort {
 
 export const animeSearchFilter = z.object({
   sort: z.nativeEnum(SearchSort),
-  category: z.literal("Anime"),
+  category: z.literal(Category.anime),
   status: z.nativeEnum(Status),
   season: z.nativeEnum(Season),
   format: z.nativeEnum(FormatAnime),
@@ -187,7 +187,7 @@ export const staffSearchFilter = z.object({
 });
 
 export const studioSearchFilter = z.object({
-  category: z.literal("Studio"),
+  category: z.literal(Category.studio),
 });
 
 export type AnimeFilter = z.infer<typeof animeSearchFilter>;
@@ -265,14 +265,27 @@ export const searchFilter = z.discriminatedUnion("category", [
 export type Filter = z.infer<typeof searchFilter>;
 
 export type Media = Replace<
-                      Replace<
-                        Replace<
-                          AniMedia,
-                          "format",
-                           Maybe<FormatAnime | FormatManga>>,
-                        "status",
-                        Maybe<Status>
-                      >,
-                      "season",
-                      Maybe<Season>
-                    >;
+  Replace<
+    Replace<
+      Replace<AniMedia, "type", Category>,
+      "format",
+      Maybe<FormatAnime | FormatManga>
+    >,
+    "status",
+    Maybe<Status>
+  >,
+  "season",
+  Maybe<Season>
+>;
+
+export type SearchResultMedia = SelectNonNullableFields<
+  Media,
+  | "id"
+  | "isAdult"
+  | "title"
+  | "coverImage"
+  | "status"
+  | "type"
+  | "studios"
+  | "genres"
+>;

@@ -38,6 +38,14 @@
   background: var(--scrollbar-background);
 }
 
+
+.pause-animations-on-children-on-hover:hover * {
+  animation-play-state: paused;
+}
+
+
+
+
 /* Banner Animations */
 .banner--image {
   grid-column: 1/-1;

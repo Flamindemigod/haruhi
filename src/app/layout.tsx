@@ -42,7 +42,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: mediaStyle }}
         />
       </head>
-      <body className="relative  font-sans">
+      <body className="relative font-sans">
         <TRPCReactProvider cookies={cookies().toString()}>
           <SessionWrapper>
             <MediaWrapper>
@@ -53,7 +53,7 @@ export default async function RootLayout({
                   radius="large"
                   scaling="90%"
                 >
-                  <div className="flex min-h-screen flex-col overflow-x-hidden">
+                  <div className="flex min-h-screen flex-col overflow-x-hidden md:max-h-[calc(100dvh_-_4rem)]">
                     <div>
                       <Header />
                     </div>
@@ -63,6 +63,9 @@ export default async function RootLayout({
                     <div className="">
                       <Footer />
                     </div>
+                  </div>
+                  <div className="sticky bottom-0 h-fit" id={"bot-navigation"}>
+                    {/* Reserved for Mobile Navigation */}
                   </div>
                 </Theme>
               </ThemeWrapper>

@@ -7,27 +7,31 @@ export default {
       display: ["group-hover"],
     },
   },
-  darkMode: 'class',
+  darkMode: "class",
   safelist: ["text-primary-500"],
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
-      backgroundSize:{
-        "500%": "500%"
+      gridTemplateColumns: {
+        mNavContainer:
+          "1fr 1fr [search-start] theme(width.16) [search-end] 1fr 1fr",
+      },
+      backgroundSize: {
+        "500%": "500%",
       },
       keyframes: {
         bg_travel_x: {
-          '0%' : { backgroundPosition: "0 0" },
-          '100%': { backgroundPosition: "100% 100%" },
+          "0%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "100% 100%" },
         },
         color_morph: {
-          '0%' : { color: "theme(colors.primary.500)" },
-          '100%': { color: "theme(colors.secondary.500)" },
+          "0%": { color: "theme(colors.primary.500)" },
+          "100%": { color: "theme(colors.secondary.500)" },
         },
       },
-      animation:{
+      animation: {
         "bg-travel-y": "bg_travel_x 10s ease-in-out infinite alternate",
-        "color_morph": "color_morph 10s ease-in-out infinite alternate"
+        color_morph: "color_morph 10s ease-in-out infinite alternate",
       },
       fontFamily: {
         georama: ["Georama", "sans-serif"],
@@ -70,5 +74,8 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-radix")()],
+  plugins: [
+    require("tailwindcss-radix")(),
+    require("@tailwindcss/container-queries"),
+  ],
 } satisfies Config;

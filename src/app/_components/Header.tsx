@@ -17,7 +17,7 @@ export const Header = async () => {
       )}
     >
       {/* Logo */}
-      <Link href={"/"} className="flex flex-row items-center">
+      <Link href={"/"} className="flex w-full flex-row items-center">
         <Image
           alt="Haruhi Logo"
           src={"./Logo.png"}
