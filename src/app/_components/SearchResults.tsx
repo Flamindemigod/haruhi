@@ -14,6 +14,10 @@ export default (props: Props) => {
       const { data } = api.anilist.searchAnime.useQuery({
         searchString: props.searchString,
         filters: props.filter,
+      }, {
+        refetchInterval: false,
+        refetchOnWindowFocus: false, 
+        refetchOnReconnect: false
       });
       return (
         <>

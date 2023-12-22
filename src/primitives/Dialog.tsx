@@ -33,13 +33,13 @@ export default (props: Props) => {
           >
             <DialogPrimitive.Overlay
               forceMount
-              className="fixed inset-0 isolate z-20 flex justify-center overflow-y-auto bg-white/75 dark:bg-black/75"
+              className="fixed inset-0 isolate z-20 flex justify-center overflow-y-auto bg-white/95 dark:bg-black/95"
             >
               <DialogPrimitive.Content
                 ref={props.contentRef}
                 forceMount
                 className={cx(
-                  "w-[95vw] max-w-7xl rounded-lg p-4 md:w-full",
+                  "w-[95vw] max-w-7xl rounded-lg px-0.5 py-2 md:w-full md:p-4",
                   // "min-h-screen",
                 )}
               >

@@ -1,15 +1,40 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, Ref, forwardRef, useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { useElementSize } from "../hooks/useElement";
 import cx from "classix";
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import Link from "next/link";
 
 type Props = {
   className?: string;
   children: ReactNode;
+  href?: string;
 };
+
+const Wrapper = forwardRef<
+  HTMLDivElement | HTMLAnchorElement,
+  { children: ReactNode; href?: string; className?: string }
+>((props, ref) => {
+  return (
+    <>
+      {!!props.href ? (
+        <Link
+          ref={ref as Ref<HTMLAnchorElement>}
+          className={cx(props.className)}
+          href={props.href}
+        >
+          {props.children}
+        </Link>
+      ) : (
+        <div className={cx(props.className)} ref={ref as Ref<HTMLDivElement>}>
+          {props.children}
+        </div>
+      )}
+    </>
+  );
+});
 
 export default (props: Props) => {
   const [textRef, { width: textWidth }] = useElementSize();
@@ -26,7 +51,8 @@ export default (props: Props) => {
   }, [containerWidth, textWidth]);
 
   return (
-    <div
+    <Wrapper
+      href={props.href}
       ref={containerRef}
       className="h-10 overflow-hidden whitespace-nowrap p-2 text-xl"
     >
@@ -52,6 +78,6 @@ export default (props: Props) => {
           </span>
         </div>
       </div>
-    </div>
+    </Wrapper>
   );
 };

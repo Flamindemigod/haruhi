@@ -43,7 +43,7 @@ import {
 } from "~/types.shared/anilist";
 
 const Wrapper = ({ children }: { children?: ReactNode }) => (
-  <div className="flex flex-col gap-2 rounded-md bg-white/10 p-4">
+  <div className="flex flex-col gap-2 rounded-md bg-black/20 p-4 dark:bg-white/10">
     {children}
   </div>
 );

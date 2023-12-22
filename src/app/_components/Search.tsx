@@ -23,7 +23,7 @@ export default (props: Props) => {
       content={
         <>
           {searchRender}
-          <div className="flex flex-col gap-4 rounded-md [&>*:nth-child(even)]:bg-emerald-400 [&>*:nth-child(odd)]:bg-red-500">
+          <div className="flex flex-col gap-4 rounded-md p-0.5 @container dark:bg-white/10 md:p-2 [&>*:nth-child(even)]:bg-white/10 [&>*:nth-child(odd)]:bg-black/20">
             <SearchResults filter={filter} searchString={searchString} />
           </div>
         </>
