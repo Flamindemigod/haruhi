@@ -20,7 +20,7 @@ const DropDownProps: DropdownProps = {
       content: [
         {
           content: (
-            <Link className="flex items-center justify-center" href={"/"}>
+            <Link className="flex items-center justify-center" href={"/anime"}>
               Anime
             </Link>
           ),
@@ -28,7 +28,7 @@ const DropDownProps: DropdownProps = {
         },
         {
           content: (
-            <Link className="flex items-center justify-center" href={"/"}>
+            <Link className="flex items-center justify-center" href={"/manga"}>
               Manga
             </Link>
           ),
@@ -48,16 +48,25 @@ export default (props: NavigationProps) => {
             <Link className="border-r border-primary-400 px-2" href={"/"}>
               Trending
             </Link>
-            <Link className="border-l border-primary-400 px-2" href={"/"}>
+            <Link
+              className="border-l border-primary-400 px-2"
+              href={"/seasonal"}
+            >
               Seasonal
             </Link>
           </>
         ) : (
           <>
-            <Link className="border-r border-primary-400 px-2" href={"/"}>
+            <Link
+              className="border-r border-primary-400 px-2"
+              href={"/trending"}
+            >
               Trending
             </Link>
-            <Link className="border-x border-primary-400 px-2" href={"/"}>
+            <Link
+              className="border-x border-primary-400 px-2"
+              href={"/seasonal"}
+            >
               Seasonal
             </Link>
             <Dropdown {...DropDownProps} />

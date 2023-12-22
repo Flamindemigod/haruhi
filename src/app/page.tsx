@@ -13,6 +13,7 @@ export default async function Home() {
       />
       <div className="relative flex w-full flex-col gap-2">
         <Hero />
+        {!!sesh?.user ?<>Home/Recommended</> : <>Trending</>}
         {`Hello There ${sesh?.user.name}`}
         {/* <Activity /> */}
       </div>

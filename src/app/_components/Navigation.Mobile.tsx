@@ -35,7 +35,7 @@ const DropDownProps: DropdownProps = {
       content: [
         {
           content: (
-            <Link className="flex items-center justify-center" href={"/"}>
+            <Link className="flex items-center justify-center" href={"/anime"}>
               Anime
             </Link>
           ),
@@ -43,7 +43,7 @@ const DropDownProps: DropdownProps = {
         },
         {
           content: (
-            <Link className="flex items-center justify-center" href={"/"}>
+            <Link className="flex items-center justify-center" href={"/manga"}>
               Manga
             </Link>
           ),
@@ -64,12 +64,12 @@ export default (props: NavigationProps) => {
   return mounted
     ? createPortal(
         <div>
-          <nav className="grid-cols-mNavContainer grid bg-offWhite-50 text-xs dark:bg-black">
+          <nav className="grid grid-cols-mNavContainer bg-offWhite-50 text-xs dark:bg-black">
             {!props.isUserAuth ? (
               <>
                 <Link
                   className={cx(
-                    "relative flex w-full flex-col items-center justify-center p-2",
+                    "relative col-span-2 flex w-full flex-col items-center justify-center p-2",
                     "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
                   )}
                   href={"/"}
@@ -80,10 +80,10 @@ export default (props: NavigationProps) => {
                 <div className="col-start-[search-start] col-end-[search-end]"></div>
                 <Link
                   className={cx(
-                    "relative flex w-full flex-col items-center justify-center p-2",
+                    "relative col-span-2 flex w-full flex-col items-center justify-center p-2",
                     "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
                   )}
-                  href={"/"}
+                  href={"/seasonal"}
                 >
                   <MixIcon className="h-5 w-5" />
                   Seasonal
@@ -106,7 +106,7 @@ export default (props: NavigationProps) => {
                     "relative flex w-full flex-col items-center justify-center p-2",
                     "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
                   )}
-                  href={"/"}
+                  href={"/trending"}
                 >
                   <RocketIcon className="h-5 w-5" />
                   Trending
@@ -117,7 +117,7 @@ export default (props: NavigationProps) => {
                     "relative flex w-full flex-col items-center justify-center p-2",
                     "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
                   )}
-                  href={"/"}
+                  href={"/seasonal"}
                 >
                   <MixIcon className="h-5 w-5" />
                   Seasonal

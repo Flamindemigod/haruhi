@@ -52,6 +52,10 @@ import {
   SearchResultMedia,
   Category,
   animeSearchFilter,
+  mangaSearchFilter,
+  characterSearchFilter,
+  staffSearchFilter,
+  studioSearchFilter,
 } from "~/types.shared/anilist";
 export const anilistRouter = createTRPCRouter({
   getGenres: publicProcedure.query(async () => {
@@ -77,7 +81,7 @@ export const anilistRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       let userNsfw;
-      if (ctx.session?.user) {
+      if (!!ctx.session?.user) {
         let user = await api.user.getUser.query();
         userNsfw = user?.showNSFW;
       } else {
@@ -143,7 +147,7 @@ export const anilistRouter = createTRPCRouter({
               Media[]
             >
           >
-        >  = {
+        > = {
           ...animeData,
           Page: { ...animeData.Page, data: [] },
         };
@@ -161,6 +165,232 @@ export const anilistRouter = createTRPCRouter({
           } as SearchResultMedia;
         });
         return dAnime;
+      }
+    }),
+
+  searchManga: publicProcedure
+    .input(
+      z.object({
+        searchString: z.string(),
+        filters: mangaSearchFilter,
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      let userNsfw;
+      if (!!ctx.session?.user) {
+        let user = await api.user.getUser.query();
+        userNsfw = user?.showNSFW;
+      } else {
+        userNsfw = undefined;
+      }
+      const vars = {
+        page: 1,
+        type: "MANGA",
+        isAdult: !userNsfw ? false : undefined,
+        sort: convertEnum(SearchSort, MediaSort, input.filters.sort),
+        search: !!input.searchString ? input.searchString : undefined,
+        status: convertEnum(Status, MediaStatus, input.filters.status),
+        format: convertEnum(FormatManga, MediaFormat, input.filters.format),
+        yearGreater: input.filters.minYear
+          ? input.filters.minYear * 10000
+          : undefined,
+        yearLesser: input.filters.maxYear
+          ? input.filters.maxYear * 10000
+          : undefined,
+        volumeGreater: input.filters.minVolumes,
+        volumeLesser:
+          input.filters.maxVolumes == 500
+            ? undefined
+            : input.filters.maxVolumes,
+        chapterGreater: input.filters.minChapters,
+        chapterLesser:
+          input.filters.maxChapters == 500
+            ? undefined
+            : input.filters.maxChapters,
+        minimumTagRank: input.filters.tag.percentage,
+        tags:
+          input.filters.tag.whitelist.length == 0
+            ? undefined
+            : input.filters.tag.whitelist,
+        excludedTags:
+          input.filters.tag.blacklist.length == 0
+            ? undefined
+            : input.filters.tag.blacklist,
+        genres:
+          input.filters.genre.whitelist.length == 0
+            ? undefined
+            : input.filters.genre.whitelist,
+        excludedGenres:
+          input.filters.genre.blacklist.length == 0
+            ? undefined
+            : input.filters.genre.blacklist,
+      } as Search_Anime_MangaQueryVariables;
+      let { data: mangaData } = await client.query<Search_Anime_MangaQuery>({
+        query: SEARCH_ANIME_MANGA,
+        variables: vars,
+      });
+
+      if (!!mangaData.Page) {
+        let dManga: Replace<
+          Search_Anime_MangaQuery,
+          "Page",
+          RenameByT<
+            { media: "data" },
+            Replace<
+              NonNullable<Search_Anime_MangaQuery["Page"]>,
+              "media",
+              Media[]
+            >
+          >
+        > = {
+          ...mangaData,
+          Page: { ...mangaData.Page, data: [] },
+        };
+        dManga.Page.data = mangaData.Page.media!.map((m: any) => {
+          return {
+            ...m,
+            type: Category.anime,
+            format: convertEnum(
+              MediaFormat,
+              FormatManga,
+              m.format,
+            ) as FormatManga,
+            status: convertEnum(MediaStatus, Status, m.status) as Status,
+          } as SearchResultMedia;
+        });
+        return dManga;
+      }
+    }),
+
+  searchCharacters: publicProcedure
+    .input(
+      z.object({
+        searchString: z.string(),
+        filters: characterSearchFilter,
+      }),
+    )
+    .query(async ({ input }) => {
+      const vars = {
+        page: 1,
+        sort: CharacterSort.SearchMatch,
+        search: !!input.searchString ? input.searchString : undefined,
+        isBirthday: (() => {
+          switch (input.filters.showBirthdaysOnly) {
+            case "True":
+              return true;
+            case "False":
+              return false;
+            case "None":
+              return undefined;
+          }
+        })(),
+      } as Search_CharactersQueryVariables;
+      let { data: characterData } = await client.query<Search_CharactersQuery>({
+        query: SEARCH_CHARACTERS,
+        variables: vars,
+      });
+
+      if (!!characterData.Page) {
+        let dChar: Replace<
+          Search_CharactersQuery,
+          "Page",
+          RenameByT<
+            { characters: "data" },
+            Replace<
+              NonNullable<Search_CharactersQuery["Page"]>,
+              "characters",
+              Character[]
+            >
+          >
+        > = {
+          ...characterData,
+          Page: { ...characterData.Page, data: [] },
+        };
+        dChar.Page.data = characterData.Page.characters!.map((m: any) => {
+          return m as Character;
+        });
+        return dChar;
+      }
+    }),
+
+  searchStaff: publicProcedure
+    .input(
+      z.object({
+        searchString: z.string(),
+        filters: staffSearchFilter,
+      }),
+    )
+    .query(async ({ input }) => {
+      const vars = {
+        page: 1,
+        sort: StaffSort.SearchMatch,
+        search: !!input.searchString ? input.searchString : undefined,
+        isBirthday: (() => {
+          switch (input.filters.showBirthdaysOnly) {
+            case "True":
+              return true;
+            case "False":
+              return false;
+            case "None":
+              return undefined;
+          }
+        })(),
+      } as Search_StaffQueryVariables;
+      let { data: staffData } = await client.query<Search_StaffQuery>({
+        query: SEARCH_STAFF,
+        variables: vars,
+      });
+
+      if (!!staffData.Page) {
+        let dStaff: Replace<
+          Search_StaffQuery,
+          "Page",
+          RenameByT<
+            { staff: "data" },
+            Replace<NonNullable<Search_StaffQuery["Page"]>, "staff", Staff[]>
+          >
+        > = {
+          ...staffData,
+          Page: { ...staffData.Page, data: [] },
+        };
+        dStaff.Page.data = staffData.Page.staff!.map((m: any) => {
+          return m as Staff;
+        });
+        return dStaff;
+      }
+    }),
+
+  searchStudio: publicProcedure
+    .input(
+      z.object({
+        searchString: z.string(),
+        filters: studioSearchFilter,
+      }),
+    )
+    .query(async ({ input }) => {
+      const vars = {
+        page: 1,
+        sort: StudioSort.SearchMatch,
+        search: !!input.searchString ? input.searchString : undefined,
+      } as Search_StudioQueryVariables;
+      let { data: studioData } = await client.query<Search_StudioQuery>({
+        query: SEARCH_STUDIO,
+        variables: vars,
+      });
+      if (!!studioData.Page) {
+        let dStudio: Replace<
+          Search_StudioQuery,
+          "Page",
+          RenameByT<
+            { studios: "data" },
+            Replace<NonNullable<Search_StudioQuery["Page"]>, "studios", Studio[]>
+          >
+        > = {
+          ...studioData,
+          Page: { ...studioData.Page, data: [] },
+        };
+        dStudio.Page.data = (studioData.Page?.studios ?? []) as Studio[]
+        return dStudio;
       }
     }),
 

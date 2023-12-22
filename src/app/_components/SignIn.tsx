@@ -13,7 +13,7 @@ export const SignIn = () => {
       }}
     >
       <Image
-        src={"./AnilistIcon.svg"}
+        src={"/AnilistIcon.svg"}
         height={32}
         width={32}
         alt="Anilist Icon"
