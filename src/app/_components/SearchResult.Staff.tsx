@@ -23,7 +23,7 @@ export default (props: Props) => {
       {/* Content */}
       <div className="col-span-full col-start-2 grid grid-flow-col grid-rows-[auto_1fr_auto] items-center">
         {/* Title */}
-        <Marquee href={`/character/${props.data?.id}`}>
+        <Marquee href={`/staff/${props.data?.id}`}>
           {props.data.name?.userPreferred}
         </Marquee>
         {/* Description */}

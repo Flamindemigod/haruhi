@@ -22,9 +22,7 @@ export default (props: Props) => {
       {/* Content */}
       <div className="col-span-full col-start-2 grid grid-flow-col grid-rows-[auto_1fr_auto] items-center">
         {/* Title */}
-        <Marquee href={`/character/${props.data?.id}`}>
-          {props.data.name}
-        </Marquee>
+        <Marquee href={`/studio/${props.data?.id}`}>{props.data.name}</Marquee>
         {/* Description
         <div
           className="line-clamp-3 h-20 overflow-hidden p-1 md:line-clamp-4 md:h-24"
