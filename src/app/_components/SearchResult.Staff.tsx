@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Marquee from "./Marquee";
-import { Staff } from "~/__generated__/graphql";
+import { Staff } from "~/types.shared/anilist";
 
 export type Props = {
   data: Staff;
@@ -14,8 +14,10 @@ export default (props: Props) => {
         <Image
           draggable={false}
           className="col-span-1 object-contain"
-          src={props.data.image?.medium!}
+          src={props.data.image.large!}
           alt={`Cover of ${props.data.name?.userPreferred}`}
+          placeholder="blur"
+          blurDataURL={props.data.image.blurHash}
           // objectFit="cover"
           fill
         />

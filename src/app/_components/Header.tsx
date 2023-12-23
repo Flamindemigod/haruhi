@@ -13,11 +13,11 @@ export const Header = async () => {
     <header
       className={cx(
         "flex flex-row items-center justify-between gap-2 px-2 py-4",
-        "animate-bg-travel-y bg-gradient-to-bl from-primary-500 via-indigo-500 to-primary-500 bg-500% ",
+        "animate-bg-travel-y bg-gradient-to-bl from-primary-500 via-indigo-500 to-primary-500 bg-500%",
       )}
     >
       {/* Logo */}
-      <Link href={"/"} className="flex w-full flex-row items-center">
+      <Link href={"/"} className="flex flex-shrink-0 flex-row items-center">
         <Image
           alt="Haruhi Logo"
           src={"/Logo.png"}

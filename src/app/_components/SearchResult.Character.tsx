@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Marquee from "./Marquee";
-import { Character } from "~/__generated__/graphql";
+import { Character } from "~/types.shared/anilist";
 
 export type Props = {
   data: Character;
@@ -14,9 +14,11 @@ export default (props: Props) => {
         <Image
           draggable={false}
           className="col-span-1 object-contain"
-          src={props.data.image?.medium!}
+          src={props.data.image.large!}
           alt={`Cover of ${props.data.name?.userPreferred}`}
           // objectFit="cover"
+          placeholder="blur"
+          blurDataURL={props.data.image.blurHash}
           fill
         />
       </div>

@@ -14,7 +14,7 @@ const Background = (props: Props) => {
           fill
           priority
           sizes="100dvw"
-          className="banner--image | object-cover"
+          className="motion-safe:animate-banner-move-s motion-safe:md:animate-banner-move-f object-cover motion-reduce:object-center"
           alt={""}
         />
       ) : (

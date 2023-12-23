@@ -43,31 +43,12 @@
   animation-play-state: paused;
 }
 
-
-
-
-/* Banner Animations */
+/* Banner */
 .banner--image {
   grid-column: 1/-1;
   grid-row: 1/-1;
-  animation: bannerMove 30s alternate infinite linear;
 }
 
-@media (min-width: 600px) {
-  .banner--image {
-    animation: bannerMove 20s alternate infinite linear;
-  }
-}
-
-@keyframes bannerMove {
-  0% {
-    object-position: left top;
-  }
-
-  100% {
-    object-position: right bottom;
-  }
-}
 
 .background--empty {
   background-color: transparent;

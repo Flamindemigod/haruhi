@@ -15,6 +15,7 @@ import SearchResultStaff, {
 import SearchResultStudio, {
   Props as SearchResultStudioProps,
 } from "./SearchResult.Studio";
+import { ThreeCircles } from "react-loader-spinner";
 export type Props = {
   searchString: string;
   filter: Filter;
@@ -23,7 +24,7 @@ export type Props = {
 export default (props: Props) => {
   switch (props.filter.category) {
     case Category.anime: {
-      const { data } = api.anilist.searchAnime.useQuery(
+      const { data, isFetching } = api.anilist.searchAnime.useQuery(
         {
           searchString: props.searchString,
           filters: props.filter,
@@ -34,6 +35,21 @@ export default (props: Props) => {
           refetchOnReconnect: false,
         },
       );
+
+      if (isFetching) {
+        return (
+          <div className="h-full">
+            <ThreeCircles
+              height="100"
+              width="100"
+              color="var(--clr-primary)"
+              wrapperClass="flex flex-col justify-center items-center py-10"
+              visible={true}
+              ariaLabel="three-circles-rotating"
+            />
+          </div>
+        );
+      }
       return (
         <>
           {data?.Page.data.map((d, idx) => (
@@ -46,7 +62,7 @@ export default (props: Props) => {
       );
     }
     case Category.manga: {
-      const { data } = api.anilist.searchManga.useQuery(
+      const { data, isFetching } = api.anilist.searchManga.useQuery(
         {
           searchString: props.searchString,
           filters: props.filter,
@@ -57,6 +73,20 @@ export default (props: Props) => {
           refetchOnReconnect: false,
         },
       );
+      if (isFetching) {
+        return (
+          <div className="h-full">
+            <ThreeCircles
+              height="100"
+              width="100"
+              color="var(--clr-primary)"
+              wrapperClass="flex flex-col justify-center items-center py-10"
+              visible={true}
+              ariaLabel="three-circles-rotating"
+            />
+          </div>
+        );
+      }
       return (
         <>
           {data?.Page.data.map((d, idx) => (
@@ -69,7 +99,7 @@ export default (props: Props) => {
       );
     }
     case Category.character: {
-      const { data } = api.anilist.searchCharacters.useQuery(
+      const { data, isFetching } = api.anilist.searchCharacters.useQuery(
         {
           searchString: props.searchString,
           filters: props.filter,
@@ -80,6 +110,20 @@ export default (props: Props) => {
           refetchOnReconnect: false,
         },
       );
+      if (isFetching) {
+        return (
+          <div className="h-full">
+            <ThreeCircles
+              height="100"
+              width="100"
+              color="var(--clr-primary)"
+              wrapperClass="flex flex-col justify-center items-center py-10"
+              visible={true}
+              ariaLabel="three-circles-rotating"
+            />
+          </div>
+        );
+      }
       return (
         <>
           {data?.Page.data.map((d, idx) => (
@@ -92,7 +136,7 @@ export default (props: Props) => {
       );
     }
     case Category.staff: {
-      const { data } = api.anilist.searchStaff.useQuery(
+      const { data, isFetching } = api.anilist.searchStaff.useQuery(
         {
           searchString: props.searchString,
           filters: props.filter,
@@ -103,6 +147,20 @@ export default (props: Props) => {
           refetchOnReconnect: false,
         },
       );
+      if (isFetching) {
+        return (
+          <div className="h-full">
+            <ThreeCircles
+              height="100"
+              width="100"
+              color="var(--clr-primary)"
+              wrapperClass="flex flex-col justify-center items-center py-10"
+              visible={true}
+              ariaLabel="three-circles-rotating"
+            />
+          </div>
+        );
+      }
       return (
         <>
           {data?.Page.data.map((d, idx) => (
@@ -115,7 +173,7 @@ export default (props: Props) => {
       );
     }
     case Category.studio: {
-      const { data } = api.anilist.searchStudio.useQuery(
+      const { data, isFetching } = api.anilist.searchStudio.useQuery(
         {
           searchString: props.searchString,
           filters: props.filter,
@@ -126,6 +184,20 @@ export default (props: Props) => {
           refetchOnReconnect: false,
         },
       );
+      if (isFetching) {
+        return (
+          <div className="h-full">
+            <ThreeCircles
+              height="100"
+              width="100"
+              color="var(--clr-primary)"
+              wrapperClass="flex flex-col justify-center items-center py-10"
+              visible={true}
+              ariaLabel="three-circles-rotating"
+            />
+          </div>
+        );
+      }
       return (
         <>
           {data?.Page.data.map((d, idx) => (

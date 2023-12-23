@@ -21,8 +21,9 @@ export default (props: Props) => {
         <Image
           draggable={false}
           className="col-span-1 object-contain"
-          src={props.media.coverImage.medium!}
+          src={props.media.coverImage.large!}
           alt={`Cover of ${props.media.title.userPreferred}`}
+          blurDataURL={props.media.coverImage.blurHash}
           // objectFit="cover"
           fill
         />

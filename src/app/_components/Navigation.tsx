@@ -9,7 +9,7 @@ export type NavigationProps = {
 export const Navigation = (props: NavigationProps) => {
   return (
     <>
-      <Media lessThan="md">
+      <Media lessThan="md" className="w-full">
         <NavigationMobile {...props} />
       </Media>
       <Media greaterThanOrEqual="md" className="w-full">

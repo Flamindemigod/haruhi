@@ -51,6 +51,7 @@
     "react-dom": "18.2.0",
     "react-fast-marquee": "^1.6.2",
     "react-hotkeys-hook": "^4.4.1",
+    "react-loader-spinner": "^6.1.6",
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
     "tailwindcss-radix": "^2.8.0",
