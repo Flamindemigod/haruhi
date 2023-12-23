@@ -54,6 +54,7 @@ query SEARCH_ANIME_MANGA($page: Int = 1, $id: Int, $type: MediaType, $isAdult: B
         userPreferred
       }
       coverImage {
+        large
         medium
         color
       }
@@ -124,6 +125,7 @@ query SEARCH_STAFF($page: Int = 1, $id: Int, $search: String, $isBirthday: Boole
       }
       description(asHtml:true)
       image {
+        large
         medium
       }
     }
@@ -148,6 +150,7 @@ query SEARCH_CHARACTERS($page: Int = 1, $id: Int, $search: String, $isBirthday: 
       }
       description(asHtml:true)
       image {
+        large
         medium
       }
     }

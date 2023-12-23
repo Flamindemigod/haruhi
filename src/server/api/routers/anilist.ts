@@ -1,10 +1,8 @@
 import { z } from "zod";
 import {
-  Character,
   CharacterSort,
   Get_GenresQuery,
   Get_TagsQuery,
-  Maybe,
   MediaFormat,
   MediaSeason,
   MediaSort,
@@ -17,14 +15,14 @@ import {
   Search_StaffQueryVariables,
   Search_StudioQuery,
   Search_StudioQueryVariables,
-  Staff,
   StaffSort,
   Studio,
   StudioSort,
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
-import { Rename, RenameByT, Replace } from "~/app/utils/typescript-utils";
+import generateBlurhash from "~/app/utils/generateBlurhash";
+import { RenameByT, Replace } from "~/app/utils/typescript-utils";
 import {
   GET_GENRES,
   GET_TAGS,
@@ -47,7 +45,6 @@ import {
   FormatManga,
   Season,
   Status,
-  searchFilter,
   Media,
   SearchResultMedia,
   Category,
@@ -56,6 +53,8 @@ import {
   characterSearchFilter,
   staffSearchFilter,
   studioSearchFilter,
+  Character,
+  Staff,
 } from "~/types.shared/anilist";
 export const anilistRouter = createTRPCRouter({
   getGenres: publicProcedure.query(async () => {
@@ -149,11 +148,12 @@ export const anilistRouter = createTRPCRouter({
           >
         > = {
           ...animeData,
-          Page: { ...animeData.Page, data: [] },
+          Page: { ...animeData.Page, data: [],  },
         };
-        dAnime.Page.data = animeData.Page.media!.map((m: any) => {
+        dAnime.Page.data = await Promise.all(animeData.Page.media!.map(async (m: any) => {
           return {
             ...m,
+            coverImage:{...m.coverImage, blurHash: await generateBlurhash(m.coverImage.medium)},
             type: Category.anime,
             format: convertEnum(
               MediaFormat,
@@ -163,7 +163,7 @@ export const anilistRouter = createTRPCRouter({
             status: convertEnum(MediaStatus, Status, m.status) as Status,
             season: convertEnum(MediaSeason, Season, m.season) as Season,
           } as SearchResultMedia;
-        });
+        }));
         return dAnime;
       }
     }),
@@ -246,10 +246,11 @@ export const anilistRouter = createTRPCRouter({
           ...mangaData,
           Page: { ...mangaData.Page, data: [] },
         };
-        dManga.Page.data = mangaData.Page.media!.map((m: any) => {
+        dManga.Page.data = await Promise.all(mangaData.Page.media!.map(async (m: any) => {
           return {
             ...m,
-            type: Category.anime,
+            coverImage:{...m.coverImage, blurHash: await generateBlurhash(m.coverImage.medium)},
+            type: Category.manga,
             format: convertEnum(
               MediaFormat,
               FormatManga,
@@ -257,7 +258,7 @@ export const anilistRouter = createTRPCRouter({
             ) as FormatManga,
             status: convertEnum(MediaStatus, Status, m.status) as Status,
           } as SearchResultMedia;
-        });
+        }));
         return dManga;
       }
     }),
@@ -306,9 +307,9 @@ export const anilistRouter = createTRPCRouter({
           ...characterData,
           Page: { ...characterData.Page, data: [] },
         };
-        dChar.Page.data = characterData.Page.characters!.map((m: any) => {
-          return m as Character;
-        });
+        dChar.Page.data = await Promise.all(characterData.Page.characters!.map(async (m: any) => {
+          return {...m, image: {...m.image, blurHash: await generateBlurhash(m.image.medium)}} as Character;
+        }));
         return dChar;
       }
     }),
@@ -353,9 +354,10 @@ export const anilistRouter = createTRPCRouter({
           ...staffData,
           Page: { ...staffData.Page, data: [] },
         };
-        dStaff.Page.data = staffData.Page.staff!.map((m: any) => {
-          return m as Staff;
-        });
+        dStaff.Page.data = await Promise.all(staffData.Page.staff!.map(async (m: any) => {
+          return {...m, image: {...m.image, blurHash: await generateBlurhash(m.image.medium)}} as Staff;
+        }));
+       
         return dStaff;
       }
     }),

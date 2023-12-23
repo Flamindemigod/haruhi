@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Media as AniMedia, Maybe } from "~/__generated__/graphql";
+import { Media as AniMedia, Maybe, Staff as AniStaff, Character as AniCharacter } from "~/__generated__/graphql";
 import { SelectNonNullableFields, Replace } from "~/app/utils/typescript-utils";
 
 export enum TernaryState {
@@ -264,19 +264,30 @@ export const searchFilter = z.discriminatedUnion("category", [
 
 export type Filter = z.infer<typeof searchFilter>;
 
-export type Media = Replace<
+export type Media = Omit<
   Replace<
     Replace<
-      Replace<AniMedia, "type", Category>,
-      "format",
-      Maybe<FormatAnime | FormatManga>
+      Replace<
+        Replace<AniMedia, "type", Category>,
+        "format",
+        Maybe<FormatAnime | FormatManga>
+      >,
+      "status",
+      Maybe<Status>
     >,
-    "status",
-    Maybe<Status>
+    "season",
+    Maybe<Season>
   >,
-  "season",
-  Maybe<Season>
->;
+  "coverImage"
+> & {
+  coverImage: {
+    extraLarge?: string;
+    large?: string;
+    medium?: string;
+    color?: string;
+    blurHash?: string;
+  };
+};
 
 export type SearchResultMedia = SelectNonNullableFields<
   Media,
@@ -289,3 +300,19 @@ export type SearchResultMedia = SelectNonNullableFields<
   | "studios"
   | "genres"
 >;
+
+export type Staff = Omit<AniStaff, "image"> &{
+  image: {
+    large?: string;
+    medium?: string;
+    blurHash?: string;
+  }
+}
+
+export type Character = Omit<AniCharacter, "image"> &{
+  image: {
+    large?: string;
+    medium?: string;
+    blurHash?: string;
+  }
+}
