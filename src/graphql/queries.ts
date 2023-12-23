@@ -266,8 +266,9 @@ export const TRENDING_ANIME_MANGA = gql`
     $format: MediaFormat
     $status: MediaStatus
     $season: MediaSeason
+    $seasonYear: Int
   ) {
-    Page(page: $page, perPage: 20) {
+    Page(page: $page, perPage: 25) {
       pageInfo {
         total
         perPage
@@ -278,10 +279,11 @@ export const TRENDING_ANIME_MANGA = gql`
       media(
         sort: $sort
         type: $type
-        season: $season
         isAdult: $isAdult
         format: $format
         status: $status
+        season: $season
+        seasonYear: $seasonYear
       ) {
         id
         title {

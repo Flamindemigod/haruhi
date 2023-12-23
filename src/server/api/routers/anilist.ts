@@ -1,8 +1,10 @@
+import { format } from "path";
 import { z } from "zod";
 import {
   CharacterSort,
   Get_GenresQuery,
   Get_TagsQuery,
+  InputMaybe,
   MediaFormat,
   MediaSeason,
   MediaSort,
@@ -18,10 +20,13 @@ import {
   StaffSort,
   Studio,
   StudioSort,
+  Trending_Anime_MangaQuery,
+  Trending_Anime_MangaQueryVariables,
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
 import generateBlurhash from "~/app/utils/generateBlurhash";
+import getSeason from "~/app/utils/getSeason";
 import { RenameByT, Replace } from "~/app/utils/typescript-utils";
 import {
   GET_GENRES,
@@ -30,6 +35,7 @@ import {
   SEARCH_CHARACTERS,
   SEARCH_STAFF,
   SEARCH_STUDIO,
+  TRENDING_ANIME_MANGA,
 } from "~/graphql/queries";
 
 import {
@@ -148,22 +154,27 @@ export const anilistRouter = createTRPCRouter({
           >
         > = {
           ...animeData,
-          Page: { ...animeData.Page, data: [],  },
+          Page: { ...animeData.Page, data: [] },
         };
-        dAnime.Page.data = await Promise.all(animeData.Page.media!.map(async (m: any) => {
-          return {
-            ...m,
-            coverImage:{...m.coverImage, blurHash: await generateBlurhash(m.coverImage.medium)},
-            type: Category.anime,
-            format: convertEnum(
-              MediaFormat,
-              FormatAnime,
-              m.format,
-            ) as FormatAnime,
-            status: convertEnum(MediaStatus, Status, m.status) as Status,
-            season: convertEnum(MediaSeason, Season, m.season) as Season,
-          } as SearchResultMedia;
-        }));
+        dAnime.Page.data = await Promise.all(
+          animeData.Page.media!.map(async (m: any) => {
+            return {
+              ...m,
+              coverImage: {
+                ...m.coverImage,
+                blurHash: await generateBlurhash(m.coverImage.medium),
+              },
+              type: Category.anime,
+              format: convertEnum(
+                MediaFormat,
+                FormatAnime,
+                m.format,
+              ) as FormatAnime,
+              status: convertEnum(MediaStatus, Status, m.status) as Status,
+              season: convertEnum(MediaSeason, Season, m.season) as Season,
+            } as SearchResultMedia;
+          }),
+        );
         return dAnime;
       }
     }),
@@ -246,19 +257,24 @@ export const anilistRouter = createTRPCRouter({
           ...mangaData,
           Page: { ...mangaData.Page, data: [] },
         };
-        dManga.Page.data = await Promise.all(mangaData.Page.media!.map(async (m: any) => {
-          return {
-            ...m,
-            coverImage:{...m.coverImage, blurHash: await generateBlurhash(m.coverImage.medium)},
-            type: Category.manga,
-            format: convertEnum(
-              MediaFormat,
-              FormatManga,
-              m.format,
-            ) as FormatManga,
-            status: convertEnum(MediaStatus, Status, m.status) as Status,
-          } as SearchResultMedia;
-        }));
+        dManga.Page.data = await Promise.all(
+          mangaData.Page.media!.map(async (m: any) => {
+            return {
+              ...m,
+              coverImage: {
+                ...m.coverImage,
+                blurHash: await generateBlurhash(m.coverImage.medium),
+              },
+              type: Category.manga,
+              format: convertEnum(
+                MediaFormat,
+                FormatManga,
+                m.format,
+              ) as FormatManga,
+              status: convertEnum(MediaStatus, Status, m.status) as Status,
+            } as SearchResultMedia;
+          }),
+        );
         return dManga;
       }
     }),
@@ -307,9 +323,17 @@ export const anilistRouter = createTRPCRouter({
           ...characterData,
           Page: { ...characterData.Page, data: [] },
         };
-        dChar.Page.data = await Promise.all(characterData.Page.characters!.map(async (m: any) => {
-          return {...m, image: {...m.image, blurHash: await generateBlurhash(m.image.medium)}} as Character;
-        }));
+        dChar.Page.data = await Promise.all(
+          characterData.Page.characters!.map(async (m: any) => {
+            return {
+              ...m,
+              image: {
+                ...m.image,
+                blurHash: await generateBlurhash(m.image.medium),
+              },
+            } as Character;
+          }),
+        );
         return dChar;
       }
     }),
@@ -354,10 +378,18 @@ export const anilistRouter = createTRPCRouter({
           ...staffData,
           Page: { ...staffData.Page, data: [] },
         };
-        dStaff.Page.data = await Promise.all(staffData.Page.staff!.map(async (m: any) => {
-          return {...m, image: {...m.image, blurHash: await generateBlurhash(m.image.medium)}} as Staff;
-        }));
-       
+        dStaff.Page.data = await Promise.all(
+          staffData.Page.staff!.map(async (m: any) => {
+            return {
+              ...m,
+              image: {
+                ...m.image,
+                blurHash: await generateBlurhash(m.image.medium),
+              },
+            } as Staff;
+          }),
+        );
+
         return dStaff;
       }
     }),
@@ -385,14 +417,100 @@ export const anilistRouter = createTRPCRouter({
           "Page",
           RenameByT<
             { studios: "data" },
-            Replace<NonNullable<Search_StudioQuery["Page"]>, "studios", Studio[]>
+            Replace<
+              NonNullable<Search_StudioQuery["Page"]>,
+              "studios",
+              Studio[]
+            >
           >
         > = {
           ...studioData,
           Page: { ...studioData.Page, data: [] },
         };
-        dStudio.Page.data = (studioData.Page?.studios ?? []) as Studio[]
+        dStudio.Page.data = (studioData.Page?.studios ?? []) as Studio[];
         return dStudio;
+      }
+    }),
+
+  getTrendingAnime: publicProcedure
+    .input(
+      z.object({
+        seasonal: z.boolean().default(false),
+        sort: z.nativeEnum(MediaSort).default(MediaSort.PopularityDesc),
+        format: z.nativeEnum(FormatAnime).default(FormatAnime.any),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      let userNsfw;
+      if (!!ctx.session?.user) {
+        let user = await api.user.getUser.query();
+        userNsfw = user?.showNSFW;
+      } else {
+        userNsfw = undefined;
+      }
+      const fallback = (input.sort === MediaSort.TrendingDesc) ? null : undefined
+      const vars = {
+        page: 1,
+        sort: input.sort,
+        isAdult: !userNsfw ? false : undefined,
+        type: "ANIME",
+        status: convertEnum(
+          Status,
+          MediaStatus,
+          Status.any,
+        ) as MediaStatus | null,
+        format: convertEnum(
+          FormatAnime,
+          MediaFormat,
+          input.format,
+        ) as MediaFormat | null,
+        season: input.seasonal
+          ? convertEnum(Season, MediaSeason, getSeason(new Date(Date.now())))
+          : fallback,
+        seasonYear: input.seasonal
+          ? new Date(Date.now()).getFullYear()
+          : fallback,
+      } as Trending_Anime_MangaQueryVariables;
+      let { data: animeData } = await client.query<Trending_Anime_MangaQuery>({
+        query: TRENDING_ANIME_MANGA,
+        variables: vars,
+      });
+      if (!!animeData.Page) {
+        let dAnime: Replace<
+          Trending_Anime_MangaQuery,
+          "Page",
+          RenameByT<
+            { media: "data" },
+            Replace<
+              NonNullable<Trending_Anime_MangaQuery["Page"]>,
+              "media",
+              Media[]
+            >
+          >
+        > = {
+          ...animeData,
+          Page: { ...animeData.Page, data: [] },
+        };
+        dAnime.Page.data = await Promise.all(
+          animeData.Page.media!.map(async (m: any) => {
+            return {
+              ...m,
+              coverImage: {
+                ...m.coverImage,
+                blurHash: await generateBlurhash(m.coverImage.medium),
+              },
+              type: Category.anime,
+              format: convertEnum(
+                MediaFormat,
+                FormatAnime,
+                m.format,
+              ) as FormatAnime,
+              status: convertEnum(MediaStatus, Status, m.status) as Status,
+              season: convertEnum(MediaSeason, Season, m.season) as Season,
+            } as SearchResultMedia;
+          }),
+        );
+        return dAnime;
       }
     }),
 });
