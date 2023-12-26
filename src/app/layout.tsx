@@ -64,7 +64,10 @@ export default async function RootLayout({
                       <Footer />
                     </div>
                   </div>
-                  <div className="sticky bottom-0 h-fit" id={"bot-navigation"}>
+                  <div
+                    className="fixed bottom-0 left-0 right-0 h-fit"
+                    id={"bot-navigation"}
+                  >
                     {/* Reserved for Mobile Navigation */}
                   </div>
                 </Theme>

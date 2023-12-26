@@ -75,7 +75,7 @@ const Carosel = forwardRef<HTMLDivElement, Props>(
         {showLeftButton && (
           <button
             aria-label="Carosel Button Go Back"
-            onClick={scrollBack}
+            onPointerUp={scrollBack}
             className="absolute  bottom-1/2 left-4 z-20 scale-[2.5] rounded-full bg-primary-500  bg-opacity-60 hover:bg-opacity-100"
           >
             <ChevronLeftIcon />
@@ -91,7 +91,7 @@ const Carosel = forwardRef<HTMLDivElement, Props>(
         {showRightButton && (
           <button
             aria-label="Carosel Button Go Forward"
-            onClick={scrollForward}
+            onPointerUp={scrollForward}
             className="absolute bottom-1/2 right-4 z-20 scale-[2.5] rounded-full bg-primary-500 bg-opacity-60 hover:bg-opacity-100"
           >
             <ChevronRightIcon />

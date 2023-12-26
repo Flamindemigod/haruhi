@@ -28,6 +28,9 @@ export default {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      aspectRatio:{
+        "cover": "2/3"
+      },
       gridTemplateColumns: {
         mNavContainer:
           "1fr 1fr [search-start] theme(width.16) [search-end] 1fr 1fr",
@@ -36,6 +39,10 @@ export default {
         "500%": "500%",
       },
       keyframes: {
+        spin: {
+          "0%": { rotate: "0" },
+          "100%": { rotate: "1turn" },
+        },
         bg_travel_x: {
           "0%": { backgroundPosition: "0 0" },
           "100%": { backgroundPosition: "100% 100%" },

@@ -39,8 +39,33 @@
 }
 
 
-.pause-animations-on-children-on-hover:hover * {
-  animation-play-state: paused;
+
+.card[data-loading], .card[data-state="open"]{
+  isolation: isolate;
+  scale: 1.1;
+  transition: scale ease-in-out 500ms 200ms;
+}
+
+.card:has(.card[data-loading], .card[data-state="open"]){
+  opacity: 0.2;
+}
+
+.card[data-loading]::before {
+  @apply bg-black/50;
+  z-index: 10;
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.card[data-loading]::after {
+  @apply block aspect-square w-1/2 animate-spin border-[6px] border-solid top-1/2 left-1/2 origin-center;
+  content: "";
+  z-index: 20;
+  position: absolute;
+  border-radius: 50%;
+  border-color: theme("backgroundColor.primary.400") transparent theme("backgroundColor.primary.400") transparent;
+  translate: -50% -50%
 }
 
 /* Banner */
@@ -48,7 +73,6 @@
   grid-column: 1/-1;
   grid-row: 1/-1;
 }
-
 
 .background--empty {
   background-color: transparent;

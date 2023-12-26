@@ -288,6 +288,7 @@ export const TRENDING_ANIME_MANGA = gql`
         id
         title {
           userPreferred
+          english
         }
         coverImage {
           large
@@ -327,6 +328,7 @@ export const TRENDING_ANIME_MANGA = gql`
         mediaListEntry {
           id
           status
+          progress
         }
         studios(isMain: true) {
           edges {

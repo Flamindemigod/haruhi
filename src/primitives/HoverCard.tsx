@@ -78,7 +78,7 @@ const Inner = (
         <HoverCardPrimitive.Content
           forceMount
           className={cx(
-            "radix-side-top:animate-slide-down radix-side-right:animate-slide-left radix-side-bottom:animate-slide-up radix-side-left:animate-slide-right",
+            "radix-side-bottom:animate-slide-up radix-side-left:animate-slide-right radix-side-right:animate-slide-left radix-side-top:animate-slide-down",
           )}
           side={props.content?.side}
           sideOffset={props.content?.sideOffset}
@@ -109,7 +109,9 @@ export default (props: Props) => {
       openDelay={props.openDelay}
       closeDelay={props.closeDelay}
     >
-      <HoverCardPrimitive.Trigger>{props.trigger}</HoverCardPrimitive.Trigger>
+      <HoverCardPrimitive.Trigger asChild>
+        {props.trigger}
+      </HoverCardPrimitive.Trigger>
       {!!props.portal ? (
         <HoverCardPrimitive.Portal
           container={props.portal.container?.current}

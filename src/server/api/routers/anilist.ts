@@ -442,6 +442,7 @@ export const anilistRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       let userNsfw;
+      
       if (!!ctx.session?.user) {
         let user = await api.user.getUser.query();
         userNsfw = user?.showNSFW;
@@ -474,6 +475,11 @@ export const anilistRouter = createTRPCRouter({
       let { data: animeData } = await client.query<Trending_Anime_MangaQuery>({
         query: TRENDING_ANIME_MANGA,
         variables: vars,
+        context:{
+          headers: {
+            Authorization: ctx.session ? "Bearer " + ctx.session.user.token : undefined,
+          }
+        }
       });
       if (!!animeData.Page) {
         let dAnime: Replace<

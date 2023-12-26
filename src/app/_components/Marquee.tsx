@@ -48,35 +48,36 @@ export default (props: Props) => {
     } else {
       setWillOverflow(false);
     }
-  }, [containerWidth, textWidth]);
+  }, [containerWidth, textWidth, willOverflow]);
 
   return (
     <Wrapper
       href={props.href}
       ref={containerRef}
-      className="h-10 overflow-hidden whitespace-nowrap p-2 text-xl"
+      className={cx(
+        "grid grid-cols-1 grid-rows-1 overflow-hidden whitespace-nowrap",
+        props.className,
+      )}
     >
-      <div className="relative">
-        <Marquee
-          pauseOnHover
-          delay={2}
-          speed={25}
-          className={cx(
-            willOverflow ? "" : "!hidden",
-            "motion-reduce:!hidden [&>*]:!px-2 motion-reduce:[&>*]:!animate-none",
-          )}
+      <Marquee
+        pauseOnHover
+        delay={2}
+        speed={25}
+        className={cx(
+          willOverflow ? "" : "!hidden",
+          "col-span-full row-span-full motion-reduce:!hidden [&>*]:!px-2 motion-reduce:[&>*]:!animate-none",
+        )}
+      >
+        {props.children}
+      </Marquee>
+      <div className="col-span-full row-span-full">
+        <span
+          ref={textRef}
+          aria-hidden={!(willOverflow || prefersNoMotion)}
+          className={cx(willOverflow ? "motion-safe:opacity-0" : "")}
         >
           {props.children}
-        </Marquee>
-        <div className="absolute inset-0 ">
-          <span
-            ref={textRef}
-            aria-hidden={!(willOverflow || prefersNoMotion)}
-            className={cx(willOverflow ? "motion-safe:opacity-0" : "")}
-          >
-            {props.children}
-          </span>
-        </div>
+        </span>
       </div>
     </Wrapper>
   );
