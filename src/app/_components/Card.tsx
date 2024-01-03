@@ -15,7 +15,6 @@ interface PropsCountdown {
   days: number;
   hours: number;
   minutes: number;
-  seconds: number;
   completed: boolean;
 }
 
@@ -23,7 +22,6 @@ const countdownRenderer = ({
   days,
   hours,
   minutes,
-  seconds,
   completed,
 }: PropsCountdown) => {
   if (completed) {
@@ -65,7 +63,7 @@ type CardMedia = Pick<
 export type Props = {
   reset?: boolean;
   onReset?: () => void;
-  type: Category.anime;
+  type: Category.anime | Category.manga;
   data: SelectNonNullableFields<
     CardMedia,
     keyof Omit<
@@ -110,14 +108,14 @@ export default (props: Props) => {
         trigger={
           <Link
             className={cx(
-              "card | aspect-cover relative h-36 flex-shrink-0 snap-center sm:h-48 md:h-64",
+              "card | relative aspect-cover h-36 flex-shrink-0 snap-center sm:h-48 md:h-64",
             )}
             ref={triggerRef}
             href={`/${props.type.toLowerCase()}/${props.data.id}`}
             onContextMenu={(e) => {
               e.preventDefault();
             }}
-            onPointerDown={(e) => {
+            onPointerDown={() => {
               if (!!props.onReset) {
                 props.onReset();
               }
@@ -178,22 +176,40 @@ export default (props: Props) => {
               <div>
                 <div className="py-2 ">
                   {/* Number of Episodes */}
-                  <div className="text-primary-500">
-                    {props.type == Category.anime
-                      ? `Episodes: ${props.data.episodes}`
-                      : `Chapters: ${props.data.chapters}`}
+                  <div className="text-primary-500 empty:hidden">
+                    {(() => {
+                      switch (props.type) {
+                        case Category.anime:
+                          if (props.data.episodes)
+                            return `Episodes ${props.data.episodes}`;
+                        case Category.manga:
+                          if (props.data.chapters)
+                            return `Chapters: ${props.data.chapters}`;
+                        default:
+                          return null;
+                      }
+                    })()}
                   </div>
                   {/* Progress */}
-
                   {(() => {
                     if (!!props.data.mediaListEntry) {
                       return (
                         <div className="text-primary-500">
-                          {`Progress: ${props.data.mediaListEntry.progress}/${
-                            props.type == Category.anime
-                              ? props.data.episodes
-                              : props.data.chapters
-                          }`}
+                          {`Progress: ${
+                            props.data.mediaListEntry.progress
+                          }${(() => {
+                            switch (props.type) {
+                              case Category.anime:
+                                if (!!props.data.episodes)
+                                  return `\\${props.data.episodes}`;
+                              case Category.manga:
+                                if (!!props.data.chapters)
+                                  return `\\${props.data.chapters}`;
+                              default:
+                                break;
+                            }
+                            return "+";
+                          })()}`}
                         </div>
                       );
                     }
