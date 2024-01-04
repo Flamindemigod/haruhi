@@ -29,18 +29,26 @@ export default async () => {
     seasonal: false,
     sort: MediaSort.PopularityDesc,
   });
+  const data_popularity_manga = await api.anilist.getTrendingManga.query({
+    sort: MediaSort.PopularityDesc,
+  });
 
   return (
     <div className="flex w-full flex-col gap-4 py-4">
       <Segment
-        title="Anime Trending This Season"
+        title="Trending Anime This Season"
         data={data_seasonal_trending?.Page.data as CCProps["data"]}
         type={Category.anime}
       />
       <Segment
-        title="Anime Trending of All Time"
+        title="Trending Anime of All Time"
         data={data_popularity?.Page.data as CCProps["data"]}
         type={Category.anime}
+      />
+      <Segment
+        title="Trending Manga of All Time"
+        data={data_popularity_manga?.Page.data as CCProps["data"]}
+        type={Category.manga}
       />
     </div>
   );

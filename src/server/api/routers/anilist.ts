@@ -521,4 +521,87 @@ export const anilistRouter = createTRPCRouter({
         return dAnime;
       }
     }),
+
+  getTrendingManga: publicProcedure
+    .input(
+      z.object({
+        sort: z.nativeEnum(MediaSort).default(MediaSort.PopularityDesc),
+        format: z.nativeEnum(FormatManga).default(FormatManga.any),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      let userNsfw;
+
+      if (!!ctx.session?.user) {
+        let user = await api.user.getUser.query();
+        userNsfw = user?.showNSFW;
+      } else {
+        userNsfw = undefined;
+      }
+      const fallback = input.sort === MediaSort.TrendingDesc ? null : undefined;
+      const vars = {
+        page: 1,
+        sort: input.sort,
+        isAdult: !userNsfw ? false : undefined,
+        type: "MANGA",
+        status: convertEnum(
+          Status,
+          MediaStatus,
+          Status.any,
+        ) as MediaStatus | null,
+        format: convertEnum(
+          FormatAnime,
+          MediaFormat,
+          input.format,
+        ) as MediaFormat | null,
+      } as Trending_Anime_MangaQueryVariables;
+      let { data: mangaData } = await client.query<Trending_Anime_MangaQuery>({
+        query: TRENDING_ANIME_MANGA,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: "Bearer " + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
+      if (!!mangaData.Page) {
+        let dManga: Replace<
+          Trending_Anime_MangaQuery,
+          "Page",
+          RenameByT<
+            { media: "data" },
+            Replace<
+              NonNullable<Trending_Anime_MangaQuery["Page"]>,
+              "media",
+              Media[]
+            >
+          >
+        > = {
+          ...mangaData,
+          Page: { ...mangaData.Page, data: [] },
+        };
+        dManga.Page.data = await Promise.all(
+          mangaData.Page.media!.map(async (m: any) => {
+            return {
+              ...m,
+              coverImage: {
+                ...m.coverImage,
+                blurHash: await generateBlurhash(m.coverImage.medium),
+              },
+              type: Category.manga,
+              format: convertEnum(
+                MediaFormat,
+                FormatManga,
+                m.format,
+              ) as FormatAnime,
+              status: convertEnum(MediaStatus, Status, m.status) as Status,
+              season: convertEnum(MediaSeason, Season, m.season) as Season,
+            } as SearchResultMedia;
+          }),
+        );
+        return dManga;
+      }
+    }),
 });
