@@ -143,7 +143,6 @@ export const SEARCH_ANIME_MANGA = gql`
         genres
         isAdult
         averageScore
-        popularity
         nextAiringEpisode {
           airingAt
           timeUntilAiring
@@ -319,7 +318,6 @@ export const TRENDING_ANIME_MANGA = gql`
         genres
         isAdult
         averageScore
-        popularity
         nextAiringEpisode {
           airingAt
           timeUntilAiring
@@ -336,6 +334,90 @@ export const TRENDING_ANIME_MANGA = gql`
             node {
               id
               name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const USER_RECOMMENDED = gql`
+  query USER_RECOMMENDED(
+    $perPage: Int = 50
+    $page: Int = 1
+    $userName: String
+    $type: MediaType
+  ) {
+    Page(perPage: $perPage, page: $page) {
+      pageInfo {
+        hasNextPage
+        total
+      }
+      mediaList(userName: $userName, type: $type, sort: [SCORE_DESC]) {
+        progress
+        score
+        media {
+          recommendations {
+            edges {
+              node {
+                rating
+                mediaRecommendation {
+                  id
+                  title {
+                    userPreferred
+                    english
+                  }
+                  coverImage {
+                    large
+                    medium
+                    color
+                  }
+                  startDate {
+                    year
+                    month
+                    day
+                  }
+                  endDate {
+                    year
+                    month
+                    day
+                  }
+                  bannerImage
+                  season
+                  seasonYear
+                  description(asHtml: true)
+                  type
+                  format
+                  status(version: 2)
+                  episodes
+                  duration
+                  chapters
+                  volumes
+                  genres
+                  isAdult
+                  averageScore
+                  nextAiringEpisode {
+                    airingAt
+                    timeUntilAiring
+                    episode
+                  }
+                  mediaListEntry {
+                    id
+                    status
+                    progress
+                  }
+                  studios(isMain: true) {
+                    edges {
+                      isMain
+                      node {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
