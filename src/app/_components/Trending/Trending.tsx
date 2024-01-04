@@ -13,7 +13,7 @@ const Segment = ({
   type: Category.anime | Category.manga;
 }) => {
   return (
-    <div className="w-full bg-offWhite-200 px-2 dark:bg-offWhite-800">
+    <div className="w-full bg-offWhite-50 px-2 dark:bg-offWhite-800">
       <div className="px-2 pt-2 text-xl font-medium">{title}</div>
       <CardCarosel type={type} data={data} />
     </div>
