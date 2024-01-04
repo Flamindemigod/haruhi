@@ -104,11 +104,11 @@ export default (props: Props) => {
         control={{ open: show, onOpenChange: setShow }}
         portal={{}}
         closeDelay={0}
-        openDelay={0}
+        openDelay={500}
         trigger={
           <Link
             className={cx(
-              "card | relative aspect-cover h-36 flex-shrink-0 snap-center sm:h-48 md:h-64",
+              "card | relative aspect-cover h-36 flex-shrink-0 snap-center sm:h-48 md:h-64 md:snap-none",
             )}
             ref={triggerRef}
             href={`/${props.type.toLowerCase()}/${props.data.id}`}

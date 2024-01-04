@@ -5,13 +5,12 @@ import React, { forwardRef, useEffect, useState } from "react";
 import { useRef } from "react";
 
 interface Props {
-  width: string;
   height: number | string;
   children?: React.ReactNode;
 }
 
 const Carosel = forwardRef<HTMLDivElement, Props>(
-  ({ width = "100vw", height = 195, children }, ref) => {
+  ({ height = 195, children }, ref) => {
     const caroselTrack = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [showLeftButton, setShowLeftButton] = useState(false);
     const [showRightButton, setShowRightButton] = useState(true);
@@ -82,8 +81,8 @@ const Carosel = forwardRef<HTMLDivElement, Props>(
           </button>
         )}
         <div
-          style={{ width, height }}
-          className={`relative flex snap-x items-center gap-4 overflow-x-auto overflow-y-hidden scroll-smooth`}
+          style={{ height }}
+          className={`carosel_track | relative flex w-full snap-x items-center gap-4 overflow-x-auto overflow-y-hidden scroll-smooth`}
           ref={caroselTrack}
         >
           {children}
