@@ -48,7 +48,7 @@ export default (props: Props) => {
   const [reset, setReset] = useState<boolean>(false);
   return (
     <>
-      <Carosel height={"clamp(150px, 100%, 210px)"} width={"100%"}>
+      <Carosel height={"clamp(150px, 100%, 210px)"}>
         {props.data.map((d) => (
           <Card
             reset={reset}
