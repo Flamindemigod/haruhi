@@ -1,21 +1,17 @@
 "use client";
 
-import { ThreeCircles } from "react-loader-spinner";
-
 export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
   return (
-    <ThreeCircles
-      height="100"
-      width="100"
-      color="var(--clr-primary)"
-      wrapperStyle={{}}
-      wrapperClass="fixed inset-0 flex flex-col justify-center items-center bg-gradient-to-br from-primary-200 to-secondary-400 z-[10000]"
-      visible={true}
-      ariaLabel="three-circles-rotating"
-      outerCircleColor=""
-      innerCircleColor=""
-      middleCircleColor=""
-    />
+    <div className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-gradient-to-br from-primary-200 to-secondary-400">
+      <div className="loadingio-spinner-dual-ring-7t9j65eirym">
+        <div className="ldio-d2f969t0yu4">
+          <div></div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
