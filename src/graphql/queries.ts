@@ -425,3 +425,159 @@ export const USER_RECOMMENDED = gql`
     }
   }
 `;
+
+const USER_UP_NEXT = gql`
+  query USER_UP_NEXT(
+    $perPage: Int = 50
+    $page: Int = 1
+    $userName: String
+    $type: MediaType
+  ) {
+    Page(perPage: $perPage, page: $page) {
+      pageInfo {
+        hasNextPage
+        total
+      }
+      mediaList(
+        userName: $userName
+        type: $type
+        sort: [ADDED_TIME]
+        status: PLANNING
+      ) {
+        media {
+          id
+          title {
+            userPreferred
+            english
+          }
+          coverImage {
+            large
+            medium
+            color
+          }
+          startDate {
+            year
+            month
+            day
+          }
+          endDate {
+            year
+            month
+            day
+          }
+          bannerImage
+          season
+          seasonYear
+          description(asHtml: true)
+          type
+          format
+          status(version: 2)
+          episodes
+          duration
+          chapters
+          volumes
+          genres
+          isAdult
+          averageScore
+          nextAiringEpisode {
+            airingAt
+            timeUntilAiring
+            episode
+          }
+          mediaListEntry {
+            id
+            status
+            progress
+          }
+          studios(isMain: true) {
+            edges {
+              isMain
+              node {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const USER_CURRENT = gql`
+  query USER_CURRENT(
+    $perPage: Int = 50
+    $page: Int = 1
+    $userName: String
+    $type: MediaType
+  ) {
+    Page(perPage: $perPage, page: $page) {
+      pageInfo {
+        hasNextPage
+        total
+      }
+      mediaList(
+        userName: $userName
+        type: $type
+        sort: [UPDATED_TIME_DESC]
+        status: CURRENT
+      ) {
+        media {
+          id
+          title {
+            userPreferred
+            english
+          }
+          coverImage {
+            large
+            medium
+            color
+          }
+          startDate {
+            year
+            month
+            day
+          }
+          endDate {
+            year
+            month
+            day
+          }
+          bannerImage
+          season
+          seasonYear
+          description(asHtml: true)
+          type
+          format
+          status(version: 2)
+          episodes
+          duration
+          chapters
+          volumes
+          genres
+          isAdult
+          averageScore
+          nextAiringEpisode {
+            airingAt
+            timeUntilAiring
+            episode
+          }
+          mediaListEntry {
+            id
+            status
+            progress
+          }
+          studios(isMain: true) {
+            edges {
+              isMain
+              node {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
