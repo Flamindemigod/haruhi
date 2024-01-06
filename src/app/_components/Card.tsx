@@ -108,7 +108,7 @@ export default (props: Props) => {
         trigger={
           <Link
             className={cx(
-              "card | relative aspect-cover h-36 flex-shrink-0 snap-center sm:h-48 md:h-64 md:snap-none",
+              "card | relative my-2 aspect-cover h-32 flex-shrink-0 sm:h-48 md:h-64",
             )}
             ref={triggerRef}
             href={`/${props.type.toLowerCase()}/${props.data.id}`}
@@ -151,7 +151,8 @@ export default (props: Props) => {
             <Image
               src={props.data.coverImage.large!}
               placeholder="blur"
-              className="object-contain"
+              className="object-cover"
+              priority
               blurDataURL={props.data.coverImage.blurHash}
               alt={`Cover of ${props.data.title.userPreferred}`}
               fill

@@ -22,12 +22,18 @@ import {
   StudioSort,
   Trending_Anime_MangaQuery,
   Trending_Anime_MangaQueryVariables,
+  User_RecommendedQuery,
+  User_RecommendedQueryVariables,
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
 import generateBlurhash from "~/app/utils/generateBlurhash";
 import getSeason from "~/app/utils/getSeason";
-import { RenameByT, Replace } from "~/app/utils/typescript-utils";
+import {
+  NonNullableFields,
+  RenameByT,
+  Replace,
+} from "~/app/utils/typescript-utils";
 import {
   GET_GENRES,
   GET_TAGS,
@@ -36,6 +42,7 @@ import {
   SEARCH_STAFF,
   SEARCH_STUDIO,
   TRENDING_ANIME_MANGA,
+  USER_RECOMMENDED,
 } from "~/graphql/queries";
 
 import {
@@ -538,7 +545,6 @@ export const anilistRouter = createTRPCRouter({
       } else {
         userNsfw = undefined;
       }
-      const fallback = input.sort === MediaSort.TrendingDesc ? null : undefined;
       const vars = {
         page: 1,
         sort: input.sort,
@@ -604,4 +610,151 @@ export const anilistRouter = createTRPCRouter({
         return dManga;
       }
     }),
+
+  getRecommendedAnime: protectedProcedure.query(async ({ ctx }) => {
+    const user = await api.user.getUser.query();
+    const userName = user?.name;
+    let animeAccumulated: Map<number, Media> = new Map();
+    let vars = {
+      page: 0,
+      type: "ANIME",
+      userName,
+      perPage: 10,
+    } as NonNullableFields<User_RecommendedQueryVariables>;
+    while (true) {
+      if ([...animeAccumulated.keys()].length > 25) {
+        break;
+      }
+      if (!!vars.page) {
+        vars.page += 1;
+      }
+      let { data: animeData } = await client.query<User_RecommendedQuery>({
+        query: USER_RECOMMENDED,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: "Bearer " + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
+      await Promise.all(
+        animeData.Page?.mediaList?.map(async (m) => {
+          return await Promise.all(
+            m?.media?.recommendations?.edges?.map(async (r) => {
+              if (
+                !!r &&
+                !!r.node &&
+                !!r.node?.mediaRecommendation &&
+                r?.node?.rating! > 20 &&
+                !r.node?.mediaRecommendation?.mediaListEntry
+              ) {
+                if ([...animeAccumulated.keys()].length > 25) return false;
+                const recommendation = r.node.mediaRecommendation;
+                animeAccumulated.set(recommendation.id, {
+                  ...recommendation,
+                  coverImage: {
+                    ...recommendation.coverImage,
+                    blurHash: await generateBlurhash(
+                      recommendation.coverImage!.medium!,
+                    ),
+                  },
+                  type: Category.anime,
+                  format: convertEnum(
+                    MediaFormat,
+                    FormatAnime,
+                    recommendation.format,
+                  ) as FormatAnime,
+                  status: convertEnum(
+                    MediaStatus,
+                    Status,
+                    recommendation.status,
+                  ) as Status,
+                  season: convertEnum(
+                    MediaSeason,
+                    Season,
+                    recommendation.season,
+                  ) as Season,
+                } as Media);
+              }
+              return true;
+            }) ?? [],
+          );
+        }) ?? [],
+      );
+      return [...animeAccumulated.values()];
+    }
+  }),
+
+  getRecommendedManga: protectedProcedure.query(async ({ ctx }) => {
+    const user = await api.user.getUser.query();
+    const userName = user?.name;
+    let mangaAccumulated: Map<number, Media> = new Map();
+    let vars = {
+      page: 0,
+      type: "MANGA",
+      userName,
+      perPage: 10,
+    } as NonNullableFields<User_RecommendedQueryVariables>;
+    while (true) {
+      if ([...mangaAccumulated.keys()].length > 25) {
+        break;
+      }
+      if (!!vars.page) {
+        vars.page += 1;
+      }
+      let { data: mangaData } = await client.query<User_RecommendedQuery>({
+        query: USER_RECOMMENDED,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: "Bearer " + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
+      await Promise.all(
+        mangaData.Page?.mediaList?.map(async (m) => {
+          return await Promise.all(
+            m?.media?.recommendations?.edges?.map(async (r) => {
+              if (
+                !!r &&
+                !!r.node &&
+                !!r.node?.mediaRecommendation &&
+                r?.node?.rating! > 20 &&
+                !r.node?.mediaRecommendation?.mediaListEntry
+              ) {
+                if ([...mangaAccumulated.keys()].length > 25) return false;
+                const recommendation = r.node.mediaRecommendation;
+                mangaAccumulated.set(recommendation.id, {
+                  ...recommendation,
+                  coverImage: {
+                    ...recommendation.coverImage,
+                    blurHash: await generateBlurhash(
+                      recommendation.coverImage!.medium!,
+                    ),
+                  },
+                  type: Category.manga,
+                  format: convertEnum(
+                    MediaFormat,
+                    FormatManga,
+                    recommendation.format,
+                  ) as FormatManga,
+                  status: convertEnum(
+                    MediaStatus,
+                    Status,
+                    recommendation.status,
+                  ) as Status,
+                } as Media);
+              }
+              return true;
+            }) ?? [],
+          );
+        }) ?? [],
+      );
+      return [...mangaAccumulated.values()];
+    }
+  }),
 });
