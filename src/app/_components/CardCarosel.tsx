@@ -5,6 +5,7 @@ import { SelectNonNullableFields } from "../utils/typescript-utils";
 import { useState } from "react";
 import Carosel from "~/primitives/Carosel";
 import Card from "./Card";
+import ViewSegment from "./ViewSegment";
 
 type CardMedia = Pick<
   Media,
@@ -44,7 +45,19 @@ export type Props = {
   >[];
 };
 
-export default (props: Props) => {
+export type SegmentProps = {
+  title?: string;
+  type: Category.anime | Category.manga;
+  data: Props["data"];
+};
+
+export const Segment = (props: SegmentProps) => (
+  <ViewSegment title={props.title}>
+    <CardCarosel type={props.type} data={props.data} />
+  </ViewSegment>
+);
+
+const CardCarosel = (props: Props) => {
   const [reset, setReset] = useState<boolean>(false);
   return (
     <>
@@ -64,3 +77,5 @@ export default (props: Props) => {
     </>
   );
 };
+
+export default CardCarosel;

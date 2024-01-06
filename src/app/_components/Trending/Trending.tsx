@@ -1,24 +1,7 @@
 import { MediaSort } from "~/__generated__/graphql";
-import CardCarosel, { Props as CCProps } from "../CardCarosel";
+import { SegmentProps, Segment } from "../CardCarosel";
 import { Category } from "~/types.shared/anilist";
 import { api } from "~/trpc/server";
-
-const Segment = ({
-  title,
-  data,
-  type,
-}: {
-  title: string;
-  data: CCProps["data"];
-  type: Category.anime | Category.manga;
-}) => {
-  return (
-    <div className="w-full bg-offWhite-50 px-2 dark:bg-offWhite-800">
-      <div className="px-2 pt-2 text-xl font-medium">{title}</div>
-      <CardCarosel type={type} data={data} />
-    </div>
-  );
-};
 
 export default async () => {
   const data_seasonal_trending = await api.anilist.getTrendingAnime.query({
@@ -37,17 +20,17 @@ export default async () => {
     <div className="flex w-full flex-col gap-4 py-4">
       <Segment
         title="Trending Anime This Season"
-        data={data_seasonal_trending?.Page.data as CCProps["data"]}
+        data={data_seasonal_trending?.Page.data as SegmentProps["data"]}
         type={Category.anime}
       />
       <Segment
         title="Trending Anime of All Time"
-        data={data_popularity?.Page.data as CCProps["data"]}
+        data={data_popularity?.Page.data as SegmentProps["data"]}
         type={Category.anime}
       />
       <Segment
         title="Trending Manga of All Time"
-        data={data_popularity_manga?.Page.data as CCProps["data"]}
+        data={data_popularity_manga?.Page.data as SegmentProps["data"]}
         type={Category.manga}
       />
     </div>
