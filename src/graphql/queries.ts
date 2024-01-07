@@ -504,7 +504,7 @@ const USER_UP_NEXT = gql`
   }
 `;
 
-const USER_CURRENT = gql`
+export const USER_CURRENT = gql`
   query USER_CURRENT(
     $perPage: Int = 50
     $page: Int = 1

@@ -22,6 +22,8 @@ import {
   StudioSort,
   Trending_Anime_MangaQuery,
   Trending_Anime_MangaQueryVariables,
+  User_CurrentQuery,
+  User_CurrentQueryVariables,
   User_RecommendedQuery,
   User_RecommendedQueryVariables,
 } from "~/__generated__/graphql";
@@ -42,6 +44,7 @@ import {
   SEARCH_STAFF,
   SEARCH_STUDIO,
   TRENDING_ANIME_MANGA,
+  USER_CURRENT,
   USER_RECOMMENDED,
 } from "~/graphql/queries";
 
@@ -756,5 +759,176 @@ export const anilistRouter = createTRPCRouter({
       );
       return [...mangaAccumulated.values()];
     }
+  }),
+
+  getCurrentAnime: protectedProcedure.query(async ({ ctx }) => {
+    const user = await api.user.getUser.query();
+    const userName = user?.name;
+    let vars = {
+      page: 0,
+      type: "ANIME",
+      userName,
+      perPage: 25,
+    } as NonNullableFields<User_CurrentQueryVariables>;
+    let data: Media[] = [];
+    while (true) {
+      if (!!vars.page) {
+        vars.page += 1;
+      }
+      let { data: animeData } = await client.query<User_CurrentQuery>({
+        query: USER_CURRENT,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: "Bearer " + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
+      data = [
+        ...data,
+        ...((
+          await Promise.all(
+            animeData.Page?.mediaList
+              ?.map(async (m) => {
+                if (!!m && !!m.media) {
+                  return {
+                    ...m.media,
+                    coverImage: {
+                      ...m.media.coverImage,
+                      blurHash: await generateBlurhash(
+                        m.media.coverImage!.medium!,
+                      ),
+                    },
+                    type: Category.anime,
+                    format: convertEnum(
+                      MediaFormat,
+                      FormatAnime,
+                      m.media.format,
+                    ) as FormatAnime,
+                    status: convertEnum(
+                      MediaStatus,
+                      Status,
+                      m.media.status,
+                    ) as Status,
+                    season: convertEnum(
+                      MediaSeason,
+                      Season,
+                      m.media.season,
+                    ) as Season,
+                  } as Media;
+                }
+                return null;
+              })
+              .filter((d) => (d === null ? false : true)) ?? [],
+          )
+        ).sort((a, b) => {
+          let a_max: number;
+          let b_max: number;
+          switch (a!.status) {
+            case Status.Releasing:
+              a_max = a!.nextAiringEpisode?.episode ?? a!.episodes ?? 0;
+              break;
+            default:
+              a_max = a!.episodes ?? 0;
+              break;
+          }
+          switch (b!.status) {
+            case Status.Releasing:
+              b_max = b!.nextAiringEpisode?.episode ?? b!.episodes ?? 0;
+              break;
+            default:
+              b_max = b!.episodes ?? 0;
+              break;
+          }
+          const aPending = a_max - (a?.mediaListEntry?.progress ?? 0);
+          const bPending = b_max - (b?.mediaListEntry?.progress ?? 0);
+          return bPending - aPending;
+        }) as Media[]),
+      ];
+      if (!animeData.Page?.pageInfo?.hasNextPage) {
+        break;
+      }
+    }
+    return data;
+  }),
+
+  getCurrentManga: protectedProcedure.query(async ({ ctx }) => {
+    const user = await api.user.getUser.query();
+    const userName = user?.name;
+    let vars = {
+      page: 0,
+      type: "MANGA",
+      userName,
+      perPage: 25,
+    } as NonNullableFields<User_CurrentQueryVariables>;
+    let data: Media[] = [];
+    while (true) {
+      if (!!vars.page) {
+        vars.page += 1;
+      }
+      let { data: mangaData } = await client.query<User_CurrentQuery>({
+        query: USER_CURRENT,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: "Bearer " + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
+      data = [
+        ...data,
+        ...((
+          await Promise.all(
+            mangaData.Page?.mediaList
+              ?.map(async (m) => {
+                if (!!m && !!m.media) {
+                  return {
+                    ...m.media,
+                    coverImage: {
+                      ...m.media.coverImage,
+                      blurHash: await generateBlurhash(
+                        m.media.coverImage!.medium!,
+                      ),
+                    },
+                    type: Category.manga,
+                    format: convertEnum(
+                      MediaFormat,
+                      FormatManga,
+                      m.media.format,
+                    ) as FormatManga,
+                    status: convertEnum(
+                      MediaStatus,
+                      Status,
+                      m.media.status,
+                    ) as Status,
+                  } as Media;
+                }
+                return null;
+              })
+              .filter((d) => (d === null ? false : true)) ?? [],
+          )
+        ).sort((a, b) => {
+          if (!a?.chapters && !b?.chapters) {
+            return 0;
+          } else if (!a?.chapters) {
+            return 1;
+          } else if (!b?.chapters) {
+            return -1;
+          } else {
+            const aPending = a.chapters - (a?.mediaListEntry?.progress ?? 0);
+            const bPending = b.chapters - (b?.mediaListEntry?.progress ?? 0);
+            return bPending - aPending;
+          }
+        }) as Media[]),
+      ];
+      if (!mangaData.Page?.pageInfo?.hasNextPage) {
+        break;
+      }
+    }
+    return data;
   }),
 });
