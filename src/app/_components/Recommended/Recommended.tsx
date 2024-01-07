@@ -8,12 +8,12 @@ export default async () => {
   return (
     <div className="flex w-full flex-col gap-4 py-4">
       <Segment
-        title="Recommended Anime For You"
+        title="Anime You Might Like"
         data={data_recommended_anime as SegmentProps["data"]}
         type={Category.anime}
       />
       <Segment
-        title="Recommended Manga For You"
+        title="Manga You Might Like"
         data={data_recommended_manga as SegmentProps["data"]}
         type={Category.manga}
       />
