@@ -71,7 +71,7 @@ const FilterSelector = (
   let { data: user } = api.user.getUser.useQuery(undefined, {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
-    // refetchInterval: false,
+    refetchInterval: false,
     enabled: !!sesh?.user,
   });
 

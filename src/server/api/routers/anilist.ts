@@ -31,6 +31,7 @@ import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
 import generateBlurhash from "~/app/utils/generateBlurhash";
 import getSeason from "~/app/utils/getSeason";
+import { recommendationBuilder } from "~/app/utils/recommendationBuilder";
 import {
   NonNullableFields,
   RenameByT,
@@ -622,10 +623,10 @@ export const anilistRouter = createTRPCRouter({
       page: 0,
       type: "ANIME",
       userName,
-      perPage: 10,
+      perPage: 25,
     } as NonNullableFields<User_RecommendedQueryVariables>;
     while (true) {
-      if ([...animeAccumulated.keys()].length > 25) {
+      if (animeAccumulated.size > 25) {
         break;
       }
       if (!!vars.page) {
@@ -642,52 +643,13 @@ export const anilistRouter = createTRPCRouter({
             : {},
         },
       });
-      await Promise.all(
-        animeData.Page?.mediaList?.map(async (m) => {
-          return await Promise.all(
-            m?.media?.recommendations?.edges?.map(async (r) => {
-              if (
-                !!r &&
-                !!r.node &&
-                !!r.node?.mediaRecommendation &&
-                r?.node?.rating! > 20 &&
-                !r.node?.mediaRecommendation?.mediaListEntry
-              ) {
-                if ([...animeAccumulated.keys()].length > 25) return false;
-                const recommendation = r.node.mediaRecommendation;
-                animeAccumulated.set(recommendation.id, {
-                  ...recommendation,
-                  coverImage: {
-                    ...recommendation.coverImage,
-                    blurHash: await generateBlurhash(
-                      recommendation.coverImage!.medium!,
-                    ),
-                  },
-                  type: Category.anime,
-                  format: convertEnum(
-                    MediaFormat,
-                    FormatAnime,
-                    recommendation.format,
-                  ) as FormatAnime,
-                  status: convertEnum(
-                    MediaStatus,
-                    Status,
-                    recommendation.status,
-                  ) as Status,
-                  season: convertEnum(
-                    MediaSeason,
-                    Season,
-                    recommendation.season,
-                  ) as Season,
-                } as Media);
-              }
-              return true;
-            }) ?? [],
-          );
-        }) ?? [],
+      animeAccumulated = await recommendationBuilder(
+        animeData.Page?.mediaList,
+        animeAccumulated,
       );
-      return [...animeAccumulated.values()];
+      break;
     }
+    return [...animeAccumulated.values()];
   }),
 
   getRecommendedManga: protectedProcedure.query(async ({ ctx }) => {
@@ -768,7 +730,7 @@ export const anilistRouter = createTRPCRouter({
       page: 0,
       type: "ANIME",
       userName,
-      perPage: 25,
+      perPage: 15,
     } as NonNullableFields<User_CurrentQueryVariables>;
     let data: Media[] = [];
     while (true) {
