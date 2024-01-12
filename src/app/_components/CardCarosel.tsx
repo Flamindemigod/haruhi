@@ -2,7 +2,6 @@
 
 import { Category, Media } from "~/types.shared/anilist";
 import { SelectNonNullableFields } from "../utils/typescript-utils";
-import { useState } from "react";
 import Carosel from "~/primitives/Carosel";
 import Card from "./Card";
 import ViewSegment from "./ViewSegment";
@@ -78,19 +77,10 @@ export const SegmentFallback = (
 );
 
 const CardCarosel = (props: Props) => {
-  const [reset, setReset] = useState<boolean>(false);
   return (
     <Carosel height={"clamp(150px, 100%, 210px)"}>
       {props.data.map((d) => (
-        <Card
-          reset={reset}
-          onReset={() => {
-            setReset((state) => !state);
-          }}
-          data={d}
-          type={props.type}
-          key={d.id}
-        />
+        <Card data={d} type={props.type} key={d.id} />
       ))}
     </Carosel>
   );

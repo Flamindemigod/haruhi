@@ -3,13 +3,14 @@
 import { Category, Media } from "~/types.shared/anilist";
 import { SelectNonNullableFields } from "../utils/typescript-utils";
 import HoverCard from "~/primitives/HoverCard";
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import cx from "classix";
 import Marquee from "./Marquee";
 import Countdown, { zeroPad } from "react-countdown";
 import useRandomBGColor from "../hooks/useRandomBGColor";
+import { createContext } from "react";
 
 interface PropsCountdown {
   days: number;
@@ -61,8 +62,6 @@ type CardMedia = Pick<
 >;
 
 export type Props = {
-  reset?: boolean;
-  onReset?: () => void;
   type: Category.anime | Category.manga;
   data: SelectNonNullableFields<
     CardMedia,
@@ -80,6 +79,8 @@ export type Props = {
 };
 
 export default (props: Props) => {
+  const { reset, onReset } = useCardContext();
+
   const [show, setShow] = useState<boolean>(false);
   let timeoutID = useRef<NodeJS.Timeout>();
   let triggerRef = useRef<HTMLAnchorElement>(null);
@@ -97,11 +98,14 @@ export default (props: Props) => {
     if (show) {
       setShow(false);
     }
-  }, [props.reset]);
+  }, [reset]);
   return (
     <>
       <HoverCard
-        control={{ open: show, onOpenChange: setShow }}
+        control={{
+          open: show,
+          onOpenChange: setShow,
+        }}
         portal={{}}
         closeDelay={0}
         openDelay={500}
@@ -116,9 +120,7 @@ export default (props: Props) => {
               e.preventDefault();
             }}
             onPointerDown={() => {
-              if (!!props.onReset) {
-                props.onReset();
-              }
+              onReset();
               showLoading();
               timeoutID.current = setTimeout(() => {
                 setShow(true);
@@ -326,4 +328,32 @@ export default (props: Props) => {
       />
     </>
   );
+};
+
+interface CardContextType {
+  reset: boolean;
+  onReset: () => void;
+}
+
+export const CardContext = createContext<CardContextType | null>(null);
+
+export const CardProvider = ({ children }: { children: ReactNode }) => {
+  const [reset, setReset] = useState<boolean>(false);
+  const onReset = () => {
+    setReset((state) => !state);
+  };
+
+  return (
+    <CardContext.Provider value={{ reset, onReset }}>
+      {children}
+    </CardContext.Provider>
+  );
+};
+
+export const useCardContext = () => {
+  const cardContext = useContext(CardContext);
+  if (!cardContext) {
+    throw new Error("useCardContext has to be used within CardProvider");
+  }
+  return cardContext;
 };

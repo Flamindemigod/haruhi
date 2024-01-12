@@ -15,6 +15,7 @@ import { mediaStyle } from "./utils/Media";
 import MediaWrapper from "./_components/MediaWrapper";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+import { CardProvider } from "./_components/Card";
 
 export const viewport: Viewport = {
   themeColor: "#cc006d",
@@ -47,30 +48,32 @@ export default async function RootLayout({
           <SessionWrapper>
             <MediaWrapper>
               <ThemeWrapper>
-                <Theme
-                  accentColor="pink"
-                  panelBackground="translucent"
-                  radius="large"
-                  scaling="90%"
-                >
-                  <div className="flex min-h-screen flex-col overflow-x-hidden md:max-h-[calc(100dvh_-_4rem)]">
-                    <div>
-                      <Header />
-                    </div>
-                    <main className="relative flex w-full flex-grow">
-                      {children}
-                    </main>
-                    <div className="">
-                      <Footer />
-                    </div>
-                  </div>
-                  <div
-                    className="fixed bottom-0 left-0 right-0 h-fit"
-                    id={"bot-navigation"}
+                <CardProvider>
+                  <Theme
+                    accentColor="pink"
+                    panelBackground="translucent"
+                    radius="large"
+                    scaling="90%"
                   >
-                    {/* Reserved for Mobile Navigation */}
-                  </div>
-                </Theme>
+                    <div className="flex min-h-screen flex-col overflow-x-hidden md:max-h-[calc(100dvh_-_4rem)]">
+                      <div>
+                        <Header />
+                      </div>
+                      <main className="relative flex w-full flex-grow">
+                        {children}
+                      </main>
+                      <div className="">
+                        <Footer />
+                      </div>
+                    </div>
+                    <div
+                      className="fixed bottom-0 left-0 right-0 h-fit"
+                      id={"bot-navigation"}
+                    >
+                      {/* Reserved for Mobile Navigation */}
+                    </div>
+                  </Theme>
+                </CardProvider>
               </ThemeWrapper>
             </MediaWrapper>
           </SessionWrapper>
