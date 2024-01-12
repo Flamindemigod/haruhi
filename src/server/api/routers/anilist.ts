@@ -756,6 +756,12 @@ export const anilistRouter = createTRPCRouter({
           let b_max: number;
           switch (a!.status) {
             case Status.Releasing:
+              if (
+                a!.nextAiringEpisode?.episode - 1 >
+                a?.mediaListEntry?.progress!
+              ) {
+                return -1;
+              }
               a_max = a!.nextAiringEpisode?.episode ?? a!.episodes ?? 0;
               break;
             default:
@@ -764,6 +770,12 @@ export const anilistRouter = createTRPCRouter({
           }
           switch (b!.status) {
             case Status.Releasing:
+              if (
+                b!.nextAiringEpisode?.episode - 1 >
+                b.mediaListEntry?.progress
+              ) {
+                return 1;
+              }
               b_max = b!.nextAiringEpisode?.episode ?? b!.episodes ?? 0;
               break;
             default:
