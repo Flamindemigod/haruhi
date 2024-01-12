@@ -1,10 +1,8 @@
-import { format } from "path";
 import { z } from "zod";
 import {
   CharacterSort,
   Get_GenresQuery,
   Get_TagsQuery,
-  InputMaybe,
   MediaFormat,
   MediaSeason,
   MediaSort,
@@ -26,6 +24,7 @@ import {
   User_CurrentQueryVariables,
   User_RecommendedQuery,
   User_RecommendedQueryVariables,
+  MediaList,
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
@@ -644,7 +643,7 @@ export const anilistRouter = createTRPCRouter({
         },
       });
       animeAccumulated = await recommendationBuilder(
-        animeData.Page?.mediaList,
+        animeData.Page?.mediaList as MediaList[],
         animeAccumulated,
       );
       break;
@@ -663,7 +662,7 @@ export const anilistRouter = createTRPCRouter({
       perPage: 10,
     } as NonNullableFields<User_RecommendedQueryVariables>;
     while (true) {
-      if ([...mangaAccumulated.keys()].length > 25) {
+      if (mangaAccumulated.size > 25) {
         break;
       }
       if (!!vars.page) {
@@ -680,47 +679,14 @@ export const anilistRouter = createTRPCRouter({
             : {},
         },
       });
-      await Promise.all(
-        mangaData.Page?.mediaList?.map(async (m) => {
-          return await Promise.all(
-            m?.media?.recommendations?.edges?.map(async (r) => {
-              if (
-                !!r &&
-                !!r.node &&
-                !!r.node?.mediaRecommendation &&
-                r?.node?.rating! > 20 &&
-                !r.node?.mediaRecommendation?.mediaListEntry
-              ) {
-                if ([...mangaAccumulated.keys()].length > 25) return false;
-                const recommendation = r.node.mediaRecommendation;
-                mangaAccumulated.set(recommendation.id, {
-                  ...recommendation,
-                  coverImage: {
-                    ...recommendation.coverImage,
-                    blurHash: await generateBlurhash(
-                      recommendation.coverImage!.medium!,
-                    ),
-                  },
-                  type: Category.manga,
-                  format: convertEnum(
-                    MediaFormat,
-                    FormatManga,
-                    recommendation.format,
-                  ) as FormatManga,
-                  status: convertEnum(
-                    MediaStatus,
-                    Status,
-                    recommendation.status,
-                  ) as Status,
-                } as Media);
-              }
-              return true;
-            }) ?? [],
-          );
-        }) ?? [],
+      mangaAccumulated = await recommendationBuilder(
+        mangaData.Page?.mediaList as MediaList[],
+        mangaAccumulated,
       );
-      return [...mangaAccumulated.values()];
+      break;
     }
+
+    return [...mangaAccumulated.values()];
   }),
 
   getCurrentAnime: protectedProcedure.query(async ({ ctx }) => {
@@ -730,7 +696,7 @@ export const anilistRouter = createTRPCRouter({
       page: 0,
       type: "ANIME",
       userName,
-      perPage: 15,
+      perPage: 50,
     } as NonNullableFields<User_CurrentQueryVariables>;
     let data: Media[] = [];
     while (true) {
@@ -812,6 +778,7 @@ export const anilistRouter = createTRPCRouter({
       if (!animeData.Page?.pageInfo?.hasNextPage) {
         break;
       }
+      break;
     }
     return data;
   }),
@@ -823,7 +790,7 @@ export const anilistRouter = createTRPCRouter({
       page: 0,
       type: "MANGA",
       userName,
-      perPage: 25,
+      perPage: 50,
     } as NonNullableFields<User_CurrentQueryVariables>;
     let data: Media[] = [];
     while (true) {

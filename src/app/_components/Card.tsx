@@ -108,7 +108,7 @@ export default (props: Props) => {
         trigger={
           <Link
             className={cx(
-              "card | relative my-2 aspect-cover h-32 flex-shrink-0 sm:h-48 md:h-64",
+              "card | relative isolate my-2 aspect-cover h-32 flex-shrink-0 sm:h-48 md:h-64",
             )}
             ref={triggerRef}
             href={`/${props.type.toLowerCase()}/${props.data.id}`}
@@ -148,6 +148,67 @@ export default (props: Props) => {
               }
             }}
           >
+            {/*Logic To Show Progress Missing*/}
+            {(() => {
+              switch (props.type) {
+                case Category.anime: {
+                  if (!!props.data.mediaListEntry) {
+                    if (!!props.data.nextAiringEpisode) {
+                      return (
+                        props.data.mediaListEntry.progress! <
+                        props.data.nextAiringEpisode.episode - 1
+                      );
+                    }
+                    if (!!props.data.episodes) {
+                      return (
+                        props.data.mediaListEntry.progress! <
+                        props.data.episodes
+                      );
+                    }
+                  }
+                }
+                case Category.manga: {
+                  if (!!props.data.mediaListEntry) {
+                    if (!!props.data.chapters) {
+                      return (
+                        props.data.mediaListEntry.progress! <
+                        props.data.chapters
+                      );
+                    }
+                  }
+                }
+                default: {
+                  return false;
+                }
+              }
+            })() && (
+              <div className="absolute left-0 top-0 z-20 rounded-br-full bg-primary-500 pb-2 pr-2">
+                {(() => {
+                  switch (props.type) {
+                    case Category.anime: {
+                      if (!!props.data.nextAiringEpisode) {
+                        return `+${
+                          props.data.nextAiringEpisode.episode -
+                            1 -
+                            props.data.mediaListEntry?.progress! ?? 0
+                        }`;
+                      }
+                      return `+${
+                        props.data.episodes -
+                          props.data.mediaListEntry?.progress! ?? 0
+                      }`;
+                    }
+                    case Category.manga:
+                      return `+${
+                        props.data.chapters -
+                          props.data.mediaListEntry?.progress! ?? 0
+                      }`;
+                    default:
+                      break;
+                  }
+                })()}
+              </div>
+            )}
             <Image
               src={props.data.coverImage.large!}
               placeholder="blur"

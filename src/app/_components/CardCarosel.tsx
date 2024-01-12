@@ -69,7 +69,7 @@ const CardCarosel = (props: Props) => {
               setReset((state) => !state);
             }}
             data={d}
-            type={Category.anime}
+            type={props.type}
             key={d.id}
           />
         ))}
