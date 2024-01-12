@@ -426,7 +426,7 @@ export const USER_RECOMMENDED = gql`
   }
 `;
 
-const USER_UP_NEXT = gql`
+export const USER_UP_NEXT = gql`
   query USER_UP_NEXT(
     $perPage: Int = 50
     $page: Int = 1

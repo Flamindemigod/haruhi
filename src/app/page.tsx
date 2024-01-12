@@ -6,6 +6,7 @@ import Trending from "./_components/Trending/Trending";
 import Recommended from "./_components/Recommended/Recommended";
 import { ActivityLogIcon } from "@radix-ui/react-icons";
 import Current from "./_components/Current/Current";
+import Pending from "./_components/Pending/Pending";
 
 export default async function Home() {
   const sesh = await getServerAuthSession();
@@ -30,7 +31,8 @@ export default async function Home() {
           <>
             {/* User Current */}
             <Current />
-            {/*TODO: User Up Next (Based On User Planning to Watching List) */}
+            {/*User Up Next (Based On User Planning to Watching List) */}
+            <Pending />
             {/*User Recommendations*/}
             <Recommended />
           </>

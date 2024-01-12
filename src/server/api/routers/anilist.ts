@@ -25,6 +25,8 @@ import {
   User_RecommendedQuery,
   User_RecommendedQueryVariables,
   MediaList,
+  User_Up_NextQueryVariables,
+  User_Up_NextQuery,
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
@@ -46,6 +48,7 @@ import {
   TRENDING_ANIME_MANGA,
   USER_CURRENT,
   USER_RECOMMENDED,
+  USER_UP_NEXT,
 } from "~/graphql/queries";
 
 import {
@@ -775,7 +778,7 @@ export const anilistRouter = createTRPCRouter({
                 }
                 return null;
               })
-              .filter((d) => (d === null ? false : true)) ?? [],
+              .filter(Boolean) ?? [],
           )
         ).sort((a, b) => {
           let a_max: number;
@@ -783,7 +786,7 @@ export const anilistRouter = createTRPCRouter({
           switch (a!.status) {
             case Status.Releasing:
               if (
-                a!.nextAiringEpisode?.episode - 1 >
+                a?.nextAiringEpisode?.episode! - 1 >
                 a?.mediaListEntry?.progress!
               ) {
                 return -1;
@@ -797,8 +800,8 @@ export const anilistRouter = createTRPCRouter({
           switch (b!.status) {
             case Status.Releasing:
               if (
-                b!.nextAiringEpisode?.episode - 1 >
-                b.mediaListEntry?.progress
+                b!.nextAiringEpisode?.episode! - 1 >
+                b!.mediaListEntry?.progress!
               ) {
                 return 1;
               }
@@ -876,7 +879,7 @@ export const anilistRouter = createTRPCRouter({
                 }
                 return null;
               })
-              .filter((d) => (d === null ? false : true)) ?? [],
+              .filter(Boolean) ?? [],
           )
         ).sort((a, b) => {
           if (!a?.chapters && !b?.chapters) {
@@ -896,6 +899,113 @@ export const anilistRouter = createTRPCRouter({
         break;
       }
     }
+    return data;
+  }),
+
+  getPendingAnime: protectedProcedure.query(async ({ ctx }) => {
+    const user = await api.user.getUser.query();
+    const userName = user?.name;
+    let vars = {
+      page: 1,
+      type: "ANIME",
+      userName,
+      perPage: 25,
+    } as NonNullableFields<User_Up_NextQueryVariables>;
+    let data: Media[] = [];
+    let { data: animeData } = await client.query<User_Up_NextQuery>({
+      query: USER_UP_NEXT,
+      variables: vars,
+      context: {
+        headers: !!ctx.session
+          ? {
+              Authorization: "Bearer " + ctx.session.user.token,
+            }
+          : {},
+      },
+    });
+    data = (
+      await Promise.all(
+        animeData.Page?.mediaList?.map(async (m) => {
+          if (!!m && !!m.media) {
+            return {
+              ...m.media,
+              coverImage: {
+                ...m.media.coverImage,
+                blurHash: await generateBlurhash(m.media.coverImage!.medium!),
+              },
+              type: Category.anime,
+              format: convertEnum(
+                MediaFormat,
+                FormatAnime,
+                m.media.format,
+              ) as FormatAnime,
+              status: convertEnum(
+                MediaStatus,
+                Status,
+                m.media.status,
+              ) as Status,
+              season: convertEnum(
+                MediaSeason,
+                Season,
+                m.media.season,
+              ) as Season,
+            } as Media;
+          }
+          return null;
+        }) ?? [],
+      )
+    ).filter(Boolean) as Media[];
+    return data;
+  }),
+
+  getPendingManga: protectedProcedure.query(async ({ ctx }) => {
+    const user = await api.user.getUser.query();
+    const userName = user?.name;
+    let vars = {
+      page: 1,
+      type: "MANGA",
+      userName,
+      perPage: 25,
+    } as NonNullableFields<User_Up_NextQueryVariables>;
+    let data: Media[] = [];
+    let { data: mangaData } = await client.query<User_Up_NextQuery>({
+      query: USER_UP_NEXT,
+      variables: vars,
+      context: {
+        headers: !!ctx.session
+          ? {
+              Authorization: "Bearer " + ctx.session.user.token,
+            }
+          : {},
+      },
+    });
+    data = (
+      await Promise.all(
+        mangaData.Page?.mediaList?.map(async (m) => {
+          if (!!m && !!m.media) {
+            return {
+              ...m.media,
+              coverImage: {
+                ...m.media.coverImage,
+                blurHash: await generateBlurhash(m.media.coverImage!.medium!),
+              },
+              type: Category.manga,
+              format: convertEnum(
+                MediaFormat,
+                FormatManga,
+                m.media.format,
+              ) as FormatManga,
+              status: convertEnum(
+                MediaStatus,
+                Status,
+                m.media.status,
+              ) as Status,
+            } as Media;
+          }
+          return null;
+        }) ?? [],
+      )
+    ).filter(Boolean) as Media[];
     return data;
   }),
 });
