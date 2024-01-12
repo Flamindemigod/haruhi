@@ -1,37 +1,10 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import {gql} from "@apollo/client"
-import {
-  getServerSession,
-  type NextAuthOptions,
-} from "next-auth";
+import { getServerSession, type NextAuthOptions } from "next-auth";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { client } from "~/apolloClient";
 import { USER_AUTH } from "~/graphql/queries";
-import { User_AuthQuery } from "~/__generated__/graphql";
-
-
-enum ScoreFormat{
-  POINT_10_DECIMAL,
-  POINT_100,
-  POINT_10,
-  POINT_5,
-  POINT_3,
-}
-
-type Viewer ={ 
-  id: number
-  name: string
-  avatar: {
-    medium: string
-  }
-  options:{
-    displayAdultContent: boolean
-  }
-  mediaListOptions: {
-    scoreFormat: ScoreFormat
-  }
-}
+import { ScoreFormat, User_AuthQuery } from "~/__generated__/graphql";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -60,7 +33,7 @@ declare module "next-auth" {
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: async ({ session, user}) => {
+    session: async ({ session, user }) => {
       if (session?.user) {
         session.user.id = user.id!;
         const getToken = await db.account.findFirst({
@@ -68,7 +41,7 @@ export const authOptions: NextAuthOptions = {
             userId: user.id,
           },
         });
-  
+
         let accessToken: string | null = null;
         if (getToken) {
           accessToken = getToken.access_token!;
@@ -92,13 +65,12 @@ export const authOptions: NextAuthOptions = {
       type: "oauth",
       authorization: {
         url: "https://anilist.co/api/v2/oauth/authorize",
-        params: { scope:"", response_type: "code" },
+        params: { scope: "", response_type: "code" },
       },
       userinfo: {
         url: "https://graphql.anilist.co",
         async request(context) {
-         
-            const { data } = await client.query<User_AuthQuery>({
+          const { data } = await client.query<User_AuthQuery>({
             query: USER_AUTH,
             context: {
               headers: {
@@ -110,24 +82,26 @@ export const authOptions: NextAuthOptions = {
             name: data.Viewer?.name ?? "",
             aniid: data.Viewer?.id ?? 0,
             image: data.Viewer?.avatar?.medium ?? "",
-            scoreFormat: data.Viewer?.mediaListOptions?.scoreFormat! ?? ScoreFormat.POINT_10_DECIMAL,
-            showNSFW: data.Viewer?.options?.displayAdultContent ?? false
+            scoreFormat:
+              data.Viewer?.mediaListOptions?.scoreFormat! ??
+              ScoreFormat.Point_10Decimal,
+            showNSFW: data.Viewer?.options?.displayAdultContent ?? false,
           };
         },
       },
       token: "https://anilist.co/api/v2/oauth/token",
       profile(profile) {
-          return {
+        return {
           id: profile.aniid,
           name: profile.name,
-            scoreFormat: profile.scoreFormat,
-            showNSFW: profile.showNSFW,
-            aniid: profile.aniid,
+          scoreFormat: profile.scoreFormat,
+          showNSFW: profile.showNSFW,
+          aniid: profile.aniid,
           image: profile.image,
           token: profile.token,
         };
       },
-    }
+    },
     /**
      * ...add more providers here.
      *
