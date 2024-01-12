@@ -53,7 +53,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { db } from "~/server/db";
+import { db, redis } from "~/server/db";
 import { api } from "~/trpc/server";
 import {
   SearchSort,
@@ -72,6 +72,7 @@ import {
   Character,
   Staff,
 } from "~/types.shared/anilist";
+import { buildRecommendationKey } from "~/types.shared/redis";
 export const anilistRouter = createTRPCRouter({
   getGenres: publicProcedure.query(async () => {
     const { data } = await client.query<Get_GenresQuery>({
@@ -617,6 +618,15 @@ export const anilistRouter = createTRPCRouter({
   getRecommendedAnime: protectedProcedure.query(async ({ ctx }) => {
     const user = await api.user.getUser.query();
     const userName = user?.name;
+    const userID = user?.aniid!;
+
+    const key = buildRecommendationKey(userID, Category.anime);
+
+    const data = await redis.get<Media[]>(key);
+    if (!!data) {
+      return data;
+    }
+
     let animeAccumulated: Map<number, Media> = new Map();
     let vars = {
       page: 0,
@@ -648,12 +658,25 @@ export const anilistRouter = createTRPCRouter({
       );
       break;
     }
+
+    await redis.set(key, [...animeAccumulated.values()], {
+      ex: 60 * 60 * 24, // Time to Expire In Seconds 60*60*24 = 1 day;
+    });
     return [...animeAccumulated.values()];
   }),
 
   getRecommendedManga: protectedProcedure.query(async ({ ctx }) => {
     const user = await api.user.getUser.query();
     const userName = user?.name;
+    const userID = user?.aniid!;
+
+    const key = buildRecommendationKey(userID, Category.manga);
+
+    const data = await redis.get<Media[]>(key);
+    if (!!data) {
+      return data;
+    }
+
     let mangaAccumulated: Map<number, Media> = new Map();
     let vars = {
       page: 0,
@@ -685,6 +708,9 @@ export const anilistRouter = createTRPCRouter({
       );
       break;
     }
+    await redis.set(key, [...mangaAccumulated.values()], {
+      ex: 60 * 60 * 24, // Time to Expire In Seconds 60*60*24 = 1 day;
+    });
 
     return [...mangaAccumulated.values()];
   }),
