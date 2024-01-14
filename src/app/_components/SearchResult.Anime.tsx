@@ -30,7 +30,7 @@ export default (props: Props) => {
         />
       </div>
       {/* Content */}
-      <div className="col-span-full col-start-2 grid grid-flow-col grid-rows-[auto_1fr_auto] items-center">
+      <div className="col-span-full col-start-2 grid grid-flow-col grid-rows-[auto_1fr_auto] items-center text-sm">
         {/* Title */}
         <Marquee href={`/anime/${props.media.id}`}>
           {props.media.title.userPreferred}

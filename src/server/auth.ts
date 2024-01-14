@@ -14,16 +14,15 @@ import { ScoreFormat, User_AuthQuery } from "~/__generated__/graphql";
  */
 declare module "next-auth" {
   interface User {
-    id: string,
-    name: string, 
-    token: string,
+    id: string;
+    name: string;
+    token: string;
   }
 
-  interface Session  {
-    user: User, 
+  interface Session {
+    user: User;
   }
 }
-
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -55,7 +54,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "database",
   },
   adapter: PrismaAdapter(db),
-  debug: true,
+  debug: env.NODE_ENV === "development",
   providers: [
     {
       clientId: env.ANILIST_CLIENT_ID,

@@ -55,7 +55,7 @@ export default (props: Props) => {
       href={props.href}
       ref={containerRef}
       className={cx(
-        "grid grid-cols-1 grid-rows-1 overflow-hidden whitespace-nowrap",
+        "grid grid-cols-1 grid-rows-1 overflow-hidden whitespace-nowrap text-base",
         props.className,
       )}
     >

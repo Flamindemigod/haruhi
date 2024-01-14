@@ -184,7 +184,7 @@ export default (props: Props) => {
                 }
               }
             })() && (
-              <div className="absolute left-0 top-0 z-20 rounded-br-full bg-primary-500 pb-2 pr-2">
+              <div className="absolute left-0 top-0 z-20 rounded-br-full bg-primary-500 pb-2 pr-2 text-white">
                 {(() => {
                   switch (props.type) {
                     case Category.anime: {

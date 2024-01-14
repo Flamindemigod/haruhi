@@ -170,6 +170,7 @@ export default {
         },
       },
       animation: {
+        spin: "spin 5s infinite linear forwards",
         "banner-move-s": "bannerMove 30s alternate infinite linear",
         "banner-move-f": "bannerMove 20s alternate infinite linear",
         "bg-travel-y": "bg_travel_x 10s ease-in-out infinite alternate",
