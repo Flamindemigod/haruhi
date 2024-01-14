@@ -12,5 +12,3 @@ export default (date: Date): Exclude<Season, Season.any> => {
     return Season.Fall;
   }
 };
-
-export const YEAR_MAX = new Date().getUTCFullYear() + 1;

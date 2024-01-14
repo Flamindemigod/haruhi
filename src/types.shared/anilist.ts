@@ -5,8 +5,10 @@ import {
   Staff as AniStaff,
   Character as AniCharacter,
 } from "~/__generated__/graphql";
-import { YEAR_MAX } from "~/app/utils/getSeason";
+
 import { SelectNonNullableFields, Replace } from "~/app/utils/typescript-utils";
+
+export const YEAR_MAX = new Date().getUTCFullYear() + 1;
 
 export enum TernaryState {
   none = "None",
