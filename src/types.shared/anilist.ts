@@ -324,3 +324,29 @@ export type Character = Omit<AniCharacter, "image"> & {
     blurHash?: string;
   };
 };
+
+export const getSeason = (date: Date): Exclude<Season, Season.any> => {
+  const month = date.getMonth() + 1; // JavaScript months are zero-based
+  if (month >= 1 && month <= 3) {
+    return Season.Winter;
+  } else if (month >= 4 && month <= 6) {
+    return Season.Spring;
+  } else if (month >= 7 && month <= 9) {
+    return Season.Summer;
+  } else {
+    return Season.Fall;
+  }
+};
+
+export const SeasonValidator = z
+  .enum([Season.Summer, Season.Spring, Season.Winter, Season.Fall])
+  .catch(getSeason(new Date()));
+
+export const YearValidator = z
+  .number()
+  .finite()
+  .safe()
+  .int()
+  .lte(YEAR_MAX)
+  .gte(1970)
+  .catch(new Date().getUTCFullYear());

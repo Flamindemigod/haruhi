@@ -31,7 +31,6 @@ import {
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
 import generateBlurhash from "~/app/utils/generateBlurhash";
-import getSeason from "~/app/utils/getSeason";
 import { recommendationBuilder } from "~/app/utils/recommendationBuilder";
 import {
   NonNullableFields,
@@ -74,6 +73,7 @@ import {
   studioSearchFilter,
   Character,
   Staff,
+  getSeason,
 } from "~/types.shared/anilist";
 import { buildRecommendationKey } from "~/types.shared/redis";
 export const anilistRouter = createTRPCRouter({
