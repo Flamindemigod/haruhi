@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { Media as AniMedia, Maybe, Staff as AniStaff, Character as AniCharacter } from "~/__generated__/graphql";
+import {
+  Media as AniMedia,
+  Maybe,
+  Staff as AniStaff,
+  Character as AniCharacter,
+} from "~/__generated__/graphql";
+import { YEAR_MAX } from "~/app/utils/getSeason";
 import { SelectNonNullableFields, Replace } from "~/app/utils/typescript-utils";
 
 export enum TernaryState {
@@ -69,15 +75,15 @@ export const animeSearchFilter = z.object({
     z
       .number()
       .min(1970)
-      .max(2024)
+      .max(YEAR_MAX)
       .transform((v) => (v === 1970 ? undefined : v)),
   ),
   maxYear: z.optional(
     z
       .number()
       .min(1970)
-      .max(2024)
-      .transform((v) => (v === 2024 ? undefined : v)),
+      .max(YEAR_MAX)
+      .transform((v) => (v === YEAR_MAX ? undefined : v)),
   ),
   minEpisode: z.optional(
     z
@@ -127,15 +133,15 @@ export const mangaSearchFilter = z.object({
     z
       .number()
       .min(1970)
-      .max(2024)
+      .max(YEAR_MAX)
       .transform((v) => (v === 1970 ? undefined : v)),
   ),
   maxYear: z.optional(
     z
       .number()
       .min(1970)
-      .max(2024)
-      .transform((v) => (v === 2024 ? undefined : v)),
+      .max(YEAR_MAX)
+      .transform((v) => (v === YEAR_MAX ? undefined : v)),
   ),
   minChapters: z.optional(
     z
@@ -203,7 +209,7 @@ export const defaultAnimeFilter: AnimeFilter = {
   season: Season.any,
   format: FormatAnime.any,
   minYear: 1970,
-  maxYear: 2024,
+  maxYear: YEAR_MAX,
   minEpisode: 0,
   maxEpisode: 150,
   minDuration: 0,
@@ -225,7 +231,7 @@ export const defaultMangaFilter: MangaFilter = {
   status: Status.any,
   format: FormatManga.any,
   minYear: 1970,
-  maxYear: 2024,
+  maxYear: YEAR_MAX,
   minChapters: 0,
   maxChapters: 500,
   minVolumes: 0,
@@ -301,18 +307,18 @@ export type SearchResultMedia = SelectNonNullableFields<
   | "genres"
 >;
 
-export type Staff = Omit<AniStaff, "image"> &{
+export type Staff = Omit<AniStaff, "image"> & {
   image: {
     large?: string;
     medium?: string;
     blurHash?: string;
-  }
-}
+  };
+};
 
-export type Character = Omit<AniCharacter, "image"> &{
+export type Character = Omit<AniCharacter, "image"> & {
   image: {
     large?: string;
     medium?: string;
     blurHash?: string;
-  }
-}
+  };
+};

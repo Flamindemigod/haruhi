@@ -42,6 +42,7 @@ import {
   TernaryState,
 } from "~/types.shared/anilist";
 import { useSession } from "next-auth/react";
+import { YEAR_MAX } from "../utils/getSeason";
 
 const Wrapper = ({ children }: { children?: ReactNode }) => (
   <div className="flex flex-col gap-2 rounded-md bg-black/20 p-4 dark:bg-white/10">
@@ -213,7 +214,7 @@ const FilterSelector = (
             </Label>
             <Slider
               id="yearRangeSelector"
-              max={2024}
+              max={YEAR_MAX}
               min={1970}
               step={1}
               value={[
@@ -677,7 +678,7 @@ const FilterSelector = (
             </Label>
             <Slider
               id="yearRangeSelector"
-              max={2024}
+              max={YEAR_MAX}
               min={1970}
               step={1}
               value={[
