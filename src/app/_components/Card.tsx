@@ -224,7 +224,7 @@ export default (props: Props) => {
         }
         content={{
           data: (
-            <div className="flex max-w-xs flex-col rounded-md bg-offWhite-100 p-4 dark:bg-offWhite-900 sm:max-w-sm md:max-w-md">
+            <div className="flex max-w-[100dvw] flex-col rounded-md bg-offWhite-100 p-4 dark:bg-offWhite-900 sm:max-w-sm md:max-w-md">
               <div className="pb-2">
                 <Marquee className="text-xl font-semibold text-primary-500">
                   {props.data.title.userPreferred}
@@ -319,9 +319,11 @@ export default (props: Props) => {
           ),
           side: "bottom",
           sideOffset: 5,
+          sticky: "always",
           collisions: {
             avoidCollisions: true,
             collisionPadding: 5,
+            collisionBoundry: document.body,
           },
         }}
         arrow={{}}
