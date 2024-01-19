@@ -8,19 +8,42 @@ import {
 
 import { SelectNonNullableFields, Replace } from "~/app/utils/typescript-utils";
 
-export const YEAR_MAX = new Date().getUTCFullYear() + 1;
-
-export enum TernaryState {
-  none = "None",
-  true = "True",
-  false = "False",
-}
 export enum Season {
   any = "Any",
   Winter = "Winter",
   Spring = "Spring",
   Summer = "Summer",
   Fall = "Fall",
+}
+
+export const getSeason = (date: Date): Exclude<Season, Season.any> => {
+  const month = date.getMonth() + 1; // JavaScript months are zero-based
+  if (month >= 1 && month <= 3) {
+    return Season.Winter;
+  } else if (month >= 4 && month <= 6) {
+    return Season.Spring;
+  } else if (month >= 7 && month <= 9) {
+    return Season.Summer;
+  } else {
+    return Season.Fall;
+  }
+};
+export const YEAR_MAX = new Date().getUTCFullYear() + 1;
+export const CURRENT_SEASON = getSeason(new Date());
+
+export const CURRENT_YEAR = new Date().getUTCFullYear();
+
+export const validSeasons = [
+  Season.Winter,
+  Season.Spring,
+  Season.Summer,
+  Season.Fall,
+] as const;
+
+export enum TernaryState {
+  none = "None",
+  true = "True",
+  false = "False",
 }
 
 export enum Category {
@@ -325,22 +348,9 @@ export type Character = Omit<AniCharacter, "image"> & {
   };
 };
 
-export const getSeason = (date: Date): Exclude<Season, Season.any> => {
-  const month = date.getMonth() + 1; // JavaScript months are zero-based
-  if (month >= 1 && month <= 3) {
-    return Season.Winter;
-  } else if (month >= 4 && month <= 6) {
-    return Season.Spring;
-  } else if (month >= 7 && month <= 9) {
-    return Season.Summer;
-  } else {
-    return Season.Fall;
-  }
-};
-
 export const SeasonValidator = z
   .enum([Season.Summer, Season.Spring, Season.Winter, Season.Fall])
-  .catch(getSeason(new Date()));
+  .catch(CURRENT_SEASON);
 
 export const YearValidator = z
   .number()

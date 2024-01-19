@@ -581,3 +581,80 @@ export const USER_CURRENT = gql`
     }
   }
 `;
+
+export const SEASONAL = gql`
+  query SEASONAL(
+    $page: Int = 1
+    $perPage: Int = 25
+    $season: MediaSeason
+    $seasonYear: Int
+    $isAdult: Boolean
+  ) {
+    Page(page: $page, perPage: $perPage) {
+      pageInfo {
+        hasNextPage
+      }
+      media(
+        season: $season
+        seasonYear: $seasonYear
+        type: ANIME
+        sort: [POPULARITY_DESC]
+        isAdult: $isAdult
+      ) {
+        id
+        title {
+          userPreferred
+          english
+        }
+        coverImage {
+          large
+          medium
+          color
+        }
+        startDate {
+          year
+          month
+          day
+        }
+        endDate {
+          year
+          month
+          day
+        }
+        bannerImage
+        season
+        seasonYear
+        description(asHtml: true)
+        type
+        format
+        status(version: 2)
+        episodes
+        duration
+        chapters
+        volumes
+        genres
+        isAdult
+        averageScore
+        nextAiringEpisode {
+          airingAt
+          timeUntilAiring
+          episode
+        }
+        mediaListEntry {
+          id
+          status
+          progress
+        }
+        studios(isMain: true) {
+          edges {
+            isMain
+            node {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;

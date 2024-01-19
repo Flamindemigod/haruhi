@@ -27,6 +27,8 @@ import {
   MediaList,
   User_Up_NextQueryVariables,
   User_Up_NextQuery,
+  SeasonalQueryVariables,
+  SeasonalQuery,
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
@@ -44,6 +46,7 @@ import {
   SEARCH_CHARACTERS,
   SEARCH_STAFF,
   SEARCH_STUDIO,
+  SEASONAL,
   TRENDING_ANIME_MANGA,
   USER_CURRENT,
   USER_RECOMMENDED,
@@ -74,6 +77,8 @@ import {
   Character,
   Staff,
   getSeason,
+  SeasonValidator,
+  YearValidator,
 } from "~/types.shared/anilist";
 import { buildRecommendationKey } from "~/types.shared/redis";
 export const anilistRouter = createTRPCRouter({
@@ -1008,4 +1013,81 @@ export const anilistRouter = createTRPCRouter({
     ).filter(Boolean) as Media[];
     return data;
   }),
+
+  getSeasonal: publicProcedure
+    .input(
+      z.object({
+        cursor: z.number().positive().nullish().default(1),
+        season: SeasonValidator,
+        year: YearValidator,
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.cursor) return null;
+      let userNsfw;
+      if (!!ctx.session?.user) {
+        let user = await api.user.getUser.query();
+        userNsfw = user?.showNSFW;
+      } else {
+        userNsfw = undefined;
+      }
+
+      let vars = {
+        page: input.cursor,
+        perPage: 25,
+        season: convertEnum(Season, MediaSeason, input.season),
+        seasonYear: input.year,
+        isAdult: !userNsfw ? false : undefined,
+      } as NonNullableFields<SeasonalQueryVariables>;
+      let data: Media[] = [];
+      let { data: animeData } = await client.query<SeasonalQuery>({
+        query: SEASONAL,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: "Bearer " + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
+      data = (
+        await Promise.all(
+          animeData.Page?.media?.map(async (media) => {
+            if (!!media) {
+              return {
+                ...media,
+                coverImage: {
+                  ...media.coverImage,
+                  blurHash: await generateBlurhash(media.coverImage!.medium!),
+                },
+                type: Category.anime,
+                format: convertEnum(
+                  MediaFormat,
+                  FormatAnime,
+                  media.format,
+                ) as FormatAnime,
+                status: convertEnum(
+                  MediaStatus,
+                  Status,
+                  media.status,
+                ) as Status,
+                season: convertEnum(
+                  MediaSeason,
+                  Season,
+                  media.season,
+                ) as Season,
+              } as Media;
+            }
+            return null;
+          }) ?? [],
+        )
+      ).filter(Boolean) as Media[];
+      return {
+        data,
+        nextCursor: !!animeData.Page?.pageInfo?.hasNextPage
+          ? ++input.cursor
+          : undefined,
+      };
+    }),
 });
