@@ -3,7 +3,7 @@
 import { Category, Media } from "~/types.shared/anilist";
 import { SelectNonNullableFields } from "../utils/typescript-utils";
 import HoverCard from "~/primitives/HoverCard";
-import { ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { ReactNode, forwardRef, useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import cx from "classix";
@@ -78,27 +78,20 @@ export type Props = {
   >;
 };
 
-export default (props: Props) => {
-  const { reset, onReset } = useCardContext();
-
+export default forwardRef<HTMLImageElement, Props>((props, ref) => {
+  const { reset } = useCardContext();
   const [show, setShow] = useState<boolean>(false);
-  let timeoutID = useRef<NodeJS.Timeout>();
-  let triggerRef = useRef<HTMLAnchorElement>(null);
 
   const color = useRandomBGColor(
     `${props.data.title.userPreferred}${props.data.id}`,
   );
-  const showLoading = () => {
-    triggerRef.current?.setAttribute("data-loading", "");
-  };
-  const hideLoading = () => {
-    triggerRef.current?.removeAttribute("data-loading");
-  };
+
   useEffect(() => {
     if (show) {
       setShow(false);
     }
   }, [reset]);
+
   return (
     <>
       <HoverCard
@@ -108,45 +101,21 @@ export default (props: Props) => {
         }}
         portal={{}}
         closeDelay={0}
-        openDelay={500}
+        openDelay={0}
         trigger={
           <Link
             className={cx(
               "card | relative isolate my-2 aspect-cover h-32 flex-shrink-0 sm:h-48 md:h-64",
             )}
-            ref={triggerRef}
             href={`/${props.type.toLowerCase()}/${props.data.id}`}
-            onContextMenu={(e) => {
-              e.preventDefault();
-            }}
-            onPointerDown={() => {
-              onReset();
-              showLoading();
-              timeoutID.current = setTimeout(() => {
-                setShow(true);
-                hideLoading();
-                timeoutID.current = undefined;
-              }, 2000);
-            }}
-            onPointerLeave={(e) => {
-              if (!!timeoutID.current) {
-                e.preventDefault();
-                hideLoading();
-                clearTimeout(timeoutID.current);
-                timeoutID.current = undefined;
-              }
-            }}
             onClick={(e) => {
-              if (show && !timeoutID.current) {
+              if (!show) {
                 e.preventDefault();
+                e.stopPropagation();
+                setShow(true);
               }
-            }}
-            onPointerUp={(e) => {
-              if (!!timeoutID.current) {
-                e.preventDefault();
-                hideLoading();
-                clearTimeout(timeoutID.current);
-                timeoutID.current = undefined;
+              if (!!show) {
+                return;
               }
             }}
           >
@@ -212,6 +181,7 @@ export default (props: Props) => {
               </div>
             )}
             <Image
+              ref={ref}
               src={props.data.coverImage.large!}
               placeholder="blur"
               className="object-cover"
@@ -330,7 +300,7 @@ export default (props: Props) => {
       />
     </>
   );
-};
+});
 
 interface CardContextType {
   reset: boolean;

@@ -44,7 +44,7 @@ body {
 }
 
 .card {
-  isolation: isolate;
+  -webkit-touch-callout: none;
   transition:
     scale ease-in-out 500ms 200ms,
     opacity ease-in-out 500ms 200ms;
@@ -55,29 +55,9 @@ body {
   opacity: 0.6;
 }
 
-.card[data-loading],
 .card[data-state="open"] {
   scale: 1.1;
   opacity: 1;
-}
-
-.card[data-loading]::before {
-  @apply bg-black/50;
-  z-index: 10;
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-
-.card[data-loading]::after {
-  @apply left-1/2 top-1/2 block aspect-square w-1/2 origin-center animate-spin border-[6px] border-solid;
-  content: "";
-  z-index: 20;
-  position: absolute;
-  border-radius: 50%;
-  border-color: theme("backgroundColor.primary.400") transparent
-    theme("backgroundColor.primary.400") transparent;
-  translate: -50% -50%;
 }
 
 @keyframes ldio-d2f969t0yu4 {
