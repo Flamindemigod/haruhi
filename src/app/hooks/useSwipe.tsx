@@ -80,7 +80,7 @@ export default (props: Props) => {
     },
     swipeDuration: Infinity,
     delta: 20,
-  }) as { ref: RefCallback<Document> };
+  }) as { ref: RefCallback<Document | {}> };
 
   useEffect(() => {
     if (!!document) {
@@ -191,7 +191,7 @@ export default (props: Props) => {
         }
       })();
     }
-    return () => ref(null);
+    return () => ref({});
   }, []);
   return {
     SwipeBlob: (
