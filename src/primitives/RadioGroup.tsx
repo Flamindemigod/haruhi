@@ -25,7 +25,7 @@ export default <T,>(props: Props<T>) => (
       "flex flex-wrap gap-2",
       props.orientation === "horizontal"
         ? "flex-row items-center "
-        : "flex-col justify-center",
+        : "w-max flex-col justify-center",
     )}
     value={String(props.value)}
     name={props.name}
@@ -39,7 +39,7 @@ export default <T,>(props: Props<T>) => (
     {props.dataValues.map((v) => (
       <span
         key={`${v.value}--${v.displayTitle}`}
-        className="flex items-center justify-center gap-2 "
+        className="flex w-full items-center justify-start gap-2"
       >
         <RadioGroupPrimitives.Item
           id={`${v.value}--${v.displayTitle}`}

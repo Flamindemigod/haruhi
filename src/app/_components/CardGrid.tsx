@@ -23,7 +23,7 @@ const CardGrid = (props: Props) => {
   }, [inView]);
   return (
     <>
-      <div className="cardGrid | grid grid-cols-3 place-items-center gap-2 p-2 md:grid-cols-5 lg:grid-cols-7">
+      <div className="cardGrid | grid w-full grid-cols-3 place-items-center gap-2 p-2 md:grid-cols-5 lg:grid-cols-7">
         {props.data.map((m, i) => {
           if (i === props.data.length - 1) {
             return (

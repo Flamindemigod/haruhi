@@ -14,6 +14,7 @@ import {
 } from "~/types.shared/anilist";
 import SeasonalMobile from "./Seasonal.Mobile";
 import { api } from "~/trpc/react";
+import SeasonalDesktop from "./Seasonal.Desktop";
 
 type Props = {
   season: Exclude<Season, Season.any>;
@@ -86,11 +87,18 @@ export default (props: Props) => {
       </Media>
       <Media className="w-full" greaterThanOrEqual="md">
         {/*Desktop Seasonal View*/}
-        <div className="flex gap-4">
-          <button onClick={goToPrevSeason}> Go Prev</button>
-          {props.season} - {props.year}
-          <button onClick={goToNextSeason}>Go Next</button>
-        </div>
+        <SeasonalDesktop
+          {...props}
+          isFetching={isFetching}
+          onReachBottom={() => {
+            fetchNextPage();
+          }}
+          setSeason={setSeason}
+          setPrevSeason={goToPrevSeason}
+          setNextSeason={goToNextSeason}
+          setCurrentSeason={goToCurrentSeason}
+          data={seasonData?.pages.map((p) => p?.data!).flat() ?? []}
+        />
       </Media>
     </>
   );

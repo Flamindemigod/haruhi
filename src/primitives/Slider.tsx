@@ -17,14 +17,19 @@ interface Props {
 }
 
 const Slider = (props: Props) => {
+  const [value, setValue] = useState(props.value);
   return (
     <SliderPrimitive.Root
       id={props.id}
       defaultValue={props.defaultValue}
       max={props.max}
       min={props.min}
-      value={props.value}
-      onValueChange={props.onChange}
+      value={value}
+      onValueChange={setValue}
+      onValueCommit={(e) => {
+        setValue(e);
+        props.onChange(e);
+      }}
       step={props.step}
       aria-label={props.ariaLabel}
       className="relative flex h-5 w-full touch-none items-center"
@@ -41,7 +46,7 @@ const Slider = (props: Props) => {
           )}
         />
       </SliderPrimitive.Track>
-      {props.value.map((v, idx) => (
+      {value.map((v, idx) => (
         <Tooltip key={idx} content={<div>{v}</div>} index={v}>
           <SliderPrimitive.Thumb
             className={cx(
