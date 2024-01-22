@@ -24,7 +24,11 @@ export default (props: Props) => {
   const pathname = usePathname();
   const { push } = useRouter();
 
-  const { data: seasonData } = api.anilist.getSeasonal.useInfiniteQuery(
+  const {
+    data: seasonData,
+    fetchNextPage,
+    isFetching,
+  } = api.anilist.getSeasonal.useInfiniteQuery(
     {
       year: props.year,
       season: props.season,
@@ -69,12 +73,16 @@ export default (props: Props) => {
         {/*Mobile Seasonal View*/}
         <SeasonalMobile
           {...props}
+          isFetching={isFetching}
+          onReachBottom={() => {
+            fetchNextPage();
+          }}
+          setSeason={setSeason}
           setPrevSeason={goToPrevSeason}
           setNextSeason={goToNextSeason}
           setCurrentSeason={goToCurrentSeason}
           data={seasonData?.pages.map((p) => p?.data!).flat() ?? []}
         />
-        <div />
       </Media>
       <Media className="w-full" greaterThanOrEqual="md">
         {/*Desktop Seasonal View*/}

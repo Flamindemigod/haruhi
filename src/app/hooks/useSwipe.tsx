@@ -22,6 +22,7 @@ export default (props: Props) => {
         | "setMagnitude"
         | "setRotation"
         | "setText"
+        | "setInterval"
         | "startFadeIn"
         | "startFadeOut",
         (...args: any[]) => void
@@ -40,22 +41,31 @@ export default (props: Props) => {
             canvasFunctions.current.setText(props.text?.right ?? "");
             break;
           case "Up":
-            return;
+            canvasFunctions.current.setText("Canceled");
+            break;
           case "Down":
-            return;
+            canvasFunctions.current.setText("Canceled");
+            break;
         }
 
         canvasFunctions.current.setMagnitude(
           (((e.absX ^ 2) + (e.absY ^ 2)) ^ (1 / 2)) / 100,
         );
         canvasFunctions.current.setRotation(Math.atan2(e.deltaY, e.deltaX));
-        canvasFunctions.current.reset();
-        canvasFunctions.current.draw();
       }
       if (!!props.onSwiping) props.onSwiping(e);
     },
     onSwipeStart: (e) => {
-      if (!!canvasFunctions.current) canvasFunctions.current.startFadeIn();
+      if (!!canvasFunctions.current && e.dir !== "Down" && e.dir !== "Up") {
+        canvasFunctions.current.setInterval(
+          setInterval(() => {
+            canvasFunctions.current!.reset();
+            canvasFunctions.current!.draw();
+          }, 17),
+        );
+
+        canvasFunctions.current.startFadeIn();
+      }
       if (!!props.onSwipeStart) props.onSwipeStart(e);
     },
     onSwiped: (e) => {
@@ -68,7 +78,7 @@ export default (props: Props) => {
 
       if (!!props.onTouchEndOrOnMouseUp) props.onTouchEndOrOnMouseUp(e);
     },
-    swipeDuration: 250,
+    swipeDuration: Infinity,
     delta: 20,
   }) as { ref: RefCallback<Document> };
 
@@ -87,7 +97,11 @@ export default (props: Props) => {
             const blobSize = canvasSize.width / (2 * 2);
             let rotation = 0;
             let text = "";
+            let drawInterval: NodeJS.Timeout | null = null;
             return {
+              setInterval: (id: NodeJS.Timeout) => {
+                drawInterval = id;
+              },
               startFadeIn: () => {
                 let i = 0;
                 const interval = setInterval(() => {
@@ -104,6 +118,7 @@ export default (props: Props) => {
                   if (i === 0) {
                     ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
                     clearInterval(interval);
+                    clearInterval(drawInterval!);
                   }
                 }, 10);
               },

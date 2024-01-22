@@ -63,6 +63,7 @@ type CardMedia = Pick<
 
 export type Props = {
   type: Category.anime | Category.manga;
+  fullWidth?: true;
   data: SelectNonNullableFields<
     CardMedia,
     keyof Omit<
@@ -105,7 +106,8 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
         trigger={
           <Link
             className={cx(
-              "card | relative isolate my-2 aspect-cover h-32 flex-shrink-0 sm:h-48 md:h-64",
+              props.fullWidth ? "w-full" : "h-32 sm:h-48 md:h-64",
+              "card | relative isolate my-2 aspect-cover flex-shrink-0",
             )}
             href={`/${props.type.toLowerCase()}/${props.data.id}`}
             onClick={(e) => {

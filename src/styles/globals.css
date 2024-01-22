@@ -46,18 +46,23 @@ body {
 .card {
   -webkit-touch-callout: none;
   transition:
+    filter ease-in-out 500ms 200ms,
     scale ease-in-out 500ms 200ms,
     opacity ease-in-out 500ms 200ms;
 }
 .carosel_track:has(:where(.card[data-loading], .card[data-state="open"]))
+  > :where(.card:not([data-loading]), .card:not([data-state="open"])),
+.cardGrid:has(:where(.card[data-loading], .card[data-state="open"]))
   > :where(.card:not([data-loading]), .card:not([data-state="open"])) {
   scale: 0.95;
   opacity: 0.6;
+  filter: grayscale(80%);
 }
 
 .card[data-state="open"] {
   scale: 1.1;
   opacity: 1;
+  filter: grayscale(0);
 }
 
 @keyframes ldio-d2f969t0yu4 {

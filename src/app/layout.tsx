@@ -66,11 +66,10 @@ export default async function RootLayout({
                         <Footer />
                       </div>
                     </div>
-                    <div
-                      className="fixed bottom-0 left-0 right-0 h-fit"
-                      id={"bot-navigation"}
-                    >
+                    <div className="sticky bottom-0 h-fit">
+                      <div id={"nav-top-panel"}></div>
                       {/* Reserved for Mobile Navigation */}
+                      <div className="relative" id={"bot-navigation"}></div>
                     </div>
                   </Theme>
                 </CardProvider>

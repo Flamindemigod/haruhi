@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavigationProps } from "./Navigation";
 import Search from "./Search.Mobile";
-import { createPortal } from "react-dom";
 import Link from "next/link";
 import Dropdown, { Props as DropdownProps } from "~/primitives/Dropdown";
 import cx from "classix";
@@ -58,7 +57,7 @@ const DropDownProps: DropdownProps = {
 
 export default (props: NavigationProps) => {
   // const ref = useRef<Element | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const [_, setMounted] = useState(false);
   useEffect(() => {
     //   ref.current = document.getElementById("bot-navigation");
     setMounted(true);

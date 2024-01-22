@@ -1,6 +1,5 @@
 "use client";
 import {
-  ArrowLeftIcon,
   ArrowRightIcon,
   ChevronDownIcon,
   ChevronUpIcon,
@@ -23,6 +22,9 @@ type Props<T> = {
   values: Value<T>[];
   buttonClass?: string;
   side?: "top" | "right" | "bottom" | "left";
+  sideOffet?: number;
+  align?: "start" | "center" | "end";
+  alignOffset?: number;
   container?: RefObject<HTMLDivElement>;
 };
 
@@ -45,20 +47,23 @@ const Select = <T,>(props: Props<T>) => {
       </SelectPrimitive.Trigger>
       <SelectPrimitive.Portal container={props.container?.current}>
         <SelectPrimitive.Content
-          className="z-[75]"
+          className="relative z-[80] rounded-lg bg-white shadow-lg max-h-radix-select-content-available-height dark:bg-offWhite-800"
           position="popper"
           side={props.side}
+          sideOffset={props.sideOffet ?? 5}
+          align={props.align}
+          alignOffset={props.alignOffset}
         >
-          <SelectPrimitive.ScrollUpButton className="flex items-center justify-center text-offWhite-700 dark:text-offWhite-300">
+          <SelectPrimitive.ScrollUpButton className="flex items-center justify-center text-offWhite-700  dark:text-offWhite-300">
             <ChevronUpIcon />
           </SelectPrimitive.ScrollUpButton>
-          <SelectPrimitive.Viewport className="relative z-[80] rounded-lg bg-white p-2 shadow-lg dark:bg-offWhite-800">
+          <SelectPrimitive.Viewport className="">
             {props.values.map((f, i) => (
               <SelectPrimitive.Item
                 key={`${f}-${i}`}
                 value={String(f.value)}
                 className={cx(
-                  "relative flex items-center rounded-md px-8 py-2 text-sm font-medium text-offWhite-700 focus:bg-offWhite-100 dark:text-offWhite-300 dark:focus:bg-offWhite-900",
+                  "relative mx-1 flex items-center rounded-md px-7 py-2 text-sm font-medium text-offWhite-700 focus:bg-offWhite-100 dark:text-offWhite-300 dark:focus:bg-offWhite-900",
                   "radix-disabled:opacity-50",
                   // "select-none focus:outline-none",
                 )}

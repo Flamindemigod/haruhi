@@ -1,7 +1,8 @@
 "use client";
 import { Category, Media, Season } from "~/types.shared/anilist";
 import useSwipe from "~/app/hooks/useSwipe";
-import Card, { Props as CardProps } from "../Card";
+import CardGrid, { Props as GridProps } from "../CardGrid";
+import SeasonSelectorMobile from "./Season.Selector.Mobile";
 
 type Props = {
   season: Exclude<Season, Season.any>;
@@ -9,7 +10,10 @@ type Props = {
   setPrevSeason: () => void;
   setNextSeason: () => void;
   setCurrentSeason: () => void;
+  setSeason: (season: Exclude<Season, Season.any>, year: number) => void;
   data: Media[];
+  onReachBottom: () => void;
+  isFetching: boolean;
 };
 
 export default (props: Props) => {
@@ -24,12 +28,18 @@ export default (props: Props) => {
   return (
     <>
       {SwipeBlob}
-      {props.season} - {props.year}
-      <div className="grid grid-cols-3 place-items-center">
-        {props.data.map((m, i) => (
-          <Card data={m as CardProps["data"]} key={i} type={Category.anime} />
-        ))}
-      </div>
+      <CardGrid
+        isFetching={props.isFetching}
+        type={Category.anime}
+        data={props.data as GridProps["data"]}
+        onReachBottom={props.onReachBottom}
+        fallback="Fetching More Data"
+      />
+      <SeasonSelectorMobile
+        season={props.season}
+        year={props.year}
+        setSeason={props.setSeason}
+      />
     </>
   );
 };
