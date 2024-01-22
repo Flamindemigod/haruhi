@@ -360,3 +360,23 @@ export const YearValidator = z
   .lte(YEAR_MAX)
   .gte(1970)
   .catch(new Date().getUTCFullYear());
+
+/** Media list watching/reading status enum. */
+export enum ListStatus {
+  /** Finished watching/reading */
+  Completed = "Completed",
+  /** Currently watching/reading */
+  Current = "Current",
+  /** Stopped watching/reading before completing */
+  Dropped = "Dropped",
+  /** Paused watching/reading */
+  Paused = "Paused",
+  /** Planning to watch/read */
+  Planning = "Planning",
+  /** Re-watching/reading */
+  Repeating = "Repeating",
+}
+
+export const ListStatusValidator = z
+  .nativeEnum(ListStatus)
+  .catch(ListStatus.Current);

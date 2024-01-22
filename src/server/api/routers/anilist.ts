@@ -29,6 +29,7 @@ import {
   User_Up_NextQuery,
   SeasonalQueryVariables,
   SeasonalQuery,
+  MediaListStatus,
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
@@ -79,6 +80,7 @@ import {
   getSeason,
   SeasonValidator,
   YearValidator,
+  ListStatus,
 } from "~/types.shared/anilist";
 import { buildRecommendationKey } from "~/types.shared/redis";
 export const anilistRouter = createTRPCRouter({
@@ -191,6 +193,16 @@ export const anilistRouter = createTRPCRouter({
               ) as FormatAnime,
               status: convertEnum(MediaStatus, Status, m.status) as Status,
               season: convertEnum(MediaSeason, Season, m.season) as Season,
+              mediaListEntry: !!m.mediaListEntry
+                ? {
+                    ...m.mediaListEntry,
+                    status: convertEnum(
+                      MediaListStatus,
+                      ListStatus,
+                      m.mediaListEntry.status,
+                    ),
+                  }
+                : null,
             } as SearchResultMedia;
           }),
         );
@@ -291,6 +303,16 @@ export const anilistRouter = createTRPCRouter({
                 m.format,
               ) as FormatManga,
               status: convertEnum(MediaStatus, Status, m.status) as Status,
+              mediaListEntry: !!m.mediaListEntry
+                ? {
+                    ...m.mediaListEntry,
+                    status: convertEnum(
+                      MediaListStatus,
+                      ListStatus,
+                      m.mediaListEntry.status,
+                    ),
+                  }
+                : null,
             } as SearchResultMedia;
           }),
         );
@@ -534,6 +556,16 @@ export const anilistRouter = createTRPCRouter({
               ) as FormatAnime,
               status: convertEnum(MediaStatus, Status, m.status) as Status,
               season: convertEnum(MediaSeason, Season, m.season) as Season,
+              mediaListEntry: !!m.mediaListEntry
+                ? {
+                    ...m.mediaListEntry,
+                    status: convertEnum(
+                      MediaListStatus,
+                      ListStatus,
+                      m.mediaListEntry.status,
+                    ),
+                  }
+                : null,
             } as SearchResultMedia;
           }),
         );
@@ -616,6 +648,16 @@ export const anilistRouter = createTRPCRouter({
               ) as FormatAnime,
               status: convertEnum(MediaStatus, Status, m.status) as Status,
               season: convertEnum(MediaSeason, Season, m.season) as Season,
+              mediaListEntry: !!m.mediaListEntry
+                ? {
+                    ...m.mediaListEntry,
+                    status: convertEnum(
+                      MediaListStatus,
+                      ListStatus,
+                      m.mediaListEntry.status,
+                    ),
+                  }
+                : null,
             } as SearchResultMedia;
           }),
         );
@@ -779,6 +821,16 @@ export const anilistRouter = createTRPCRouter({
                       Season,
                       m.media.season,
                     ) as Season,
+                    mediaListEntry: !!m.media.mediaListEntry
+                      ? {
+                          ...m.media.mediaListEntry,
+                          status: convertEnum(
+                            MediaListStatus,
+                            ListStatus,
+                            m.media.mediaListEntry.status,
+                          ),
+                        }
+                      : null,
                   } as Media;
                 }
                 return null;
@@ -880,6 +932,16 @@ export const anilistRouter = createTRPCRouter({
                       Status,
                       m.media.status,
                     ) as Status,
+                    mediaListEntry: !!m.media.mediaListEntry
+                      ? {
+                          ...m.media.mediaListEntry,
+                          status: convertEnum(
+                            MediaListStatus,
+                            ListStatus,
+                            m.media.mediaListEntry.status,
+                          ),
+                        }
+                      : null,
                   } as Media;
                 }
                 return null;
@@ -954,6 +1016,16 @@ export const anilistRouter = createTRPCRouter({
                 Season,
                 m.media.season,
               ) as Season,
+              mediaListEntry: !!m.media.mediaListEntry
+                ? {
+                    ...m.media.mediaListEntry,
+                    status: convertEnum(
+                      MediaListStatus,
+                      ListStatus,
+                      m.media.mediaListEntry.status,
+                    ),
+                  }
+                : null,
             } as Media;
           }
           return null;
@@ -1005,6 +1077,16 @@ export const anilistRouter = createTRPCRouter({
                 Status,
                 m.media.status,
               ) as Status,
+              mediaListEntry: !!m.media.mediaListEntry
+                ? {
+                    ...m.media.mediaListEntry,
+                    status: convertEnum(
+                      MediaListStatus,
+                      ListStatus,
+                      m.media.mediaListEntry.status,
+                    ),
+                  }
+                : null,
             } as Media;
           }
           return null;
@@ -1077,6 +1159,16 @@ export const anilistRouter = createTRPCRouter({
                   Season,
                   media.season,
                 ) as Season,
+                mediaListEntry: !!media.mediaListEntry
+                  ? {
+                      ...media.mediaListEntry,
+                      status: convertEnum(
+                        MediaListStatus,
+                        ListStatus,
+                        media.mediaListEntry.status,
+                      ),
+                    }
+                  : null,
               } as Media;
             }
             return null;

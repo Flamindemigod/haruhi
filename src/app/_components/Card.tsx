@@ -237,10 +237,10 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                             switch (props.type) {
                               case Category.anime:
                                 if (!!props.data.episodes)
-                                  return `\\${props.data.episodes}`;
+                                  return `/${props.data.episodes}`;
                               case Category.manga:
                                 if (!!props.data.chapters)
-                                  return `\\${props.data.chapters}`;
+                                  return `/${props.data.chapters}`;
                               default:
                                 break;
                             }
