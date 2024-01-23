@@ -20,8 +20,8 @@ import {
   StudioSort,
   Trending_Anime_MangaQuery,
   Trending_Anime_MangaQueryVariables,
-  User_CurrentQuery,
-  User_CurrentQueryVariables,
+  User_ListQuery,
+  User_ListQueryVariables,
   User_RecommendedQuery,
   User_RecommendedQueryVariables,
   MediaList,
@@ -30,6 +30,7 @@ import {
   SeasonalQueryVariables,
   SeasonalQuery,
   MediaListStatus,
+  MediaListSort,
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
@@ -49,7 +50,7 @@ import {
   SEARCH_STUDIO,
   SEASONAL,
   TRENDING_ANIME_MANGA,
-  USER_CURRENT,
+  USER_LIST,
   USER_RECOMMENDED,
   USER_UP_NEXT,
 } from "~/graphql/queries";
@@ -81,6 +82,9 @@ import {
   SeasonValidator,
   YearValidator,
   ListStatus,
+  ListStatusValidator,
+  ListSortValidator,
+  ListSort,
 } from "~/types.shared/anilist";
 import { buildRecommendationKey } from "~/types.shared/redis";
 export const anilistRouter = createTRPCRouter({
@@ -773,14 +777,14 @@ export const anilistRouter = createTRPCRouter({
       type: "ANIME",
       userName,
       perPage: 50,
-    } as NonNullableFields<User_CurrentQueryVariables>;
+    } as NonNullableFields<User_ListQueryVariables>;
     let data: Media[] = [];
     while (true) {
       if (!!vars.page) {
         vars.page += 1;
       }
-      let { data: animeData } = await client.query<User_CurrentQuery>({
-        query: USER_CURRENT,
+      let { data: animeData } = await client.query<User_ListQuery>({
+        query: USER_LIST,
         variables: vars,
         context: {
           headers: !!ctx.session
@@ -889,14 +893,14 @@ export const anilistRouter = createTRPCRouter({
       type: "MANGA",
       userName,
       perPage: 50,
-    } as NonNullableFields<User_CurrentQueryVariables>;
+    } as NonNullableFields<User_ListQueryVariables>;
     let data: Media[] = [];
     while (true) {
       if (!!vars.page) {
         vars.page += 1;
       }
-      let { data: mangaData } = await client.query<User_CurrentQuery>({
-        query: USER_CURRENT,
+      let { data: mangaData } = await client.query<User_ListQuery>({
+        query: USER_LIST,
         variables: vars,
         context: {
           headers: !!ctx.session
@@ -1178,6 +1182,176 @@ export const anilistRouter = createTRPCRouter({
       return {
         data,
         nextCursor: !!animeData.Page?.pageInfo?.hasNextPage
+          ? ++input.cursor
+          : undefined,
+      };
+    }),
+
+  getAnimeList: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.number().positive().nullish().default(1),
+        list: ListStatusValidator,
+        sort: ListSortValidator,
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.cursor) return null;
+      let user = await api.user.getUser.query();
+      let userName = user!.name;
+      let userNsfw = user!.showNSFW;
+
+      let vars = {
+        page: input.cursor,
+        perPage: 25,
+        type: "ANIME",
+        sort: convertEnum(ListSort, MediaListSort, input.sort),
+        userName,
+        status: convertEnum(ListStatus, MediaListStatus, input.list),
+        isAdult: !userNsfw ? false : undefined,
+      } as NonNullableFields<User_ListQueryVariables>;
+      let data: Media[] = [];
+      let { data: animeData } = await client.query<User_ListQuery>({
+        query: USER_LIST,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: "Bearer " + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
+      data = await Promise.all(
+        animeData.Page?.mediaList
+          ?.map(async (m) => {
+            if (!!m && !!m.media) {
+              return {
+                ...m.media,
+                coverImage: {
+                  ...m.media.coverImage,
+                  blurHash: await generateBlurhash(m.media.coverImage!.medium!),
+                },
+                type: Category.anime,
+                format: convertEnum(
+                  MediaFormat,
+                  FormatAnime,
+                  m.media.format,
+                ) as FormatAnime,
+                status: convertEnum(
+                  MediaStatus,
+                  Status,
+                  m.media.status,
+                ) as Status,
+                season: convertEnum(
+                  MediaSeason,
+                  Season,
+                  m.media.season,
+                ) as Season,
+                mediaListEntry: !!m.media.mediaListEntry
+                  ? {
+                      ...m.media.mediaListEntry,
+                      status: convertEnum(
+                        MediaListStatus,
+                        ListStatus,
+                        m.media.mediaListEntry.status,
+                      ),
+                    }
+                  : null,
+              } as Media;
+            }
+            return null;
+          })
+          .filter(async (p) => !!(await p)) as Promise<Media>[],
+      );
+      return {
+        data,
+        nextCursor: !!animeData.Page?.pageInfo?.hasNextPage
+          ? ++input.cursor
+          : undefined,
+      };
+    }),
+
+  getMangaList: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.number().positive().nullish().default(1),
+        list: ListStatusValidator,
+        sort: ListSortValidator,
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.cursor) return null;
+      let user = await api.user.getUser.query();
+      let userName = user!.name;
+      let userNsfw = user!.showNSFW;
+
+      let vars = {
+        page: input.cursor,
+        perPage: 25,
+        type: "MANGA",
+        sort: convertEnum(ListSort, MediaListSort, input.sort),
+        userName,
+        status: convertEnum(ListStatus, MediaListStatus, input.list),
+        isAdult: !userNsfw ? false : undefined,
+      } as NonNullableFields<User_ListQueryVariables>;
+      let data: Media[] = [];
+      let { data: mangaData } = await client.query<User_ListQuery>({
+        query: USER_LIST,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: "Bearer " + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
+      data = await Promise.all(
+        mangaData.Page?.mediaList
+          ?.map(async (m) => {
+            if (!!m && !!m.media) {
+              return {
+                ...m.media,
+                coverImage: {
+                  ...m.media.coverImage,
+                  blurHash: await generateBlurhash(m.media.coverImage!.medium!),
+                },
+                type: Category.anime,
+                format: convertEnum(
+                  MediaFormat,
+                  FormatAnime,
+                  m.media.format,
+                ) as FormatAnime,
+                status: convertEnum(
+                  MediaStatus,
+                  Status,
+                  m.media.status,
+                ) as Status,
+                season: convertEnum(
+                  MediaSeason,
+                  Season,
+                  m.media.season,
+                ) as Season,
+                mediaListEntry: !!m.media.mediaListEntry
+                  ? {
+                      ...m.media.mediaListEntry,
+                      status: convertEnum(
+                        MediaListStatus,
+                        ListStatus,
+                        m.media.mediaListEntry.status,
+                      ),
+                    }
+                  : null,
+              } as Media;
+            }
+            return null;
+          })
+          .filter(async (p) => !!(await p)) as Promise<Media>[],
+      );
+      return {
+        data,
+        nextCursor: !!mangaData.Page?.pageInfo?.hasNextPage
           ? ++input.cursor
           : undefined,
       };

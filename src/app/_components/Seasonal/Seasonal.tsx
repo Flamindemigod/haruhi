@@ -29,6 +29,7 @@ export default (props: Props) => {
     data: seasonData,
     fetchNextPage,
     isFetching,
+    hasNextPage,
   } = api.anilist.getSeasonal.useInfiniteQuery(
     {
       year: props.year,
@@ -76,7 +77,7 @@ export default (props: Props) => {
           {...props}
           isFetching={isFetching}
           onReachBottom={() => {
-            fetchNextPage();
+            if (hasNextPage) fetchNextPage();
           }}
           setSeason={setSeason}
           setPrevSeason={goToPrevSeason}
@@ -91,7 +92,7 @@ export default (props: Props) => {
           {...props}
           isFetching={isFetching}
           onReachBottom={() => {
-            fetchNextPage();
+            if (hasNextPage) fetchNextPage();
           }}
           setSeason={setSeason}
           setPrevSeason={goToPrevSeason}

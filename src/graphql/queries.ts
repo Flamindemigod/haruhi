@@ -504,12 +504,14 @@ export const USER_UP_NEXT = gql`
   }
 `;
 
-export const USER_CURRENT = gql`
-  query USER_CURRENT(
+export const USER_LIST = gql`
+  query USER_LIST(
     $perPage: Int = 50
     $page: Int = 1
     $userName: String
     $type: MediaType
+    $status: MediaListStatus = CURRENT
+    $sort: [MediaListSort] = [UPDATED_TIME_DESC]
   ) {
     Page(perPage: $perPage, page: $page) {
       pageInfo {
@@ -519,8 +521,8 @@ export const USER_CURRENT = gql`
       mediaList(
         userName: $userName
         type: $type
-        sort: [UPDATED_TIME_DESC]
-        status: CURRENT
+        sort: $sort
+        status: $status
       ) {
         media {
           id

@@ -90,6 +90,19 @@ export enum SearchSort {
   UpdatedAtDesc = "Updated At",
 }
 
+export enum ListSort {
+  AddedTime = "Added Time",
+  AddedTimeDesc = "Added Time Desc",
+  FinishedOn = "Finished On",
+  FinishedOnDesc = "Finished On Desc",
+  MediaPopularity = "Popularity",
+  MediaPopularityDesc = "Popularity Desc",
+  Progress = "Progress",
+  ProgressDesc = "Progress Desc",
+  Score = "Score",
+  ScoreDesc = "Score Desc",
+}
+
 export const animeSearchFilter = z.object({
   sort: z.nativeEnum(SearchSort),
   category: z.literal(Category.anime),
@@ -376,6 +389,10 @@ export enum ListStatus {
   /** Re-watching/reading */
   Repeating = "Repeating",
 }
+
+export const ListSortValidator = z
+  .nativeEnum(ListSort)
+  .catch(ListSort.AddedTimeDesc);
 
 export const ListStatusValidator = z
   .nativeEnum(ListStatus)

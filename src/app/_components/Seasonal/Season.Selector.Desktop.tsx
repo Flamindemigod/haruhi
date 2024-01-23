@@ -63,7 +63,7 @@ export default (props: Props) => {
           thumbClasses="w-4 h-4"
           trackClasses="dark:bg-primary-400"
         />
-      </Wrapper>{" "}
+      </Wrapper>
     </>
   );
 };
