@@ -3,6 +3,7 @@
 ## Home Page
 
 - [ ] Fallback for Empty Carosels
+- [ ] Activity
 
 ## Media Card
 

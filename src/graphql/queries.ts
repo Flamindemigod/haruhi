@@ -660,3 +660,33 @@ export const SEASONAL = gql`
     }
   }
 `;
+
+export const SET_MEDIA_ENTRY = gql`
+  mutation SET_MEDIA_ENTRY(
+    $id: Int
+    $mediaId: Int
+    $status: MediaListStatus
+    $score: Float
+    $progress: Int
+    $repeat: Int
+    $startedAt: FuzzyDateInput
+    $completedAt: FuzzyDateInput
+    $notes: String
+    $private: Boolean
+  ) {
+    SaveMediaListEntry(
+      id: $id
+      mediaId: $mediaId
+      status: $status
+      score: $score
+      progress: $progress
+      repeat: $repeat
+      startedAt: $startedAt
+      completedAt: $completedAt
+      notes: $notes
+      private: $private
+    ) {
+      id
+    }
+  }
+`;

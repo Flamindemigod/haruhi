@@ -31,10 +31,15 @@ import {
   SeasonalQuery,
   MediaListStatus,
   MediaListSort,
+  Set_Media_EntryMutationVariables,
+  Set_Media_EntryMutation,
+  Media as AniMedia,
 } from "~/__generated__/graphql";
 import { client } from "~/apolloClient";
 import convertEnum from "~/app/utils/convertEnum";
+import { FuzzyDate } from "~/app/utils/fuzzyDate";
 import generateBlurhash from "~/app/utils/generateBlurhash";
+import mediaBuilder from "~/app/utils/mediaBuilder";
 import { recommendationBuilder } from "~/app/utils/recommendationBuilder";
 import {
   NonNullableFields,
@@ -49,6 +54,7 @@ import {
   SEARCH_STAFF,
   SEARCH_STUDIO,
   SEASONAL,
+  SET_MEDIA_ENTRY,
   TRENDING_ANIME_MANGA,
   USER_LIST,
   USER_RECOMMENDED,
@@ -182,32 +188,8 @@ export const anilistRouter = createTRPCRouter({
           Page: { ...animeData.Page, data: [] },
         };
         dAnime.Page.data = await Promise.all(
-          animeData.Page.media!.map(async (m: any) => {
-            return {
-              ...m,
-              coverImage: {
-                ...m.coverImage,
-                blurHash: await generateBlurhash(m.coverImage.medium),
-              },
-              type: Category.anime,
-              format: convertEnum(
-                MediaFormat,
-                FormatAnime,
-                m.format,
-              ) as FormatAnime,
-              status: convertEnum(MediaStatus, Status, m.status) as Status,
-              season: convertEnum(MediaSeason, Season, m.season) as Season,
-              mediaListEntry: !!m.mediaListEntry
-                ? {
-                    ...m.mediaListEntry,
-                    status: convertEnum(
-                      MediaListStatus,
-                      ListStatus,
-                      m.mediaListEntry.status,
-                    ),
-                  }
-                : null,
-            } as SearchResultMedia;
+          animeData.Page.media!.map(async (m) => {
+            return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
           }),
         );
         return dAnime;
@@ -293,31 +275,8 @@ export const anilistRouter = createTRPCRouter({
           Page: { ...mangaData.Page, data: [] },
         };
         dManga.Page.data = await Promise.all(
-          mangaData.Page.media!.map(async (m: any) => {
-            return {
-              ...m,
-              coverImage: {
-                ...m.coverImage,
-                blurHash: await generateBlurhash(m.coverImage.medium),
-              },
-              type: Category.manga,
-              format: convertEnum(
-                MediaFormat,
-                FormatManga,
-                m.format,
-              ) as FormatManga,
-              status: convertEnum(MediaStatus, Status, m.status) as Status,
-              mediaListEntry: !!m.mediaListEntry
-                ? {
-                    ...m.mediaListEntry,
-                    status: convertEnum(
-                      MediaListStatus,
-                      ListStatus,
-                      m.mediaListEntry.status,
-                    ),
-                  }
-                : null,
-            } as SearchResultMedia;
+          mangaData.Page.media!.map(async (m) => {
+            return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
           }),
         );
         return dManga;
@@ -545,32 +504,8 @@ export const anilistRouter = createTRPCRouter({
           Page: { ...animeData.Page, data: [] },
         };
         dAnime.Page.data = await Promise.all(
-          animeData.Page.media!.map(async (m: any) => {
-            return {
-              ...m,
-              coverImage: {
-                ...m.coverImage,
-                blurHash: await generateBlurhash(m.coverImage.medium),
-              },
-              type: Category.anime,
-              format: convertEnum(
-                MediaFormat,
-                FormatAnime,
-                m.format,
-              ) as FormatAnime,
-              status: convertEnum(MediaStatus, Status, m.status) as Status,
-              season: convertEnum(MediaSeason, Season, m.season) as Season,
-              mediaListEntry: !!m.mediaListEntry
-                ? {
-                    ...m.mediaListEntry,
-                    status: convertEnum(
-                      MediaListStatus,
-                      ListStatus,
-                      m.mediaListEntry.status,
-                    ),
-                  }
-                : null,
-            } as SearchResultMedia;
+          animeData.Page.media!.map(async (m) => {
+            return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
           }),
         );
         return dAnime;
@@ -637,32 +572,8 @@ export const anilistRouter = createTRPCRouter({
           Page: { ...mangaData.Page, data: [] },
         };
         dManga.Page.data = await Promise.all(
-          mangaData.Page.media!.map(async (m: any) => {
-            return {
-              ...m,
-              coverImage: {
-                ...m.coverImage,
-                blurHash: await generateBlurhash(m.coverImage.medium),
-              },
-              type: Category.manga,
-              format: convertEnum(
-                MediaFormat,
-                FormatManga,
-                m.format,
-              ) as FormatAnime,
-              status: convertEnum(MediaStatus, Status, m.status) as Status,
-              season: convertEnum(MediaSeason, Season, m.season) as Season,
-              mediaListEntry: !!m.mediaListEntry
-                ? {
-                    ...m.mediaListEntry,
-                    status: convertEnum(
-                      MediaListStatus,
-                      ListStatus,
-                      m.mediaListEntry.status,
-                    ),
-                  }
-                : null,
-            } as SearchResultMedia;
+          mangaData.Page.media!.map(async (m) => {
+            return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
           }),
         );
         return dManga;
@@ -801,41 +712,7 @@ export const anilistRouter = createTRPCRouter({
             animeData.Page?.mediaList
               ?.map(async (m) => {
                 if (!!m && !!m.media) {
-                  return {
-                    ...m.media,
-                    coverImage: {
-                      ...m.media.coverImage,
-                      blurHash: await generateBlurhash(
-                        m.media.coverImage!.medium!,
-                      ),
-                    },
-                    type: Category.anime,
-                    format: convertEnum(
-                      MediaFormat,
-                      FormatAnime,
-                      m.media.format,
-                    ) as FormatAnime,
-                    status: convertEnum(
-                      MediaStatus,
-                      Status,
-                      m.media.status,
-                    ) as Status,
-                    season: convertEnum(
-                      MediaSeason,
-                      Season,
-                      m.media.season,
-                    ) as Season,
-                    mediaListEntry: !!m.media.mediaListEntry
-                      ? {
-                          ...m.media.mediaListEntry,
-                          status: convertEnum(
-                            MediaListStatus,
-                            ListStatus,
-                            m.media.mediaListEntry.status,
-                          ),
-                        }
-                      : null,
-                  } as Media;
+                  return await mediaBuilder(m.media as AniMedia);
                 }
                 return null;
               })
@@ -917,36 +794,7 @@ export const anilistRouter = createTRPCRouter({
             mangaData.Page?.mediaList
               ?.map(async (m) => {
                 if (!!m && !!m.media) {
-                  return {
-                    ...m.media,
-                    coverImage: {
-                      ...m.media.coverImage,
-                      blurHash: await generateBlurhash(
-                        m.media.coverImage!.medium!,
-                      ),
-                    },
-                    type: Category.manga,
-                    format: convertEnum(
-                      MediaFormat,
-                      FormatManga,
-                      m.media.format,
-                    ) as FormatManga,
-                    status: convertEnum(
-                      MediaStatus,
-                      Status,
-                      m.media.status,
-                    ) as Status,
-                    mediaListEntry: !!m.media.mediaListEntry
-                      ? {
-                          ...m.media.mediaListEntry,
-                          status: convertEnum(
-                            MediaListStatus,
-                            ListStatus,
-                            m.media.mediaListEntry.status,
-                          ),
-                        }
-                      : null,
-                  } as Media;
+                  return await mediaBuilder(m.media as AniMedia);
                 }
                 return null;
               })
@@ -998,39 +846,7 @@ export const anilistRouter = createTRPCRouter({
       await Promise.all(
         animeData.Page?.mediaList?.map(async (m) => {
           if (!!m && !!m.media) {
-            return {
-              ...m.media,
-              coverImage: {
-                ...m.media.coverImage,
-                blurHash: await generateBlurhash(m.media.coverImage!.medium!),
-              },
-              type: Category.anime,
-              format: convertEnum(
-                MediaFormat,
-                FormatAnime,
-                m.media.format,
-              ) as FormatAnime,
-              status: convertEnum(
-                MediaStatus,
-                Status,
-                m.media.status,
-              ) as Status,
-              season: convertEnum(
-                MediaSeason,
-                Season,
-                m.media.season,
-              ) as Season,
-              mediaListEntry: !!m.media.mediaListEntry
-                ? {
-                    ...m.media.mediaListEntry,
-                    status: convertEnum(
-                      MediaListStatus,
-                      ListStatus,
-                      m.media.mediaListEntry.status,
-                    ),
-                  }
-                : null,
-            } as Media;
+            return await mediaBuilder(m.media as AniMedia);
           }
           return null;
         }) ?? [],
@@ -1064,34 +880,7 @@ export const anilistRouter = createTRPCRouter({
       await Promise.all(
         mangaData.Page?.mediaList?.map(async (m) => {
           if (!!m && !!m.media) {
-            return {
-              ...m.media,
-              coverImage: {
-                ...m.media.coverImage,
-                blurHash: await generateBlurhash(m.media.coverImage!.medium!),
-              },
-              type: Category.manga,
-              format: convertEnum(
-                MediaFormat,
-                FormatManga,
-                m.media.format,
-              ) as FormatManga,
-              status: convertEnum(
-                MediaStatus,
-                Status,
-                m.media.status,
-              ) as Status,
-              mediaListEntry: !!m.media.mediaListEntry
-                ? {
-                    ...m.media.mediaListEntry,
-                    status: convertEnum(
-                      MediaListStatus,
-                      ListStatus,
-                      m.media.mediaListEntry.status,
-                    ),
-                  }
-                : null,
-            } as Media;
+            return await mediaBuilder(m.media as AniMedia);
           }
           return null;
         }) ?? [],
@@ -1141,39 +930,7 @@ export const anilistRouter = createTRPCRouter({
         await Promise.all(
           animeData.Page?.media?.map(async (media) => {
             if (!!media) {
-              return {
-                ...media,
-                coverImage: {
-                  ...media.coverImage,
-                  blurHash: await generateBlurhash(media.coverImage!.medium!),
-                },
-                type: Category.anime,
-                format: convertEnum(
-                  MediaFormat,
-                  FormatAnime,
-                  media.format,
-                ) as FormatAnime,
-                status: convertEnum(
-                  MediaStatus,
-                  Status,
-                  media.status,
-                ) as Status,
-                season: convertEnum(
-                  MediaSeason,
-                  Season,
-                  media.season,
-                ) as Season,
-                mediaListEntry: !!media.mediaListEntry
-                  ? {
-                      ...media.mediaListEntry,
-                      status: convertEnum(
-                        MediaListStatus,
-                        ListStatus,
-                        media.mediaListEntry.status,
-                      ),
-                    }
-                  : null,
-              } as Media;
+              return await mediaBuilder(media as AniMedia);
             }
             return null;
           }) ?? [],
@@ -1226,39 +983,7 @@ export const anilistRouter = createTRPCRouter({
         animeData.Page?.mediaList
           ?.map(async (m) => {
             if (!!m && !!m.media) {
-              return {
-                ...m.media,
-                coverImage: {
-                  ...m.media.coverImage,
-                  blurHash: await generateBlurhash(m.media.coverImage!.medium!),
-                },
-                type: Category.anime,
-                format: convertEnum(
-                  MediaFormat,
-                  FormatAnime,
-                  m.media.format,
-                ) as FormatAnime,
-                status: convertEnum(
-                  MediaStatus,
-                  Status,
-                  m.media.status,
-                ) as Status,
-                season: convertEnum(
-                  MediaSeason,
-                  Season,
-                  m.media.season,
-                ) as Season,
-                mediaListEntry: !!m.media.mediaListEntry
-                  ? {
-                      ...m.media.mediaListEntry,
-                      status: convertEnum(
-                        MediaListStatus,
-                        ListStatus,
-                        m.media.mediaListEntry.status,
-                      ),
-                    }
-                  : null,
-              } as Media;
+              return await mediaBuilder(m.media as AniMedia);
             }
             return null;
           })
@@ -1311,34 +1036,7 @@ export const anilistRouter = createTRPCRouter({
         mangaData.Page?.mediaList
           ?.map(async (m) => {
             if (!!m && !!m.media) {
-              return {
-                ...m.media,
-                coverImage: {
-                  ...m.media.coverImage,
-                  blurHash: await generateBlurhash(m.media.coverImage!.medium!),
-                },
-                type: Category.manga,
-                format: convertEnum(
-                  MediaFormat,
-                  FormatManga,
-                  m.media.format,
-                ) as FormatManga,
-                status: convertEnum(
-                  MediaStatus,
-                  Status,
-                  m.media.status,
-                ) as Status,
-                mediaListEntry: !!m.media.mediaListEntry
-                  ? {
-                      ...m.media.mediaListEntry,
-                      status: convertEnum(
-                        MediaListStatus,
-                        ListStatus,
-                        m.media.mediaListEntry.status,
-                      ),
-                    }
-                  : null,
-              } as Media;
+              return await mediaBuilder(m.media as AniMedia);
             }
             return null;
           })
@@ -1350,5 +1048,45 @@ export const anilistRouter = createTRPCRouter({
           ? ++input.cursor
           : undefined,
       };
+    }),
+
+  setMediaEntry: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().nullable().catch(null),
+        mediaId: z.number(),
+        status: ListStatusValidator.removeCatch(),
+        score: z.number().nullable(),
+        progress: z.number().catch(0),
+        repeat: z.number().catch(0),
+        startedAt: z.date().nullable(),
+        completedAt: z.date().nullable(),
+        notes: z.string().nullable(),
+        private: z.boolean().catch(false),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      let vars = {
+        ...input,
+        startedAt: !!input.startedAt
+          ? new FuzzyDate().fromDate(input.startedAt).toFuzzy()
+          : null,
+        completedAt: !!input.completedAt
+          ? new FuzzyDate().fromDate(input.completedAt).toFuzzy()
+          : null,
+        status: convertEnum(ListStatus, MediaListStatus, input.status) ?? null,
+        // isAdult: !userNsfw ? false : undefined,
+      } as NonNullableFields<Set_Media_EntryMutationVariables>;
+      let { data, error } = await client.query<Set_Media_EntryMutation>({
+        query: SET_MEDIA_ENTRY,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: "Bearer " + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
     }),
 });

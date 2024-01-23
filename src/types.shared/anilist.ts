@@ -1,12 +1,13 @@
 import { z } from "zod";
 import {
   Media as AniMedia,
-  Maybe,
   Staff as AniStaff,
   Character as AniCharacter,
+  MediaList as AniMediaList,
+  MediaCoverImage,
 } from "~/__generated__/graphql";
 
-import { SelectNonNullableFields, Replace } from "~/app/utils/typescript-utils";
+import { SelectNonNullableFields } from "~/app/utils/typescript-utils";
 
 export enum Season {
   any = "Any",
@@ -308,30 +309,28 @@ export const searchFilter = z.discriminatedUnion("category", [
 
 export type Filter = z.infer<typeof searchFilter>;
 
-export type Media = Omit<
-  Replace<
-    Replace<
-      Replace<
-        Replace<AniMedia, "type", Category>,
-        "format",
-        Maybe<FormatAnime | FormatManga>
-      >,
-      "status",
-      Maybe<Status>
-    >,
-    "season",
-    Maybe<Season>
-  >,
-  "coverImage"
-> & {
-  coverImage: {
-    extraLarge?: string;
-    large?: string;
-    medium?: string;
-    color?: string;
-    blurHash?: string;
-  };
-};
+export interface MediaList
+  extends Omit<AniMediaList, "startedAt" | "completedAt"> {
+  startedAt: Date | null;
+  completedAt: Date | null;
+}
+
+export interface CoverImage extends MediaCoverImage {
+  blurHash?: string;
+}
+
+export interface Media
+  extends Omit<
+    AniMedia,
+    "coverImage" | "mediaListEntry" | "type" | "format" | "status" | "season"
+  > {
+  mediaListEntry: MediaList | null;
+  coverImage: CoverImage;
+  status: Omit<Status, Status.any>;
+  type: Category.anime | Category.manga;
+  format: FormatAnime | FormatManga;
+  season?: Season;
+}
 
 export type SearchResultMedia = SelectNonNullableFields<
   Media,
