@@ -1,19 +1,6 @@
-import {
-  MediaFormat,
-  MediaList,
-  MediaSeason,
-  MediaStatus,
-} from "~/__generated__/graphql";
-import {
-  Category,
-  FormatAnime,
-  FormatManga,
-  Media,
-  Season,
-  Status,
-} from "~/types.shared/anilist";
-import generateBlurhash from "./generateBlurhash";
-import convertEnum from "./convertEnum";
+import { MediaList } from "~/__generated__/graphql";
+import { Media } from "~/types.shared/anilist";
+import mediaBuilder from "./mediaBuilder";
 
 function* getRecommendations(mediaParent: MediaList) {
   for (let edge of mediaParent.media?.recommendations?.edges!) {
@@ -45,60 +32,10 @@ export async function recommendationBuilder(
       ) {
         continue;
       }
-      switch (recommendation.type) {
-        case "ANIME":
-          acculatedRecommendations.set(recommendation.id, {
-            ...recommendation,
-            coverImage: {
-              ...recommendation.coverImage,
-              blurHash: await generateBlurhash(
-                recommendation.coverImage!.medium!,
-              ),
-            },
-            type: Category.anime,
-            format: convertEnum(
-              MediaFormat,
-              FormatAnime,
-              recommendation.format,
-            ) as FormatAnime,
-            status: convertEnum(
-              MediaStatus,
-              Status,
-              recommendation.status,
-            ) as Status,
-            season: convertEnum(
-              MediaSeason,
-              Season,
-              recommendation.season,
-            ) as Season,
-          } as Media);
-
-          break;
-        case "MANGA":
-          acculatedRecommendations.set(recommendation.id, {
-            ...recommendation,
-            coverImage: {
-              ...recommendation.coverImage,
-              blurHash: await generateBlurhash(
-                recommendation.coverImage!.medium!,
-              ),
-            },
-            type: Category.manga,
-            format: convertEnum(
-              MediaFormat,
-              FormatManga,
-              recommendation.format,
-            ) as FormatManga,
-            status: convertEnum(
-              MediaStatus,
-              Status,
-              recommendation.status,
-            ) as Status,
-          } as Media);
-
-        default:
-          break;
-      }
+      acculatedRecommendations.set(
+        recommendation.id,
+        await mediaBuilder(recommendation),
+      );
     }
   }
   return acculatedRecommendations;
