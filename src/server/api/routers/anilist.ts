@@ -1317,22 +1317,17 @@ export const anilistRouter = createTRPCRouter({
                   ...m.media.coverImage,
                   blurHash: await generateBlurhash(m.media.coverImage!.medium!),
                 },
-                type: Category.anime,
+                type: Category.manga,
                 format: convertEnum(
                   MediaFormat,
-                  FormatAnime,
+                  FormatManga,
                   m.media.format,
-                ) as FormatAnime,
+                ) as FormatManga,
                 status: convertEnum(
                   MediaStatus,
                   Status,
                   m.media.status,
                 ) as Status,
-                season: convertEnum(
-                  MediaSeason,
-                  Season,
-                  m.media.season,
-                ) as Season,
                 mediaListEntry: !!m.media.mediaListEntry
                   ? {
                       ...m.media.mediaListEntry,
