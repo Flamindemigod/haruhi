@@ -32,7 +32,7 @@ export default (props: Props) => {
       </div>
       <CardGrid
         isFetching={props.isFetching}
-        type={Category.anime}
+        type={Category.Anime}
         data={props.data as GridProps["data"]}
         onReachBottom={props.onReachBottom}
         fallback="Fetching Seasonal Data"

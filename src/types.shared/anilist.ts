@@ -48,11 +48,11 @@ export enum TernaryState {
 }
 
 export enum Category {
-  anime = "Anime",
-  manga = "Manga",
-  character = "Character",
-  staff = "Staff",
-  studio = "Studio",
+  Anime = "Anime",
+  Manga = "Manga",
+  Character = "Character",
+  Staff = "Staff",
+  Studio = "Studio",
 }
 
 export enum Status {
@@ -106,7 +106,7 @@ export enum ListSort {
 
 export const animeSearchFilter = z.object({
   sort: z.nativeEnum(SearchSort),
-  category: z.literal(Category.anime),
+  category: z.literal(Category.Anime),
   status: z.nativeEnum(Status),
   season: z.nativeEnum(Season),
   format: z.nativeEnum(FormatAnime),
@@ -165,7 +165,7 @@ export const animeSearchFilter = z.object({
 
 export const mangaSearchFilter = z.object({
   sort: z.nativeEnum(SearchSort),
-  category: z.literal(Category.manga),
+  category: z.literal(Category.Manga),
   status: z.nativeEnum(Status),
   format: z.nativeEnum(FormatManga),
   minYear: z.optional(
@@ -222,17 +222,17 @@ export const mangaSearchFilter = z.object({
 });
 
 export const characterSearchFilter = z.object({
-  category: z.literal(Category.character),
+  category: z.literal(Category.Character),
   showBirthdaysOnly: z.nativeEnum(TernaryState),
 });
 
 export const staffSearchFilter = z.object({
-  category: z.literal(Category.staff),
+  category: z.literal(Category.Staff),
   showBirthdaysOnly: z.nativeEnum(TernaryState),
 });
 
 export const studioSearchFilter = z.object({
-  category: z.literal(Category.studio),
+  category: z.literal(Category.Studio),
 });
 
 export type AnimeFilter = z.infer<typeof animeSearchFilter>;
@@ -243,7 +243,7 @@ export type StudioFilter = z.infer<typeof studioSearchFilter>;
 
 export const defaultAnimeFilter: AnimeFilter = {
   sort: SearchSort.SearchMatch,
-  category: Category.anime,
+  category: Category.Anime,
   status: Status.any,
   season: Season.any,
   format: FormatAnime.any,
@@ -266,7 +266,7 @@ export const defaultAnimeFilter: AnimeFilter = {
 
 export const defaultMangaFilter: MangaFilter = {
   sort: SearchSort.SearchMatch,
-  category: Category.manga,
+  category: Category.Manga,
   status: Status.any,
   format: FormatManga.any,
   minYear: 1970,
@@ -287,16 +287,16 @@ export const defaultMangaFilter: MangaFilter = {
 };
 
 export const defaultCharacterFilter: CharacterFilter = {
-  category: Category.character,
+  category: Category.Character,
   showBirthdaysOnly: TernaryState.none,
 };
 
 export const defaultStaffFilter: StaffFilter = {
-  category: Category.staff,
+  category: Category.Staff,
   showBirthdaysOnly: TernaryState.none,
 };
 export const defaultStudioFilter: StudioFilter = {
-  category: Category.studio,
+  category: Category.Studio,
 };
 
 export const searchFilter = z.discriminatedUnion("category", [
@@ -327,7 +327,7 @@ export interface Media
   mediaListEntry: MediaList | null;
   coverImage: CoverImage;
   status: Omit<Status, Status.any>;
-  type: Category.anime | Category.manga;
+  type: Category.Anime | Category.Manga;
   format: FormatAnime | FormatManga;
   season?: Season;
 }

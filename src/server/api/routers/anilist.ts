@@ -585,7 +585,7 @@ export const anilistRouter = createTRPCRouter({
     const userName = user?.name;
     const userID = user?.aniid!;
 
-    const key = buildRecommendationKey(userID, Category.anime);
+    const key = buildRecommendationKey(userID, Category.Anime);
 
     const data = await redis.get<Media[]>(key);
     if (!!data) {
@@ -635,7 +635,7 @@ export const anilistRouter = createTRPCRouter({
     const userName = user?.name;
     const userID = user?.aniid!;
 
-    const key = buildRecommendationKey(userID, Category.manga);
+    const key = buildRecommendationKey(userID, Category.Manga);
 
     const data = await redis.get<Media[]>(key);
     if (!!data) {

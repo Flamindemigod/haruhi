@@ -30,7 +30,7 @@ export default (props: Props) => {
       {SwipeBlob}
       <CardGrid
         isFetching={props.isFetching}
-        type={Category.anime}
+        type={Category.Anime}
         data={props.data as GridProps["data"]}
         onReachBottom={props.onReachBottom}
         fallback="Fetching More Data"

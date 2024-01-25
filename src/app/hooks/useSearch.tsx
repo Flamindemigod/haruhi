@@ -80,7 +80,7 @@ const FilterSelector = (
   const [genreReset, setGenreReset] = useState<boolean>(false);
   const [tagReset, setTagReset] = useState<boolean>(false);
   switch (filter.category) {
-    case Category.anime:
+    case Category.Anime:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
           {/* Reset */}
@@ -568,7 +568,7 @@ const FilterSelector = (
           </Wrapper>
         </div>
       );
-    case Category.manga:
+    case Category.Manga:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
           {/* Reset */}
@@ -1023,8 +1023,8 @@ const FilterSelector = (
           </Wrapper>
         </div>
       );
-    case Category.character:
-    case Category.staff:
+    case Category.Character:
+    case Category.Staff:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
           {/* Reset */}
@@ -1089,7 +1089,7 @@ const FilterSelector = (
         </div>
       );
 
-    case Category.studio:
+    case Category.Studio:
       return (
         <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
           <Wrapper>
@@ -1132,7 +1132,7 @@ export default (
                   {filters.category} <ChevronDownIcon />
                 </button>
               }
-              defaultValue={Category.anime}
+              defaultValue={Category.Anime}
               values={Object.values(Category).map((v) => ({
                 value: v,
                 displayTitle: v,
@@ -1140,20 +1140,20 @@ export default (
               onValueChange={(v) => {
                 let filter: Filter;
                 switch (v) {
-                  case Category.anime:
+                  case Category.Anime:
                     filter = defaultAnimeFilter;
                     break;
-                  case Category.manga:
+                  case Category.Manga:
                     filter = defaultMangaFilter;
                     break;
 
-                  case Category.character:
+                  case Category.Character:
                     filter = defaultCharacterFilter;
                     break;
-                  case Category.staff:
+                  case Category.Staff:
                     filter = defaultStaffFilter;
                     break;
-                  case Category.studio:
+                  case Category.Studio:
                     filter = defaultStudioFilter;
                     break;
                   default:
@@ -1183,20 +1183,20 @@ export default (
                 setSearchTerm("");
                 let filter: Filter;
                 switch (filters.category) {
-                  case Category.anime:
+                  case Category.Anime:
                     filter = defaultAnimeFilter;
                     break;
-                  case Category.manga:
+                  case Category.Manga:
                     filter = defaultMangaFilter;
                     break;
 
-                  case Category.character:
+                  case Category.Character:
                     filter = defaultCharacterFilter;
                     break;
-                  case Category.staff:
+                  case Category.Staff:
                     filter = defaultStaffFilter;
                     break;
-                  case Category.studio:
+                  case Category.Studio:
                     filter = defaultStudioFilter;
                     break;
                   default:

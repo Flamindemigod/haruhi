@@ -24,11 +24,12 @@ export default async (data: AniMedia) => {
 
   const get_format = (f: MediaFormat | null) => {
     switch (media_type) {
-      case Category.anime:
+      case Category.Anime:
         return convertEnum(MediaFormat, FormatAnime, f) as FormatAnime;
-      case Category.manga:
+      case Category.Manga:
         return convertEnum(MediaFormat, FormatManga, f) as FormatManga;
     }
+    return null;
   };
 
   return {

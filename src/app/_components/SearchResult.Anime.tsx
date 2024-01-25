@@ -6,7 +6,7 @@ import cx from "classix";
 
 export type Props = {
   media: Omit<SearchResultMedia, "type"> & {
-    type: Category.anime;
+    type: Category.Anime;
   };
 };
 

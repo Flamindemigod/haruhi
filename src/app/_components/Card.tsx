@@ -62,7 +62,7 @@ type CardMedia = Pick<
 >;
 
 export type Props = {
-  type: Category.anime | Category.manga;
+  type: Category.Anime | Category.Manga;
   fullWidth?: true;
   data: SelectNonNullableFields<
     CardMedia,
@@ -124,7 +124,7 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
             {/*Logic To Show Progress Missing*/}
             {(() => {
               switch (props.type) {
-                case Category.anime: {
+                case Category.Anime: {
                   if (!!props.data.mediaListEntry) {
                     if (!!props.data.nextAiringEpisode) {
                       return (
@@ -140,7 +140,7 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                     }
                   }
                 }
-                case Category.manga: {
+                case Category.Manga: {
                   if (!!props.data.mediaListEntry) {
                     if (!!props.data.chapters) {
                       return (
@@ -158,7 +158,7 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
               <div className="absolute left-0 top-0 z-20 rounded-br-full bg-primary-500 pb-2 pr-2 text-white">
                 {(() => {
                   switch (props.type) {
-                    case Category.anime: {
+                    case Category.Anime: {
                       if (!!props.data.nextAiringEpisode) {
                         return `+${
                           props.data.nextAiringEpisode.episode -
@@ -171,7 +171,7 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                           props.data.mediaListEntry?.progress! ?? 0
                       }`;
                     }
-                    case Category.manga:
+                    case Category.Manga:
                       return `+${
                         props.data.chapters -
                           props.data.mediaListEntry?.progress! ?? 0
@@ -214,11 +214,12 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                   {/* Number of Episodes */}
                   <div className="text-primary-500 empty:hidden">
                     {(() => {
+                      if (!!props.data.mediaListEntry) return null;
                       switch (props.type) {
-                        case Category.anime:
+                        case Category.Anime:
                           if (props.data.episodes)
                             return `Episodes ${props.data.episodes}`;
-                        case Category.manga:
+                        case Category.Manga:
                           if (props.data.chapters)
                             return `Chapters: ${props.data.chapters}`;
                         default:
@@ -235,10 +236,10 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                             props.data.mediaListEntry.progress
                           }${(() => {
                             switch (props.type) {
-                              case Category.anime:
+                              case Category.Anime:
                                 if (!!props.data.episodes)
                                   return `/${props.data.episodes}`;
-                              case Category.manga:
+                              case Category.Manga:
                                 if (!!props.data.chapters)
                                   return `/${props.data.chapters}`;
                               default:

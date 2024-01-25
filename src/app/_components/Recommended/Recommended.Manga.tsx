@@ -8,7 +8,7 @@ export default async () => {
     <Segment
       title="Manga You Might Like"
       data={data_recommended_manga as SegmentProps["data"]}
-      type={Category.manga}
+      type={Category.Manga}
     />
   );
 };

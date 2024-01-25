@@ -23,7 +23,7 @@ export type Props = {
 
 export default (props: Props) => {
   switch (props.filter.category) {
-    case Category.anime: {
+    case Category.Anime: {
       const { data, isFetching } = api.anilist.searchAnime.useQuery(
         {
           searchString: props.searchString,
@@ -61,7 +61,7 @@ export default (props: Props) => {
         </>
       );
     }
-    case Category.manga: {
+    case Category.Manga: {
       const { data, isFetching } = api.anilist.searchManga.useQuery(
         {
           searchString: props.searchString,
@@ -98,7 +98,7 @@ export default (props: Props) => {
         </>
       );
     }
-    case Category.character: {
+    case Category.Character: {
       const { data, isFetching } = api.anilist.searchCharacters.useQuery(
         {
           searchString: props.searchString,
@@ -135,7 +135,7 @@ export default (props: Props) => {
         </>
       );
     }
-    case Category.staff: {
+    case Category.Staff: {
       const { data, isFetching } = api.anilist.searchStaff.useQuery(
         {
           searchString: props.searchString,
@@ -172,7 +172,7 @@ export default (props: Props) => {
         </>
       );
     }
-    case Category.studio: {
+    case Category.Studio: {
       const { data, isFetching } = api.anilist.searchStudio.useQuery(
         {
           searchString: props.searchString,

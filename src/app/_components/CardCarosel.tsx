@@ -29,7 +29,7 @@ type CardMedia = Pick<
 >;
 
 export type Props = {
-  type: Category.anime | Category.manga;
+  type: Category.Anime | Category.Manga;
   data: SelectNonNullableFields<
     CardMedia,
     keyof Omit<
@@ -47,7 +47,7 @@ export type Props = {
 
 export type SegmentProps = {
   title?: string;
-  type: Category.anime | Category.manga;
+  type: Category.Anime | Category.Manga;
   data: Props["data"];
 };
 

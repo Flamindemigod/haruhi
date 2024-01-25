@@ -10,12 +10,12 @@ export default async () => {
       <Segment
         title="Pending Picks"
         data={data_pending_anime as SegmentProps["data"]}
-        type={Category.anime}
+        type={Category.Anime}
       />
       <Segment
         title="Unread Gems"
         data={data_pending_manga as SegmentProps["data"]}
-        type={Category.manga}
+        type={Category.Manga}
       />
     </div>
   );

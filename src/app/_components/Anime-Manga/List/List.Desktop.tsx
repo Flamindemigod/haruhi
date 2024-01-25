@@ -7,7 +7,7 @@ import ListSelectorDesktop from "./List.Selector.Desktop";
 type Props = {
   list: ListStatus;
   sort: ListSort;
-  type: Category.anime | Category.manga;
+  type: Category.Anime | Category.Manga;
   setParams: (list: ListStatus, sort: ListSort) => void;
   data: Media[];
   onReachBottom: () => void;

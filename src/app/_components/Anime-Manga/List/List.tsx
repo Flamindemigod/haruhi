@@ -8,14 +8,14 @@ import ListDesktop from "./List.Desktop";
 import ListMobile from "./List.Mobile";
 
 type Props = {
-  type: Category.anime | Category.manga;
+  type: Category.Anime | Category.Manga;
   list: ListStatus;
   sort: ListSort;
 };
 
 const useList = (props: Props) => {
   switch (props.type) {
-    case Category.anime:
+    case Category.Anime:
       return api.anilist.getAnimeList.useInfiniteQuery(
         {
           list: props.list,
@@ -31,7 +31,7 @@ const useList = (props: Props) => {
         },
       );
 
-    case Category.manga:
+    case Category.Manga:
       return api.anilist.getMangaList.useInfiniteQuery(
         {
           list: props.list,

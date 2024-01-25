@@ -47,5 +47,5 @@ export default async ({
   const listStatus = ListStatusValidator.parse(searchParams?.list);
   const listSort = ListSortValidator.parse(searchParams?.sort);
 
-  return <List list={listStatus} sort={listSort} type={Category.anime} />;
+  return <List list={listStatus} sort={listSort} type={Category.Anime} />;
 };

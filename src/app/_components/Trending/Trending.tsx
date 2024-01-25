@@ -21,17 +21,17 @@ export default async () => {
       <Segment
         title="Trending Anime This Season"
         data={data_seasonal_trending?.Page.data as SegmentProps["data"]}
-        type={Category.anime}
+        type={Category.Anime}
       />
       <Segment
         title="Trending Anime of All Time"
         data={data_popularity?.Page.data as SegmentProps["data"]}
-        type={Category.anime}
+        type={Category.Anime}
       />
       <Segment
         title="Trending Manga of All Time"
         data={data_popularity_manga?.Page.data as SegmentProps["data"]}
-        type={Category.manga}
+        type={Category.Manga}
       />
     </div>
   );
