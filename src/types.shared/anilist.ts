@@ -310,7 +310,8 @@ export const searchFilter = z.discriminatedUnion("category", [
 export type Filter = z.infer<typeof searchFilter>;
 
 export interface MediaList
-  extends Omit<AniMediaList, "startedAt" | "completedAt"> {
+  extends Omit<AniMediaList, "startedAt" | "completedAt" | "status"> {
+  status: ListStatus;
   startedAt: Date | null;
   completedAt: Date | null;
 }

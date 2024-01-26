@@ -14,7 +14,7 @@ type Props<T> = {
   disabled?: boolean;
   required?: boolean;
   name?: string;
-  orientation?: "horizontal" | "vertical";
+  orientation: "horizontal" | "vertical";
   dataValues: Value<T>[];
   icon?: ReactNode;
 };
@@ -23,9 +23,8 @@ export default <T,>(props: Props<T>) => (
   <RadioGroupPrimitives.Root
     className={cx(
       "flex flex-wrap gap-2",
-      props.orientation === "horizontal"
-        ? "flex-row items-center "
-        : "w-max flex-col justify-center",
+      props.orientation === "horizontal" && "flex-row items-center",
+      props.orientation === "vertical" && "w-max flex-col justify-center",
     )}
     value={String(props.value)}
     name={props.name}
@@ -39,7 +38,7 @@ export default <T,>(props: Props<T>) => (
     {props.dataValues.map((v) => (
       <span
         key={`${v.value}--${v.displayTitle}`}
-        className="flex w-full items-center justify-start gap-2"
+        className={cx("flex items-center justify-start gap-2")}
       >
         <RadioGroupPrimitives.Item
           id={`${v.value}--${v.displayTitle}`}

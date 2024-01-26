@@ -36,7 +36,7 @@ export default (props: Props) => {
         </Marquee>
         {/* Description */}
         <div
-          className="line-clamp-3 h-20 overflow-hidden p-1 md:line-clamp-4 md:h-24"
+          className="line-clamp-3 h-24 overflow-hidden p-1 md:line-clamp-4 md:h-24"
           dangerouslySetInnerHTML={{ __html: props.media.description! }}
         ></div>
         {/* Genre Tags */}

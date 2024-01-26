@@ -1179,6 +1179,7 @@ export default (
                   <MixerHorizontalIcon />
                 </button>
               }
+              side="right"
               content={FilterSelector(filters, setFilter, () => {
                 setSearchTerm("");
                 let filter: Filter;
@@ -1204,7 +1205,7 @@ export default (
                 }
                 setFilter(filter);
               })}
-              className="w-2/3 max-w-lg"
+              className="w-[90%] max-w-lg"
             />
           ),
           color: "ruby",

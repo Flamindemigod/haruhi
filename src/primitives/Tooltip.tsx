@@ -7,6 +7,7 @@ interface Props {
   content: ReactNode;
   index?: number;
   className?: string;
+  side?: "top" | "left" | "right" | "bottom";
 }
 
 const Tooltip = (props: Props) => {
@@ -26,6 +27,7 @@ const Tooltip = (props: Props) => {
             e.preventDefault();
           }}
           sideOffset={4}
+          side={props.side ?? "top"}
           key={props.index}
           className={cx(
             "radix-side-top:animate-slide-down-fade",

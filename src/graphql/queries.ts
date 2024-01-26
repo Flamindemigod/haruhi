@@ -1,5 +1,76 @@
 import { gql } from "graphql-tag";
 
+const MediaResponseFragment = gql`
+  fragment MediaResponseFragment on Media {
+    id
+    title {
+      userPreferred
+    }
+    coverImage {
+      large
+      medium
+      color
+    }
+    startDate {
+      year
+      month
+      day
+    }
+    endDate {
+      year
+      month
+      day
+    }
+    bannerImage
+    season
+    seasonYear
+    description(asHtml: true)
+    type
+    format
+    status(version: 2)
+    episodes
+    duration
+    chapters
+    volumes
+    genres
+    isAdult
+    averageScore
+    nextAiringEpisode {
+      airingAt
+      timeUntilAiring
+      episode
+    }
+    mediaListEntry {
+      id
+      status
+      score
+      progress
+      repeat
+      startedAt {
+        year
+        month
+        day
+      }
+      completedAt {
+        year
+        month
+        day
+      }
+      notes
+      private
+    }
+    studios(isMain: true) {
+      edges {
+        isMain
+        node {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
 export const USER_AUTH = gql`
   query USER_AUTH {
     Viewer {
@@ -110,60 +181,11 @@ export const SEARCH_ANIME_MANGA = gql`
         sort: $sort
         isAdult: $isAdult
       ) {
-        id
-        title {
-          userPreferred
-        }
-        coverImage {
-          large
-          medium
-          color
-        }
-        startDate {
-          year
-          month
-          day
-        }
-        endDate {
-          year
-          month
-          day
-        }
-        bannerImage
-        season
-        seasonYear
-        description(asHtml: true)
-        type
-        format
-        status(version: 2)
-        episodes
-        duration
-        chapters
-        volumes
-        genres
-        isAdult
-        averageScore
-        nextAiringEpisode {
-          airingAt
-          timeUntilAiring
-          episode
-        }
-        mediaListEntry {
-          id
-          status
-        }
-        studios(isMain: true) {
-          edges {
-            isMain
-            node {
-              id
-              name
-            }
-          }
-        }
+        ...MediaResponseFragment
       }
     }
   }
+  ${MediaResponseFragment}
 `;
 
 export const SEARCH_STAFF = gql`
@@ -284,62 +306,11 @@ export const TRENDING_ANIME_MANGA = gql`
         season: $season
         seasonYear: $seasonYear
       ) {
-        id
-        title {
-          userPreferred
-          english
-        }
-        coverImage {
-          large
-          medium
-          color
-        }
-        startDate {
-          year
-          month
-          day
-        }
-        endDate {
-          year
-          month
-          day
-        }
-        bannerImage
-        season
-        seasonYear
-        description(asHtml: true)
-        type
-        format
-        status(version: 2)
-        episodes
-        duration
-        chapters
-        volumes
-        genres
-        isAdult
-        averageScore
-        nextAiringEpisode {
-          airingAt
-          timeUntilAiring
-          episode
-        }
-        mediaListEntry {
-          id
-          status
-          progress
-        }
-        studios(isMain: true) {
-          edges {
-            isMain
-            node {
-              id
-              name
-            }
-          }
-        }
+        ...MediaResponseFragment
       }
     }
   }
+  ${MediaResponseFragment}
 `;
 
 export const USER_RECOMMENDED = gql`
@@ -363,59 +334,7 @@ export const USER_RECOMMENDED = gql`
               node {
                 rating
                 mediaRecommendation {
-                  id
-                  title {
-                    userPreferred
-                    english
-                  }
-                  coverImage {
-                    large
-                    medium
-                    color
-                  }
-                  startDate {
-                    year
-                    month
-                    day
-                  }
-                  endDate {
-                    year
-                    month
-                    day
-                  }
-                  bannerImage
-                  season
-                  seasonYear
-                  description(asHtml: true)
-                  type
-                  format
-                  status(version: 2)
-                  episodes
-                  duration
-                  chapters
-                  volumes
-                  genres
-                  isAdult
-                  averageScore
-                  nextAiringEpisode {
-                    airingAt
-                    timeUntilAiring
-                    episode
-                  }
-                  mediaListEntry {
-                    id
-                    status
-                    progress
-                  }
-                  studios(isMain: true) {
-                    edges {
-                      isMain
-                      node {
-                        id
-                        name
-                      }
-                    }
-                  }
+                  ...MediaResponseFragment
                 }
               }
             }
@@ -424,6 +343,7 @@ export const USER_RECOMMENDED = gql`
       }
     }
   }
+  ${MediaResponseFragment}
 `;
 
 export const USER_UP_NEXT = gql`
@@ -445,63 +365,12 @@ export const USER_UP_NEXT = gql`
         status: PLANNING
       ) {
         media {
-          id
-          title {
-            userPreferred
-            english
-          }
-          coverImage {
-            large
-            medium
-            color
-          }
-          startDate {
-            year
-            month
-            day
-          }
-          endDate {
-            year
-            month
-            day
-          }
-          bannerImage
-          season
-          seasonYear
-          description(asHtml: true)
-          type
-          format
-          status(version: 2)
-          episodes
-          duration
-          chapters
-          volumes
-          genres
-          isAdult
-          averageScore
-          nextAiringEpisode {
-            airingAt
-            timeUntilAiring
-            episode
-          }
-          mediaListEntry {
-            id
-            status
-            progress
-          }
-          studios(isMain: true) {
-            edges {
-              isMain
-              node {
-                id
-                name
-              }
-            }
-          }
+          ...MediaResponseFragment
         }
       }
     }
   }
+  ${MediaResponseFragment}
 `;
 
 export const USER_LIST = gql`
@@ -525,63 +394,12 @@ export const USER_LIST = gql`
         status: $status
       ) {
         media {
-          id
-          title {
-            userPreferred
-            english
-          }
-          coverImage {
-            large
-            medium
-            color
-          }
-          startDate {
-            year
-            month
-            day
-          }
-          endDate {
-            year
-            month
-            day
-          }
-          bannerImage
-          season
-          seasonYear
-          description(asHtml: true)
-          type
-          format
-          status(version: 2)
-          episodes
-          duration
-          chapters
-          volumes
-          genres
-          isAdult
-          averageScore
-          nextAiringEpisode {
-            airingAt
-            timeUntilAiring
-            episode
-          }
-          mediaListEntry {
-            id
-            status
-            progress
-          }
-          studios(isMain: true) {
-            edges {
-              isMain
-              node {
-                id
-                name
-              }
-            }
-          }
+          ...MediaResponseFragment
         }
       }
     }
   }
+  ${MediaResponseFragment}
 `;
 
 export const SEASONAL = gql`
@@ -603,62 +421,11 @@ export const SEASONAL = gql`
         sort: [POPULARITY_DESC]
         isAdult: $isAdult
       ) {
-        id
-        title {
-          userPreferred
-          english
-        }
-        coverImage {
-          large
-          medium
-          color
-        }
-        startDate {
-          year
-          month
-          day
-        }
-        endDate {
-          year
-          month
-          day
-        }
-        bannerImage
-        season
-        seasonYear
-        description(asHtml: true)
-        type
-        format
-        status(version: 2)
-        episodes
-        duration
-        chapters
-        volumes
-        genres
-        isAdult
-        averageScore
-        nextAiringEpisode {
-          airingAt
-          timeUntilAiring
-          episode
-        }
-        mediaListEntry {
-          id
-          status
-          progress
-        }
-        studios(isMain: true) {
-          edges {
-            isMain
-            node {
-              id
-              name
-            }
-          }
-        }
+        ...MediaResponseFragment
       }
     }
   }
+  ${MediaResponseFragment}
 `;
 
 export const SET_MEDIA_ENTRY = gql`

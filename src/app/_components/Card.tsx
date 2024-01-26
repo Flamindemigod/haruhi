@@ -1,6 +1,6 @@
 "use client";
 
-import { Category, Media } from "~/types.shared/anilist";
+import { Category, ListStatus, Media } from "~/types.shared/anilist";
 import { SelectNonNullableFields } from "../utils/typescript-utils";
 import HoverCard from "~/primitives/HoverCard";
 import { ReactNode, forwardRef, useContext, useEffect, useState } from "react";
@@ -11,6 +11,8 @@ import Marquee from "./Marquee";
 import Countdown, { zeroPad } from "react-countdown";
 import useRandomBGColor from "../hooks/useRandomBGColor";
 import { createContext } from "react";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+import Tooltip from "~/primitives/Tooltip";
 
 interface PropsCountdown {
   days: number;
@@ -40,7 +42,7 @@ const countdownRenderer = ({
   }
 };
 
-type CardMedia = Pick<
+export type CardMedia = Pick<
   Media,
   | "coverImage"
   | "title"
@@ -121,6 +123,29 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
               }
             }}
           >
+            {
+              //Logic to Show Info To remind user that media needs to be scored
+              (() => {
+                if (
+                  props.data.mediaListEntry?.status === ListStatus.Completed ||
+                  props.data.mediaListEntry?.status === ListStatus.Dropped
+                ) {
+                  if (!!props.data.mediaListEntry.score) return null;
+                  return (
+                    <div className="absolute right-2 top-2 isolate z-20 h-6 w-6 overflow-clip rounded-full after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md">
+                      <Tooltip
+                        side="bottom"
+                        content={
+                          <div>{`This ${props.type} needs to be scored`}</div>
+                        }
+                      >
+                        <InfoCircledIcon className="h-full w-full font-medium text-red-500" />
+                      </Tooltip>
+                    </div>
+                  );
+                }
+              })()
+            }
             {/*Logic To Show Progress Missing*/}
             {(() => {
               switch (props.type) {

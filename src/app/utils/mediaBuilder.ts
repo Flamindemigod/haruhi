@@ -49,7 +49,7 @@ export default async (data: AniMedia) => {
             MediaListStatus,
             ListStatus,
             data.mediaListEntry.status,
-          ),
+          ) as ListStatus,
           startedAt: data.mediaListEntry.startedAt
             ? new FuzzyDate().fromFuzzy(data.mediaListEntry.startedAt!).toDate()
             : null,
