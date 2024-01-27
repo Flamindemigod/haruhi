@@ -14,12 +14,7 @@ const Tooltip = (props: Props) => {
   return (
     <TooltipPrimitive.TooltipProvider>
       <TooltipPrimitive.Root delayDuration={0}>
-        <TooltipPrimitive.Trigger
-          asChild
-          onClick={(e) => {
-            e.preventDefault();
-          }}
-        >
+        <TooltipPrimitive.Trigger asChild>
           {props.children}
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content

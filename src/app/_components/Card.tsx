@@ -3,7 +3,14 @@
 import { Category, ListStatus, Media } from "~/types.shared/anilist";
 import { SelectNonNullableFields } from "../utils/typescript-utils";
 import HoverCard from "~/primitives/HoverCard";
-import { ReactNode, forwardRef, useContext, useEffect, useState } from "react";
+import {
+  ReactNode,
+  forwardRef,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import cx from "classix";
@@ -11,8 +18,11 @@ import Marquee from "./Marquee";
 import Countdown, { zeroPad } from "react-countdown";
 import useRandomBGColor from "../hooks/useRandomBGColor";
 import { createContext } from "react";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { InfoCircledIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import Tooltip from "~/primitives/Tooltip";
+import MediaEditor from "./Anime-Manga/MediaEditor";
+import { Media as MediaRender } from "../utils/Media";
+import { useHover } from "../hooks/useHover";
 
 interface PropsCountdown {
   days: number;
@@ -83,8 +93,16 @@ export type Props = {
 
 export default forwardRef<HTMLImageElement, Props>((props, ref) => {
   const { reset } = useCardContext();
-  const [show, setShow] = useState<boolean>(false);
+  let lock = true;
 
+  const setLock = (e: boolean) => {
+    lock = e;
+  };
+  const [show, setShowInner] = useState<boolean>(false);
+  const setShow = (e: boolean) => {
+    if (lock) return null;
+    setShowInner(e);
+  };
   const color = useRandomBGColor(
     `${props.data.title.userPreferred}${props.data.id}`,
   );
@@ -123,6 +141,19 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
               }
             }}
           >
+            {
+              //Render Media Editor Button
+            }
+            <MediaRender lessThan="md">M</MediaRender>
+            <MediaRender greaterThanOrEqual="md">
+              <CardEditorButtonDesktop
+                data={props.data}
+                setLock={setLock}
+                resetShow={() => {
+                  setShowInner(false);
+                }}
+              />
+            </MediaRender>
             {
               //Logic to Show Info To remind user that media needs to be scored
               (() => {
@@ -356,4 +387,62 @@ export const useCardContext = () => {
     throw new Error("useCardContext has to be used within CardProvider");
   }
   return cardContext;
+};
+
+export const CardEditorButtonDesktop = (props: {
+  resetShow: () => void;
+  setLock: (e: boolean) => void;
+  data: SelectNonNullableFields<
+    CardMedia,
+    keyof Omit<
+      CardMedia,
+      | "airingSchedule"
+      | "mediaListEntry"
+      | "averageScore"
+      | "season"
+      | "seasonYear"
+      | "status"
+      | "format"
+    >
+  >;
+}) => {
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const isHover = useHover(triggerRef);
+  const [open, onOpenChange] = useState<boolean>(false);
+
+  if (isHover) {
+    props.setLock(true);
+    props.resetShow();
+  } else {
+    if (!open) {
+      props.resetShow();
+      setTimeout(() => {
+        props.setLock(false);
+      }, 300);
+    }
+  }
+  return (
+    <>
+      <button
+        ref={triggerRef}
+        onClick={() => {
+          onOpenChange(true);
+        }}
+        className="absolute bottom-2 right-2 isolate z-20 h-6 w-6 overflow-clip rounded-full after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md"
+      >
+        <Tooltip content={"Show Media Editor"} side="top" className="z-[100]">
+          <Pencil1Icon className="h-full w-full font-medium text-gray-700 hover:text-green-400" />
+        </Tooltip>
+      </button>
+
+      <MediaEditor
+        control={{
+          open,
+          onOpenChange,
+        }}
+        mode="Desktop"
+        data={props.data}
+      />
+    </>
+  );
 };

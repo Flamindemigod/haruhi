@@ -67,6 +67,8 @@ export default async function RootLayout({
                       </div>
                     </div>
                     <div className="sticky bottom-0 h-fit">
+                      {/*Reserved for Media Editor Button*/}
+                      <div id={"editor-area"}></div>
                       <div id={"nav-top-panel"}></div>
                       {/* Reserved for Mobile Navigation */}
                       <div className="relative" id={"bot-navigation"}></div>

@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import cx from "classix";
 import { Drawer } from "vaul";
 
 interface Props {
-  trigger: React.ReactNode;
+  control?: { open: boolean; onOpenChange: (e: boolean) => void };
+  trigger?: React.ReactNode;
   content: React.ReactNode;
   close?: React.ReactNode;
   className?: string;
@@ -12,6 +13,7 @@ interface Props {
   scrollLockTimeout?: number;
   snapPoints?: number[];
   modal?: boolean;
+  container?: HTMLElement;
   side?: "top" | "left" | "right" | "bottom";
 }
 
@@ -20,19 +22,20 @@ export default ({
   content,
   className,
   close,
+  container,
+  control,
   ...rootProps
 }: Props) => {
-  const [open, setOpen] = useState<boolean>(false);
   return (
     <Drawer.Root
-      open={open}
-      onOpenChange={setOpen}
       {...rootProps}
+      open={control?.open}
+      onOpenChange={control?.onOpenChange}
       direction={rootProps.side}
-      shouldScaleBackground
+      // shouldScaleBackground
     >
-      <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>
-      <Drawer.Portal>
+      <Drawer.Trigger>{trigger}</Drawer.Trigger>
+      <Drawer.Portal container={container}>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Content
           className={cx(
