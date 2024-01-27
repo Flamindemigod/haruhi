@@ -61,7 +61,11 @@ const Streaming = (props: Props) => {
   const [syncPlayedSeconds, setSyncPlayedSeconds] = useState<number>(0);
   const [videoEnd, setVideoEnd] = useState<boolean>(false);
   const [openToast, setOpenToast] = useState<boolean>(false);
-  const [episodeID, setEpisodeID] = useState<{id: string, number: number, title: string}>({id: "", number: 0, title: ""});
+  const [episodeID, setEpisodeID] = useState<{
+    id: string;
+    number: number;
+    title: string;
+  }>({ id: "", number: 0, title: "" });
   const [playerState, setPlayerState] = useState<playerProps>({
     ready: false,
     url: "",
@@ -96,7 +100,7 @@ const Streaming = (props: Props) => {
             mediaEpisodes: 0,
             rewatches: 0,
             id: 0,
-            user: { userID: 0, sessionID: "" }
+            user: { userID: 0, sessionID: "" },
           },
           initial: "Initial state",
           states: {
@@ -268,7 +272,13 @@ const Streaming = (props: Props) => {
               internal: true,
             },
             setUser: {
-              actions: assign({ user: (context, event) => ({ ...context.user, userID: event.userID, sessionID: event.sessionID }) }),
+              actions: assign({
+                user: (context, event) => ({
+                  ...context.user,
+                  userID: event.userID,
+                  sessionID: event.sessionID,
+                }),
+              }),
               internal: true,
             },
           },
@@ -279,22 +289,24 @@ const Streaming = (props: Props) => {
               | { type: "userAuthChange"; userAuthState: boolean }
               | { type: "setEpisode"; episode: number }
               | {
-                type: "setMediaStatus";
-                status:
-                | ""
-                | "CURRENT"
-                | "COMPLETED"
-                | "PLANNING"
-                | "DROPPED"
-                | "PAUSED"
-                | "REPEATING";
-              }
+                  type: "setMediaStatus";
+                  status:
+                    | ""
+                    | "CURRENT"
+                    | "COMPLETED"
+                    | "PLANNING"
+                    | "DROPPED"
+                    | "PAUSED"
+                    | "REPEATING";
+                }
               | { type: "setMediaEpisodes"; episode: number }
               | { type: "setRewatches"; rewatches: number }
               | { type: "setId"; id: number }
               | {
-                type: "setUser", userID: number, sessionID: string
-              },
+                  type: "setUser";
+                  userID: number;
+                  sessionID: string;
+                },
           },
           predictableActionArguments: true,
           preserveActionOrder: true,
@@ -308,7 +320,7 @@ const Streaming = (props: Props) => {
                 context.episode,
                 "CURRENT",
                 context.user,
-                context.rewatches + 1
+                context.rewatches + 1,
               );
             },
             initAndCompleteAndRewatch: (context, event) => {
@@ -317,20 +329,40 @@ const Streaming = (props: Props) => {
                 context.episode,
                 "COMPLETED",
                 context.user,
-                context.rewatches + 1
+                context.rewatches + 1,
               );
             },
             initAndComplete: (context, event) => {
-              updateEpisode(context.id, context.episode, "COMPLETED", context.user);
+              updateEpisode(
+                context.id,
+                context.episode,
+                "COMPLETED",
+                context.user,
+              );
             },
             initAndWatching: (context, event) => {
-              updateEpisode(context.id, context.episode, "CURRENT", context.user);
+              updateEpisode(
+                context.id,
+                context.episode,
+                "CURRENT",
+                context.user,
+              );
             },
             increment: (context, event) => {
-              updateEpisode(context.id, context.episode, "CURRENT", context.user);
+              updateEpisode(
+                context.id,
+                context.episode,
+                "CURRENT",
+                context.user,
+              );
             },
             incrementAndComplete: (context, event) => {
-              updateEpisode(context.id, context.episode, "COMPLETED", context.user);
+              updateEpisode(
+                context.id,
+                context.episode,
+                "COMPLETED",
+                context.user,
+              );
             },
           },
           services: {},
@@ -352,13 +384,13 @@ const Streaming = (props: Props) => {
             },
           },
           delays: {},
-        }
+        },
       ),
-    []
+    [],
   );
 
   const [episodeUpdaterState, episodeUpdaterSend] = useMachine(
-    episodeUpdaterMachine
+    episodeUpdaterMachine,
   );
 
   const throttleedSeek = useCallback(
@@ -367,9 +399,9 @@ const Streaming = (props: Props) => {
         videoPlayer.current.seekTo(seekTo, seekType);
       },
       5000,
-      { leading: true, trailing: false }
+      { leading: true, trailing: false },
     ),
-    []
+    [],
   );
 
   const validateAnime = (id: number) => {
@@ -424,7 +456,7 @@ const Streaming = (props: Props) => {
     syncPlayed,
     syncSeekTo,
     syncEpisodes,
-    syncPlaybackrate
+    syncPlaybackrate,
   );
 
   const {
@@ -436,55 +468,63 @@ const Streaming = (props: Props) => {
     queryKey: ["episodeSubList", props.entry.id],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}`
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}`,
+      );
+      return data.json();
+    },
+  });
+
+  const {
+    isSuccess: isSuccessEpisodesDub,
+    isFetching: isFetchingEpisodesDub,
+    data: episodesListDub,
+  } = useQuery({
+    refetchOnWindowFocus: false,
+    queryKey: ["episodeDubList", props.entry.id],
+    queryFn: async () => {
+      const data = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}&format=dub`,
       );
       return data.json();
     },
   });
 
   // const {
-  //   isSuccess: isSuccessEpisodesDub,
-  //   isFetching: isFetchingEpisodesDub,
-  //   data: episodesListDub,
-  // } = useQuery({
-  //   refetchOnWindowFocus: false,
-  //   queryKey: ["episodeDubList", props.entry.id],
-  //   queryFn: async () => {
-  //     const data = await fetch(
-  //       `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}&format=dub`
-  //     );
-  //     return data.json();
-  //   },
-  // });
-
-  const {
-      isSuccess: isSuccessEpisodesDub,
-      isFetching: isFetchingEpisodesDub,
-      data: episodesListDub,
-    } = {
-      isSuccess: true, 
-      isFetching: false, 
-      data: [],
-    }
+  //     isSuccess: isSuccessEpisodesDub,
+  //     isFetching: isFetchingEpisodesDub,
+  //     data: episodesListDub,
+  //   } = {
+  //     isSuccess: true,
+  //     isFetching: false,
+  //     data: [],
+  //   }
   const { refetch: episodeRefetch } = useQuery({
     enabled: !!(isSuccessEpisodesDub || isSuccessEpisodesSub),
     refetchOnWindowFocus: false,
     queryKey: ["episode", episodeID, props.entry.id],
     queryFn: async () => {
-      const queryURL = new URL("/api/getStream", process.env.NEXT_PUBLIC_SERVER);
-      queryURL.searchParams.append("id", encodeURIComponent(episodeID.id));
-      queryURL.searchParams.append("episodeNumber", encodeURIComponent(episodeID.number));
-      queryURL.searchParams.append("animeId", encodeURIComponent(props.entry.id));
-      const data = await fetch(
-        queryURL
+      const queryURL = new URL(
+        "/api/getStream",
+        process.env.NEXT_PUBLIC_SERVER,
       );
+      queryURL.searchParams.append("id", encodeURIComponent(episodeID.id));
+      queryURL.searchParams.append(
+        "episodeNumber",
+        encodeURIComponent(episodeID.number),
+      );
+      queryURL.searchParams.append(
+        "animeId",
+        encodeURIComponent(props.entry.id),
+      );
+      const data = await fetch(queryURL);
       return data.json();
     },
     onSuccess(data) {
       setPlayerState((state) => ({
         ...state,
-        url: `${process.env.NEXT_PUBLIC_MEDIA_PROXY
-          }/m3u8-proxy?url=${encodeURIComponent(data.source?.[0]?.url)}`,
+        url: `${
+          process.env.NEXT_PUBLIC_MEDIA_PROXY
+        }/m3u8-proxy?url=${encodeURIComponent(data.source?.[0]?.url)}`,
       }));
     },
   });
@@ -495,7 +535,7 @@ const Streaming = (props: Props) => {
     queryKey: ["SkipTiming", props.entry.idMal, episode, playerState.duration],
     queryFn: async () => {
       const data = await fetch(
-        `https://api.aniskip.com/v2/skip-times/${props.entry.idMal}/${episode}?types[]=op&episodeLength=${playerState.duration}`
+        `https://api.aniskip.com/v2/skip-times/${props.entry.idMal}/${episode}?types[]=op&episodeLength=${playerState.duration}`,
       );
       return data.json();
     },
@@ -517,7 +557,7 @@ const Streaming = (props: Props) => {
           props.entry.nextAiringEpisode
             ? props.entry.nextAiringEpisode.episode - 1
             : props.entry.episodes,
-        ])
+        ]),
       );
     } else {
       setEpisode(1);
@@ -528,11 +568,11 @@ const Streaming = (props: Props) => {
     let episodeList = [];
     if (isDubbed ? episodesListDub : episodesListSub) {
       episodeList = [...(isDubbed ? episodesListDub : episodesListSub)].sort(
-        (a, b) => a.number - b.number
+        (a, b) => a.number - b.number,
       );
       // episodeRefetch();
     }
-    console.log(episodeList[episode - 1])
+    console.log(episodeList[episode - 1]);
     setEpisodeID(episodeList[episode - 1]);
   }, [episode, isDubbed, isSuccessEpisodesDub, isSuccessEpisodesSub]);
 
@@ -550,7 +590,7 @@ const Streaming = (props: Props) => {
           userId: user.userID?.toString() ?? "",
           sessionId: user.sessionID,
         },
-      }
+      },
     );
     queryClient.invalidateQueries({
       queryKey: ["mediaListEntry"],
@@ -617,16 +657,16 @@ const Streaming = (props: Props) => {
   return (
     <>
       {isFetchingEpisodesSub ||
-        isFetchingEpisodesDub ||
-        episodesListDub.length ||
-        episodesListSub.length ? (
+      isFetchingEpisodesDub ||
+      episodesListDub.length ||
+      episodesListSub.length ? (
         <div>
           <ToastPrimitive.Provider>
             <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
               Streaming
             </div>
             {(isFetchingEpisodesSub || isFetchingEpisodesDub) &&
-              !playerState.ready ? (
+            !playerState.ready ? (
               <VideoPlayerSkeleton />
             ) : (
               <VideoPlayer
@@ -805,7 +845,7 @@ const Streaming = (props: Props) => {
                 <Switch
                   checked={isDubbed}
                   onChecked={setIsDubbed}
-                  disabled={episodesListDub?.length === 0}
+                  disabled={!episodesListDub}
                 />
               </div>
             </div>
@@ -820,7 +860,7 @@ const Streaming = (props: Props) => {
                 "radix-swipe-end:animate-toast-swipe-out",
                 "translate-x-radix-toast-swipe-move-x",
                 "radix-swipe-cancel:translate-x-0 radix-swipe-cancel:duration-200 radix-swipe-cancel:ease-[ease]",
-                "focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75"
+                "focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-75",
               )}
             >
               <div className="flex">
