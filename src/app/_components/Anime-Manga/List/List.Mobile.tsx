@@ -22,7 +22,7 @@ export default (props: Props) => {
         type={props.type}
         data={props.data as GridProps["data"]}
         onReachBottom={props.onReachBottom}
-        fallback="Fetching Seasonal Data"
+        fallback="Fetching List Data"
       />
       <ListSelectorMobile {...props} />
     </>
