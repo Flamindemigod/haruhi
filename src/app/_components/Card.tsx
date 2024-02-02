@@ -55,6 +55,7 @@ const countdownRenderer = ({
 export type CardMedia = Pick<
   Media,
   | "coverImage"
+  | "bannerImage"
   | "title"
   | "nextAiringEpisode"
   | "mediaListEntry"
@@ -428,7 +429,7 @@ export const CardEditorButtonDesktop = (props: {
         onClick={() => {
           onOpenChange(true);
         }}
-        className="absolute bottom-2 right-2 isolate z-20 h-6 w-6 overflow-clip rounded-full after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md"
+        className="absolute bottom-2 right-2 isolate z-20 h-8 w-8 overflow-clip rounded-full border-2 border-solid border-gray-700/30 p-1 after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md"
       >
         <Tooltip content={"Show Media Editor"} side="top" className="z-[100]">
           <Pencil1Icon className="h-full w-full font-medium text-gray-700 hover:text-green-400" />

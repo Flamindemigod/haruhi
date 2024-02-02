@@ -171,8 +171,8 @@ export default {
       },
       animation: {
         spin: "spin 5s infinite linear forwards",
-        "banner-move-s": "bannerMove 30s alternate infinite linear",
-        "banner-move-f": "bannerMove 20s alternate infinite linear",
+        "banner-move-s": "bannerMove 20s alternate infinite linear",
+        "banner-move-f": "bannerMove 15s alternate infinite linear",
         "bg-travel-y": "bg_travel_x 10s ease-in-out infinite alternate",
         color_morph: "color_morph 10s ease-in-out infinite alternate",
         // Dropdown menu

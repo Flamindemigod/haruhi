@@ -8,6 +8,10 @@ export const ThemeSwitcher = () => {
   const { resolvedTheme, setTheme } = useTheme();
   return (
     <div className="flex flex-row items-center gap-2">
+      <div className="bg-red-400 p-8 text-xl">
+        {!!navigator.share ? "Yes" : "no"}
+      </div>
+
       <Switch
         icon={
           resolvedTheme == "light" ? (

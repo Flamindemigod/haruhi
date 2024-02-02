@@ -5,6 +5,9 @@ const MediaResponseFragment = gql`
     id
     title {
       userPreferred
+      english
+      native
+      romaji
     }
     coverImage {
       large
