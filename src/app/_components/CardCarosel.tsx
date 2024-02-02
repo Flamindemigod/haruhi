@@ -9,6 +9,7 @@ import { ThreeCircles } from "react-loader-spinner";
 
 type CardMedia = Pick<
   Media,
+  | "bannerImage"
   | "coverImage"
   | "title"
   | "nextAiringEpisode"
