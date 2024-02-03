@@ -42,7 +42,7 @@ import {
   TernaryState,
   YEAR_MAX,
 } from "~/types.shared/anilist";
-import { useSession } from "next-auth/react";
+import { useUser } from "../_contexts/User";
 
 const Wrapper = ({ children }: { children?: ReactNode }) => (
   <div className="flex flex-col gap-2 rounded-md bg-black/20 p-4 dark:bg-white/10">
@@ -56,8 +56,6 @@ const FilterSelector = (
   onReset: () => void,
   container?: RefObject<HTMLDivElement>,
 ) => {
-  let { data: sesh } = useSession();
-
   let { data: genres } = api.anilist.getGenres.useQuery(undefined, {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
@@ -69,12 +67,7 @@ const FilterSelector = (
     refetchInterval: false,
   });
 
-  let { data: user } = api.user.getUser.useQuery(undefined, {
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    refetchInterval: false,
-    enabled: !!sesh?.user,
-  });
+  const user = useUser();
 
   let category = "";
   const [genreReset, setGenreReset] = useState<boolean>(false);

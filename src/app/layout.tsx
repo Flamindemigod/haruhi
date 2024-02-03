@@ -16,6 +16,7 @@ import MediaWrapper from "./_components/MediaWrapper";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { CardProvider } from "./_components/Card";
+import { UserProvider } from "./_contexts/User";
 
 export const viewport: Viewport = {
   themeColor: "#cc006d",
@@ -48,33 +49,35 @@ export default async function RootLayout({
           <SessionWrapper>
             <MediaWrapper>
               <ThemeWrapper>
-                <CardProvider>
-                  <Theme
-                    accentColor="pink"
-                    panelBackground="translucent"
-                    radius="large"
-                    scaling="90%"
-                  >
-                    <div className="flex min-h-screen flex-col overflow-x-hidden md:max-h-[calc(100dvh_-_4rem)]">
-                      <div>
-                        <Header />
+                <UserProvider>
+                  <CardProvider>
+                    <Theme
+                      accentColor="pink"
+                      panelBackground="translucent"
+                      radius="large"
+                      scaling="90%"
+                    >
+                      <div className="flex min-h-screen flex-col overflow-x-hidden md:max-h-[calc(100dvh_-_4rem)]">
+                        <div>
+                          <Header />
+                        </div>
+                        <main className="relative flex w-full flex-grow">
+                          {children}
+                        </main>
+                        <div className="">
+                          <Footer />
+                        </div>
                       </div>
-                      <main className="relative flex w-full flex-grow">
-                        {children}
-                      </main>
-                      <div className="">
-                        <Footer />
+                      <div className="sticky bottom-0 h-fit">
+                        {/*Reserved for Media Editor Button*/}
+                        <div id={"editor-area"}></div>
+                        <div id={"nav-top-panel"}></div>
+                        {/* Reserved for Mobile Navigation */}
+                        <div className="relative" id={"bot-navigation"}></div>
                       </div>
-                    </div>
-                    <div className="sticky bottom-0 h-fit">
-                      {/*Reserved for Media Editor Button*/}
-                      <div id={"editor-area"}></div>
-                      <div id={"nav-top-panel"}></div>
-                      {/* Reserved for Mobile Navigation */}
-                      <div className="relative" id={"bot-navigation"}></div>
-                    </div>
-                  </Theme>
-                </CardProvider>
+                    </Theme>
+                  </CardProvider>
+                </UserProvider>
               </ThemeWrapper>
             </MediaWrapper>
           </SessionWrapper>
