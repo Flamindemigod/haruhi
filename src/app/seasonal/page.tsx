@@ -1,5 +1,5 @@
 import { Season, SeasonValidator, YearValidator } from "~/types.shared/anilist";
-import Seasonal from "../_components/Seasonal/Seasonal";
+import Seasonal from "../_components/seasonal/Seasonal";
 
 export default async ({
   searchParams,

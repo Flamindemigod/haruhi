@@ -1,6 +1,6 @@
 import { RedirectType, redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
-import Trending from "../_components/Trending/Trending";
+import Trending from "../_components/trending/Trending";
 
 export default async () => {
   const sesh = await getServerAuthSession();

@@ -5,7 +5,14 @@ import { getServerAuthSession } from "~/server/auth";
 import Avatar from "./Avatar";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import Link from "next/link";
-import { Navigation } from "./Navigation";
+// import {  Navigation } from "./Navigation";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
+
+const Navigation = dynamic(() => import("./Navigation"), {
+  ssr: false,
+  loading: () => <div className="w-full" />,
+});
 
 export const Header = async () => {
   const session = await getServerAuthSession();

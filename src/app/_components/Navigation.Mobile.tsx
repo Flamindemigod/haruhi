@@ -56,14 +56,8 @@ const DropDownProps: DropdownProps = {
 };
 
 export default (props: NavigationProps) => {
-  // const ref = useRef<Element | null>(null);
-  const [_, setMounted] = useState(false);
-  useEffect(() => {
-    //   ref.current = document.getElementById("bot-navigation");
-    setMounted(true);
-  }, []);
-  return (
-    <Portal.Root container={document?.getElementById("bot-navigation")}>
+   return (
+    <Portal.Root container={document.getElementById("bot-navigation")}>
       <nav className="grid grid-cols-mNavContainer bg-offWhite-50 text-xs dark:bg-black">
         {!props.isUserAuth ? (
           <>

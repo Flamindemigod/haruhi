@@ -11,7 +11,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const { data: sesh } = useSession();
   const { data: user } = api.user.getUser.useQuery(undefined, {
     refetchOnReconnect: false,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
     refetchInterval: false,
     enabled: !!sesh?.user,
   });

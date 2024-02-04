@@ -3,26 +3,19 @@
 import { Category, ListStatus, Media } from "~/types.shared/anilist";
 import { SelectNonNullableFields } from "../utils/typescript-utils";
 import HoverCard from "~/primitives/HoverCard";
-import {
-  ReactNode,
-  forwardRef,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import cx from "classix";
 import Marquee from "./Marquee";
 import Countdown, { zeroPad } from "react-countdown";
 import useRandomBGColor from "../hooks/useRandomBGColor";
-import { createContext } from "react";
 import { InfoCircledIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import Tooltip from "~/primitives/Tooltip";
-import MediaEditor from "./Anime-Manga/MediaEditor";
-import { Media as MediaRender } from "../utils/Media";
+import MediaEditor from "./anime-manga/MediaEditor";
 import { useHover } from "../hooks/useHover";
+import { useUser } from "../_contexts/User";
+import { useCardContext } from "../_contexts/CardContext";
 
 interface PropsCountdown {
   days: number;
@@ -94,7 +87,8 @@ export type Props = {
 
 export default forwardRef<HTMLImageElement, Props>((props, ref) => {
   const { reset } = useCardContext();
-  let lock = true;
+  const user = useUser();
+  let lock = false;
 
   const setLock = (e: boolean) => {
     lock = e;
@@ -125,28 +119,129 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
         closeDelay={0}
         openDelay={0}
         trigger={
-          <Link
+          <div
             className={cx(
               props.fullWidth ? "w-full" : "h-32 sm:h-48 md:h-64",
               "card | relative isolate my-2 aspect-cover flex-shrink-0",
             )}
-            href={`/${props.type.toLowerCase()}/${props.data.id}`}
-            onClick={(e) => {
-              if (!show) {
-                e.preventDefault();
-                e.stopPropagation();
-                setShow(true);
-              }
-              if (!!show) {
-                return;
-              }
-            }}
           >
+            <Link
+              // className={cx(
+              //   props.fullWidth ? "w-full" : "h-32 sm:h-48 md:h-64",
+              //   "card | relative isolate my-2 aspect-cover flex-shrink-0",
+              // )}
+              href={`/${props.type.toLowerCase()}/${props.data.id}`}
+              onClick={(e) => {
+                if (!show) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShow(true);
+                }
+                if (!!show) {
+                  return;
+                }
+              }}
+            >
+              {
+                //Logic to Show Info To remind user that media needs to be scored
+                (() => {
+                  if (
+                    props.data.mediaListEntry?.status ===
+                      ListStatus.Completed ||
+                    props.data.mediaListEntry?.status === ListStatus.Dropped
+                  ) {
+                    if (!!props.data.mediaListEntry.score) return null;
+                    return (
+                      <div className="absolute right-2 top-2 isolate z-20 h-6 w-6 overflow-clip rounded-full after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md">
+                        <Tooltip
+                          side="bottom"
+                          content={
+                            <div>{`This ${props.type} needs to be scored`}</div>
+                          }
+                        >
+                          <InfoCircledIcon className="h-full w-full font-medium text-red-500" />
+                        </Tooltip>
+                      </div>
+                    );
+                  }
+                })()
+              }
+              {/*Logic To Show Progress Missing*/}
+              {(() => {
+                switch (props.type) {
+                  case Category.Anime: {
+                    if (!!props.data.mediaListEntry) {
+                      if (!!props.data.nextAiringEpisode) {
+                        return (
+                          props.data.mediaListEntry.progress! <
+                          props.data.nextAiringEpisode.episode - 1
+                        );
+                      }
+                      if (!!props.data.episodes) {
+                        return (
+                          props.data.mediaListEntry.progress! <
+                          props.data.episodes
+                        );
+                      }
+                    }
+                  }
+                  case Category.Manga: {
+                    if (!!props.data.mediaListEntry) {
+                      if (!!props.data.chapters) {
+                        return (
+                          props.data.mediaListEntry.progress! <
+                          props.data.chapters
+                        );
+                      }
+                    }
+                  }
+                  default: {
+                    return false;
+                  }
+                }
+              })() && (
+                <div className="absolute left-0 top-0 z-20 rounded-br-full bg-primary-500 pb-2 pr-2 text-white">
+                  {(() => {
+                    switch (props.type) {
+                      case Category.Anime: {
+                        if (!!props.data.nextAiringEpisode) {
+                          return `+${
+                            props.data.nextAiringEpisode.episode -
+                              1 -
+                              props.data.mediaListEntry?.progress! ?? 0
+                          }`;
+                        }
+                        return `+${
+                          props.data.episodes -
+                            props.data.mediaListEntry?.progress! ?? 0
+                        }`;
+                      }
+                      case Category.Manga:
+                        return `+${
+                          props.data.chapters -
+                            props.data.mediaListEntry?.progress! ?? 0
+                        }`;
+                      default:
+                        break;
+                    }
+                  })()}
+                </div>
+              )}
+              <Image
+                ref={ref}
+                src={props.data.coverImage.large!}
+                placeholder="blur"
+                className="object-cover"
+                priority
+                blurDataURL={props.data.coverImage.blurHash}
+                alt={`Cover of ${props.data.title.userPreferred}`}
+                fill
+              />
+            </Link>
             {
               //Render Media Editor Button
             }
-            <MediaRender lessThan="md">M</MediaRender>
-            <MediaRender greaterThanOrEqual="md">
+            {!!user && (
               <CardEditorButtonDesktop
                 data={props.data}
                 setLock={setLock}
@@ -154,102 +249,8 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                   setShowInner(false);
                 }}
               />
-            </MediaRender>
-            {
-              //Logic to Show Info To remind user that media needs to be scored
-              (() => {
-                if (
-                  props.data.mediaListEntry?.status === ListStatus.Completed ||
-                  props.data.mediaListEntry?.status === ListStatus.Dropped
-                ) {
-                  if (!!props.data.mediaListEntry.score) return null;
-                  return (
-                    <div className="absolute right-2 top-2 isolate z-20 h-6 w-6 overflow-clip rounded-full after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md">
-                      <Tooltip
-                        side="bottom"
-                        content={
-                          <div>{`This ${props.type} needs to be scored`}</div>
-                        }
-                      >
-                        <InfoCircledIcon className="h-full w-full font-medium text-red-500" />
-                      </Tooltip>
-                    </div>
-                  );
-                }
-              })()
-            }
-            {/*Logic To Show Progress Missing*/}
-            {(() => {
-              switch (props.type) {
-                case Category.Anime: {
-                  if (!!props.data.mediaListEntry) {
-                    if (!!props.data.nextAiringEpisode) {
-                      return (
-                        props.data.mediaListEntry.progress! <
-                        props.data.nextAiringEpisode.episode - 1
-                      );
-                    }
-                    if (!!props.data.episodes) {
-                      return (
-                        props.data.mediaListEntry.progress! <
-                        props.data.episodes
-                      );
-                    }
-                  }
-                }
-                case Category.Manga: {
-                  if (!!props.data.mediaListEntry) {
-                    if (!!props.data.chapters) {
-                      return (
-                        props.data.mediaListEntry.progress! <
-                        props.data.chapters
-                      );
-                    }
-                  }
-                }
-                default: {
-                  return false;
-                }
-              }
-            })() && (
-              <div className="absolute left-0 top-0 z-20 rounded-br-full bg-primary-500 pb-2 pr-2 text-white">
-                {(() => {
-                  switch (props.type) {
-                    case Category.Anime: {
-                      if (!!props.data.nextAiringEpisode) {
-                        return `+${
-                          props.data.nextAiringEpisode.episode -
-                            1 -
-                            props.data.mediaListEntry?.progress! ?? 0
-                        }`;
-                      }
-                      return `+${
-                        props.data.episodes -
-                          props.data.mediaListEntry?.progress! ?? 0
-                      }`;
-                    }
-                    case Category.Manga:
-                      return `+${
-                        props.data.chapters -
-                          props.data.mediaListEntry?.progress! ?? 0
-                      }`;
-                    default:
-                      break;
-                  }
-                })()}
-              </div>
             )}
-            <Image
-              ref={ref}
-              src={props.data.coverImage.large!}
-              placeholder="blur"
-              className="object-cover"
-              priority
-              blurDataURL={props.data.coverImage.blurHash}
-              alt={`Cover of ${props.data.title.userPreferred}`}
-              fill
-            />
-          </Link>
+          </div>
         }
         content={{
           data: (
@@ -353,7 +354,6 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
           collisions: {
             avoidCollisions: true,
             collisionPadding: 5,
-            collisionBoundry: document.body,
           },
         }}
         arrow={{}}
@@ -361,34 +361,6 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
     </>
   );
 });
-
-interface CardContextType {
-  reset: boolean;
-  onReset: () => void;
-}
-
-export const CardContext = createContext<CardContextType | null>(null);
-
-export const CardProvider = ({ children }: { children: ReactNode }) => {
-  const [reset, setReset] = useState<boolean>(false);
-  const onReset = () => {
-    setReset((state) => !state);
-  };
-
-  return (
-    <CardContext.Provider value={{ reset, onReset }}>
-      {children}
-    </CardContext.Provider>
-  );
-};
-
-export const useCardContext = () => {
-  const cardContext = useContext(CardContext);
-  if (!cardContext) {
-    throw new Error("useCardContext has to be used within CardProvider");
-  }
-  return cardContext;
-};
 
 export const CardEditorButtonDesktop = (props: {
   resetShow: () => void;
@@ -411,22 +383,25 @@ export const CardEditorButtonDesktop = (props: {
   const isHover = useHover(triggerRef);
   const [open, onOpenChange] = useState<boolean>(false);
 
-  if (isHover) {
-    props.setLock(true);
-    props.resetShow();
-  } else {
-    if (!open) {
+  useEffect(() => {
+    if (isHover) {
+      props.setLock(true);
       props.resetShow();
+    }
+    if (!open) {
       setTimeout(() => {
         props.setLock(false);
-      }, 300);
+      }, 500);
     }
-  }
+    props.resetShow();
+  }, [isHover, open]);
+
   return (
     <>
       <button
         ref={triggerRef}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           onOpenChange(true);
         }}
         className="absolute bottom-2 right-2 isolate z-20 h-8 w-8 overflow-clip rounded-full border-2 border-solid border-gray-700/30 p-1 after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md"

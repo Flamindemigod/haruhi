@@ -2,14 +2,15 @@ import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import Background from "./_components/Background";
 import Hero from "./_components/Hero";
-import Trending from "./_components/Trending/Trending";
-import Recommended from "./_components/Recommended/Recommended";
+import Trending from "./_components/trending/Trending";
+import Recommended from "./_components/recommended/Recommended";
 import { ActivityLogIcon } from "@radix-ui/react-icons";
-import Current from "./_components/Current/Current";
-import Pending from "./_components/Pending/Pending";
+import Current from "./_components/current/Current";
+import Pending from "./_components/pending/Pending";
 
 export default async function Home() {
   const sesh = await getServerAuthSession();
+
   return (
     <>
       <Background

@@ -79,11 +79,14 @@ export const SegmentFallback = (
 
 const CardCarosel = (props: Props) => {
   return (
-    <Carosel height={"clamp(150px, 100%, 210px)"}>
-      {props.data.map((d) => (
-        <Card data={d} type={props.type} key={d.id} />
-      ))}
-    </Carosel>
+    <>
+      <Carosel height={"clamp(150px, 100%, 210px)"}>
+        {props.data.map((d) => (
+          // <div key={d.id}>{d.title.native}</div>
+          <Card data={d} type={props.type} key={d.id} />
+        ))}
+      </Carosel>
+    </>
   );
 };
 

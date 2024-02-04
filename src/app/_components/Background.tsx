@@ -12,9 +12,10 @@ const Background = (props: Props) => {
         <Image
           src={props.backgroundImage}
           fill
+          draggable={false}
           priority
           sizes="100dvw"
-          className="motion-safe:animate-banner-move-s motion-safe:md:animate-banner-move-f object-cover motion-reduce:object-center"
+          className="object-cover motion-safe:animate-banner-move-s motion-reduce:object-center motion-safe:md:animate-banner-move-f"
           alt={""}
         />
       ) : (

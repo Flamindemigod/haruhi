@@ -9,7 +9,7 @@ import {
   ListStatusValidator,
 } from "~/types.shared/anilist";
 import { SignIn } from "../_components/SignIn";
-import List from "../_components/Anime-Manga/List/List";
+import List from "../_components/anime-manga/List/List";
 
 export default async ({
   searchParams,

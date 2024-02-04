@@ -1111,6 +1111,7 @@ export default (
     filter: debounchedFilters,
     searchString: debounchedSearchString,
     render: (
+    
       <TextField
         placeholder="Search..."
         variant="surface"

@@ -1,20 +1,21 @@
 "use client";
-import { Media } from "../utils/Media";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 import NavigationDesktop from "./Navigation.Desktop";
 import NavigationMobile from "./Navigation.Mobile";
 
 export type NavigationProps = {
   isUserAuth: boolean;
 };
-export const Navigation = (props: NavigationProps) => {
+export default (props: NavigationProps) => {
+  const matches = useMediaQuery(`(min-width: 640px)`);
   return (
     <>
-      <Media lessThan="md" className="w-full">
-        <NavigationMobile {...props} />
-      </Media>
-      <Media greaterThanOrEqual="md" className="w-full">
-        <NavigationDesktop {...props} />
-      </Media>
+      <div className="w-full sm:hidden">
+        {(matches === null || !matches) && <NavigationMobile {...props} />}
+      </div>
+      <div className="hidden w-full sm:block">
+        {(matches === null || !!matches) && <NavigationDesktop {...props} />}
+      </div>
     </>
   );
 };

@@ -14,7 +14,7 @@ type Props = {
   openDelay?: number;
   closeDelay?: number;
   trigger: ReactNode;
-  portal?: {
+  portal: {
     container?: RefObject<HTMLElement>;
   };
   content: {
@@ -62,44 +62,7 @@ const transitions: Record<
   },
 };
 
-const Inner = (
-  props: Props & { open: boolean; onOpen: (open: boolean) => void },
-) => {
-  return (
-    <Transition.Root show={props.control?.open ?? props.open}>
-      <Transition.Child
-        className={"relative"}
-        {...transitions[props.content?.side ?? "top"]}
-        enter="ease-out duration-300"
-        leave="ease-in duration-300"
-        leaveFrom="opacity-1"
-        leaveTo="opacity-0"
-      >
-        <HoverCardPrimitive.Content
-          forceMount
-          className={cx(
-            "radix-side-bottom:animate-slide-up radix-side-left:animate-slide-right radix-side-right:animate-slide-left radix-side-top:animate-slide-down",
-          )}
-          side={props.content?.side}
-          sideOffset={props.content?.sideOffset}
-          sticky={props.content?.sticky}
-          align={props.content?.align}
-          alignOffset={props.content?.alignOffset}
-          avoidCollisions={props.content?.collisions?.avoidCollisions}
-          collisionBoundary={props.content?.collisions?.collisionBoundry}
-          collisionPadding={props.content?.collisions?.collisionPadding}
-          arrowPadding={props.arrow?.arrowPadding}
-          hideWhenDetached={props.content?.hideWhenDetached}
-        >
-          {props.content.data}
-          {!!props.arrow ? <HoverCardPrimitive.Arrow /> : <></>}
-        </HoverCardPrimitive.Content>
-      </Transition.Child>
-    </Transition.Root>
-  );
-};
-
-export default (props: Props) => {
+export default ({ portal, ...props }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <HoverCardPrimitive.Root
@@ -112,16 +75,41 @@ export default (props: Props) => {
       <HoverCardPrimitive.Trigger asChild>
         {props.trigger}
       </HoverCardPrimitive.Trigger>
-      {!!props.portal ? (
-        <HoverCardPrimitive.Portal
-          container={props.portal.container?.current}
-          forceMount
-        >
-          <Inner {...props} open={open} onOpen={setOpen} />
-        </HoverCardPrimitive.Portal>
-      ) : (
-        <Inner {...props} open={open} onOpen={setOpen} />
-      )}
+      <HoverCardPrimitive.Portal
+        container={portal.container?.current}
+        forceMount
+      >
+        <Transition.Root show={props.control?.open ?? open}>
+          <Transition.Child
+            className={"relative"}
+            {...transitions[props.content?.side ?? "top"]}
+            enter="ease-out duration-300"
+            leave="ease-in duration-300"
+            leaveFrom="opacity-1"
+            leaveTo="opacity-0"
+          >
+            <HoverCardPrimitive.Content
+              forceMount
+              className={cx(
+                "radix-side-bottom:animate-slide-up radix-side-left:animate-slide-right radix-side-right:animate-slide-left radix-side-top:animate-slide-down",
+              )}
+              side={props.content?.side}
+              sideOffset={props.content?.sideOffset}
+              sticky={props.content?.sticky}
+              align={props.content?.align}
+              alignOffset={props.content?.alignOffset}
+              avoidCollisions={props.content?.collisions?.avoidCollisions}
+              collisionBoundary={props.content?.collisions?.collisionBoundry}
+              collisionPadding={props.content?.collisions?.collisionPadding}
+              arrowPadding={props.arrow?.arrowPadding}
+              hideWhenDetached={props.content?.hideWhenDetached}
+            >
+              {props.content.data}
+              {!!props.arrow ? <HoverCardPrimitive.Arrow /> : <></>}
+            </HoverCardPrimitive.Content>
+          </Transition.Child>
+        </Transition.Root>
+      </HoverCardPrimitive.Portal>
     </HoverCardPrimitive.Root>
   );
 };
