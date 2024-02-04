@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { Media } from "~/app/utils/Media";
 import median from "~/app/utils/median";
 import mod from "~/app/utils/mod";
 import {
@@ -15,6 +14,7 @@ import {
 import SeasonalMobile from "./Seasonal.Mobile";
 import { api } from "~/trpc/react";
 import SeasonalDesktop from "./Seasonal.Desktop";
+import { useMediaQuery } from "~/app/hooks/useMediaQuery";
 
 type Props = {
   season: Exclude<Season, Season.any>;
@@ -69,38 +69,43 @@ export default (props: Props) => {
 
   const goToCurrentSeason = () => setSeason(CURRENT_SEASON, CURRENT_YEAR);
 
+  const matches = useMediaQuery(`(min-width: 640px)`);
   return (
     <>
-      <Media className="w-full" lessThan="md">
+      <div className="w-full sm:hidden">
         {/*Mobile Seasonal View*/}
-        <SeasonalMobile
-          {...props}
-          isFetching={isFetching}
-          onReachBottom={() => {
-            if (hasNextPage) fetchNextPage();
-          }}
-          setSeason={setSeason}
-          setPrevSeason={goToPrevSeason}
-          setNextSeason={goToNextSeason}
-          setCurrentSeason={goToCurrentSeason}
-          data={seasonData?.pages.map((p) => p?.data!).flat() ?? []}
-        />
-      </Media>
-      <Media className="w-full" greaterThanOrEqual="md">
+        {(matches === null || !matches) && (
+          <SeasonalMobile
+            {...props}
+            isFetching={isFetching}
+            onReachBottom={() => {
+              if (hasNextPage) fetchNextPage();
+            }}
+            setSeason={setSeason}
+            setPrevSeason={goToPrevSeason}
+            setNextSeason={goToNextSeason}
+            setCurrentSeason={goToCurrentSeason}
+            data={seasonData?.pages.map((p) => p?.data!).flat() ?? []}
+          />
+        )}
+      </div>
+      <div className="hidden w-full sm:block">
         {/*Desktop Seasonal View*/}
-        <SeasonalDesktop
-          {...props}
-          isFetching={isFetching}
-          onReachBottom={() => {
-            if (hasNextPage) fetchNextPage();
-          }}
-          setSeason={setSeason}
-          setPrevSeason={goToPrevSeason}
-          setNextSeason={goToNextSeason}
-          setCurrentSeason={goToCurrentSeason}
-          data={seasonData?.pages.map((p) => p?.data!).flat() ?? []}
-        />
-      </Media>
+        {(matches === null || matches) && (
+          <SeasonalDesktop
+            {...props}
+            isFetching={isFetching}
+            onReachBottom={() => {
+              if (hasNextPage) fetchNextPage();
+            }}
+            setSeason={setSeason}
+            setPrevSeason={goToPrevSeason}
+            setNextSeason={goToNextSeason}
+            setCurrentSeason={goToCurrentSeason}
+            data={seasonData?.pages.map((p) => p?.data!).flat() ?? []}
+          />
+        )}
+      </div>
     </>
   );
 };

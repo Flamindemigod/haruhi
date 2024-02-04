@@ -1,11 +1,11 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { Media } from "~/app/utils/Media";
 import { api } from "~/trpc/react";
 import { Category, ListSort, ListStatus } from "~/types.shared/anilist";
 import ListDesktop from "./List.Desktop";
 import ListMobile from "./List.Mobile";
+import { useMediaQuery } from "~/app/hooks/useMediaQuery";
 
 type Props = {
   type: Category.Anime | Category.Manga;
@@ -66,37 +66,41 @@ export default (props: Props) => {
     params.set("sort", sort as string);
     push(`${pathname}?${params.toString()}`);
   };
-
+  const matches = useMediaQuery(`(min-width: 640px)`);
   return (
     <>
-      <Media className="w-full" lessThan="md">
+      <div className="w-full sm:hidden">
         {/*Mobile View*/}
-        <ListMobile
-          type={props.type}
-          list={props.list}
-          data={listData?.pages.map((p) => p?.data!).flat() ?? []}
-          sort={props.sort}
-          setParams={setParams}
-          isFetching={isFetching}
-          onReachBottom={() => {
-            if (hasNextPage) fetchNextPage();
-          }}
-        />
-      </Media>
-      <Media className="w-full" greaterThanOrEqual="md">
+        {(matches === null || !matches) && (
+          <ListMobile
+            type={props.type}
+            list={props.list}
+            data={listData?.pages.map((p) => p?.data!).flat() ?? []}
+            sort={props.sort}
+            setParams={setParams}
+            isFetching={isFetching}
+            onReachBottom={() => {
+              if (hasNextPage) fetchNextPage();
+            }}
+          />
+        )}
+      </div>
+      <div className="hidden w-full sm:block">
         {/*Desktop View*/}
-        <ListDesktop
-          type={props.type}
-          list={props.list}
-          data={listData?.pages.map((p) => p?.data!).flat() ?? []}
-          sort={props.sort}
-          setParams={setParams}
-          isFetching={isFetching}
-          onReachBottom={() => {
-            if (hasNextPage) fetchNextPage();
-          }}
-        />
-      </Media>
+        {(matches === null || matches) && (
+          <ListDesktop
+            type={props.type}
+            list={props.list}
+            data={listData?.pages.map((p) => p?.data!).flat() ?? []}
+            sort={props.sort}
+            setParams={setParams}
+            isFetching={isFetching}
+            onReachBottom={() => {
+              if (hasNextPage) fetchNextPage();
+            }}
+          />
+        )}
+      </div>
       ;
     </>
   );
