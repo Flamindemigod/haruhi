@@ -572,8 +572,7 @@ const Streaming = (props: Props) => {
       );
       // episodeRefetch();
     }
-    console.log(episodeList[episode - 1]);
-    setEpisodeID(episodeList.find((v)=>v.number === episode).at(0));
+    setEpisodeID(episodeList.filter((v)=>v.number === parseInt(`${episode}`)).at(0));
   }, [episode, isDubbed, isSuccessEpisodesDub, isSuccessEpisodesSub]);
 
   const updateEpisode = async (
