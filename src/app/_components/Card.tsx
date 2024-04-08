@@ -3,7 +3,7 @@
 import { Category, ListStatus, Media } from "~/types.shared/anilist";
 import { SelectNonNullableFields } from "../utils/typescript-utils";
 import HoverCard from "~/primitives/HoverCard";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import cx from "classix";
@@ -13,7 +13,6 @@ import useRandomBGColor from "../hooks/useRandomBGColor";
 import { InfoCircledIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import Tooltip from "~/primitives/Tooltip";
 import MediaEditor from "./anime-manga/MediaEditor";
-import { useHover } from "../hooks/useHover";
 import { useUser } from "../_contexts/User";
 import { useCardContext } from "../_contexts/CardContext";
 
@@ -89,23 +88,16 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
   const { reset } = useCardContext();
   const user = useUser();
   let lock = false;
-
-  const setLock = (e: boolean) => {
-    lock = e;
-  };
   const [show, setShowInner] = useState<boolean>(false);
-  const setShow = (e: boolean) => {
-    if (lock) return null;
-    setShowInner(e);
+  const setShow = (val: boolean) => {
+    if (!lock) setShowInner(val);
   };
   const color = useRandomBGColor(
     `${props.data.title.userPreferred}${props.data.id}`,
   );
 
   useEffect(() => {
-    if (show) {
-      setShow(false);
-    }
+    setShow(false);
   }, [reset]);
 
   return (
@@ -244,9 +236,12 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
             {!!user && (
               <CardEditorButtonDesktop
                 data={props.data}
-                setLock={setLock}
                 resetShow={() => {
+                  lock = true;
                   setShowInner(false);
+                  setTimeout(() => {
+                    lock = false;
+                  }, 200);
                 }}
               />
             )}
@@ -364,7 +359,6 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
 
 export const CardEditorButtonDesktop = (props: {
   resetShow: () => void;
-  setLock: (e: boolean) => void;
   data: SelectNonNullableFields<
     CardMedia,
     keyof Omit<
@@ -379,29 +373,12 @@ export const CardEditorButtonDesktop = (props: {
     >
   >;
 }) => {
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const isHover = useHover(triggerRef);
   const [open, onOpenChange] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (isHover) {
-      props.setLock(true);
-      props.resetShow();
-    }
-    if (!open) {
-      setTimeout(() => {
-        props.setLock(false);
-      }, 500);
-    }
-    props.resetShow();
-  }, [isHover, open]);
 
   return (
     <>
       <button
-        ref={triggerRef}
-        onClick={(e) => {
-          e.stopPropagation();
+        onClick={() => {
           onOpenChange(true);
         }}
         className="absolute bottom-2 right-2 isolate z-20 h-8 w-8 overflow-clip rounded-full border-2 border-solid border-gray-700/30 p-1 after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md"
@@ -414,7 +391,12 @@ export const CardEditorButtonDesktop = (props: {
       <MediaEditor
         control={{
           open,
-          onOpenChange,
+          onOpenChange: (val: boolean) => {
+            onOpenChange(val);
+            if (!val) {
+              props.resetShow();
+            }
+          },
         }}
         mode="Desktop"
         data={props.data}

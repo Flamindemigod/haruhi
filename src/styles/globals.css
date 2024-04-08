@@ -60,7 +60,7 @@ body {
 }
 
 .card[data-state="open"] {
-  scale: 1.1;
+  scale: 1.01;
   opacity: 1;
   filter: grayscale(0);
 }
