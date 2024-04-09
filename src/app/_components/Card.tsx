@@ -85,17 +85,19 @@ export type Props = {
 };
 
 export default forwardRef<HTMLImageElement, Props>((props, ref) => {
-  const { reset } = useCardContext();
+  const { reset, onReset } = useCardContext();
   const user = useUser();
   let lock = false;
   const [show, setShowInner] = useState<boolean>(false);
   const setShow = (val: boolean) => {
-    if (!lock) setShowInner(val);
+    onReset();
+    if (!lock) {
+      setShowInner(val);
+    }
   };
   const color = useRandomBGColor(
     `${props.data.title.userPreferred}${props.data.id}`,
   );
-
   useEffect(() => {
     setShow(false);
   }, [reset]);
@@ -118,10 +120,6 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
             )}
           >
             <Link
-              // className={cx(
-              //   props.fullWidth ? "w-full" : "h-32 sm:h-48 md:h-64",
-              //   "card | relative isolate my-2 aspect-cover flex-shrink-0",
-              // )}
               href={`/${props.type.toLowerCase()}/${props.data.id}`}
               onClick={(e) => {
                 if (!show) {

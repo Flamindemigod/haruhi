@@ -77,7 +77,6 @@ export default ({ portal, ...props }: Props) => {
       </HoverCardPrimitive.Trigger>
       <HoverCardPrimitive.Portal
         container={portal.container?.current}
-        forceMount
       >
         <Transition.Root show={props.control?.open ?? open}>
           <Transition.Child
@@ -89,7 +88,6 @@ export default ({ portal, ...props }: Props) => {
             leaveTo="opacity-0"
           >
             <HoverCardPrimitive.Content
-              forceMount
               className={cx(
                 "radix-side-bottom:animate-slide-up radix-side-left:animate-slide-right radix-side-right:animate-slide-left radix-side-top:animate-slide-down",
               )}

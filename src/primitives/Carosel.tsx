@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useLayoutEffect, useState } from "react";
 import { useRef } from "react";
 
 interface Props {
@@ -22,7 +22,7 @@ const Carosel = forwardRef<HTMLDivElement, Props>(
       caroselTrack.current.scrollLeft += window.innerWidth / 1.5;
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       setShowLeftButton(false);
       setShowRightButton(false);
       if (caroselTrack.current.scrollWidth - caroselTrack.current.clientWidth) {
@@ -31,7 +31,7 @@ const Carosel = forwardRef<HTMLDivElement, Props>(
       }
     }, [children]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       caroselTrack.current.addEventListener("scroll", () => {
         setShowLeftButton(true);
         setShowRightButton(true);

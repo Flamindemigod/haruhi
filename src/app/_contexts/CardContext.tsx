@@ -10,9 +10,9 @@ interface CardContextType {
 export const CardContext = createContext<CardContextType | null>(null);
 
 export const CardProvider = ({ children }: { children: ReactNode }) => {
-  const [reset, setReset] = useState<boolean>(false);
+  let reset = false;
   const onReset = () => {
-    setReset((state) => !state);
+    reset = !reset;
   };
 
   return (
