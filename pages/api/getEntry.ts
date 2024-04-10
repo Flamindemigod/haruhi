@@ -5,7 +5,7 @@ type Response = {};
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Response>
+  res: NextApiResponse<Response>,
 ) {
   if (req.query.id !== undefined) {
     const query = `query getEntry {
@@ -177,7 +177,9 @@ export default async function handler(
       variables: {},
       token: req.cookies.access_token,
     });
-
+    data.Media.recommendations.edges = data.Media.recommendations.edges.filter(
+      (d: any) => !!d.node.mediaRecommendation,
+    );
     res.status(200).json(data);
   } else {
     res.status(400).json({ error: "id must be specified" });
