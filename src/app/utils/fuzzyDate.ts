@@ -1,4 +1,4 @@
-import { FuzzyDate as AniFuzzyDate } from "~/__generated__/graphql";
+import { FuzzyDate as AniFuzzyDate } from '~/__generated__/graphql';
 
 export class FuzzyDate {
   /** Numeric Day (24) */
@@ -24,7 +24,11 @@ export class FuzzyDate {
   }
 
   toDate() {
-    return new Date(this.year, this.month - 1, this.day);
+    let date = new Date();
+    date.setUTCFullYear(this.year);
+    date.setUTCMonth(this.month - 1);
+    date.setUTCDate(this.day);
+    return date;
   }
 
   fromFuzzy(date: AniFuzzyDate) {

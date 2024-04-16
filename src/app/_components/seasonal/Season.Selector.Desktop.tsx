@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { ReactNode } from "react";
-import RadioGroup from "~/primitives/RadioGroup";
-import { Season, YEAR_MAX, validSeasons } from "~/types.shared/anilist";
-import { Root as Label } from "@radix-ui/react-label";
-import Slider from "~/primitives/Slider";
+import { ReactNode } from 'react';
+import RadioGroup from '~/primitives/RadioGroup';
+import { Season, YEAR_MAX, validSeasons } from '~/types.shared/anilist';
+import { Root as Label } from '@radix-ui/react-label';
+import Slider from '~/primitives/Slider';
 
 type Props = {
   season: Exclude<Season, Season.any>;
@@ -14,7 +14,7 @@ type Props = {
 };
 
 const Wrapper = ({ children }: { children?: ReactNode }) => (
-  <div className="sticky top-0 flex flex-col items-center justify-center gap-2 rounded-md bg-black/20 p-4 dark:bg-white/10">
+  <div className='sticky top-0 flex flex-col items-center justify-center gap-2 rounded-md bg-black/20 p-4 dark:bg-white/10'>
     {children}
   </div>
 );
@@ -24,16 +24,16 @@ export default (props: Props) => {
     <>
       <Wrapper>
         <Label
-          className="self-start text-lg font-semibold text-primary-500"
-          htmlFor="seasonSelector"
+          className='self-start text-lg font-semibold text-primary-500'
+          htmlFor='seasonSelector'
         >
           Season
         </Label>
         <RadioGroup
-          name="seasonSelector"
+          name='seasonSelector'
           value={props.season}
-          orientation="vertical"
-          icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
+          orientation='vertical'
+          icon={<div className='h-3 w-3 rounded-full bg-primary-500' />}
           dataValues={validSeasons.map((e) => ({
             value: e,
             displayTitle: `${e}`.padStart(8),
@@ -45,23 +45,23 @@ export default (props: Props) => {
       </Wrapper>
       <Wrapper>
         <Label
-          className="self-start text-lg font-semibold text-primary-500"
-          htmlFor="yearSelector"
+          className='self-start text-lg font-semibold text-primary-500'
+          htmlFor='yearSelector'
         >
           Year{` ${props.year}`}
         </Label>
         <Slider
-          id="yearSelector"
+          id='yearSelector'
           max={YEAR_MAX}
           min={1970}
           step={1}
           value={[props.year]}
-          ariaLabel="Seasonal Year Selector"
+          ariaLabel='Seasonal Year Selector'
           onChange={(v) => {
             props.setSeason(props.season, v.at(0)!);
           }}
-          thumbClasses="w-4 h-4"
-          trackClasses="dark:bg-primary-400"
+          thumbClasses='w-4 h-4'
+          trackClasses='dark:bg-primary-400'
         />
       </Wrapper>
     </>

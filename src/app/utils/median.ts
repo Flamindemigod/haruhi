@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from 'assert';
 
 export default (arr: number[]): number => {
   assert(arr.length);

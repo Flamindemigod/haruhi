@@ -1,4 +1,4 @@
-import { gql } from "graphql-tag";
+import { gql } from 'graphql-tag';
 
 const MediaResponseFragment = gql`
   fragment MediaResponseFragment on Media {

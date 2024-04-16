@@ -1,7 +1,7 @@
-import { Season, SeasonValidator, YearValidator } from "~/types.shared/anilist";
-import Seasonal from "../_components/seasonal/Seasonal";
+import { Season, SeasonValidator, YearValidator } from '~/types.shared/anilist';
+import Seasonal from '../_components/seasonal/Seasonal';
 
-export default async ({
+const Page = async ({
   searchParams,
 }: {
   searchParams?: {
@@ -16,3 +16,5 @@ export default async ({
   // <Swipes to Move Up and Down a season> // Mobile View // Preload Seasonal
   return <Seasonal season={season} year={seasonYear} />;
 };
+
+export default Page;

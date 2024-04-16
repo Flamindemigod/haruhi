@@ -1,17 +1,17 @@
-import cx from "classix";
-import Image from "next/image";
-import { SignIn } from "./SignIn";
-import { getServerAuthSession } from "~/server/auth";
-import Avatar from "./Avatar";
-import { ThemeSwitcher } from "./ThemeSwitcher";
-import Link from "next/link";
+import cx from 'classix';
+import Image from 'next/image';
+import { SignIn } from './SignIn';
+import { getServerAuthSession } from '~/server/auth';
+import Avatar from './Avatar';
+import { ThemeSwitcher } from './ThemeSwitcher';
+import Link from 'next/link';
 // import {  Navigation } from "./Navigation";
-import { Suspense } from "react";
-import dynamic from "next/dynamic";
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 
-const Navigation = dynamic(() => import("./Navigation"), {
+const Navigation = dynamic(() => import('./Navigation'), {
   ssr: false,
-  loading: () => <div className="w-full" />,
+  loading: () => <div className='w-full' />,
 });
 
 export const Header = async () => {
@@ -19,15 +19,15 @@ export const Header = async () => {
   return (
     <header
       className={cx(
-        "flex flex-row items-center justify-between gap-2 px-2 py-4",
-        "animate-bg-travel-y bg-gradient-to-bl from-primary-500 via-indigo-500 to-primary-500 bg-500%",
+        'flex flex-row items-center justify-between gap-2 px-2 py-4',
+        'animate-bg-travel-y bg-gradient-to-bl from-primary-500 via-indigo-500 to-primary-500 bg-500%'
       )}
     >
       {/* Logo */}
-      <Link href={"/"} className="flex flex-shrink-0 flex-row items-center">
+      <Link href={'/'} className='flex flex-shrink-0 flex-row items-center'>
         <Image
-          alt="Haruhi Logo"
-          src={"/Logo.png"}
+          alt='Haruhi Logo'
+          src={'/Logo.png'}
           height={56}
           width={56}
           priority
@@ -37,7 +37,9 @@ export const Header = async () => {
       {/* Theme Switcher */}
       <ThemeSwitcher />
       {/* Sign In Button / User Avatar */}
-      {!session?.user ? <SignIn /> : <Avatar />}
+      {!session?.user ?
+        <SignIn />
+      : <Avatar />}
     </header>
   );
 };

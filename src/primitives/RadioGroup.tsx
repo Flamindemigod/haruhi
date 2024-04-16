@@ -1,7 +1,7 @@
-import * as RadioGroupPrimitives from "@radix-ui/react-radio-group";
-import { Root as Label } from "@radix-ui/react-label";
-import cx from "classix";
-import { ReactNode } from "react";
+import * as RadioGroupPrimitives from '@radix-ui/react-radio-group';
+import { Root as Label } from '@radix-ui/react-label';
+import cx from 'classix';
+import { ReactNode } from 'react';
 
 type Value<T> = {
   displayTitle: string;
@@ -14,17 +14,17 @@ type Props<T> = {
   disabled?: boolean;
   required?: boolean;
   name?: string;
-  orientation: "horizontal" | "vertical";
+  orientation: 'horizontal' | 'vertical';
   dataValues: Value<T>[];
   icon?: ReactNode;
 };
 
-export default <T,>(props: Props<T>) => (
+const RadioGroup = <T,>(props: Props<T>) => (
   <RadioGroupPrimitives.Root
     className={cx(
-      "flex flex-wrap gap-2",
-      props.orientation === "horizontal" && "flex-row items-center",
-      props.orientation === "vertical" && "w-max flex-col justify-center",
+      'flex flex-wrap gap-2',
+      props.orientation === 'horizontal' && 'flex-row items-center',
+      props.orientation === 'vertical' && 'w-max flex-col justify-center'
     )}
     value={String(props.value)}
     name={props.name}
@@ -38,14 +38,14 @@ export default <T,>(props: Props<T>) => (
     {props.dataValues.map((v) => (
       <span
         key={`${v.value}--${v.displayTitle}`}
-        className={cx("flex items-center justify-start gap-2")}
+        className={cx('flex items-center justify-start gap-2')}
       >
         <RadioGroupPrimitives.Item
           id={`${v.value}--${v.displayTitle}`}
           value={String(v.value)}
-          className="h-4 w-4 rounded-full bg-white"
+          className='h-4 w-4 rounded-full bg-white'
         >
-          <RadioGroupPrimitives.Indicator className="flex items-center justify-center">
+          <RadioGroupPrimitives.Indicator className='flex items-center justify-center'>
             {props.icon}
           </RadioGroupPrimitives.Indicator>
         </RadioGroupPrimitives.Item>
@@ -56,3 +56,5 @@ export default <T,>(props: Props<T>) => (
     ))}
   </RadioGroupPrimitives.Root>
 );
+
+export default RadioGroup;

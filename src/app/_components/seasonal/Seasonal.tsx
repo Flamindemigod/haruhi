@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
-import median from "~/app/utils/median";
-import mod from "~/app/utils/mod";
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import median from '~/app/utils/median';
+import mod from '~/app/utils/mod';
 import {
   CURRENT_SEASON,
   CURRENT_YEAR,
   Season,
   YEAR_MAX,
   validSeasons,
-} from "~/types.shared/anilist";
-import SeasonalMobile from "./Seasonal.Mobile";
-import { api } from "~/trpc/react";
-import SeasonalDesktop from "./Seasonal.Desktop";
-import { useMediaQuery } from "~/app/hooks/useMediaQuery";
+} from '~/types.shared/anilist';
+import SeasonalMobile from './Seasonal.Mobile';
+import { api } from '~/trpc/react';
+import SeasonalDesktop from './Seasonal.Desktop';
+import { useMediaQuery } from '~/app/hooks/useMediaQuery';
 
 type Props = {
   season: Exclude<Season, Season.any>;
   year: number;
 };
 
-export default (props: Props) => {
+const Seasonal = (props: Props) => {
   const pathname = usePathname();
   const { push } = useRouter();
 
@@ -42,13 +42,13 @@ export default (props: Props) => {
       refetchOnWindowFocus: false,
       getNextPageParam: (lastPage) => lastPage?.nextCursor,
       initialCursor: 1,
-    },
+    }
   );
 
   const setSeason = (season: Exclude<Season, Season.any>, year: number) => {
     const params = new URLSearchParams();
-    params.set("season", season as string);
-    params.set("year", `${median([1970, year, YEAR_MAX])}`);
+    params.set('season', season as string);
+    params.set('year', `${median([1970, year, YEAR_MAX])}`);
     push(`${pathname}?${params.toString()}`);
   };
 
@@ -72,7 +72,7 @@ export default (props: Props) => {
   const matches = useMediaQuery(`(min-width: 640px)`);
   return (
     <>
-      <div className="w-full sm:hidden">
+      <div className='w-full sm:hidden'>
         {/*Mobile Seasonal View*/}
         {(matches === null || !matches) && (
           <SeasonalMobile
@@ -89,7 +89,7 @@ export default (props: Props) => {
           />
         )}
       </div>
-      <div className="hidden w-full sm:block">
+      <div className='hidden w-full sm:block'>
         {/*Desktop Seasonal View*/}
         {(matches === null || matches) && (
           <SeasonalDesktop
@@ -109,3 +109,5 @@ export default (props: Props) => {
     </>
   );
 };
+
+export default Seasonal;

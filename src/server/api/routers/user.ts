@@ -1,13 +1,13 @@
-import { User_AuthQuery } from "~/__generated__/graphql";
-import { client } from "~/apolloClient";
-import { USER_AUTH } from "~/graphql/queries";
+import { User_AuthQuery } from '~/__generated__/graphql';
+import { client } from '~/apolloClient';
+import { USER_AUTH } from '~/graphql/queries';
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
-} from "~/server/api/trpc";
-import { db } from "~/server/db";
-import { api } from "~/trpc/server";
+} from '~/server/api/trpc';
+import { db } from '~/server/db';
+import { api } from '~/trpc/server';
 
 export const userRouter = createTRPCRouter({
   getUser: protectedProcedure.query(async ({ ctx }) => {
@@ -23,7 +23,7 @@ export const userRouter = createTRPCRouter({
       query: USER_AUTH,
       context: {
         headers: {
-          Authorization: "Bearer " + ctx.session.user.token,
+          Authorization: 'Bearer ' + ctx.session.user.token,
         },
       },
     });

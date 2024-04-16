@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   CharacterSort,
   Get_GenresQuery,
@@ -34,18 +34,21 @@ import {
   Set_Media_EntryMutationVariables,
   Set_Media_EntryMutation,
   Media as AniMedia,
-} from "~/__generated__/graphql";
-import { client } from "~/apolloClient";
-import convertEnum from "~/app/utils/convertEnum";
-import { FuzzyDate } from "~/app/utils/fuzzyDate";
-import generateBlurhash from "~/app/utils/generateBlurhash";
-import mediaBuilder from "~/app/utils/mediaBuilder";
-import { recommendationBuilder } from "~/app/utils/recommendationBuilder";
+} from '~/__generated__/graphql';
+import { client } from '~/apolloClient';
+import convertEnum from '~/app/utils/convertEnum';
+import { FuzzyDate } from '~/app/utils/fuzzyDate';
+import generateBlurhash from '~/app/utils/generateBlurhash';
+import mediaBuilder from '~/app/utils/mediaBuilder';
+import {
+  recommendationBuilder,
+  recommendationGenBlurs,
+} from '~/app/utils/recommendationBuilder';
 import {
   NonNullableFields,
   RenameByT,
   Replace,
-} from "~/app/utils/typescript-utils";
+} from '~/app/utils/typescript-utils';
 import {
   GET_GENRES,
   GET_TAGS,
@@ -59,15 +62,15 @@ import {
   USER_LIST,
   USER_RECOMMENDED,
   USER_UP_NEXT,
-} from "~/graphql/queries";
+} from '~/graphql/queries';
 
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
-} from "~/server/api/trpc";
-import { db, redis } from "~/server/db";
-import { api } from "~/trpc/server";
+} from '~/server/api/trpc';
+import { db, redis } from '~/server/db';
+import { api } from '~/trpc/server';
 import {
   SearchSort,
   FormatAnime,
@@ -91,8 +94,8 @@ import {
   ListStatusValidator,
   ListSortValidator,
   ListSort,
-} from "~/types.shared/anilist";
-import { buildRecommendationKey } from "~/types.shared/redis";
+} from '~/types.shared/anilist';
+import { buildRecommendationKey } from '~/types.shared/redis';
 export const anilistRouter = createTRPCRouter({
   getGenres: publicProcedure.query(async () => {
     const { data } = await client.query<Get_GenresQuery>({
@@ -113,7 +116,7 @@ export const anilistRouter = createTRPCRouter({
       z.object({
         searchString: z.string(),
         filters: animeSearchFilter,
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       let userNsfw;
@@ -125,7 +128,7 @@ export const anilistRouter = createTRPCRouter({
       }
       const vars = {
         page: 1,
-        type: "ANIME",
+        type: 'ANIME',
         isAdult: !userNsfw ? false : undefined,
         sort: convertEnum(SearchSort, MediaSort, input.filters.sort),
         search: !!input.searchString ? input.searchString : undefined,
@@ -174,12 +177,12 @@ export const anilistRouter = createTRPCRouter({
       if (!!animeData.Page) {
         let dAnime: Replace<
           Search_Anime_MangaQuery,
-          "Page",
+          'Page',
           RenameByT<
-            { media: "data" },
+            { media: 'data' },
             Replace<
-              NonNullable<Search_Anime_MangaQuery["Page"]>,
-              "media",
+              NonNullable<Search_Anime_MangaQuery['Page']>,
+              'media',
               Media[]
             >
           >
@@ -190,7 +193,7 @@ export const anilistRouter = createTRPCRouter({
         dAnime.Page.data = await Promise.all(
           animeData.Page.media!.map(async (m) => {
             return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
-          }),
+          })
         );
         return dAnime;
       }
@@ -201,7 +204,7 @@ export const anilistRouter = createTRPCRouter({
       z.object({
         searchString: z.string(),
         filters: mangaSearchFilter,
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       let userNsfw;
@@ -213,7 +216,7 @@ export const anilistRouter = createTRPCRouter({
       }
       const vars = {
         page: 1,
-        type: "MANGA",
+        type: 'MANGA',
         isAdult: !userNsfw ? false : undefined,
         sort: convertEnum(SearchSort, MediaSort, input.filters.sort),
         search: !!input.searchString ? input.searchString : undefined,
@@ -261,12 +264,12 @@ export const anilistRouter = createTRPCRouter({
       if (!!mangaData.Page) {
         let dManga: Replace<
           Search_Anime_MangaQuery,
-          "Page",
+          'Page',
           RenameByT<
-            { media: "data" },
+            { media: 'data' },
             Replace<
-              NonNullable<Search_Anime_MangaQuery["Page"]>,
-              "media",
+              NonNullable<Search_Anime_MangaQuery['Page']>,
+              'media',
               Media[]
             >
           >
@@ -277,7 +280,7 @@ export const anilistRouter = createTRPCRouter({
         dManga.Page.data = await Promise.all(
           mangaData.Page.media!.map(async (m) => {
             return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
-          }),
+          })
         );
         return dManga;
       }
@@ -288,7 +291,7 @@ export const anilistRouter = createTRPCRouter({
       z.object({
         searchString: z.string(),
         filters: characterSearchFilter,
-      }),
+      })
     )
     .query(async ({ input }) => {
       const vars = {
@@ -297,11 +300,11 @@ export const anilistRouter = createTRPCRouter({
         search: !!input.searchString ? input.searchString : undefined,
         isBirthday: (() => {
           switch (input.filters.showBirthdaysOnly) {
-            case "True":
+            case 'True':
               return true;
-            case "False":
+            case 'False':
               return false;
-            case "None":
+            case 'None':
               return undefined;
           }
         })(),
@@ -314,12 +317,12 @@ export const anilistRouter = createTRPCRouter({
       if (!!characterData.Page) {
         let dChar: Replace<
           Search_CharactersQuery,
-          "Page",
+          'Page',
           RenameByT<
-            { characters: "data" },
+            { characters: 'data' },
             Replace<
-              NonNullable<Search_CharactersQuery["Page"]>,
-              "characters",
+              NonNullable<Search_CharactersQuery['Page']>,
+              'characters',
               Character[]
             >
           >
@@ -336,7 +339,7 @@ export const anilistRouter = createTRPCRouter({
                 blurHash: await generateBlurhash(m.image.medium),
               },
             } as Character;
-          }),
+          })
         );
         return dChar;
       }
@@ -347,7 +350,7 @@ export const anilistRouter = createTRPCRouter({
       z.object({
         searchString: z.string(),
         filters: staffSearchFilter,
-      }),
+      })
     )
     .query(async ({ input }) => {
       const vars = {
@@ -356,11 +359,11 @@ export const anilistRouter = createTRPCRouter({
         search: !!input.searchString ? input.searchString : undefined,
         isBirthday: (() => {
           switch (input.filters.showBirthdaysOnly) {
-            case "True":
+            case 'True':
               return true;
-            case "False":
+            case 'False':
               return false;
-            case "None":
+            case 'None':
               return undefined;
           }
         })(),
@@ -373,10 +376,10 @@ export const anilistRouter = createTRPCRouter({
       if (!!staffData.Page) {
         let dStaff: Replace<
           Search_StaffQuery,
-          "Page",
+          'Page',
           RenameByT<
-            { staff: "data" },
-            Replace<NonNullable<Search_StaffQuery["Page"]>, "staff", Staff[]>
+            { staff: 'data' },
+            Replace<NonNullable<Search_StaffQuery['Page']>, 'staff', Staff[]>
           >
         > = {
           ...staffData,
@@ -391,7 +394,7 @@ export const anilistRouter = createTRPCRouter({
                 blurHash: await generateBlurhash(m.image.medium),
               },
             } as Staff;
-          }),
+          })
         );
 
         return dStaff;
@@ -403,7 +406,7 @@ export const anilistRouter = createTRPCRouter({
       z.object({
         searchString: z.string(),
         filters: studioSearchFilter,
-      }),
+      })
     )
     .query(async ({ input }) => {
       const vars = {
@@ -418,12 +421,12 @@ export const anilistRouter = createTRPCRouter({
       if (!!studioData.Page) {
         let dStudio: Replace<
           Search_StudioQuery,
-          "Page",
+          'Page',
           RenameByT<
-            { studios: "data" },
+            { studios: 'data' },
             Replace<
-              NonNullable<Search_StudioQuery["Page"]>,
-              "studios",
+              NonNullable<Search_StudioQuery['Page']>,
+              'studios',
               Studio[]
             >
           >
@@ -442,7 +445,7 @@ export const anilistRouter = createTRPCRouter({
         seasonal: z.boolean().default(false),
         sort: z.nativeEnum(MediaSort).default(MediaSort.PopularityDesc),
         format: z.nativeEnum(FormatAnime).default(FormatAnime.any),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       let userNsfw;
@@ -458,16 +461,16 @@ export const anilistRouter = createTRPCRouter({
         page: 1,
         sort: input.sort,
         isAdult: !userNsfw ? false : undefined,
-        type: "ANIME",
+        type: 'ANIME',
         status: convertEnum(
           Status,
           MediaStatus,
-          Status.any,
+          Status.any
         ) as MediaStatus | null,
         format: convertEnum(
           FormatAnime,
           MediaFormat,
-          input.format,
+          input.format
         ) as MediaFormat | null,
         season: input.seasonal
           ? convertEnum(Season, MediaSeason, getSeason(new Date(Date.now())))
@@ -482,7 +485,7 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
@@ -490,12 +493,12 @@ export const anilistRouter = createTRPCRouter({
       if (!!animeData.Page) {
         let dAnime: Replace<
           Trending_Anime_MangaQuery,
-          "Page",
+          'Page',
           RenameByT<
-            { media: "data" },
+            { media: 'data' },
             Replace<
-              NonNullable<Trending_Anime_MangaQuery["Page"]>,
-              "media",
+              NonNullable<Trending_Anime_MangaQuery['Page']>,
+              'media',
               Media[]
             >
           >
@@ -506,7 +509,7 @@ export const anilistRouter = createTRPCRouter({
         dAnime.Page.data = await Promise.all(
           animeData.Page.media!.map(async (m) => {
             return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
-          }),
+          })
         );
         return dAnime;
       }
@@ -517,7 +520,7 @@ export const anilistRouter = createTRPCRouter({
       z.object({
         sort: z.nativeEnum(MediaSort).default(MediaSort.PopularityDesc),
         format: z.nativeEnum(FormatManga).default(FormatManga.any),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       let userNsfw;
@@ -532,16 +535,16 @@ export const anilistRouter = createTRPCRouter({
         page: 1,
         sort: input.sort,
         isAdult: !userNsfw ? false : undefined,
-        type: "MANGA",
+        type: 'MANGA',
         status: convertEnum(
           Status,
           MediaStatus,
-          Status.any,
+          Status.any
         ) as MediaStatus | null,
         format: convertEnum(
           FormatAnime,
           MediaFormat,
-          input.format,
+          input.format
         ) as MediaFormat | null,
       } as Trending_Anime_MangaQueryVariables;
       let { data: mangaData } = await client.query<Trending_Anime_MangaQuery>({
@@ -550,7 +553,7 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
@@ -558,12 +561,12 @@ export const anilistRouter = createTRPCRouter({
       if (!!mangaData.Page) {
         let dManga: Replace<
           Trending_Anime_MangaQuery,
-          "Page",
+          'Page',
           RenameByT<
-            { media: "data" },
+            { media: 'data' },
             Replace<
-              NonNullable<Trending_Anime_MangaQuery["Page"]>,
-              "media",
+              NonNullable<Trending_Anime_MangaQuery['Page']>,
+              'media',
               Media[]
             >
           >
@@ -574,7 +577,7 @@ export const anilistRouter = createTRPCRouter({
         dManga.Page.data = await Promise.all(
           mangaData.Page.media!.map(async (m) => {
             return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
-          }),
+          })
         );
         return dManga;
       }
@@ -589,13 +592,13 @@ export const anilistRouter = createTRPCRouter({
 
     const data = await redis.get<Media[]>(key);
     if (!!data) {
-      return data;
+      return await recommendationGenBlurs(data);
     }
 
     let animeAccumulated: Map<number, Media> = new Map();
     let vars = {
       page: 0,
-      type: "ANIME",
+      type: 'ANIME',
       userName,
       perPage: 25,
     } as NonNullableFields<User_RecommendedQueryVariables>;
@@ -612,14 +615,14 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
       });
       animeAccumulated = await recommendationBuilder(
         animeData.Page?.mediaList as MediaList[],
-        animeAccumulated,
+        animeAccumulated
       );
       break;
     }
@@ -627,7 +630,7 @@ export const anilistRouter = createTRPCRouter({
     await redis.set(key, [...animeAccumulated.values()], {
       ex: 60 * 60 * 24, // Time to Expire In Seconds 60*60*24 = 1 day;
     });
-    return [...animeAccumulated.values()];
+    return await recommendationGenBlurs([...animeAccumulated.values()]);
   }),
 
   getRecommendedManga: protectedProcedure.query(async ({ ctx }) => {
@@ -639,13 +642,13 @@ export const anilistRouter = createTRPCRouter({
 
     const data = await redis.get<Media[]>(key);
     if (!!data) {
-      return data;
+      return await recommendationGenBlurs(data);
     }
 
     let mangaAccumulated: Map<number, Media> = new Map();
     let vars = {
       page: 0,
-      type: "MANGA",
+      type: 'MANGA',
       userName,
       perPage: 10,
     } as NonNullableFields<User_RecommendedQueryVariables>;
@@ -662,14 +665,14 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
       });
       mangaAccumulated = await recommendationBuilder(
         mangaData.Page?.mediaList as MediaList[],
-        mangaAccumulated,
+        mangaAccumulated
       );
       break;
     }
@@ -677,7 +680,7 @@ export const anilistRouter = createTRPCRouter({
       ex: 60 * 60 * 24, // Time to Expire In Seconds 60*60*24 = 1 day;
     });
 
-    return [...mangaAccumulated.values()];
+    return await recommendationGenBlurs([...mangaAccumulated.values()]);
   }),
 
   getCurrentAnime: protectedProcedure.query(async ({ ctx }) => {
@@ -685,7 +688,7 @@ export const anilistRouter = createTRPCRouter({
     const userName = user?.name;
     let vars = {
       page: 0,
-      type: "ANIME",
+      type: 'ANIME',
       userName,
       perPage: 50,
     } as NonNullableFields<User_ListQueryVariables>;
@@ -700,7 +703,7 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
@@ -716,7 +719,7 @@ export const anilistRouter = createTRPCRouter({
                 }
                 return null;
               })
-              .filter(Boolean) ?? [],
+              .filter(Boolean) ?? []
           )
         ).sort((a, b) => {
           let a_max: number;
@@ -767,7 +770,7 @@ export const anilistRouter = createTRPCRouter({
     const userName = user?.name;
     let vars = {
       page: 0,
-      type: "MANGA",
+      type: 'MANGA',
       userName,
       perPage: 50,
     } as NonNullableFields<User_ListQueryVariables>;
@@ -782,7 +785,7 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
@@ -798,7 +801,7 @@ export const anilistRouter = createTRPCRouter({
                 }
                 return null;
               })
-              .filter(Boolean) ?? [],
+              .filter(Boolean) ?? []
           )
         ).sort((a, b) => {
           if (!a?.chapters && !b?.chapters) {
@@ -826,7 +829,7 @@ export const anilistRouter = createTRPCRouter({
     const userName = user?.name;
     let vars = {
       page: 1,
-      type: "ANIME",
+      type: 'ANIME',
       userName,
       perPage: 25,
     } as NonNullableFields<User_Up_NextQueryVariables>;
@@ -837,7 +840,7 @@ export const anilistRouter = createTRPCRouter({
       context: {
         headers: !!ctx.session
           ? {
-              Authorization: "Bearer " + ctx.session.user.token,
+              Authorization: 'Bearer ' + ctx.session.user.token,
             }
           : {},
       },
@@ -849,7 +852,7 @@ export const anilistRouter = createTRPCRouter({
             return await mediaBuilder(m.media as AniMedia);
           }
           return null;
-        }) ?? [],
+        }) ?? []
       )
     ).filter(Boolean) as Media[];
     return data;
@@ -860,7 +863,7 @@ export const anilistRouter = createTRPCRouter({
     const userName = user?.name;
     let vars = {
       page: 1,
-      type: "MANGA",
+      type: 'MANGA',
       userName,
       perPage: 25,
     } as NonNullableFields<User_Up_NextQueryVariables>;
@@ -871,7 +874,7 @@ export const anilistRouter = createTRPCRouter({
       context: {
         headers: !!ctx.session
           ? {
-              Authorization: "Bearer " + ctx.session.user.token,
+              Authorization: 'Bearer ' + ctx.session.user.token,
             }
           : {},
       },
@@ -883,7 +886,7 @@ export const anilistRouter = createTRPCRouter({
             return await mediaBuilder(m.media as AniMedia);
           }
           return null;
-        }) ?? [],
+        }) ?? []
       )
     ).filter(Boolean) as Media[];
     return data;
@@ -895,7 +898,7 @@ export const anilistRouter = createTRPCRouter({
         cursor: z.number().positive().nullish().default(1),
         season: SeasonValidator,
         year: YearValidator,
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       if (!input.cursor) return null;
@@ -921,7 +924,7 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
@@ -933,7 +936,7 @@ export const anilistRouter = createTRPCRouter({
               return await mediaBuilder(media as AniMedia);
             }
             return null;
-          }) ?? [],
+          }) ?? []
         )
       ).filter(Boolean) as Media[];
       return {
@@ -950,7 +953,7 @@ export const anilistRouter = createTRPCRouter({
         cursor: z.number().positive().nullish().default(1),
         list: ListStatusValidator,
         sort: ListSortValidator,
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       if (!input.cursor) return null;
@@ -961,7 +964,7 @@ export const anilistRouter = createTRPCRouter({
       let vars = {
         page: input.cursor,
         perPage: 25,
-        type: "ANIME",
+        type: 'ANIME',
         sort: convertEnum(ListSort, MediaListSort, input.sort),
         userName,
         status: convertEnum(ListStatus, MediaListStatus, input.list),
@@ -974,7 +977,7 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
@@ -987,7 +990,7 @@ export const anilistRouter = createTRPCRouter({
             }
             return null;
           })
-          .filter(async (p) => !!(await p)) as Promise<Media>[],
+          .filter(async (p) => !!(await p)) as Promise<Media>[]
       );
       return {
         data,
@@ -1003,7 +1006,7 @@ export const anilistRouter = createTRPCRouter({
         cursor: z.number().positive().nullish().default(1),
         list: ListStatusValidator,
         sort: ListSortValidator,
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       if (!input.cursor) return null;
@@ -1014,7 +1017,7 @@ export const anilistRouter = createTRPCRouter({
       let vars = {
         page: input.cursor,
         perPage: 25,
-        type: "MANGA",
+        type: 'MANGA',
         sort: convertEnum(ListSort, MediaListSort, input.sort),
         userName,
         status: convertEnum(ListStatus, MediaListStatus, input.list),
@@ -1027,7 +1030,7 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
@@ -1040,7 +1043,7 @@ export const anilistRouter = createTRPCRouter({
             }
             return null;
           })
-          .filter(async (p) => !!(await p)) as Promise<Media>[],
+          .filter(async (p) => !!(await p)) as Promise<Media>[]
       );
       return {
         data,
@@ -1063,7 +1066,7 @@ export const anilistRouter = createTRPCRouter({
         completedAt: z.date().nullable(),
         notes: z.string().nullable(),
         private: z.boolean().catch(false),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       let vars = {
@@ -1083,7 +1086,7 @@ export const anilistRouter = createTRPCRouter({
         context: {
           headers: !!ctx.session
             ? {
-                Authorization: "Bearer " + ctx.session.user.token,
+                Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },

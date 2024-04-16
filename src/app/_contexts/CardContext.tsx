@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useState } from 'react';
 
 interface CardContextType {
   reset: boolean;
@@ -25,7 +25,7 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
 export const useCardContext = () => {
   const cardContext = useContext(CardContext);
   if (!cardContext) {
-    throw new Error("useCardContext has to be used within CardProvider");
+    throw new Error('useCardContext has to be used within CardProvider');
   }
   return cardContext;
 };

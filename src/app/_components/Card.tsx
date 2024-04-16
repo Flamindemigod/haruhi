@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { Category, ListStatus, Media } from "~/types.shared/anilist";
-import { SelectNonNullableFields } from "../utils/typescript-utils";
-import HoverCard from "~/primitives/HoverCard";
-import { forwardRef, useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import cx from "classix";
-import Marquee from "./Marquee";
-import Countdown, { zeroPad } from "react-countdown";
-import useRandomBGColor from "../hooks/useRandomBGColor";
-import { InfoCircledIcon, Pencil1Icon } from "@radix-ui/react-icons";
-import Tooltip from "~/primitives/Tooltip";
-import MediaEditor from "./anime-manga/MediaEditor";
-import { useUser } from "../_contexts/User";
-import { useCardContext } from "../_contexts/CardContext";
+import { Category, ListStatus, Media } from '~/types.shared/anilist';
+import { SelectNonNullableFields } from '../utils/typescript-utils';
+import HoverCard from '~/primitives/HoverCard';
+import { forwardRef, useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import cx from 'classix';
+import Marquee from './Marquee';
+import Countdown, { zeroPad } from 'react-countdown';
+import useRandomBGColor from '../hooks/useRandomBGColor';
+import { InfoCircledIcon } from '@radix-ui/react-icons';
+import Tooltip from '~/primitives/Tooltip';
+import { useCardContext } from '../_contexts/CardContext';
+import { useSession } from 'next-auth/react';
+import CardEditor from './CardEditor';
 
 interface PropsCountdown {
   days: number;
@@ -36,9 +36,9 @@ const countdownRenderer = ({
     // Render a countdown
     return (
       <span>
-        {days ? `${zeroPad(days)}d : ` : ""}
-        {days || hours ? `${zeroPad(hours)}h : ` : ""}{" "}
-        {days || hours || minutes ? `${zeroPad(minutes)}m` : ""}
+        {days ? `${zeroPad(days)}d : ` : ''}
+        {days || hours ? `${zeroPad(hours)}h : ` : ''}{' '}
+        {days || hours || minutes ? `${zeroPad(minutes)}m` : ''}
       </span>
     );
   }
@@ -46,47 +46,50 @@ const countdownRenderer = ({
 
 export type CardMedia = Pick<
   Media,
-  | "coverImage"
-  | "bannerImage"
-  | "title"
-  | "nextAiringEpisode"
-  | "mediaListEntry"
-  | "episodes"
-  | "status"
-  | "duration"
-  | "averageScore"
-  | "format"
-  | "genres"
-  | "isAdult"
-  | "description"
-  | "id"
-  | "season"
-  | "seasonYear"
-  | "chapters"
-  | "volumes"
+  | 'coverImage'
+  | 'bannerImage'
+  | 'title'
+  | 'nextAiringEpisode'
+  | 'mediaListEntry'
+  | 'episodes'
+  | 'status'
+  | 'duration'
+  | 'averageScore'
+  | 'format'
+  | 'genres'
+  | 'isAdult'
+  | 'description'
+  | 'id'
+  | 'season'
+  | 'seasonYear'
+  | 'chapters'
+  | 'volumes'
+  | 'type'
 >;
 
 export type Props = {
+  refetch?: () => void;
   type: Category.Anime | Category.Manga;
   fullWidth?: true;
   data: SelectNonNullableFields<
     CardMedia,
     keyof Omit<
       CardMedia,
-      | "airingSchedule"
-      | "mediaListEntry"
-      | "averageScore"
-      | "season"
-      | "seasonYear"
-      | "status"
-      | "format"
+      | 'airingSchedule'
+      | 'mediaListEntry'
+      | 'averageScore'
+      | 'season'
+      | 'seasonYear'
+      | 'status'
+      | 'format'
     >
   >;
 };
 
-export default forwardRef<HTMLImageElement, Props>((props, ref) => {
+const Card = forwardRef<HTMLImageElement, Props>((props, ref) => {
   const { reset, onReset } = useCardContext();
-  const user = useUser();
+  // const user = useUser();
+  const user = useSession().data;
   let lock = false;
   const [show, setShowInner] = useState<boolean>(false);
   const setShow = (val: boolean) => {
@@ -96,7 +99,7 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
     }
   };
   const color = useRandomBGColor(
-    `${props.data.title.userPreferred}${props.data.id}`,
+    `${props.data.title.userPreferred}${props.data.id}`
   );
   useEffect(() => {
     setShow(false);
@@ -115,8 +118,8 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
         trigger={
           <div
             className={cx(
-              props.fullWidth ? "w-full" : "h-32 sm:h-48 md:h-64",
-              "card | relative isolate my-2 aspect-cover flex-shrink-0",
+              props.fullWidth ? 'w-full' : 'h-32 sm:h-48 md:h-64',
+              'card | relative isolate my-2 aspect-cover flex-shrink-0'
             )}
           >
             <Link
@@ -142,14 +145,14 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                   ) {
                     if (!!props.data.mediaListEntry.score) return null;
                     return (
-                      <div className="absolute right-2 top-2 isolate z-20 h-6 w-6 overflow-clip rounded-full after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md">
+                      <div className='absolute right-2 top-2 isolate z-20 h-6 w-6 overflow-clip rounded-full after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md'>
                         <Tooltip
-                          side="bottom"
+                          side='bottom'
                           content={
                             <div>{`This ${props.type} needs to be scored`}</div>
                           }
                         >
-                          <InfoCircledIcon className="h-full w-full font-medium text-red-500" />
+                          <InfoCircledIcon className='h-full w-full font-medium text-red-500' />
                         </Tooltip>
                       </div>
                     );
@@ -190,7 +193,7 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                   }
                 }
               })() && (
-                <div className="absolute left-0 top-0 z-20 rounded-br-full bg-primary-500 pb-2 pr-2 text-white">
+                <div className='absolute left-0 top-0 z-20 rounded-br-full bg-primary-500 pb-2 pr-2 text-white'>
                   {(() => {
                     switch (props.type) {
                       case Category.Anime: {
@@ -220,8 +223,8 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
               <Image
                 ref={ref}
                 src={props.data.coverImage.large!}
-                placeholder="blur"
-                className="object-cover"
+                placeholder='blur'
+                className='object-cover'
                 priority
                 blurDataURL={props.data.coverImage.blurHash}
                 alt={`Cover of ${props.data.title.userPreferred}`}
@@ -232,7 +235,9 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
               //Render Media Editor Button
             }
             {!!user && (
-              <CardEditorButtonDesktop
+              <CardEditor
+                show={show}
+                refetch={props.refetch ?? (() => {})}
                 data={props.data}
                 resetShow={() => {
                   lock = true;
@@ -247,23 +252,23 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
         }
         content={{
           data: (
-            <div className="flex max-w-[100dvw] flex-col rounded-md bg-offWhite-100 p-4 dark:bg-offWhite-900 sm:max-w-sm md:max-w-md">
-              <div className="pb-2">
-                <Marquee className="text-xl font-semibold text-primary-500">
+            <div className='flex max-w-[100dvw] flex-col rounded-md bg-offWhite-100 p-4 dark:bg-offWhite-900 sm:max-w-sm md:max-w-md'>
+              <div className='pb-2'>
+                <Marquee className='text-xl font-semibold text-primary-500'>
                   {props.data.title.userPreferred}
                 </Marquee>
-                <Marquee className="text-sm">
+                <Marquee className='text-sm'>
                   {props.data.title.english}
                 </Marquee>
               </div>
               <div
                 dangerouslySetInnerHTML={{ __html: props.data.description }}
-                className="line-clamp-3 md:line-clamp-4"
+                className='line-clamp-3 md:line-clamp-4'
               ></div>
               <div>
-                <div className="py-2 ">
+                <div className='py-2 '>
                   {/* Number of Episodes */}
-                  <div className="text-primary-500 empty:hidden">
+                  <div className='text-primary-500 empty:hidden'>
                     {(() => {
                       if (!!props.data.mediaListEntry) return null;
                       switch (props.type) {
@@ -282,7 +287,7 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                   {(() => {
                     if (!!props.data.mediaListEntry) {
                       return (
-                        <div className="text-primary-500">
+                        <div className='text-primary-500'>
                           {`Progress: ${
                             props.data.mediaListEntry.progress
                           }${(() => {
@@ -296,7 +301,7 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                               default:
                                 break;
                             }
-                            return "+";
+                            return '+';
                           })()}`}
                         </div>
                       );
@@ -321,18 +326,18 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
                   }
                 })()}
               </div>
-              <div className="py-2">
+              <div className='py-2'>
                 {/* Format - Status*/}
                 {`${props.data.format} - ${props.data.status}`}
               </div>
-              <div className="flex h-14 gap-2 overflow-y-auto p-2">
+              <div className='flex h-14 gap-2 overflow-y-auto p-2'>
                 {/* Genres */}
                 {props.data.genres.map((g) => (
                   <div
                     key={g}
                     className={cx(
-                      "h-min whitespace-nowrap rounded-lg px-2 py-0.5",
-                      color,
+                      'h-min whitespace-nowrap rounded-lg px-2 py-0.5',
+                      color
                     )}
                   >
                     {g}
@@ -341,9 +346,9 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
               </div>
             </div>
           ),
-          side: "bottom",
+          side: 'bottom',
           sideOffset: 5,
-          sticky: "always",
+          sticky: 'always',
           collisions: {
             avoidCollisions: true,
             collisionPadding: 5,
@@ -355,50 +360,5 @@ export default forwardRef<HTMLImageElement, Props>((props, ref) => {
   );
 });
 
-export const CardEditorButtonDesktop = (props: {
-  resetShow: () => void;
-  data: SelectNonNullableFields<
-    CardMedia,
-    keyof Omit<
-      CardMedia,
-      | "airingSchedule"
-      | "mediaListEntry"
-      | "averageScore"
-      | "season"
-      | "seasonYear"
-      | "status"
-      | "format"
-    >
-  >;
-}) => {
-  const [open, onOpenChange] = useState<boolean>(false);
-
-  return (
-    <>
-      <button
-        onClick={() => {
-          onOpenChange(true);
-        }}
-        className="absolute bottom-2 right-2 isolate z-20 h-8 w-8 overflow-clip rounded-full border-2 border-solid border-gray-700/30 p-1 after:absolute after:inset-0 after:-z-50 after:bg-white/10 after:backdrop-blur-md"
-      >
-        <Tooltip content={"Show Media Editor"} side="top" className="z-[100]">
-          <Pencil1Icon className="h-full w-full font-medium text-gray-700 hover:text-green-400" />
-        </Tooltip>
-      </button>
-
-      <MediaEditor
-        control={{
-          open,
-          onOpenChange: (val: boolean) => {
-            onOpenChange(val);
-            if (!val) {
-              props.resetShow();
-            }
-          },
-        }}
-        mode="Desktop"
-        data={props.data}
-      />
-    </>
-  );
-};
+Card.displayName = 'Card';
+export default Card;

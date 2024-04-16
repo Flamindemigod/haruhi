@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Category, ListSort, ListStatus, Media } from "~/types.shared/anilist";
-import CardGrid, { Props as GridProps } from "../../CardGrid";
-import ListSelectorMobile from "./List.Selector.Mobile";
+import { Category, ListSort, ListStatus, Media } from '~/types.shared/anilist';
+import CardGrid, { Props as GridProps } from '../../CardGrid';
+import ListSelectorMobile from './List.Selector.Mobile';
 
 type Props = {
   list: ListStatus;
@@ -20,9 +20,9 @@ export default (props: Props) => {
       <CardGrid
         isFetching={props.isFetching}
         type={props.type}
-        data={props.data as GridProps["data"]}
+        data={props.data as GridProps['data']}
         onReachBottom={props.onReachBottom}
-        fallback="Fetching List Data"
+        fallback='Fetching List Data'
       />
       <ListSelectorMobile {...props} />
     </>

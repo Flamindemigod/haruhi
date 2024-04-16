@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   Dispatch,
@@ -7,21 +7,21 @@ import React, {
   RefObject,
   SetStateAction,
   useState,
-} from "react";
-import { Root as Label } from "@radix-ui/react-label";
-import Slider from "~/primitives/Slider";
-import RadioGroup from "~/primitives/RadioGroup";
-import Select from "~/primitives/Select";
-import TextField from "~/primitives/TextField";
+} from 'react';
+import { Root as Label } from '@radix-ui/react-label';
+import Slider from '~/primitives/Slider';
+import RadioGroup from '~/primitives/RadioGroup';
+import Select from '~/primitives/Select';
+import TextField from '~/primitives/TextField';
 import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
   MixerHorizontalIcon,
-} from "@radix-ui/react-icons";
-import Drawer from "~/primitives/Drawer";
-import { api } from "~/trpc/react";
-import ThreeToggleChip from "~/primitives/ThreeToggleChip";
-import { useDebounce } from "./useDebounce";
+} from '@radix-ui/react-icons';
+import Drawer from '~/primitives/Drawer';
+import { api } from '~/trpc/react';
+import ThreeToggleChip from '~/primitives/ThreeToggleChip';
+import { useDebounce } from './useDebounce';
 import {
   AnimeFilter,
   MangaFilter,
@@ -41,11 +41,11 @@ import {
   Filter,
   TernaryState,
   YEAR_MAX,
-} from "~/types.shared/anilist";
-import { useUser } from "../_contexts/User";
+} from '~/types.shared/anilist';
+import { useUser } from '../_contexts/User';
 
 const Wrapper = ({ children }: { children?: ReactNode }) => (
-  <div className="flex flex-col gap-2 rounded-md bg-black/20 p-4 dark:bg-white/10">
+  <div className='flex flex-col gap-2 rounded-md bg-black/20 p-4 dark:bg-white/10'>
     {children}
   </div>
 );
@@ -54,7 +54,7 @@ const FilterSelector = (
   filter: Filter,
   setFilter: Dispatch<SetStateAction<Filter>>,
   onReset: () => void,
-  container?: RefObject<HTMLDivElement>,
+  container?: RefObject<HTMLDivElement>
 ) => {
   let { data: genres } = api.anilist.getGenres.useQuery(undefined, {
     refetchOnReconnect: false,
@@ -69,17 +69,17 @@ const FilterSelector = (
 
   const user = useUser();
 
-  let category = "";
+  let category = '';
   const [genreReset, setGenreReset] = useState<boolean>(false);
   const [tagReset, setTagReset] = useState<boolean>(false);
   switch (filter.category) {
     case Category.Anime:
       return (
-        <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+        <div className='m-2 grid h-full w-full gap-2 overflow-y-scroll p-2'>
           {/* Reset */}
           <Wrapper>
             <button
-              className="rounded-md bg-primary-500 p-2"
+              className='rounded-md bg-primary-500 p-2'
               onClick={() => {
                 setGenreReset((s) => !s);
                 setTagReset((s) => !s);
@@ -92,15 +92,15 @@ const FilterSelector = (
           {/* Sort */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="sortSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='sortSelector'
             >
               Sort
             </Label>
             <Select
               value={(filter as AnimeFilter).sort}
               trigger={
-                <div className="rounded-md bg-primary-500 p-2 text-center">
+                <div className='rounded-md bg-primary-500 p-2 text-center'>
                   {(filter as AnimeFilter).sort}
                 </div>
               }
@@ -109,8 +109,8 @@ const FilterSelector = (
                 value: v,
                 displayTitle: v,
               }))}
-              triggerAriaLabel="sortSelector"
-              side={"left"}
+              triggerAriaLabel='sortSelector'
+              side={'left'}
               onValueChange={(v: SearchSort) => {
                 setFilter((state) => ({
                   ...(state as AnimeFilter),
@@ -122,19 +122,19 @@ const FilterSelector = (
           {/* Airing Status */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="airingStatusSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='airingStatusSelector'
             >
               Airing Status
             </Label>
             <RadioGroup
-              name="airingStatusSelector"
-              orientation="horizontal"
+              name='airingStatusSelector'
+              orientation='horizontal'
               dataValues={Object.values(Status).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
-              icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
+              icon={<div className='h-3 w-3 rounded-full bg-primary-500' />}
               value={(filter as AnimeFilter).status}
               onValueChange={(s: Status) => {
                 setFilter((state) => ({
@@ -147,19 +147,19 @@ const FilterSelector = (
           {/* Format */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="formatSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='formatSelector'
             >
               Format
             </Label>
             <RadioGroup
-              name="formatSelector"
-              orientation="horizontal"
+              name='formatSelector'
+              orientation='horizontal'
               dataValues={Object.values(FormatAnime).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
-              icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
+              icon={<div className='h-3 w-3 rounded-full bg-primary-500' />}
               value={(filter as AnimeFilter).format}
               onValueChange={(f: FormatAnime) => {
                 setFilter((state: any) => ({
@@ -172,19 +172,19 @@ const FilterSelector = (
           {/* Season Selector */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="seasonSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='seasonSelector'
             >
               Season
             </Label>
             <RadioGroup
-              name="seasonSelector"
-              orientation="horizontal"
+              name='seasonSelector'
+              orientation='horizontal'
               dataValues={Object.values(Season).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
-              icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
+              icon={<div className='h-3 w-3 rounded-full bg-primary-500' />}
               value={(filter as AnimeFilter).season}
               onValueChange={(s: Season) => {
                 setFilter((state) => ({
@@ -197,16 +197,16 @@ const FilterSelector = (
           {/* Year Range */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="yearRangeSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='yearRangeSelector'
             >
-              Year Range{" "}
+              Year Range{' '}
               {`[${(filter as AnimeFilter).minYear} - ${
                 (filter as AnimeFilter).maxYear
               }]`}
             </Label>
             <Slider
-              id="yearRangeSelector"
+              id='yearRangeSelector'
               max={YEAR_MAX}
               min={1970}
               step={1}
@@ -214,7 +214,7 @@ const FilterSelector = (
                 (filter as AnimeFilter).minYear!,
                 (filter as AnimeFilter).maxYear!,
               ]}
-              ariaLabel="Year Range Selector"
+              ariaLabel='Year Range Selector'
               onChange={(v) => {
                 setFilter((state) => ({
                   ...state,
@@ -222,25 +222,25 @@ const FilterSelector = (
                   maxYear: v.sort().at(-1)!,
                 }));
               }}
-              thumbClasses="w-4 h-4"
-              trackClasses="dark:bg-primary-400"
+              thumbClasses='w-4 h-4'
+              trackClasses='dark:bg-primary-400'
             />
           </Wrapper>
           {/* Episodes Range */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="episodeRangeSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='episodeRangeSelector'
             >
-              Episode Range{" "}
+              Episode Range{' '}
               {`[${(filter as AnimeFilter).minEpisode} - ${
-                (filter as AnimeFilter).maxEpisode === 150
-                  ? "150+"
-                  : (filter as AnimeFilter).maxEpisode
+                (filter as AnimeFilter).maxEpisode === 150 ?
+                  '150+'
+                : (filter as AnimeFilter).maxEpisode
               }]`}
             </Label>
             <Slider
-              id="episodeRangeSelector"
+              id='episodeRangeSelector'
               max={150}
               min={0}
               step={1}
@@ -248,7 +248,7 @@ const FilterSelector = (
                 (filter as AnimeFilter).minEpisode!,
                 (filter as AnimeFilter).maxEpisode!,
               ]}
-              ariaLabel="Episode Range Selector"
+              ariaLabel='Episode Range Selector'
               onChange={(v) => {
                 setFilter((state) => ({
                   ...state,
@@ -256,26 +256,26 @@ const FilterSelector = (
                   maxEpisode: v.at(-1)!,
                 }));
               }}
-              thumbClasses="w-4 h-4"
-              trackClasses="dark:bg-primary-400"
+              thumbClasses='w-4 h-4'
+              trackClasses='dark:bg-primary-400'
             />
           </Wrapper>
 
           {/* Duration Range */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="durationRangeSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='durationRangeSelector'
             >
-              Duration Range{" "}
+              Duration Range{' '}
               {`[${(filter as AnimeFilter).minDuration} - ${
-                (filter as AnimeFilter).maxDuration === 200
-                  ? "200+"
-                  : (filter as AnimeFilter).maxDuration
+                (filter as AnimeFilter).maxDuration === 200 ?
+                  '200+'
+                : (filter as AnimeFilter).maxDuration
               }]`}
             </Label>
             <Slider
-              id="durationRangeSelector"
+              id='durationRangeSelector'
               max={200}
               min={0}
               step={1}
@@ -283,7 +283,7 @@ const FilterSelector = (
                 (filter as AnimeFilter).minDuration!,
                 (filter as AnimeFilter).maxDuration!,
               ]}
-              ariaLabel="Duration Range Selector"
+              ariaLabel='Duration Range Selector'
               onChange={(v) => {
                 setFilter((state) => ({
                   ...state,
@@ -291,22 +291,22 @@ const FilterSelector = (
                   maxDuration: v.at(-1)!,
                 }));
               }}
-              thumbClasses="w-4 h-4"
-              trackClasses="dark:bg-primary-400"
+              thumbClasses='w-4 h-4'
+              trackClasses='dark:bg-primary-400'
             />
           </Wrapper>
 
           {/*Genre Selection */}
           <Wrapper>
-            <div className="flex justify-between">
+            <div className='flex justify-between'>
               <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="genreSelector"
+                className='text-lg font-semibold text-primary-500'
+                htmlFor='genreSelector'
               >
                 Genres
               </Label>
               <button
-                className="rounded-md bg-primary-500 p-2"
+                className='rounded-md bg-primary-500 p-2'
                 onClick={() => {
                   setGenreReset((state) => !state);
                 }}
@@ -321,13 +321,13 @@ const FilterSelector = (
                 initState={(() => {
                   if (
                     (filter as AnimeFilter).genre.whitelist.find(
-                      (a) => a === genre,
+                      (a) => a === genre
                     )
                   )
                     return TernaryState.true;
                   if (
                     (filter as AnimeFilter).genre.blacklist.find(
-                      (a) => a === genre,
+                      (a) => a === genre
                     )
                   )
                     return TernaryState.false;
@@ -341,10 +341,10 @@ const FilterSelector = (
                     genre: {
                       ...state.tag,
                       whitelist: state.genre.whitelist.filter(
-                        (si: string) => si !== genre,
+                        (si: string) => si !== genre
                       ),
                       blacklist: state.genre.blacklist.filter(
-                        (si: string) => si !== genre,
+                        (si: string) => si !== genre
                       ),
                     },
                   }));
@@ -358,7 +358,7 @@ const FilterSelector = (
                           ...state.tag,
 
                           blacklist: state.genre.blacklist.filter(
-                            (si: string) => si !== genre,
+                            (si: string) => si !== genre
                           ),
                           whitelist: [...state.genre.whitelist, genre!],
                         },
@@ -372,7 +372,7 @@ const FilterSelector = (
                           ...state.tag,
 
                           whitelist: state.genre.whitelist.filter(
-                            (si: string) => si !== genre,
+                            (si: string) => si !== genre
                           ),
                           blacklist: [...state.genre.blacklist, genre!],
                         },
@@ -386,10 +386,10 @@ const FilterSelector = (
                           ...state.tag,
 
                           whitelist: state.genre.whitelist.filter(
-                            (si: string) => si !== genre,
+                            (si: string) => si !== genre
                           ),
                           blacklist: state.genre.blacklist.filter(
-                            (si: string) => si !== genre,
+                            (si: string) => si !== genre
                           ),
                         },
                       }));
@@ -403,15 +403,15 @@ const FilterSelector = (
 
           {/*Tag Percentage & Selection */}
           <Wrapper>
-            <div className="flex justify-between">
+            <div className='flex justify-between'>
               <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="tagSelector"
+                className='text-lg font-semibold text-primary-500'
+                htmlFor='tagSelector'
               >
                 Tags
               </Label>
               <button
-                className="rounded-md bg-primary-500 p-2"
+                className='rounded-md bg-primary-500 p-2'
                 onClick={() => {
                   setFilter((state: any) => ({
                     ...state,
@@ -427,13 +427,13 @@ const FilterSelector = (
               </button>
             </div>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="tagSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='tagSelector'
             >
               {`Minimum Tag ${(filter as AnimeFilter).tag.percentage}%`}
             </Label>
             <Slider
-              ariaLabel="tagMinSlider"
+              ariaLabel='tagMinSlider'
               min={0}
               step={1}
               max={100}
@@ -448,10 +448,10 @@ const FilterSelector = (
                 }));
               }}
             />
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className='mt-4 flex flex-wrap gap-2'>
               {tags
                 ?.MediaTagCollection!.filter((v) =>
-                  user?.showNSFW ? true : !v!.isAdult,
+                  user?.showNSFW ? true : !v!.isAdult
                 )
                 .sort((a, b) => a!.category!.localeCompare(b!.category!))
                 .map((tag) => {
@@ -462,7 +462,7 @@ const FilterSelector = (
                   return (
                     <Fragment key={tag?.id}>
                       {showCategorySeperator && (
-                        <div className="w-full rounded-md p-2 dark:bg-white/10 dark:text-white">
+                        <div className='w-full rounded-md p-2 dark:bg-white/10 dark:text-white'>
                           {tag?.category}
                         </div>
                       )}
@@ -470,13 +470,13 @@ const FilterSelector = (
                         initState={(() => {
                           if (
                             (filter as AnimeFilter).tag.whitelist.find(
-                              (a) => a === tag!.name,
+                              (a) => a === tag!.name
                             )
                           )
                             return TernaryState.true;
                           if (
                             (filter as AnimeFilter).tag.blacklist.find(
-                              (a) => a === tag!.name,
+                              (a) => a === tag!.name
                             )
                           )
                             return TernaryState.false;
@@ -491,10 +491,10 @@ const FilterSelector = (
                               ...state.tag,
 
                               whitelist: state.tag.whitelist.filter(
-                                (si: string) => si !== tag!.name,
+                                (si: string) => si !== tag!.name
                               ),
                               blacklist: state.tag.blacklist.filter(
-                                (si: string) => si !== tag!.name,
+                                (si: string) => si !== tag!.name
                               ),
                             },
                           }));
@@ -508,7 +508,7 @@ const FilterSelector = (
                                   ...state.tag,
 
                                   blacklist: state.tag.blacklist.filter(
-                                    (si: string) => si !== tag?.name,
+                                    (si: string) => si !== tag?.name
                                   ),
                                   whitelist: [
                                     ...state.tag.whitelist,
@@ -525,7 +525,7 @@ const FilterSelector = (
                                   ...state.tag,
 
                                   whitelist: state.tag.whitelist.filter(
-                                    (si: string) => si !== tag!.name,
+                                    (si: string) => si !== tag!.name
                                   ),
                                   blacklist: [
                                     ...state.tag.blacklist,
@@ -542,10 +542,10 @@ const FilterSelector = (
                                   ...state.tag,
 
                                   whitelist: state.tag.whitelist.filter(
-                                    (si: string) => si !== tag!.name,
+                                    (si: string) => si !== tag!.name
                                   ),
                                   blacklist: state.tag.blacklist.filter(
-                                    (si: string) => si !== tag!.name,
+                                    (si: string) => si !== tag!.name
                                   ),
                                 },
                               }));
@@ -563,11 +563,11 @@ const FilterSelector = (
       );
     case Category.Manga:
       return (
-        <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+        <div className='m-2 grid h-full w-full gap-2 overflow-y-scroll p-2'>
           {/* Reset */}
           <Wrapper>
             <button
-              className="rounded-md bg-primary-500 p-2"
+              className='rounded-md bg-primary-500 p-2'
               onClick={() => {
                 setGenreReset((s) => !s);
                 setTagReset((s) => !s);
@@ -580,15 +580,15 @@ const FilterSelector = (
           {/* Sort */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="sortSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='sortSelector'
             >
               Sort
             </Label>
             <Select
               value={(filter as MangaFilter).sort}
               trigger={
-                <div className="rounded-md bg-primary-500 p-2 text-center">
+                <div className='rounded-md bg-primary-500 p-2 text-center'>
                   {(filter as MangaFilter).sort}
                 </div>
               }
@@ -597,8 +597,8 @@ const FilterSelector = (
                 value: v,
                 displayTitle: v,
               }))}
-              triggerAriaLabel="sortSelector"
-              side={"left"}
+              triggerAriaLabel='sortSelector'
+              side={'left'}
               onValueChange={(v: SearchSort) => {
                 setFilter((state) => ({
                   ...(state as MangaFilter),
@@ -610,19 +610,19 @@ const FilterSelector = (
           {/* Airing Status */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="airingStatusSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='airingStatusSelector'
             >
               Airing Status
             </Label>
             <RadioGroup
-              name="airingStatusSelector"
-              orientation="horizontal"
+              name='airingStatusSelector'
+              orientation='horizontal'
               dataValues={Object.values(Status).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
-              icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
+              icon={<div className='h-3 w-3 rounded-full bg-primary-500' />}
               value={(filter as MangaFilter).status}
               onValueChange={(s: Status) => {
                 setFilter((state) => ({
@@ -635,19 +635,19 @@ const FilterSelector = (
           {/* Format */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="formatSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='formatSelector'
             >
               Format
             </Label>
             <RadioGroup
-              name="formatSelector"
-              orientation="horizontal"
+              name='formatSelector'
+              orientation='horizontal'
               dataValues={Object.values(FormatManga).map((v) => ({
                 value: v,
                 displayTitle: v,
               }))}
-              icon={<div className="h-3 w-3 rounded-full bg-primary-500" />}
+              icon={<div className='h-3 w-3 rounded-full bg-primary-500' />}
               value={(filter as MangaFilter).format}
               onValueChange={(f: FormatManga) => {
                 setFilter((state: any) => ({
@@ -661,16 +661,16 @@ const FilterSelector = (
           {/* Year Range */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="yearRangeSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='yearRangeSelector'
             >
-              Year Range{" "}
+              Year Range{' '}
               {`[${(filter as MangaFilter).minYear} - ${
                 (filter as MangaFilter).maxYear
               }]`}
             </Label>
             <Slider
-              id="yearRangeSelector"
+              id='yearRangeSelector'
               max={YEAR_MAX}
               min={1970}
               step={1}
@@ -678,7 +678,7 @@ const FilterSelector = (
                 (filter as MangaFilter).minYear!,
                 (filter as MangaFilter).maxYear!,
               ]}
-              ariaLabel="Year Range Selector"
+              ariaLabel='Year Range Selector'
               onChange={(v) => {
                 setFilter((state) => ({
                   ...state,
@@ -686,25 +686,25 @@ const FilterSelector = (
                   maxYear: v.sort().at(-1)!,
                 }));
               }}
-              thumbClasses="w-4 h-4"
-              trackClasses="dark:bg-primary-400"
+              thumbClasses='w-4 h-4'
+              trackClasses='dark:bg-primary-400'
             />
           </Wrapper>
           {/* Chapters Range */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="chaptersRangeSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='chaptersRangeSelector'
             >
-              Chapter Range{" "}
+              Chapter Range{' '}
               {`[${(filter as MangaFilter).minChapters} - ${
-                (filter as MangaFilter).maxChapters === 300
-                  ? "300+"
-                  : (filter as MangaFilter).maxChapters
+                (filter as MangaFilter).maxChapters === 300 ?
+                  '300+'
+                : (filter as MangaFilter).maxChapters
               }]`}
             </Label>
             <Slider
-              id="chaptersRangeSelector"
+              id='chaptersRangeSelector'
               max={300}
               min={0}
               step={1}
@@ -712,7 +712,7 @@ const FilterSelector = (
                 (filter as MangaFilter).minChapters!,
                 (filter as MangaFilter).maxChapters!,
               ]}
-              ariaLabel="Chapters Range Selector"
+              ariaLabel='Chapters Range Selector'
               onChange={(v) => {
                 setFilter((state) => ({
                   ...state,
@@ -720,26 +720,26 @@ const FilterSelector = (
                   maxChapters: v.at(-1)!,
                 }));
               }}
-              thumbClasses="w-4 h-4"
-              trackClasses="dark:bg-primary-400"
+              thumbClasses='w-4 h-4'
+              trackClasses='dark:bg-primary-400'
             />
           </Wrapper>
 
           {/* Volumes Range */}
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="volumesRangeSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='volumesRangeSelector'
             >
-              Volumes Range{" "}
+              Volumes Range{' '}
               {`[${(filter as MangaFilter).minVolumes} - ${
-                (filter as MangaFilter).maxVolumes === 50
-                  ? "50+"
-                  : (filter as MangaFilter).maxVolumes
+                (filter as MangaFilter).maxVolumes === 50 ?
+                  '50+'
+                : (filter as MangaFilter).maxVolumes
               }]`}
             </Label>
             <Slider
-              id="volumesRangeSelector"
+              id='volumesRangeSelector'
               max={50}
               min={0}
               step={1}
@@ -747,7 +747,7 @@ const FilterSelector = (
                 (filter as MangaFilter).minVolumes!,
                 (filter as MangaFilter).maxVolumes!,
               ]}
-              ariaLabel="Volumes Range Selector"
+              ariaLabel='Volumes Range Selector'
               onChange={(v) => {
                 setFilter((state) => ({
                   ...state,
@@ -755,22 +755,22 @@ const FilterSelector = (
                   maxVolumes: v.at(-1)!,
                 }));
               }}
-              thumbClasses="w-4 h-4"
-              trackClasses="dark:bg-primary-400"
+              thumbClasses='w-4 h-4'
+              trackClasses='dark:bg-primary-400'
             />
           </Wrapper>
 
           {/*Genre Selection */}
           <Wrapper>
-            <div className="flex justify-between">
+            <div className='flex justify-between'>
               <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="genreSelector"
+                className='text-lg font-semibold text-primary-500'
+                htmlFor='genreSelector'
               >
                 Genres
               </Label>
               <button
-                className="rounded-md bg-primary-500 p-2"
+                className='rounded-md bg-primary-500 p-2'
                 onClick={() => {
                   setGenreReset((state) => !state);
                 }}
@@ -785,13 +785,13 @@ const FilterSelector = (
                 initState={(() => {
                   if (
                     (filter as MangaFilter).genre.whitelist.find(
-                      (a) => a === genre,
+                      (a) => a === genre
                     )
                   )
                     return TernaryState.true;
                   if (
                     (filter as MangaFilter).genre.blacklist.find(
-                      (a) => a === genre,
+                      (a) => a === genre
                     )
                   )
                     return TernaryState.false;
@@ -803,10 +803,10 @@ const FilterSelector = (
                     ...state,
                     genre: {
                       whitelist: state.genre.whitelist.filter(
-                        (si: string) => si !== genre,
+                        (si: string) => si !== genre
                       ),
                       blacklist: state.genre.blacklist.filter(
-                        (si: string) => si !== genre,
+                        (si: string) => si !== genre
                       ),
                     },
                   }));
@@ -818,7 +818,7 @@ const FilterSelector = (
                         ...state,
                         genre: {
                           blacklist: state.genre.blacklist.filter(
-                            (si: string) => si !== genre,
+                            (si: string) => si !== genre
                           ),
                           whitelist: [...state.genre.whitelist, genre!],
                         },
@@ -830,7 +830,7 @@ const FilterSelector = (
                         ...state,
                         genre: {
                           whitelist: state.genre.whitelist.filter(
-                            (si: string) => si !== genre,
+                            (si: string) => si !== genre
                           ),
                           blacklist: [...state.genre.blacklist, genre!],
                         },
@@ -842,10 +842,10 @@ const FilterSelector = (
                         ...state,
                         genre: {
                           whitelist: state.genre.whitelist.filter(
-                            (si: string) => si !== genre,
+                            (si: string) => si !== genre
                           ),
                           blacklist: state.genre.blacklist.filter(
-                            (si: string) => si !== genre,
+                            (si: string) => si !== genre
                           ),
                         },
                       }));
@@ -859,15 +859,15 @@ const FilterSelector = (
 
           {/*Tag Percentage & Selection */}
           <Wrapper>
-            <div className="flex justify-between">
+            <div className='flex justify-between'>
               <Label
-                className="text-lg font-semibold text-primary-500"
-                htmlFor="tagSelector"
+                className='text-lg font-semibold text-primary-500'
+                htmlFor='tagSelector'
               >
                 Tags
               </Label>
               <button
-                className="rounded-md bg-primary-500 p-2"
+                className='rounded-md bg-primary-500 p-2'
                 onClick={() => {
                   setTagReset((state) => !state);
                   setFilter((state) => ({
@@ -884,13 +884,13 @@ const FilterSelector = (
               </button>
             </div>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="tagSelector"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='tagSelector'
             >
               {`Minimum Tag ${(filter as MangaFilter).tag.percentage}%`}
             </Label>
             <Slider
-              ariaLabel="tagMinSlider"
+              ariaLabel='tagMinSlider'
               min={0}
               step={1}
               max={100}
@@ -905,10 +905,10 @@ const FilterSelector = (
                 }));
               }}
             />
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className='mt-4 flex flex-wrap gap-2'>
               {tags
                 ?.MediaTagCollection!.filter((v) =>
-                  user?.showNSFW ? true : !v!.isAdult,
+                  user?.showNSFW ? true : !v!.isAdult
                 )
                 .sort((a, b) => a!.category!.localeCompare(b!.category!))
                 .map((tag) => {
@@ -919,7 +919,7 @@ const FilterSelector = (
                   return (
                     <Fragment key={tag?.id}>
                       {showCategorySeperator && (
-                        <div className="w-full rounded-md p-2 dark:bg-white/10 dark:text-white">
+                        <div className='w-full rounded-md p-2 dark:bg-white/10 dark:text-white'>
                           {tag?.category}
                         </div>
                       )}
@@ -927,13 +927,13 @@ const FilterSelector = (
                         initState={(() => {
                           if (
                             (filter as MangaFilter).tag.whitelist.find(
-                              (a) => a === tag!.name,
+                              (a) => a === tag!.name
                             )
                           )
                             return TernaryState.true;
                           if (
                             (filter as MangaFilter).tag.blacklist.find(
-                              (a) => a === tag!.name,
+                              (a) => a === tag!.name
                             )
                           )
                             return TernaryState.false;
@@ -947,10 +947,10 @@ const FilterSelector = (
                             tag: {
                               ...state.tag,
                               whitelist: state.tag.whitelist.filter(
-                                (si: string) => si !== tag!.name,
+                                (si: string) => si !== tag!.name
                               ),
                               blacklist: state.tag.blacklist.filter(
-                                (si: string) => si !== tag!.name,
+                                (si: string) => si !== tag!.name
                               ),
                             },
                           }));
@@ -963,7 +963,7 @@ const FilterSelector = (
                                 tag: {
                                   ...state.tag,
                                   blacklist: state.tag.blacklist.filter(
-                                    (si: string) => si !== tag?.name,
+                                    (si: string) => si !== tag?.name
                                   ),
                                   whitelist: [
                                     ...state.tag.whitelist,
@@ -980,7 +980,7 @@ const FilterSelector = (
                                   ...state.tag,
 
                                   whitelist: state.tag.whitelist.filter(
-                                    (si: string) => si !== tag!.name,
+                                    (si: string) => si !== tag!.name
                                   ),
                                   blacklist: [
                                     ...state.tag.blacklist,
@@ -997,10 +997,10 @@ const FilterSelector = (
                                   ...state.tag,
 
                                   whitelist: state.tag.whitelist.filter(
-                                    (si: string) => si !== tag!.name,
+                                    (si: string) => si !== tag!.name
                                   ),
                                   blacklist: state.tag.blacklist.filter(
-                                    (si: string) => si !== tag!.name,
+                                    (si: string) => si !== tag!.name
                                   ),
                                 },
                               }));
@@ -1019,11 +1019,11 @@ const FilterSelector = (
     case Category.Character:
     case Category.Staff:
       return (
-        <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+        <div className='m-2 grid h-full w-full gap-2 overflow-y-scroll p-2'>
           {/* Reset */}
           <Wrapper>
             <button
-              className="rounded-md bg-primary-500 p-2"
+              className='rounded-md bg-primary-500 p-2'
               onClick={() => {
                 onReset();
               }}
@@ -1033,8 +1033,8 @@ const FilterSelector = (
           </Wrapper>
           <Wrapper>
             <Label
-              className="text-lg font-semibold text-primary-500"
-              htmlFor="showBirthday"
+              className='text-lg font-semibold text-primary-500'
+              htmlFor='showBirthday'
             >
               Show Birthdays
             </Label>
@@ -1042,11 +1042,11 @@ const FilterSelector = (
               text={((f: CharacterFilter | StaffFilter) => {
                 switch (f.showBirthdaysOnly) {
                   case TernaryState.true:
-                    return "Showing Only Birthdays";
+                    return 'Showing Only Birthdays';
                   case TernaryState.false:
-                    return "Filtering Out Birthdays";
+                    return 'Filtering Out Birthdays';
                   case TernaryState.none:
-                    return "Showing All";
+                    return 'Showing All';
                 }
               })(filter as CharacterFilter | StaffFilter)}
               onChange={(f) => {
@@ -1084,9 +1084,9 @@ const FilterSelector = (
 
     case Category.Studio:
       return (
-        <div className="m-2 grid h-full w-full gap-2 overflow-y-scroll p-2">
+        <div className='m-2 grid h-full w-full gap-2 overflow-y-scroll p-2'>
           <Wrapper>
-            <div className="grid h-full place-items-center text-xl font-semibold">
+            <div className='grid h-full place-items-center text-xl font-semibold'>
               No Filtering Options
             </div>
           </Wrapper>
@@ -1096,13 +1096,13 @@ const FilterSelector = (
 };
 
 export default (
-  container?: RefObject<HTMLDivElement>,
+  container?: RefObject<HTMLDivElement>
 ): {
   render: React.JSX.Element;
   searchString: string;
   filter: Filter;
 } => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const debounchedSearchString = useDebounce<string>(searchTerm, 1000);
   const [filters, setFilter] = useState<Filter>(defaultAnimeFilter);
   const debounchedFilters = useDebounce<Filter>(filters, 1000);
@@ -1111,18 +1111,17 @@ export default (
     filter: debounchedFilters,
     searchString: debounchedSearchString,
     render: (
-    
       <TextField
-        placeholder="Search..."
-        variant="surface"
-        rootClasses="outline-primary-500 focus-within:-outline-offset-4 hover:-outline-offset-4 focus-within:outline hover:outline  outline-4 transition-all p-1 dark:bg-white/10"
+        placeholder='Search...'
+        variant='surface'
+        rootClasses='outline-primary-500 focus-within:-outline-offset-4 hover:-outline-offset-4 focus-within:outline hover:outline  outline-4 transition-all p-1 dark:bg-white/10'
         startIcon={{
           icon: (
             <Select
-              side="top"
+              side='top'
               trigger={
-                <button className="flex items-center gap-2 bg-primary-500/20 p-2">
-                  <MagnifyingGlassIcon className="scale-150" />
+                <button className='flex items-center gap-2 bg-primary-500/20 p-2'>
+                  <MagnifyingGlassIcon className='scale-150' />
                   {filters.category} <ChevronDownIcon />
                 </button>
               }
@@ -1155,12 +1154,12 @@ export default (
                 }
                 setFilter(filter);
               }}
-              triggerAriaLabel="Search Field"
+              triggerAriaLabel='Search Field'
               value={filters.category}
             />
           ),
-          color: "ruby",
-          gap: "4",
+          color: 'ruby',
+          gap: '4',
         }}
         onValueChange={(e) => {
           setSearchTerm(e);
@@ -1169,13 +1168,13 @@ export default (
           icon: (
             <Drawer
               trigger={
-                <button className="flex items-center gap-2 bg-primary-500/20 p-2">
+                <button className='flex items-center gap-2 bg-primary-500/20 p-2'>
                   <MixerHorizontalIcon />
                 </button>
               }
-              side="right"
+              side='right'
               content={FilterSelector(filters, setFilter, () => {
-                setSearchTerm("");
+                setSearchTerm('');
                 let filter: Filter;
                 switch (filters.category) {
                   case Category.Anime:
@@ -1199,14 +1198,14 @@ export default (
                 }
                 setFilter(filter);
               })}
-              className="w-[90%] max-w-lg"
+              className='w-[90%] max-w-lg'
             />
           ),
-          color: "ruby",
-          gap: "4",
+          color: 'ruby',
+          gap: '4',
         }}
         value={searchTerm}
-        className="focus-within:border-b-1 hover:border-b-1 isolate z-0 mx-2 h-full rounded-md border-0 border-secondary-500 bg-black/20 px-2 py-1 text-primary-400 outline-none transition-all placeholder:text-primary-400 dark:bg-black/50 placeholder:dark:text-primary-500"
+        className='focus-within:border-b-1 hover:border-b-1 isolate z-0 mx-2 h-full rounded-md border-0 border-secondary-500 bg-black/20 px-2 py-1 text-primary-400 outline-none transition-all placeholder:text-primary-400 dark:bg-black/50 placeholder:dark:text-primary-500'
       />
     ),
   };

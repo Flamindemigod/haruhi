@@ -3,23 +3,36 @@
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
   /** ISO 3166-1 alpha-2 country code */
-  CountryCode: { input: any; output: any; }
+  CountryCode: { input: any; output: any };
   /** 8 digit long date integer (YYYYMMDD). Unknown dates represented by 0. E.g. 2016: 20160000, May 1976: 19760500 */
-  FuzzyDateInt: { input: any; output: any; }
-  Json: { input: any; output: any; }
+  FuzzyDateInt: { input: any; output: any };
+  Json: { input: any; output: any };
 };
 
 /** Notification for when a activity is liked */
@@ -108,7 +121,6 @@ export type ActivityReply = {
   userId: Maybe<Scalars['Int']['output']>;
 };
 
-
 /** Replay to an activity item */
 export type ActivityReplyTextArgs = {
   asHtml: InputMaybe<Scalars['Boolean']['input']>;
@@ -181,7 +193,7 @@ export type ActivityReplySubscribedNotification = {
 export enum ActivitySort {
   Id = 'ID',
   IdDesc = 'ID_DESC',
-  Pinned = 'PINNED'
+  Pinned = 'PINNED',
 }
 
 /** Activity type enum. */
@@ -195,7 +207,7 @@ export enum ActivityType {
   /** A text message activity sent to another user */
   Message = 'MESSAGE',
   /** A text activity */
-  Text = 'TEXT'
+  Text = 'TEXT',
 }
 
 /** Activity union type */
@@ -279,7 +291,7 @@ export enum AiringSort {
   MediaId = 'MEDIA_ID',
   MediaIdDesc = 'MEDIA_ID_DESC',
   Time = 'TIME',
-  TimeDesc = 'TIME_DESC'
+  TimeDesc = 'TIME_DESC',
 }
 
 export type AniChartHighlightInput = {
@@ -329,12 +341,10 @@ export type Character = {
   updatedAt: Maybe<Scalars['Int']['output']>;
 };
 
-
 /** A character that features in an anime or manga */
 export type CharacterDescriptionArgs = {
   asHtml: InputMaybe<Scalars['Boolean']['input']>;
 };
-
 
 /** A character that features in an anime or manga */
 export type CharacterMediaArgs = {
@@ -373,13 +383,11 @@ export type CharacterEdge = {
   voiceActors: Maybe<Array<Maybe<Staff>>>;
 };
 
-
 /** Character connection edge */
 export type CharacterEdgeVoiceActorRolesArgs = {
   language: InputMaybe<StaffLanguage>;
   sort: InputMaybe<Array<InputMaybe<StaffSort>>>;
 };
-
 
 /** Character connection edge */
 export type CharacterEdgeVoiceActorsArgs = {
@@ -439,7 +447,7 @@ export enum CharacterRole {
   /** A primary character role in the media */
   Main = 'MAIN',
   /** A supporting character role in the media */
-  Supporting = 'SUPPORTING'
+  Supporting = 'SUPPORTING',
 }
 
 /** Character sort enums */
@@ -452,7 +460,7 @@ export enum CharacterSort {
   Relevance = 'RELEVANCE',
   Role = 'ROLE',
   RoleDesc = 'ROLE_DESC',
-  SearchMatch = 'SEARCH_MATCH'
+  SearchMatch = 'SEARCH_MATCH',
 }
 
 /** A submission for a character that features in an anime or manga */
@@ -508,13 +516,13 @@ export type Deleted = {
 export enum ExternalLinkMediaType {
   Anime = 'ANIME',
   Manga = 'MANGA',
-  Staff = 'STAFF'
+  Staff = 'STAFF',
 }
 
 export enum ExternalLinkType {
   Info = 'INFO',
   Social = 'SOCIAL',
-  Streaming = 'STREAMING'
+  Streaming = 'STREAMING',
 }
 
 /** User's favourite anime, manga, characters, staff & studios */
@@ -532,13 +540,11 @@ export type Favourites = {
   studios: Maybe<StudioConnection>;
 };
 
-
 /** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesAnimeArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
   perPage: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesCharactersArgs = {
@@ -546,20 +552,17 @@ export type FavouritesCharactersArgs = {
   perPage: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesMangaArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
   perPage: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesStaffArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
   perPage: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** User's favourite anime, manga, characters, staff & studios */
 export type FavouritesStudiosArgs = {
@@ -654,7 +657,6 @@ export type InternalPage = {
   users: Maybe<Array<Maybe<User>>>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageActivitiesArgs = {
   createdAt: InputMaybe<Scalars['Int']['input']>;
@@ -686,13 +688,11 @@ export type InternalPageActivitiesArgs = {
   userId_not_in: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageActivityRepliesArgs = {
   activityId: InputMaybe<Scalars['Int']['input']>;
   id: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageAiringSchedulesArgs = {
@@ -717,7 +717,6 @@ export type InternalPageAiringSchedulesArgs = {
   sort: InputMaybe<Array<InputMaybe<AiringSort>>>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageCharacterSubmissionsArgs = {
   assigneeId: InputMaybe<Scalars['Int']['input']>;
@@ -726,7 +725,6 @@ export type InternalPageCharacterSubmissionsArgs = {
   status: InputMaybe<SubmissionStatus>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageCharactersArgs = {
@@ -739,13 +737,11 @@ export type InternalPageCharactersArgs = {
   sort: InputMaybe<Array<InputMaybe<CharacterSort>>>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageFollowersArgs = {
   sort: InputMaybe<Array<InputMaybe<UserSort>>>;
   userId: Scalars['Int']['input'];
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageFollowingArgs = {
@@ -753,13 +749,11 @@ export type InternalPageFollowingArgs = {
   userId: Scalars['Int']['input'];
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageLikesArgs = {
   likeableId: InputMaybe<Scalars['Int']['input']>;
   type: InputMaybe<LikeableType>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageMediaArgs = {
@@ -834,7 +828,6 @@ export type InternalPageMediaArgs = {
   volumes_lesser: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageMediaListArgs = {
   compareWithAuthList: InputMaybe<Scalars['Boolean']['input']>;
@@ -864,7 +857,6 @@ export type InternalPageMediaListArgs = {
   userName: InputMaybe<Scalars['String']['input']>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageMediaSubmissionsArgs = {
   assigneeId: InputMaybe<Scalars['Int']['input']>;
@@ -875,7 +867,6 @@ export type InternalPageMediaSubmissionsArgs = {
   type: InputMaybe<MediaType>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageMediaTrendsArgs = {
@@ -906,13 +897,11 @@ export type InternalPageMediaTrendsArgs = {
   trending_not: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageModActionsArgs = {
   modId: InputMaybe<Scalars['Int']['input']>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageNotificationsArgs = {
@@ -920,7 +909,6 @@ export type InternalPageNotificationsArgs = {
   type: InputMaybe<NotificationType>;
   type_in: InputMaybe<Array<InputMaybe<NotificationType>>>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageRecommendationsArgs = {
@@ -935,13 +923,11 @@ export type InternalPageRecommendationsArgs = {
   userId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageReportsArgs = {
   reportedId: InputMaybe<Scalars['Int']['input']>;
   reporterId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageReviewsArgs = {
@@ -952,7 +938,6 @@ export type InternalPageReviewsArgs = {
   userId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageRevisionHistoryArgs = {
   characterId: InputMaybe<Scalars['Int']['input']>;
@@ -961,7 +946,6 @@ export type InternalPageRevisionHistoryArgs = {
   studioId: InputMaybe<Scalars['Int']['input']>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageStaffArgs = {
@@ -974,7 +958,6 @@ export type InternalPageStaffArgs = {
   sort: InputMaybe<Array<InputMaybe<StaffSort>>>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageStaffSubmissionsArgs = {
   assigneeId: InputMaybe<Scalars['Int']['input']>;
@@ -983,7 +966,6 @@ export type InternalPageStaffSubmissionsArgs = {
   status: InputMaybe<SubmissionStatus>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageStudiosArgs = {
@@ -995,7 +977,6 @@ export type InternalPageStudiosArgs = {
   sort: InputMaybe<Array<InputMaybe<StudioSort>>>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageThreadCommentsArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
@@ -1003,7 +984,6 @@ export type InternalPageThreadCommentsArgs = {
   threadId: InputMaybe<Scalars['Int']['input']>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageThreadsArgs = {
@@ -1018,12 +998,10 @@ export type InternalPageThreadsArgs = {
   userId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** Page of data (Used for internal use only) */
 export type InternalPageUserBlockSearchArgs = {
   search: InputMaybe<Scalars['String']['input']>;
 };
-
 
 /** Page of data (Used for internal use only) */
 export type InternalPageUsersArgs = {
@@ -1039,11 +1017,17 @@ export enum LikeableType {
   Activity = 'ACTIVITY',
   ActivityReply = 'ACTIVITY_REPLY',
   Thread = 'THREAD',
-  ThreadComment = 'THREAD_COMMENT'
+  ThreadComment = 'THREAD_COMMENT',
 }
 
 /** Likeable union type */
-export type LikeableUnion = ActivityReply | ListActivity | MessageActivity | TextActivity | Thread | ThreadComment;
+export type LikeableUnion =
+  | ActivityReply
+  | ListActivity
+  | MessageActivity
+  | TextActivity
+  | Thread
+  | ThreadComment;
 
 /** User list activity (anime & manga updates) */
 export type ListActivity = {
@@ -1219,14 +1203,12 @@ export type Media = {
   volumes: Maybe<Scalars['Int']['output']>;
 };
 
-
 /** Anime or Manga */
 export type MediaAiringScheduleArgs = {
   notYetAired: InputMaybe<Scalars['Boolean']['input']>;
   page: InputMaybe<Scalars['Int']['input']>;
   perPage: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Anime or Manga */
 export type MediaCharactersArgs = {
@@ -1236,12 +1218,10 @@ export type MediaCharactersArgs = {
   sort: InputMaybe<Array<InputMaybe<CharacterSort>>>;
 };
 
-
 /** Anime or Manga */
 export type MediaDescriptionArgs = {
   asHtml: InputMaybe<Scalars['Boolean']['input']>;
 };
-
 
 /** Anime or Manga */
 export type MediaRecommendationsArgs = {
@@ -1249,7 +1229,6 @@ export type MediaRecommendationsArgs = {
   perPage: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<RecommendationSort>>>;
 };
-
 
 /** Anime or Manga */
 export type MediaReviewsArgs = {
@@ -1259,12 +1238,10 @@ export type MediaReviewsArgs = {
   sort: InputMaybe<Array<InputMaybe<ReviewSort>>>;
 };
 
-
 /** Anime or Manga */
 export type MediaSourceArgs = {
   version: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Anime or Manga */
 export type MediaStaffArgs = {
@@ -1273,19 +1250,16 @@ export type MediaStaffArgs = {
   sort: InputMaybe<Array<InputMaybe<StaffSort>>>;
 };
 
-
 /** Anime or Manga */
 export type MediaStatusArgs = {
   version: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Anime or Manga */
 export type MediaStudiosArgs = {
   isMain: InputMaybe<Scalars['Boolean']['input']>;
   sort: InputMaybe<Array<InputMaybe<StudioSort>>>;
 };
-
 
 /** Anime or Manga */
 export type MediaTrendsArgs = {
@@ -1398,19 +1372,16 @@ export type MediaEdge = {
   voiceActors: Maybe<Array<Maybe<Staff>>>;
 };
 
-
 /** Media connection edge */
 export type MediaEdgeRelationTypeArgs = {
   version: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Media connection edge */
 export type MediaEdgeVoiceActorRolesArgs = {
   language: InputMaybe<StaffLanguage>;
   sort: InputMaybe<Array<InputMaybe<StaffSort>>>;
 };
-
 
 /** Media connection edge */
 export type MediaEdgeVoiceActorsArgs = {
@@ -1470,7 +1441,7 @@ export enum MediaFormat {
   /** Anime broadcast on television */
   Tv = 'TV',
   /** Anime which are under 15 minutes in length and broadcast on television */
-  TvShort = 'TV_SHORT'
+  TvShort = 'TV_SHORT',
 }
 
 /** List of anime or manga */
@@ -1516,12 +1487,10 @@ export type MediaList = {
   userId: Scalars['Int']['output'];
 };
 
-
 /** List of anime or manga */
 export type MediaListCustomListsArgs = {
   asArray: InputMaybe<Scalars['Boolean']['input']>;
 };
-
 
 /** List of anime or manga */
 export type MediaListScoreArgs = {
@@ -1549,12 +1518,10 @@ export type MediaListCollection = {
   user: Maybe<User>;
 };
 
-
 /** List of anime or manga */
 export type MediaListCollectionCustomListsArgs = {
   asArray: InputMaybe<Scalars['Boolean']['input']>;
 };
-
 
 /** List of anime or manga */
 export type MediaListCollectionStatusListsArgs = {
@@ -1644,7 +1611,7 @@ export enum MediaListSort {
   Status = 'STATUS',
   StatusDesc = 'STATUS_DESC',
   UpdatedTime = 'UPDATED_TIME',
-  UpdatedTimeDesc = 'UPDATED_TIME_DESC'
+  UpdatedTimeDesc = 'UPDATED_TIME_DESC',
 }
 
 /** Media list watching/reading status enum. */
@@ -1660,7 +1627,7 @@ export enum MediaListStatus {
   /** Planning to watch/read */
   Planning = 'PLANNING',
   /** Re-watching/reading */
-  Repeating = 'REPEATING'
+  Repeating = 'REPEATING',
 }
 
 /** A user's list options for anime or manga lists */
@@ -1730,7 +1697,7 @@ export enum MediaRankType {
   /** Ranking is based on the media's popularity */
   Popular = 'POPULAR',
   /** Ranking is based on the media's ratings/score */
-  Rated = 'RATED'
+  Rated = 'RATED',
 }
 
 /** Type of relation media has to its parent. */
@@ -1760,7 +1727,7 @@ export enum MediaRelation {
   /** An alternative version of the media with a different primary focus */
   SpinOff = 'SPIN_OFF',
   /** A shortened and summarized version */
-  Summary = 'SUMMARY'
+  Summary = 'SUMMARY',
 }
 
 export enum MediaSeason {
@@ -1771,7 +1738,7 @@ export enum MediaSeason {
   /** Months June to August */
   Summer = 'SUMMER',
   /** Months December to February */
-  Winter = 'WINTER'
+  Winter = 'WINTER',
 }
 
 /** Media sort enums */
@@ -1812,7 +1779,7 @@ export enum MediaSort {
   UpdatedAt = 'UPDATED_AT',
   UpdatedAtDesc = 'UPDATED_AT_DESC',
   Volumes = 'VOLUMES',
-  VolumesDesc = 'VOLUMES_DESC'
+  VolumesDesc = 'VOLUMES_DESC',
 }
 
 /** Source type the media was adapted from */
@@ -1846,7 +1813,7 @@ export enum MediaSource {
   /** Video game driven primary by text and narrative */
   VisualNovel = 'VISUAL_NOVEL',
   /** Version 3 only. Written works published online */
-  WebNovel = 'WEB_NOVEL'
+  WebNovel = 'WEB_NOVEL',
 }
 
 /** A media's statistics */
@@ -1869,7 +1836,7 @@ export enum MediaStatus {
   /** To be released at a later date */
   NotYetReleased = 'NOT_YET_RELEASED',
   /** Currently releasing */
-  Releasing = 'RELEASING'
+  Releasing = 'RELEASING',
 }
 
 /** Data and links to legal streaming episodes on external sites */
@@ -1979,18 +1946,15 @@ export type MediaTitle = {
   userPreferred: Maybe<Scalars['String']['output']>;
 };
 
-
 /** The official titles of the media in various languages */
 export type MediaTitleEnglishArgs = {
   stylised: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-
 /** The official titles of the media in various languages */
 export type MediaTitleNativeArgs = {
   stylised: InputMaybe<Scalars['Boolean']['input']>;
 };
-
 
 /** The official titles of the media in various languages */
 export type MediaTitleRomajiArgs = {
@@ -2070,7 +2034,7 @@ export enum MediaTrendSort {
   Score = 'SCORE',
   ScoreDesc = 'SCORE_DESC',
   Trending = 'TRENDING',
-  TrendingDesc = 'TRENDING_DESC'
+  TrendingDesc = 'TRENDING_DESC',
 }
 
 /** Media type enum, anime or manga. */
@@ -2078,7 +2042,7 @@ export enum MediaType {
   /** Japanese Anime */
   Anime = 'ANIME',
   /** Asian comic */
-  Manga = 'MANGA'
+  Manga = 'MANGA',
 }
 
 /** User message activity */
@@ -2120,7 +2084,6 @@ export type MessageActivity = {
   type: Maybe<ActivityType>;
 };
 
-
 /** User message activity */
 export type MessageActivityMessageArgs = {
   asHtml: InputMaybe<Scalars['Boolean']['input']>;
@@ -2147,7 +2110,7 @@ export enum ModActionType {
   Expire = 'EXPIRE',
   Note = 'NOTE',
   Report = 'REPORT',
-  Reset = 'RESET'
+  Reset = 'RESET',
 }
 
 /** Mod role enums */
@@ -2181,7 +2144,7 @@ export enum ModRole {
   /** A social media moderator */
   SocialMedia = 'SOCIAL_MEDIA',
   /** A staff data moderator */
-  StaffData = 'STAFF_DATA'
+  StaffData = 'STAFF_DATA',
 }
 
 export type Mutation = {
@@ -2246,48 +2209,39 @@ export type Mutation = {
   UpdateUser: Maybe<User>;
 };
 
-
 export type MutationDeleteActivityArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type MutationDeleteActivityReplyArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type MutationDeleteCustomListArgs = {
   customList: InputMaybe<Scalars['String']['input']>;
   type: InputMaybe<MediaType>;
 };
 
-
 export type MutationDeleteMediaListEntryArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type MutationDeleteReviewArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type MutationDeleteThreadArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type MutationDeleteThreadCommentArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type MutationRateReviewArgs = {
   rating: InputMaybe<ReviewRating>;
   reviewId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type MutationSaveActivityReplyArgs = {
   activityId: InputMaybe<Scalars['Int']['input']>;
@@ -2296,12 +2250,10 @@ export type MutationSaveActivityReplyArgs = {
   text: InputMaybe<Scalars['String']['input']>;
 };
 
-
 export type MutationSaveListActivityArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   locked: InputMaybe<Scalars['Boolean']['input']>;
 };
-
 
 export type MutationSaveMediaListEntryArgs = {
   advancedScores: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
@@ -2322,7 +2274,6 @@ export type MutationSaveMediaListEntryArgs = {
   status: InputMaybe<MediaListStatus>;
 };
 
-
 export type MutationSaveMessageActivityArgs = {
   asMod: InputMaybe<Scalars['Boolean']['input']>;
   id: InputMaybe<Scalars['Int']['input']>;
@@ -2332,13 +2283,11 @@ export type MutationSaveMessageActivityArgs = {
   recipientId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type MutationSaveRecommendationArgs = {
   mediaId: InputMaybe<Scalars['Int']['input']>;
   mediaRecommendationId: InputMaybe<Scalars['Int']['input']>;
   rating: InputMaybe<RecommendationRating>;
 };
-
 
 export type MutationSaveReviewArgs = {
   body: InputMaybe<Scalars['String']['input']>;
@@ -2349,13 +2298,11 @@ export type MutationSaveReviewArgs = {
   summary: InputMaybe<Scalars['String']['input']>;
 };
 
-
 export type MutationSaveTextActivityArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   locked: InputMaybe<Scalars['Boolean']['input']>;
   text: InputMaybe<Scalars['String']['input']>;
 };
-
 
 export type MutationSaveThreadArgs = {
   body: InputMaybe<Scalars['String']['input']>;
@@ -2367,7 +2314,6 @@ export type MutationSaveThreadArgs = {
   title: InputMaybe<Scalars['String']['input']>;
 };
 
-
 export type MutationSaveThreadCommentArgs = {
   comment: InputMaybe<Scalars['String']['input']>;
   id: InputMaybe<Scalars['Int']['input']>;
@@ -2376,18 +2322,15 @@ export type MutationSaveThreadCommentArgs = {
   threadId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type MutationToggleActivityPinArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   pinned: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-
 export type MutationToggleActivitySubscriptionArgs = {
   activityId: InputMaybe<Scalars['Int']['input']>;
   subscribe: InputMaybe<Scalars['Boolean']['input']>;
 };
-
 
 export type MutationToggleFavouriteArgs = {
   animeId: InputMaybe<Scalars['Int']['input']>;
@@ -2397,34 +2340,28 @@ export type MutationToggleFavouriteArgs = {
   studioId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type MutationToggleFollowArgs = {
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type MutationToggleLikeArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   type: InputMaybe<LikeableType>;
 };
 
-
 export type MutationToggleLikeV2Args = {
   id: InputMaybe<Scalars['Int']['input']>;
   type: InputMaybe<LikeableType>;
 };
-
 
 export type MutationToggleThreadSubscriptionArgs = {
   subscribe: InputMaybe<Scalars['Boolean']['input']>;
   threadId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type MutationUpdateAniChartHighlightsArgs = {
   highlights: InputMaybe<Array<InputMaybe<AniChartHighlightInput>>>;
 };
-
 
 export type MutationUpdateAniChartSettingsArgs = {
   outgoingLinkProvider: InputMaybe<Scalars['String']['input']>;
@@ -2432,7 +2369,6 @@ export type MutationUpdateAniChartSettingsArgs = {
   theme: InputMaybe<Scalars['String']['input']>;
   titleLanguage: InputMaybe<Scalars['String']['input']>;
 };
-
 
 export type MutationUpdateFavouriteOrderArgs = {
   animeIds: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
@@ -2446,7 +2382,6 @@ export type MutationUpdateFavouriteOrderArgs = {
   studioIds: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   studioOrder: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
-
 
 export type MutationUpdateMediaListEntriesArgs = {
   advancedScores: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
@@ -2464,7 +2399,6 @@ export type MutationUpdateMediaListEntriesArgs = {
   startedAt: InputMaybe<FuzzyDateInput>;
   status: InputMaybe<MediaListStatus>;
 };
-
 
 export type MutationUpdateUserArgs = {
   about: InputMaybe<Scalars['String']['input']>;
@@ -2537,11 +2471,28 @@ export enum NotificationType {
   /** A user has liked your forum thread */
   ThreadLike = 'THREAD_LIKE',
   /** A user has commented in one of your subscribed forum threads */
-  ThreadSubscribed = 'THREAD_SUBSCRIBED'
+  ThreadSubscribed = 'THREAD_SUBSCRIBED',
 }
 
 /** Notification union type */
-export type NotificationUnion = ActivityLikeNotification | ActivityMentionNotification | ActivityMessageNotification | ActivityReplyLikeNotification | ActivityReplyNotification | ActivityReplySubscribedNotification | AiringNotification | FollowingNotification | MediaDataChangeNotification | MediaDeletionNotification | MediaMergeNotification | RelatedMediaAdditionNotification | ThreadCommentLikeNotification | ThreadCommentMentionNotification | ThreadCommentReplyNotification | ThreadCommentSubscribedNotification | ThreadLikeNotification;
+export type NotificationUnion =
+  | ActivityLikeNotification
+  | ActivityMentionNotification
+  | ActivityMessageNotification
+  | ActivityReplyLikeNotification
+  | ActivityReplyNotification
+  | ActivityReplySubscribedNotification
+  | AiringNotification
+  | FollowingNotification
+  | MediaDataChangeNotification
+  | MediaDeletionNotification
+  | MediaMergeNotification
+  | RelatedMediaAdditionNotification
+  | ThreadCommentLikeNotification
+  | ThreadCommentMentionNotification
+  | ThreadCommentReplyNotification
+  | ThreadCommentSubscribedNotification
+  | ThreadLikeNotification;
 
 /** Page of data */
 export type Page = {
@@ -2567,7 +2518,6 @@ export type Page = {
   threads: Maybe<Array<Maybe<Thread>>>;
   users: Maybe<Array<Maybe<User>>>;
 };
-
 
 /** Page of data */
 export type PageActivitiesArgs = {
@@ -2600,13 +2550,11 @@ export type PageActivitiesArgs = {
   userId_not_in: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
-
 /** Page of data */
 export type PageActivityRepliesArgs = {
   activityId: InputMaybe<Scalars['Int']['input']>;
   id: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data */
 export type PageAiringSchedulesArgs = {
@@ -2631,7 +2579,6 @@ export type PageAiringSchedulesArgs = {
   sort: InputMaybe<Array<InputMaybe<AiringSort>>>;
 };
 
-
 /** Page of data */
 export type PageCharactersArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
@@ -2643,13 +2590,11 @@ export type PageCharactersArgs = {
   sort: InputMaybe<Array<InputMaybe<CharacterSort>>>;
 };
 
-
 /** Page of data */
 export type PageFollowersArgs = {
   sort: InputMaybe<Array<InputMaybe<UserSort>>>;
   userId: Scalars['Int']['input'];
 };
-
 
 /** Page of data */
 export type PageFollowingArgs = {
@@ -2657,13 +2602,11 @@ export type PageFollowingArgs = {
   userId: Scalars['Int']['input'];
 };
 
-
 /** Page of data */
 export type PageLikesArgs = {
   likeableId: InputMaybe<Scalars['Int']['input']>;
   type: InputMaybe<LikeableType>;
 };
-
 
 /** Page of data */
 export type PageMediaArgs = {
@@ -2738,7 +2681,6 @@ export type PageMediaArgs = {
   volumes_lesser: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** Page of data */
 export type PageMediaListArgs = {
   compareWithAuthList: InputMaybe<Scalars['Boolean']['input']>;
@@ -2767,7 +2709,6 @@ export type PageMediaListArgs = {
   userId_in: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   userName: InputMaybe<Scalars['String']['input']>;
 };
-
 
 /** Page of data */
 export type PageMediaTrendsArgs = {
@@ -2798,14 +2739,12 @@ export type PageMediaTrendsArgs = {
   trending_not: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** Page of data */
 export type PageNotificationsArgs = {
   resetNotificationCount: InputMaybe<Scalars['Boolean']['input']>;
   type: InputMaybe<NotificationType>;
   type_in: InputMaybe<Array<InputMaybe<NotificationType>>>;
 };
-
 
 /** Page of data */
 export type PageRecommendationsArgs = {
@@ -2820,7 +2759,6 @@ export type PageRecommendationsArgs = {
   userId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 /** Page of data */
 export type PageReviewsArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
@@ -2829,7 +2767,6 @@ export type PageReviewsArgs = {
   sort: InputMaybe<Array<InputMaybe<ReviewSort>>>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data */
 export type PageStaffArgs = {
@@ -2842,7 +2779,6 @@ export type PageStaffArgs = {
   sort: InputMaybe<Array<InputMaybe<StaffSort>>>;
 };
 
-
 /** Page of data */
 export type PageStudiosArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
@@ -2853,7 +2789,6 @@ export type PageStudiosArgs = {
   sort: InputMaybe<Array<InputMaybe<StudioSort>>>;
 };
 
-
 /** Page of data */
 export type PageThreadCommentsArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
@@ -2861,7 +2796,6 @@ export type PageThreadCommentsArgs = {
   threadId: InputMaybe<Scalars['Int']['input']>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data */
 export type PageThreadsArgs = {
@@ -2875,7 +2809,6 @@ export type PageThreadsArgs = {
   subscribed: InputMaybe<Scalars['Boolean']['input']>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 /** Page of data */
 export type PageUsersArgs = {
@@ -2963,7 +2896,6 @@ export type Query = {
   Viewer: Maybe<User>;
 };
 
-
 export type QueryActivityArgs = {
   createdAt: InputMaybe<Scalars['Int']['input']>;
   createdAt_greater: InputMaybe<Scalars['Int']['input']>;
@@ -2994,12 +2926,10 @@ export type QueryActivityArgs = {
   userId_not_in: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
-
 export type QueryActivityReplyArgs = {
   activityId: InputMaybe<Scalars['Int']['input']>;
   id: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type QueryAiringScheduleArgs = {
   airingAt: InputMaybe<Scalars['Int']['input']>;
@@ -3023,7 +2953,6 @@ export type QueryAiringScheduleArgs = {
   sort: InputMaybe<Array<InputMaybe<AiringSort>>>;
 };
 
-
 export type QueryCharacterArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   id_in: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
@@ -3034,36 +2963,30 @@ export type QueryCharacterArgs = {
   sort: InputMaybe<Array<InputMaybe<CharacterSort>>>;
 };
 
-
 export type QueryExternalLinkSourceCollectionArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   mediaType: InputMaybe<ExternalLinkMediaType>;
   type: InputMaybe<ExternalLinkType>;
 };
 
-
 export type QueryFollowerArgs = {
   sort: InputMaybe<Array<InputMaybe<UserSort>>>;
   userId: Scalars['Int']['input'];
 };
-
 
 export type QueryFollowingArgs = {
   sort: InputMaybe<Array<InputMaybe<UserSort>>>;
   userId: Scalars['Int']['input'];
 };
 
-
 export type QueryLikeArgs = {
   likeableId: InputMaybe<Scalars['Int']['input']>;
   type: InputMaybe<LikeableType>;
 };
 
-
 export type QueryMarkdownArgs = {
   markdown: Scalars['String']['input'];
 };
-
 
 export type QueryMediaArgs = {
   averageScore: InputMaybe<Scalars['Int']['input']>;
@@ -3137,7 +3060,6 @@ export type QueryMediaArgs = {
   volumes_lesser: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type QueryMediaListArgs = {
   compareWithAuthList: InputMaybe<Scalars['Boolean']['input']>;
   completedAt: InputMaybe<Scalars['FuzzyDateInt']['input']>;
@@ -3166,7 +3088,6 @@ export type QueryMediaListArgs = {
   userName: InputMaybe<Scalars['String']['input']>;
 };
 
-
 export type QueryMediaListCollectionArgs = {
   chunk: InputMaybe<Scalars['Int']['input']>;
   completedAt: InputMaybe<Scalars['FuzzyDateInt']['input']>;
@@ -3191,11 +3112,9 @@ export type QueryMediaListCollectionArgs = {
   userName: InputMaybe<Scalars['String']['input']>;
 };
 
-
 export type QueryMediaTagCollectionArgs = {
   status: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type QueryMediaTrendArgs = {
   averageScore: InputMaybe<Scalars['Int']['input']>;
@@ -3225,19 +3144,16 @@ export type QueryMediaTrendArgs = {
   trending_not: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type QueryNotificationArgs = {
   resetNotificationCount: InputMaybe<Scalars['Boolean']['input']>;
   type: InputMaybe<NotificationType>;
   type_in: InputMaybe<Array<InputMaybe<NotificationType>>>;
 };
 
-
 export type QueryPageArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
   perPage: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type QueryRecommendationArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
@@ -3251,7 +3167,6 @@ export type QueryRecommendationArgs = {
   userId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type QueryReviewArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   mediaId: InputMaybe<Scalars['Int']['input']>;
@@ -3259,7 +3174,6 @@ export type QueryReviewArgs = {
   sort: InputMaybe<Array<InputMaybe<ReviewSort>>>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type QueryStaffArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
@@ -3271,7 +3185,6 @@ export type QueryStaffArgs = {
   sort: InputMaybe<Array<InputMaybe<StaffSort>>>;
 };
 
-
 export type QueryStudioArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   id_in: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
@@ -3280,7 +3193,6 @@ export type QueryStudioArgs = {
   search: InputMaybe<Scalars['String']['input']>;
   sort: InputMaybe<Array<InputMaybe<StudioSort>>>;
 };
-
 
 export type QueryThreadArgs = {
   categoryId: InputMaybe<Scalars['Int']['input']>;
@@ -3294,14 +3206,12 @@ export type QueryThreadArgs = {
   userId: InputMaybe<Scalars['Int']['input']>;
 };
 
-
 export type QueryThreadCommentArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<ThreadCommentSort>>>;
   threadId: InputMaybe<Scalars['Int']['input']>;
   userId: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type QueryUserArgs = {
   id: InputMaybe<Scalars['Int']['input']>;
@@ -3346,7 +3256,7 @@ export type RecommendationEdge = {
 export enum RecommendationRating {
   NoRating = 'NO_RATING',
   RateDown = 'RATE_DOWN',
-  RateUp = 'RATE_UP'
+  RateUp = 'RATE_UP',
 }
 
 /** Recommendation sort enums */
@@ -3354,7 +3264,7 @@ export enum RecommendationSort {
   Id = 'ID',
   IdDesc = 'ID_DESC',
   Rating = 'RATING',
-  RatingDesc = 'RATING_DESC'
+  RatingDesc = 'RATING_DESC',
 }
 
 /** Notification for when new media is added to the site */
@@ -3422,7 +3332,6 @@ export type Review = {
   userRating: Maybe<ReviewRating>;
 };
 
-
 /** A Review that features in an anime or manga */
 export type ReviewBodyArgs = {
   asHtml: InputMaybe<Scalars['Boolean']['input']>;
@@ -3446,7 +3355,7 @@ export type ReviewEdge = {
 export enum ReviewRating {
   DownVote = 'DOWN_VOTE',
   NoVote = 'NO_VOTE',
-  UpVote = 'UP_VOTE'
+  UpVote = 'UP_VOTE',
 }
 
 /** Review sort enums */
@@ -3460,7 +3369,7 @@ export enum ReviewSort {
   Score = 'SCORE',
   ScoreDesc = 'SCORE_DESC',
   UpdatedAt = 'UPDATED_AT',
-  UpdatedAtDesc = 'UPDATED_AT_DESC'
+  UpdatedAtDesc = 'UPDATED_AT_DESC',
 }
 
 /** Feed of mod edit activity */
@@ -3491,7 +3400,7 @@ export type RevisionHistory = {
 /** Revision history actions */
 export enum RevisionHistoryAction {
   Create = 'CREATE',
-  Edit = 'EDIT'
+  Edit = 'EDIT',
 }
 
 /** A user's list score distribution. */
@@ -3513,7 +3422,7 @@ export enum ScoreFormat {
   /** A float from 0-10 with 1 decimal place */
   Point_10Decimal = 'POINT_10_DECIMAL',
   /** An integer from 0-100 */
-  Point_100 = 'POINT_100'
+  Point_100 = 'POINT_100',
 }
 
 export type SiteStatistics = {
@@ -3527,13 +3436,11 @@ export type SiteStatistics = {
   users: Maybe<SiteTrendConnection>;
 };
 
-
 export type SiteStatisticsAnimeArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
   perPage: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<SiteTrendSort>>>;
 };
-
 
 export type SiteStatisticsCharactersArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
@@ -3541,13 +3448,11 @@ export type SiteStatisticsCharactersArgs = {
   sort: InputMaybe<Array<InputMaybe<SiteTrendSort>>>;
 };
 
-
 export type SiteStatisticsMangaArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
   perPage: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<SiteTrendSort>>>;
 };
-
 
 export type SiteStatisticsReviewsArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
@@ -3555,20 +3460,17 @@ export type SiteStatisticsReviewsArgs = {
   sort: InputMaybe<Array<InputMaybe<SiteTrendSort>>>;
 };
 
-
 export type SiteStatisticsStaffArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
   perPage: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<SiteTrendSort>>>;
 };
 
-
 export type SiteStatisticsStudiosArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
   perPage: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<SiteTrendSort>>>;
 };
-
 
 export type SiteStatisticsUsersArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
@@ -3607,7 +3509,7 @@ export enum SiteTrendSort {
   Count = 'COUNT',
   CountDesc = 'COUNT_DESC',
   Date = 'DATE',
-  DateDesc = 'DATE_DESC'
+  DateDesc = 'DATE_DESC',
 }
 
 /** Voice actors or production staff */
@@ -3670,7 +3572,6 @@ export type Staff = {
   yearsActive: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
 };
 
-
 /** Voice actors or production staff */
 export type StaffCharacterMediaArgs = {
   onList: InputMaybe<Scalars['Boolean']['input']>;
@@ -3679,7 +3580,6 @@ export type StaffCharacterMediaArgs = {
   sort: InputMaybe<Array<InputMaybe<MediaSort>>>;
 };
 
-
 /** Voice actors or production staff */
 export type StaffCharactersArgs = {
   page: InputMaybe<Scalars['Int']['input']>;
@@ -3687,12 +3587,10 @@ export type StaffCharactersArgs = {
   sort: InputMaybe<Array<InputMaybe<CharacterSort>>>;
 };
 
-
 /** Voice actors or production staff */
 export type StaffDescriptionArgs = {
   asHtml: InputMaybe<Scalars['Boolean']['input']>;
 };
-
 
 /** Voice actors or production staff */
 export type StaffStaffMediaArgs = {
@@ -3752,7 +3650,7 @@ export enum StaffLanguage {
   /** Portuguese */
   Portuguese = 'PORTUGUESE',
   /** Spanish */
-  Spanish = 'SPANISH'
+  Spanish = 'SPANISH',
 }
 
 /** The names of the staff member */
@@ -3811,7 +3709,7 @@ export enum StaffSort {
   Relevance = 'RELEVANCE',
   Role = 'ROLE',
   RoleDesc = 'ROLE_DESC',
-  SearchMatch = 'SEARCH_MATCH'
+  SearchMatch = 'SEARCH_MATCH',
 }
 
 /** User's staff statistics */
@@ -3875,7 +3773,6 @@ export type Studio = {
   siteUrl: Maybe<Scalars['String']['output']>;
 };
 
-
 /** Animation or production company */
 export type StudioMediaArgs = {
   isMain: InputMaybe<Scalars['Boolean']['input']>;
@@ -3913,7 +3810,7 @@ export enum StudioSort {
   IdDesc = 'ID_DESC',
   Name = 'NAME',
   NameDesc = 'NAME_DESC',
-  SearchMatch = 'SEARCH_MATCH'
+  SearchMatch = 'SEARCH_MATCH',
 }
 
 /** User's studio statistics */
@@ -3929,7 +3826,7 @@ export type StudioStats = {
 /** Submission sort enums */
 export enum SubmissionSort {
   Id = 'ID',
-  IdDesc = 'ID_DESC'
+  IdDesc = 'ID_DESC',
 }
 
 /** Submission status */
@@ -3937,7 +3834,7 @@ export enum SubmissionStatus {
   Accepted = 'ACCEPTED',
   PartiallyAccepted = 'PARTIALLY_ACCEPTED',
   Pending = 'PENDING',
-  Rejected = 'REJECTED'
+  Rejected = 'REJECTED',
 }
 
 /** User's tag statistics */
@@ -3984,7 +3881,6 @@ export type TextActivity = {
   /** The user id of the activity's creator */
   userId: Maybe<Scalars['Int']['output']>;
 };
-
 
 /** User text activity */
 export type TextActivityTextArgs = {
@@ -4040,7 +3936,6 @@ export type Thread = {
   viewCount: Maybe<Scalars['Int']['output']>;
 };
 
-
 /** Forum Thread */
 export type ThreadBodyArgs = {
   asHtml: InputMaybe<Scalars['Boolean']['input']>;
@@ -4087,7 +3982,6 @@ export type ThreadComment = {
   /** The user id of the comment's owner */
   userId: Maybe<Scalars['Int']['output']>;
 };
-
 
 /** Forum Thread Comment */
 export type ThreadCommentCommentArgs = {
@@ -4166,7 +4060,7 @@ export type ThreadCommentReplyNotification = {
 /** Thread comments sort enums */
 export enum ThreadCommentSort {
   Id = 'ID',
-  IdDesc = 'ID_DESC'
+  IdDesc = 'ID_DESC',
 }
 
 /** Notification for when a user replies to a subscribed forum thread */
@@ -4232,7 +4126,7 @@ export enum ThreadSort {
   UpdatedAt = 'UPDATED_AT',
   UpdatedAtDesc = 'UPDATED_AT_DESC',
   ViewCount = 'VIEW_COUNT',
-  ViewCountDesc = 'VIEW_COUNT_DESC'
+  ViewCountDesc = 'VIEW_COUNT_DESC',
 }
 
 /** A user */
@@ -4291,12 +4185,10 @@ export type User = {
   updatedAt: Maybe<Scalars['Int']['output']>;
 };
 
-
 /** A user */
 export type UserAboutArgs = {
   asHtml: InputMaybe<Scalars['Boolean']['input']>;
 };
-
 
 /** A user */
 export type UserFavouritesArgs = {
@@ -4440,7 +4332,7 @@ export enum UserSort {
   Username = 'USERNAME',
   UsernameDesc = 'USERNAME_DESC',
   WatchedTime = 'WATCHED_TIME',
-  WatchedTimeDesc = 'WATCHED_TIME_DESC'
+  WatchedTimeDesc = 'WATCHED_TIME_DESC',
 }
 
 /** The language the user wants to see staff and character names in */
@@ -4450,7 +4342,7 @@ export enum UserStaffNameLanguage {
   /** The romanization of the staff or character's native name */
   Romaji = 'ROMAJI',
   /** The romanization of the staff or character's native name, with western name ordering */
-  RomajiWestern = 'ROMAJI_WESTERN'
+  RomajiWestern = 'ROMAJI_WESTERN',
 }
 
 export type UserStaffStatistic = {
@@ -4502,72 +4394,60 @@ export type UserStatistics = {
   volumesRead: Scalars['Int']['output'];
 };
 
-
 export type UserStatisticsCountriesArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
-
 
 export type UserStatisticsFormatsArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
 
-
 export type UserStatisticsGenresArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
-
 
 export type UserStatisticsLengthsArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
 
-
 export type UserStatisticsReleaseYearsArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
-
 
 export type UserStatisticsScoresArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
 
-
 export type UserStatisticsStaffArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
-
 
 export type UserStatisticsStartYearsArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
 
-
 export type UserStatisticsStatusesArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
-
 
 export type UserStatisticsStudiosArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
 
-
 export type UserStatisticsTagsArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
   sort: InputMaybe<Array<InputMaybe<UserStatisticsSort>>>;
 };
-
 
 export type UserStatisticsVoiceActorsArgs = {
   limit: InputMaybe<Scalars['Int']['input']>;
@@ -4583,7 +4463,7 @@ export enum UserStatisticsSort {
   MeanScore = 'MEAN_SCORE',
   MeanScoreDesc = 'MEAN_SCORE_DESC',
   Progress = 'PROGRESS',
-  ProgressDesc = 'PROGRESS_DESC'
+  ProgressDesc = 'PROGRESS_DESC',
 }
 
 /** A user's statistics */
@@ -4653,7 +4533,7 @@ export enum UserTitleLanguage {
   /** The romanization of the native language title */
   Romaji = 'ROMAJI',
   /** The romanization of the native language title, stylised by media creator */
-  RomajiStylised = 'ROMAJI_STYLISED'
+  RomajiStylised = 'ROMAJI_STYLISED',
 }
 
 export type UserVoiceActorStatistic = {
@@ -4675,22 +4555,126 @@ export type YearStats = {
   year: Maybe<Scalars['Int']['output']>;
 };
 
-export type MediaResponseFragmentFragment = { __typename?: 'Media', id: number, bannerImage: string | null, season: MediaSeason | null, seasonYear: number | null, description: string | null, type: MediaType | null, format: MediaFormat | null, status: MediaStatus | null, episodes: number | null, duration: number | null, chapters: number | null, volumes: number | null, genres: Array<string | null> | null, isAdult: boolean | null, averageScore: number | null, title: { __typename?: 'MediaTitle', userPreferred: string | null } | null, coverImage: { __typename?: 'MediaCoverImage', large: string | null, medium: string | null, color: string | null } | null, startDate: { __typename?: 'FuzzyDate', year: number | null, month: number | null, day: number | null } | null, endDate: { __typename?: 'FuzzyDate', year: number | null, month: number | null, day: number | null } | null, nextAiringEpisode: { __typename?: 'AiringSchedule', airingAt: number, timeUntilAiring: number, episode: number } | null, mediaListEntry: { __typename?: 'MediaList', id: number, status: MediaListStatus | null, score: number | null, progress: number | null, repeat: number | null, notes: string | null, private: boolean | null, startedAt: { __typename?: 'FuzzyDate', year: number | null, month: number | null, day: number | null } | null, completedAt: { __typename?: 'FuzzyDate', year: number | null, month: number | null, day: number | null } | null } | null, studios: { __typename?: 'StudioConnection', edges: Array<{ __typename?: 'StudioEdge', isMain: boolean, node: { __typename?: 'Studio', id: number, name: string } | null } | null> | null } | null } & { ' $fragmentName'?: 'MediaResponseFragmentFragment' };
+export type MediaResponseFragmentFragment = {
+  __typename?: 'Media';
+  id: number;
+  bannerImage: string | null;
+  season: MediaSeason | null;
+  seasonYear: number | null;
+  description: string | null;
+  type: MediaType | null;
+  format: MediaFormat | null;
+  status: MediaStatus | null;
+  episodes: number | null;
+  duration: number | null;
+  chapters: number | null;
+  volumes: number | null;
+  genres: Array<string | null> | null;
+  isAdult: boolean | null;
+  averageScore: number | null;
+  title: {
+    __typename?: 'MediaTitle';
+    userPreferred: string | null;
+    english: string | null;
+    native: string | null;
+    romaji: string | null;
+  } | null;
+  coverImage: {
+    __typename?: 'MediaCoverImage';
+    large: string | null;
+    medium: string | null;
+    color: string | null;
+  } | null;
+  startDate: {
+    __typename?: 'FuzzyDate';
+    year: number | null;
+    month: number | null;
+    day: number | null;
+  } | null;
+  endDate: {
+    __typename?: 'FuzzyDate';
+    year: number | null;
+    month: number | null;
+    day: number | null;
+  } | null;
+  nextAiringEpisode: {
+    __typename?: 'AiringSchedule';
+    airingAt: number;
+    timeUntilAiring: number;
+    episode: number;
+  } | null;
+  mediaListEntry: {
+    __typename?: 'MediaList';
+    id: number;
+    status: MediaListStatus | null;
+    score: number | null;
+    progress: number | null;
+    repeat: number | null;
+    notes: string | null;
+    private: boolean | null;
+    startedAt: {
+      __typename?: 'FuzzyDate';
+      year: number | null;
+      month: number | null;
+      day: number | null;
+    } | null;
+    completedAt: {
+      __typename?: 'FuzzyDate';
+      year: number | null;
+      month: number | null;
+      day: number | null;
+    } | null;
+  } | null;
+  studios: {
+    __typename?: 'StudioConnection';
+    edges: Array<{
+      __typename?: 'StudioEdge';
+      isMain: boolean;
+      node: { __typename?: 'Studio'; id: number; name: string } | null;
+    } | null> | null;
+  } | null;
+} & { ' $fragmentName'?: 'MediaResponseFragmentFragment' };
 
-export type User_AuthQueryVariables = Exact<{ [key: string]: never; }>;
+export type User_AuthQueryVariables = Exact<{ [key: string]: never }>;
 
+export type User_AuthQuery = {
+  __typename?: 'Query';
+  Viewer: {
+    __typename?: 'User';
+    id: number;
+    name: string;
+    avatar: { __typename?: 'UserAvatar'; medium: string | null } | null;
+    options: {
+      __typename?: 'UserOptions';
+      displayAdultContent: boolean | null;
+    } | null;
+    mediaListOptions: {
+      __typename?: 'MediaListOptions';
+      scoreFormat: ScoreFormat | null;
+    } | null;
+  } | null;
+};
 
-export type User_AuthQuery = { __typename?: 'Query', Viewer: { __typename?: 'User', id: number, name: string, avatar: { __typename?: 'UserAvatar', medium: string | null } | null, options: { __typename?: 'UserOptions', displayAdultContent: boolean | null } | null, mediaListOptions: { __typename?: 'MediaListOptions', scoreFormat: ScoreFormat | null } | null } | null };
+export type Get_GenresQueryVariables = Exact<{ [key: string]: never }>;
 
-export type Get_GenresQueryVariables = Exact<{ [key: string]: never; }>;
+export type Get_GenresQuery = {
+  __typename?: 'Query';
+  GenreCollection: Array<string | null> | null;
+};
 
+export type Get_TagsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type Get_GenresQuery = { __typename?: 'Query', GenreCollection: Array<string | null> | null };
-
-export type Get_TagsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type Get_TagsQuery = { __typename?: 'Query', MediaTagCollection: Array<{ __typename?: 'MediaTag', id: number, name: string, description: string | null, category: string | null, isAdult: boolean | null } | null> | null };
+export type Get_TagsQuery = {
+  __typename?: 'Query';
+  MediaTagCollection: Array<{
+    __typename?: 'MediaTag';
+    id: number;
+    name: string;
+    description: string | null;
+    category: string | null;
+    isAdult: boolean | null;
+  } | null> | null;
+};
 
 export type Search_Anime_MangaQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -4716,21 +4700,53 @@ export type Search_Anime_MangaQueryVariables = Exact<{
   chapterGreater: InputMaybe<Scalars['Int']['input']>;
   volumeLesser: InputMaybe<Scalars['Int']['input']>;
   volumeGreater: InputMaybe<Scalars['Int']['input']>;
-  licensedBy: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>>;
+  licensedBy: InputMaybe<
+    | Array<InputMaybe<Scalars['Int']['input']>>
+    | InputMaybe<Scalars['Int']['input']>
+  >;
   isLicensed: InputMaybe<Scalars['Boolean']['input']>;
-  genres: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
-  excludedGenres: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
-  tags: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
-  excludedTags: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
+  genres: InputMaybe<
+    | Array<InputMaybe<Scalars['String']['input']>>
+    | InputMaybe<Scalars['String']['input']>
+  >;
+  excludedGenres: InputMaybe<
+    | Array<InputMaybe<Scalars['String']['input']>>
+    | InputMaybe<Scalars['String']['input']>
+  >;
+  tags: InputMaybe<
+    | Array<InputMaybe<Scalars['String']['input']>>
+    | InputMaybe<Scalars['String']['input']>
+  >;
+  excludedTags: InputMaybe<
+    | Array<InputMaybe<Scalars['String']['input']>>
+    | InputMaybe<Scalars['String']['input']>
+  >;
   minimumTagRank: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<InputMaybe<MediaSort>> | InputMaybe<MediaSort>>;
 }>;
 
-
-export type Search_Anime_MangaQuery = { __typename?: 'Query', Page: { __typename?: 'Page', pageInfo: { __typename?: 'PageInfo', total: number | null, perPage: number | null, currentPage: number | null, lastPage: number | null, hasNextPage: boolean | null } | null, media: Array<(
-      { __typename?: 'Media' }
-      & { ' $fragmentRefs'?: { 'MediaResponseFragmentFragment': MediaResponseFragmentFragment } }
-    ) | null> | null } | null };
+export type Search_Anime_MangaQuery = {
+  __typename?: 'Query';
+  Page: {
+    __typename?: 'Page';
+    pageInfo: {
+      __typename?: 'PageInfo';
+      total: number | null;
+      perPage: number | null;
+      currentPage: number | null;
+      lastPage: number | null;
+      hasNextPage: boolean | null;
+    } | null;
+    media: Array<
+      | ({ __typename?: 'Media' } & {
+          ' $fragmentRefs'?: {
+            MediaResponseFragmentFragment: MediaResponseFragmentFragment;
+          };
+        })
+      | null
+    > | null;
+  } | null;
+};
 
 export type Search_StaffQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -4740,19 +4756,70 @@ export type Search_StaffQueryVariables = Exact<{
   sort?: InputMaybe<Array<InputMaybe<StaffSort>> | InputMaybe<StaffSort>>;
 }>;
 
-
-export type Search_StaffQuery = { __typename?: 'Query', Page: { __typename?: 'Page', pageInfo: { __typename?: 'PageInfo', total: number | null, perPage: number | null, currentPage: number | null, lastPage: number | null, hasNextPage: boolean | null } | null, staff: Array<{ __typename?: 'Staff', id: number, description: string | null, name: { __typename?: 'StaffName', userPreferred: string | null } | null, image: { __typename?: 'StaffImage', large: string | null, medium: string | null } | null } | null> | null } | null };
+export type Search_StaffQuery = {
+  __typename?: 'Query';
+  Page: {
+    __typename?: 'Page';
+    pageInfo: {
+      __typename?: 'PageInfo';
+      total: number | null;
+      perPage: number | null;
+      currentPage: number | null;
+      lastPage: number | null;
+      hasNextPage: boolean | null;
+    } | null;
+    staff: Array<{
+      __typename?: 'Staff';
+      id: number;
+      description: string | null;
+      name: { __typename?: 'StaffName'; userPreferred: string | null } | null;
+      image: {
+        __typename?: 'StaffImage';
+        large: string | null;
+        medium: string | null;
+      } | null;
+    } | null> | null;
+  } | null;
+};
 
 export type Search_CharactersQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
   id: InputMaybe<Scalars['Int']['input']>;
   search: InputMaybe<Scalars['String']['input']>;
   isBirthday: InputMaybe<Scalars['Boolean']['input']>;
-  sort?: InputMaybe<Array<InputMaybe<CharacterSort>> | InputMaybe<CharacterSort>>;
+  sort?: InputMaybe<
+    Array<InputMaybe<CharacterSort>> | InputMaybe<CharacterSort>
+  >;
 }>;
 
-
-export type Search_CharactersQuery = { __typename?: 'Query', Page: { __typename?: 'Page', pageInfo: { __typename?: 'PageInfo', total: number | null, perPage: number | null, currentPage: number | null, lastPage: number | null, hasNextPage: boolean | null } | null, characters: Array<{ __typename?: 'Character', id: number, description: string | null, name: { __typename?: 'CharacterName', userPreferred: string | null } | null, image: { __typename?: 'CharacterImage', large: string | null, medium: string | null } | null } | null> | null } | null };
+export type Search_CharactersQuery = {
+  __typename?: 'Query';
+  Page: {
+    __typename?: 'Page';
+    pageInfo: {
+      __typename?: 'PageInfo';
+      total: number | null;
+      perPage: number | null;
+      currentPage: number | null;
+      lastPage: number | null;
+      hasNextPage: boolean | null;
+    } | null;
+    characters: Array<{
+      __typename?: 'Character';
+      id: number;
+      description: string | null;
+      name: {
+        __typename?: 'CharacterName';
+        userPreferred: string | null;
+      } | null;
+      image: {
+        __typename?: 'CharacterImage';
+        large: string | null;
+        medium: string | null;
+      } | null;
+    } | null> | null;
+  } | null;
+};
 
 export type Search_StudioQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -4761,8 +4828,25 @@ export type Search_StudioQueryVariables = Exact<{
   sort?: InputMaybe<Array<InputMaybe<StudioSort>> | InputMaybe<StudioSort>>;
 }>;
 
-
-export type Search_StudioQuery = { __typename?: 'Query', Page: { __typename?: 'Page', pageInfo: { __typename?: 'PageInfo', total: number | null, perPage: number | null, currentPage: number | null, lastPage: number | null, hasNextPage: boolean | null } | null, studios: Array<{ __typename?: 'Studio', id: number, name: string } | null> | null } | null };
+export type Search_StudioQuery = {
+  __typename?: 'Query';
+  Page: {
+    __typename?: 'Page';
+    pageInfo: {
+      __typename?: 'PageInfo';
+      total: number | null;
+      perPage: number | null;
+      currentPage: number | null;
+      lastPage: number | null;
+      hasNextPage: boolean | null;
+    } | null;
+    studios: Array<{
+      __typename?: 'Studio';
+      id: number;
+      name: string;
+    } | null> | null;
+  } | null;
+};
 
 export type Trending_Anime_MangaQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -4775,11 +4859,28 @@ export type Trending_Anime_MangaQueryVariables = Exact<{
   seasonYear: InputMaybe<Scalars['Int']['input']>;
 }>;
 
-
-export type Trending_Anime_MangaQuery = { __typename?: 'Query', Page: { __typename?: 'Page', pageInfo: { __typename?: 'PageInfo', total: number | null, perPage: number | null, currentPage: number | null, lastPage: number | null, hasNextPage: boolean | null } | null, media: Array<(
-      { __typename?: 'Media' }
-      & { ' $fragmentRefs'?: { 'MediaResponseFragmentFragment': MediaResponseFragmentFragment } }
-    ) | null> | null } | null };
+export type Trending_Anime_MangaQuery = {
+  __typename?: 'Query';
+  Page: {
+    __typename?: 'Page';
+    pageInfo: {
+      __typename?: 'PageInfo';
+      total: number | null;
+      perPage: number | null;
+      currentPage: number | null;
+      lastPage: number | null;
+      hasNextPage: boolean | null;
+    } | null;
+    media: Array<
+      | ({ __typename?: 'Media' } & {
+          ' $fragmentRefs'?: {
+            MediaResponseFragmentFragment: MediaResponseFragmentFragment;
+          };
+        })
+      | null
+    > | null;
+  } | null;
+};
 
 export type User_RecommendedQueryVariables = Exact<{
   perPage?: InputMaybe<Scalars['Int']['input']>;
@@ -4788,11 +4889,42 @@ export type User_RecommendedQueryVariables = Exact<{
   type: InputMaybe<MediaType>;
 }>;
 
-
-export type User_RecommendedQuery = { __typename?: 'Query', Page: { __typename?: 'Page', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean | null, total: number | null } | null, mediaList: Array<{ __typename?: 'MediaList', progress: number | null, score: number | null, media: { __typename?: 'Media', recommendations: { __typename?: 'RecommendationConnection', edges: Array<{ __typename?: 'RecommendationEdge', node: { __typename?: 'Recommendation', rating: number | null, mediaRecommendation: (
-                { __typename?: 'Media' }
-                & { ' $fragmentRefs'?: { 'MediaResponseFragmentFragment': MediaResponseFragmentFragment } }
-              ) | null } | null } | null> | null } | null } | null } | null> | null } | null };
+export type User_RecommendedQuery = {
+  __typename?: 'Query';
+  Page: {
+    __typename?: 'Page';
+    pageInfo: {
+      __typename?: 'PageInfo';
+      hasNextPage: boolean | null;
+      total: number | null;
+    } | null;
+    mediaList: Array<{
+      __typename?: 'MediaList';
+      progress: number | null;
+      score: number | null;
+      media: {
+        __typename?: 'Media';
+        recommendations: {
+          __typename?: 'RecommendationConnection';
+          edges: Array<{
+            __typename?: 'RecommendationEdge';
+            node: {
+              __typename?: 'Recommendation';
+              rating: number | null;
+              mediaRecommendation:
+                | ({ __typename?: 'Media' } & {
+                    ' $fragmentRefs'?: {
+                      MediaResponseFragmentFragment: MediaResponseFragmentFragment;
+                    };
+                  })
+                | null;
+            } | null;
+          } | null> | null;
+        } | null;
+      } | null;
+    } | null> | null;
+  } | null;
+};
 
 export type User_Up_NextQueryVariables = Exact<{
   perPage?: InputMaybe<Scalars['Int']['input']>;
@@ -4801,11 +4933,27 @@ export type User_Up_NextQueryVariables = Exact<{
   type: InputMaybe<MediaType>;
 }>;
 
-
-export type User_Up_NextQuery = { __typename?: 'Query', Page: { __typename?: 'Page', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean | null, total: number | null } | null, mediaList: Array<{ __typename?: 'MediaList', media: (
-        { __typename?: 'Media' }
-        & { ' $fragmentRefs'?: { 'MediaResponseFragmentFragment': MediaResponseFragmentFragment } }
-      ) | null } | null> | null } | null };
+export type User_Up_NextQuery = {
+  __typename?: 'Query';
+  Page: {
+    __typename?: 'Page';
+    pageInfo: {
+      __typename?: 'PageInfo';
+      hasNextPage: boolean | null;
+      total: number | null;
+    } | null;
+    mediaList: Array<{
+      __typename?: 'MediaList';
+      media:
+        | ({ __typename?: 'Media' } & {
+            ' $fragmentRefs'?: {
+              MediaResponseFragmentFragment: MediaResponseFragmentFragment;
+            };
+          })
+        | null;
+    } | null> | null;
+  } | null;
+};
 
 export type User_ListQueryVariables = Exact<{
   perPage?: InputMaybe<Scalars['Int']['input']>;
@@ -4813,14 +4961,32 @@ export type User_ListQueryVariables = Exact<{
   userName: InputMaybe<Scalars['String']['input']>;
   type: InputMaybe<MediaType>;
   status?: InputMaybe<MediaListStatus>;
-  sort?: InputMaybe<Array<InputMaybe<MediaListSort>> | InputMaybe<MediaListSort>>;
+  sort?: InputMaybe<
+    Array<InputMaybe<MediaListSort>> | InputMaybe<MediaListSort>
+  >;
 }>;
 
-
-export type User_ListQuery = { __typename?: 'Query', Page: { __typename?: 'Page', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean | null, total: number | null } | null, mediaList: Array<{ __typename?: 'MediaList', media: (
-        { __typename?: 'Media' }
-        & { ' $fragmentRefs'?: { 'MediaResponseFragmentFragment': MediaResponseFragmentFragment } }
-      ) | null } | null> | null } | null };
+export type User_ListQuery = {
+  __typename?: 'Query';
+  Page: {
+    __typename?: 'Page';
+    pageInfo: {
+      __typename?: 'PageInfo';
+      hasNextPage: boolean | null;
+      total: number | null;
+    } | null;
+    mediaList: Array<{
+      __typename?: 'MediaList';
+      media:
+        | ({ __typename?: 'Media' } & {
+            ' $fragmentRefs'?: {
+              MediaResponseFragmentFragment: MediaResponseFragmentFragment;
+            };
+          })
+        | null;
+    } | null> | null;
+  } | null;
+};
 
 export type SeasonalQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -4830,11 +4996,21 @@ export type SeasonalQueryVariables = Exact<{
   isAdult: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
-
-export type SeasonalQuery = { __typename?: 'Query', Page: { __typename?: 'Page', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean | null } | null, media: Array<(
-      { __typename?: 'Media' }
-      & { ' $fragmentRefs'?: { 'MediaResponseFragmentFragment': MediaResponseFragmentFragment } }
-    ) | null> | null } | null };
+export type SeasonalQuery = {
+  __typename?: 'Query';
+  Page: {
+    __typename?: 'Page';
+    pageInfo: { __typename?: 'PageInfo'; hasNextPage: boolean | null } | null;
+    media: Array<
+      | ({ __typename?: 'Media' } & {
+          ' $fragmentRefs'?: {
+            MediaResponseFragmentFragment: MediaResponseFragmentFragment;
+          };
+        })
+      | null
+    > | null;
+  } | null;
+};
 
 export type Set_Media_EntryMutationVariables = Exact<{
   id: InputMaybe<Scalars['Int']['input']>;
@@ -4849,20 +5025,3767 @@ export type Set_Media_EntryMutationVariables = Exact<{
   private: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
+export type Set_Media_EntryMutation = {
+  __typename?: 'Mutation';
+  SaveMediaListEntry: { __typename?: 'MediaList'; id: number } | null;
+};
 
-export type Set_Media_EntryMutation = { __typename?: 'Mutation', SaveMediaListEntry: { __typename?: 'MediaList', id: number } | null };
-
-export const MediaResponseFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MediaResponseFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Media"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPreferred"}}]}},{"kind":"Field","name":{"kind":"Name","value":"coverImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"large"}},{"kind":"Field","name":{"kind":"Name","value":"medium"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"endDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bannerImage"}},{"kind":"Field","name":{"kind":"Name","value":"season"}},{"kind":"Field","name":{"kind":"Name","value":"seasonYear"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"asHtml"},"value":{"kind":"BooleanValue","value":true}}]},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"format"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"IntValue","value":"2"}}]},{"kind":"Field","name":{"kind":"Name","value":"episodes"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"chapters"}},{"kind":"Field","name":{"kind":"Name","value":"volumes"}},{"kind":"Field","name":{"kind":"Name","value":"genres"}},{"kind":"Field","name":{"kind":"Name","value":"isAdult"}},{"kind":"Field","name":{"kind":"Name","value":"averageScore"}},{"kind":"Field","name":{"kind":"Name","value":"nextAiringEpisode"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airingAt"}},{"kind":"Field","name":{"kind":"Name","value":"timeUntilAiring"}},{"kind":"Field","name":{"kind":"Name","value":"episode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaListEntry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"score"}},{"kind":"Field","name":{"kind":"Name","value":"progress"}},{"kind":"Field","name":{"kind":"Name","value":"repeat"}},{"kind":"Field","name":{"kind":"Name","value":"startedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"private"}}]}},{"kind":"Field","name":{"kind":"Name","value":"studios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isMain"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isMain"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MediaResponseFragmentFragment, unknown>;
-export const User_AuthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"USER_AUTH"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Viewer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"medium"}}]}},{"kind":"Field","name":{"kind":"Name","value":"options"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"displayAdultContent"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaListOptions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scoreFormat"}}]}}]}}]}}]} as unknown as DocumentNode<User_AuthQuery, User_AuthQueryVariables>;
-export const Get_GenresDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GET_GENRES"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"GenreCollection"}}]}}]} as unknown as DocumentNode<Get_GenresQuery, Get_GenresQueryVariables>;
-export const Get_TagsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GET_TAGS"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"MediaTagCollection"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"isAdult"}}]}}]}}]} as unknown as DocumentNode<Get_TagsQuery, Get_TagsQueryVariables>;
-export const Search_Anime_MangaDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SEARCH_ANIME_MANGA"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"1"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isAdult"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"format"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaFormat"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaStatus"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"countryOfOrigin"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CountryCode"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"source"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaSource"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"season"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaSeason"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"seasonYear"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"year"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"onList"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"yearLesser"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FuzzyDateInt"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"yearGreater"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FuzzyDateInt"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"episodeLesser"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"episodeGreater"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"durationLesser"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"durationGreater"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"chapterLesser"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"chapterGreater"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"volumeLesser"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"volumeGreater"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"licensedBy"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isLicensed"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"genres"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"excludedGenres"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tags"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"excludedTags"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"minimumTagRank"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaSort"}}},"defaultValue":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"POPULARITY_DESC"},{"kind":"EnumValue","value":"SCORE_DESC"}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"IntValue","value":"20"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"lastPage"}},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"media"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"season"},"value":{"kind":"Variable","name":{"kind":"Name","value":"season"}}},{"kind":"Argument","name":{"kind":"Name","value":"format_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"format"}}},{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}},{"kind":"Argument","name":{"kind":"Name","value":"countryOfOrigin"},"value":{"kind":"Variable","name":{"kind":"Name","value":"countryOfOrigin"}}},{"kind":"Argument","name":{"kind":"Name","value":"source"},"value":{"kind":"Variable","name":{"kind":"Name","value":"source"}}},{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}},{"kind":"Argument","name":{"kind":"Name","value":"onList"},"value":{"kind":"Variable","name":{"kind":"Name","value":"onList"}}},{"kind":"Argument","name":{"kind":"Name","value":"seasonYear"},"value":{"kind":"Variable","name":{"kind":"Name","value":"seasonYear"}}},{"kind":"Argument","name":{"kind":"Name","value":"startDate_like"},"value":{"kind":"Variable","name":{"kind":"Name","value":"year"}}},{"kind":"Argument","name":{"kind":"Name","value":"startDate_lesser"},"value":{"kind":"Variable","name":{"kind":"Name","value":"yearLesser"}}},{"kind":"Argument","name":{"kind":"Name","value":"startDate_greater"},"value":{"kind":"Variable","name":{"kind":"Name","value":"yearGreater"}}},{"kind":"Argument","name":{"kind":"Name","value":"episodes_lesser"},"value":{"kind":"Variable","name":{"kind":"Name","value":"episodeLesser"}}},{"kind":"Argument","name":{"kind":"Name","value":"episodes_greater"},"value":{"kind":"Variable","name":{"kind":"Name","value":"episodeGreater"}}},{"kind":"Argument","name":{"kind":"Name","value":"duration_lesser"},"value":{"kind":"Variable","name":{"kind":"Name","value":"durationLesser"}}},{"kind":"Argument","name":{"kind":"Name","value":"duration_greater"},"value":{"kind":"Variable","name":{"kind":"Name","value":"durationGreater"}}},{"kind":"Argument","name":{"kind":"Name","value":"chapters_lesser"},"value":{"kind":"Variable","name":{"kind":"Name","value":"chapterLesser"}}},{"kind":"Argument","name":{"kind":"Name","value":"chapters_greater"},"value":{"kind":"Variable","name":{"kind":"Name","value":"chapterGreater"}}},{"kind":"Argument","name":{"kind":"Name","value":"volumes_lesser"},"value":{"kind":"Variable","name":{"kind":"Name","value":"volumeLesser"}}},{"kind":"Argument","name":{"kind":"Name","value":"volumes_greater"},"value":{"kind":"Variable","name":{"kind":"Name","value":"volumeGreater"}}},{"kind":"Argument","name":{"kind":"Name","value":"licensedById_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"licensedBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"isLicensed"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isLicensed"}}},{"kind":"Argument","name":{"kind":"Name","value":"genre_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"genres"}}},{"kind":"Argument","name":{"kind":"Name","value":"genre_not_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"excludedGenres"}}},{"kind":"Argument","name":{"kind":"Name","value":"tag_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tags"}}},{"kind":"Argument","name":{"kind":"Name","value":"tag_not_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"excludedTags"}}},{"kind":"Argument","name":{"kind":"Name","value":"minimumTagRank"},"value":{"kind":"Variable","name":{"kind":"Name","value":"minimumTagRank"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"isAdult"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isAdult"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MediaResponseFragment"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MediaResponseFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Media"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPreferred"}}]}},{"kind":"Field","name":{"kind":"Name","value":"coverImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"large"}},{"kind":"Field","name":{"kind":"Name","value":"medium"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"endDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bannerImage"}},{"kind":"Field","name":{"kind":"Name","value":"season"}},{"kind":"Field","name":{"kind":"Name","value":"seasonYear"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"asHtml"},"value":{"kind":"BooleanValue","value":true}}]},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"format"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"IntValue","value":"2"}}]},{"kind":"Field","name":{"kind":"Name","value":"episodes"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"chapters"}},{"kind":"Field","name":{"kind":"Name","value":"volumes"}},{"kind":"Field","name":{"kind":"Name","value":"genres"}},{"kind":"Field","name":{"kind":"Name","value":"isAdult"}},{"kind":"Field","name":{"kind":"Name","value":"averageScore"}},{"kind":"Field","name":{"kind":"Name","value":"nextAiringEpisode"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airingAt"}},{"kind":"Field","name":{"kind":"Name","value":"timeUntilAiring"}},{"kind":"Field","name":{"kind":"Name","value":"episode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaListEntry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"score"}},{"kind":"Field","name":{"kind":"Name","value":"progress"}},{"kind":"Field","name":{"kind":"Name","value":"repeat"}},{"kind":"Field","name":{"kind":"Name","value":"startedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"private"}}]}},{"kind":"Field","name":{"kind":"Name","value":"studios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isMain"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isMain"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<Search_Anime_MangaQuery, Search_Anime_MangaQueryVariables>;
-export const Search_StaffDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SEARCH_STAFF"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"1"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isBirthday"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"StaffSort"}}},"defaultValue":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"FAVOURITES_DESC"}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"IntValue","value":"20"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"lastPage"}},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"staff"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}},{"kind":"Argument","name":{"kind":"Name","value":"isBirthday"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isBirthday"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPreferred"}}]}},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"asHtml"},"value":{"kind":"BooleanValue","value":true}}]},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"large"}},{"kind":"Field","name":{"kind":"Name","value":"medium"}}]}}]}}]}}]}}]} as unknown as DocumentNode<Search_StaffQuery, Search_StaffQueryVariables>;
-export const Search_CharactersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SEARCH_CHARACTERS"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"1"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isBirthday"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CharacterSort"}}},"defaultValue":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"FAVOURITES_DESC"}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"IntValue","value":"20"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"lastPage"}},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"characters"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}},{"kind":"Argument","name":{"kind":"Name","value":"isBirthday"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isBirthday"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPreferred"}}]}},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"asHtml"},"value":{"kind":"BooleanValue","value":true}}]},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"large"}},{"kind":"Field","name":{"kind":"Name","value":"medium"}}]}}]}}]}}]}}]} as unknown as DocumentNode<Search_CharactersQuery, Search_CharactersQueryVariables>;
-export const Search_StudioDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SEARCH_STUDIO"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"1"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"StudioSort"}}},"defaultValue":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"SEARCH_MATCH"}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"IntValue","value":"20"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"lastPage"}},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"studios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<Search_StudioQuery, Search_StudioQueryVariables>;
-export const Trending_Anime_MangaDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TRENDING_ANIME_MANGA"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"1"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaSort"}}},"defaultValue":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"TRENDING_DESC"}]}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isAdult"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"format"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaFormat"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaStatus"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"season"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaSeason"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"seasonYear"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"IntValue","value":"25"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"perPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"lastPage"}},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"media"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"isAdult"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isAdult"}}},{"kind":"Argument","name":{"kind":"Name","value":"format"},"value":{"kind":"Variable","name":{"kind":"Name","value":"format"}}},{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}},{"kind":"Argument","name":{"kind":"Name","value":"season"},"value":{"kind":"Variable","name":{"kind":"Name","value":"season"}}},{"kind":"Argument","name":{"kind":"Name","value":"seasonYear"},"value":{"kind":"Variable","name":{"kind":"Name","value":"seasonYear"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MediaResponseFragment"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MediaResponseFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Media"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPreferred"}}]}},{"kind":"Field","name":{"kind":"Name","value":"coverImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"large"}},{"kind":"Field","name":{"kind":"Name","value":"medium"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"endDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bannerImage"}},{"kind":"Field","name":{"kind":"Name","value":"season"}},{"kind":"Field","name":{"kind":"Name","value":"seasonYear"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"asHtml"},"value":{"kind":"BooleanValue","value":true}}]},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"format"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"IntValue","value":"2"}}]},{"kind":"Field","name":{"kind":"Name","value":"episodes"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"chapters"}},{"kind":"Field","name":{"kind":"Name","value":"volumes"}},{"kind":"Field","name":{"kind":"Name","value":"genres"}},{"kind":"Field","name":{"kind":"Name","value":"isAdult"}},{"kind":"Field","name":{"kind":"Name","value":"averageScore"}},{"kind":"Field","name":{"kind":"Name","value":"nextAiringEpisode"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airingAt"}},{"kind":"Field","name":{"kind":"Name","value":"timeUntilAiring"}},{"kind":"Field","name":{"kind":"Name","value":"episode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaListEntry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"score"}},{"kind":"Field","name":{"kind":"Name","value":"progress"}},{"kind":"Field","name":{"kind":"Name","value":"repeat"}},{"kind":"Field","name":{"kind":"Name","value":"startedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"private"}}]}},{"kind":"Field","name":{"kind":"Name","value":"studios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isMain"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isMain"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<Trending_Anime_MangaQuery, Trending_Anime_MangaQueryVariables>;
-export const User_RecommendedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"USER_RECOMMENDED"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"50"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"1"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userName"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"SCORE_DESC"}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"progress"}},{"kind":"Field","name":{"kind":"Name","value":"score"}},{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"recommendations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"mediaRecommendation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MediaResponseFragment"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MediaResponseFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Media"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPreferred"}}]}},{"kind":"Field","name":{"kind":"Name","value":"coverImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"large"}},{"kind":"Field","name":{"kind":"Name","value":"medium"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"endDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bannerImage"}},{"kind":"Field","name":{"kind":"Name","value":"season"}},{"kind":"Field","name":{"kind":"Name","value":"seasonYear"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"asHtml"},"value":{"kind":"BooleanValue","value":true}}]},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"format"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"IntValue","value":"2"}}]},{"kind":"Field","name":{"kind":"Name","value":"episodes"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"chapters"}},{"kind":"Field","name":{"kind":"Name","value":"volumes"}},{"kind":"Field","name":{"kind":"Name","value":"genres"}},{"kind":"Field","name":{"kind":"Name","value":"isAdult"}},{"kind":"Field","name":{"kind":"Name","value":"averageScore"}},{"kind":"Field","name":{"kind":"Name","value":"nextAiringEpisode"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airingAt"}},{"kind":"Field","name":{"kind":"Name","value":"timeUntilAiring"}},{"kind":"Field","name":{"kind":"Name","value":"episode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaListEntry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"score"}},{"kind":"Field","name":{"kind":"Name","value":"progress"}},{"kind":"Field","name":{"kind":"Name","value":"repeat"}},{"kind":"Field","name":{"kind":"Name","value":"startedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"private"}}]}},{"kind":"Field","name":{"kind":"Name","value":"studios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isMain"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isMain"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<User_RecommendedQuery, User_RecommendedQueryVariables>;
-export const User_Up_NextDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"USER_UP_NEXT"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"50"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"1"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userName"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"ADDED_TIME"}]}},{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"EnumValue","value":"PLANNING"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MediaResponseFragment"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MediaResponseFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Media"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPreferred"}}]}},{"kind":"Field","name":{"kind":"Name","value":"coverImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"large"}},{"kind":"Field","name":{"kind":"Name","value":"medium"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"endDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bannerImage"}},{"kind":"Field","name":{"kind":"Name","value":"season"}},{"kind":"Field","name":{"kind":"Name","value":"seasonYear"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"asHtml"},"value":{"kind":"BooleanValue","value":true}}]},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"format"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"IntValue","value":"2"}}]},{"kind":"Field","name":{"kind":"Name","value":"episodes"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"chapters"}},{"kind":"Field","name":{"kind":"Name","value":"volumes"}},{"kind":"Field","name":{"kind":"Name","value":"genres"}},{"kind":"Field","name":{"kind":"Name","value":"isAdult"}},{"kind":"Field","name":{"kind":"Name","value":"averageScore"}},{"kind":"Field","name":{"kind":"Name","value":"nextAiringEpisode"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airingAt"}},{"kind":"Field","name":{"kind":"Name","value":"timeUntilAiring"}},{"kind":"Field","name":{"kind":"Name","value":"episode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaListEntry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"score"}},{"kind":"Field","name":{"kind":"Name","value":"progress"}},{"kind":"Field","name":{"kind":"Name","value":"repeat"}},{"kind":"Field","name":{"kind":"Name","value":"startedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"private"}}]}},{"kind":"Field","name":{"kind":"Name","value":"studios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isMain"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isMain"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<User_Up_NextQuery, User_Up_NextQueryVariables>;
-export const User_ListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"USER_LIST"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"50"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"1"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaListStatus"}},"defaultValue":{"kind":"EnumValue","value":"CURRENT"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaListSort"}}},"defaultValue":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"UPDATED_TIME_DESC"}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userName"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"media"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MediaResponseFragment"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MediaResponseFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Media"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPreferred"}}]}},{"kind":"Field","name":{"kind":"Name","value":"coverImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"large"}},{"kind":"Field","name":{"kind":"Name","value":"medium"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"endDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bannerImage"}},{"kind":"Field","name":{"kind":"Name","value":"season"}},{"kind":"Field","name":{"kind":"Name","value":"seasonYear"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"asHtml"},"value":{"kind":"BooleanValue","value":true}}]},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"format"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"IntValue","value":"2"}}]},{"kind":"Field","name":{"kind":"Name","value":"episodes"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"chapters"}},{"kind":"Field","name":{"kind":"Name","value":"volumes"}},{"kind":"Field","name":{"kind":"Name","value":"genres"}},{"kind":"Field","name":{"kind":"Name","value":"isAdult"}},{"kind":"Field","name":{"kind":"Name","value":"averageScore"}},{"kind":"Field","name":{"kind":"Name","value":"nextAiringEpisode"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airingAt"}},{"kind":"Field","name":{"kind":"Name","value":"timeUntilAiring"}},{"kind":"Field","name":{"kind":"Name","value":"episode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaListEntry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"score"}},{"kind":"Field","name":{"kind":"Name","value":"progress"}},{"kind":"Field","name":{"kind":"Name","value":"repeat"}},{"kind":"Field","name":{"kind":"Name","value":"startedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"private"}}]}},{"kind":"Field","name":{"kind":"Name","value":"studios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isMain"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isMain"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<User_ListQuery, User_ListQueryVariables>;
-export const SeasonalDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SEASONAL"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"1"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"25"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"season"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaSeason"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"seasonYear"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isAdult"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Page"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"media"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"season"},"value":{"kind":"Variable","name":{"kind":"Name","value":"season"}}},{"kind":"Argument","name":{"kind":"Name","value":"seasonYear"},"value":{"kind":"Variable","name":{"kind":"Name","value":"seasonYear"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"EnumValue","value":"ANIME"}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"POPULARITY_DESC"}]}},{"kind":"Argument","name":{"kind":"Name","value":"isAdult"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isAdult"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MediaResponseFragment"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MediaResponseFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Media"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userPreferred"}}]}},{"kind":"Field","name":{"kind":"Name","value":"coverImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"large"}},{"kind":"Field","name":{"kind":"Name","value":"medium"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"endDate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bannerImage"}},{"kind":"Field","name":{"kind":"Name","value":"season"}},{"kind":"Field","name":{"kind":"Name","value":"seasonYear"}},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"asHtml"},"value":{"kind":"BooleanValue","value":true}}]},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"format"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"version"},"value":{"kind":"IntValue","value":"2"}}]},{"kind":"Field","name":{"kind":"Name","value":"episodes"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"chapters"}},{"kind":"Field","name":{"kind":"Name","value":"volumes"}},{"kind":"Field","name":{"kind":"Name","value":"genres"}},{"kind":"Field","name":{"kind":"Name","value":"isAdult"}},{"kind":"Field","name":{"kind":"Name","value":"averageScore"}},{"kind":"Field","name":{"kind":"Name","value":"nextAiringEpisode"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"airingAt"}},{"kind":"Field","name":{"kind":"Name","value":"timeUntilAiring"}},{"kind":"Field","name":{"kind":"Name","value":"episode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mediaListEntry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"score"}},{"kind":"Field","name":{"kind":"Name","value":"progress"}},{"kind":"Field","name":{"kind":"Name","value":"repeat"}},{"kind":"Field","name":{"kind":"Name","value":"startedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"month"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"private"}}]}},{"kind":"Field","name":{"kind":"Name","value":"studios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isMain"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isMain"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<SeasonalQuery, SeasonalQueryVariables>;
-export const Set_Media_EntryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SET_MEDIA_ENTRY"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"mediaId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"MediaListStatus"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"score"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"progress"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"repeat"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"startedAt"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FuzzyDateInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"completedAt"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FuzzyDateInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"notes"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"private"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"SaveMediaListEntry"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"mediaId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"mediaId"}}},{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}},{"kind":"Argument","name":{"kind":"Name","value":"score"},"value":{"kind":"Variable","name":{"kind":"Name","value":"score"}}},{"kind":"Argument","name":{"kind":"Name","value":"progress"},"value":{"kind":"Variable","name":{"kind":"Name","value":"progress"}}},{"kind":"Argument","name":{"kind":"Name","value":"repeat"},"value":{"kind":"Variable","name":{"kind":"Name","value":"repeat"}}},{"kind":"Argument","name":{"kind":"Name","value":"startedAt"},"value":{"kind":"Variable","name":{"kind":"Name","value":"startedAt"}}},{"kind":"Argument","name":{"kind":"Name","value":"completedAt"},"value":{"kind":"Variable","name":{"kind":"Name","value":"completedAt"}}},{"kind":"Argument","name":{"kind":"Name","value":"notes"},"value":{"kind":"Variable","name":{"kind":"Name","value":"notes"}}},{"kind":"Argument","name":{"kind":"Name","value":"private"},"value":{"kind":"Variable","name":{"kind":"Name","value":"private"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<Set_Media_EntryMutation, Set_Media_EntryMutationVariables>;
+export const MediaResponseFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'MediaResponseFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Media' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'title' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'userPreferred' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'english' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'native' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'romaji' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coverImage' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'large' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'medium' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'startDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'endDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'bannerImage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'season' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'seasonYear' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'description' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'asHtml' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'format' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'status' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'version' },
+                value: { kind: 'IntValue', value: '2' },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'episodes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'duration' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'chapters' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'volumes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'genres' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'isAdult' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'averageScore' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'nextAiringEpisode' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'airingAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'timeUntilAiring' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'episode' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'mediaListEntry' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'score' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'progress' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'repeat' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'startedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'completedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'private' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'studios' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'isMain' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isMain' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MediaResponseFragmentFragment, unknown>;
+export const User_AuthDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'USER_AUTH' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Viewer' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'avatar' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'medium' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'options' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayAdultContent' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'mediaListOptions' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'scoreFormat' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<User_AuthQuery, User_AuthQueryVariables>;
+export const Get_GenresDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GET_GENRES' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'GenreCollection' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<Get_GenresQuery, Get_GenresQueryVariables>;
+export const Get_TagsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GET_TAGS' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'MediaTagCollection' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'category' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isAdult' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<Get_TagsQuery, Get_TagsQueryVariables>;
+export const Search_Anime_MangaDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'SEARCH_ANIME_MANGA' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaType' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'isAdult' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'search' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'format' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'MediaFormat' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'status' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaStatus' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'countryOfOrigin' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'CountryCode' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'source' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaSource' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'season' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaSeason' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'seasonYear' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'year' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'onList' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'yearLesser' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'FuzzyDateInt' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'yearGreater' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'FuzzyDateInt' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'episodeLesser' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'episodeGreater' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'durationLesser' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'durationGreater' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'chapterLesser' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'chapterGreater' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'volumeLesser' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'volumeGreater' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'licensedBy' },
+          },
+          type: {
+            kind: 'ListType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'isLicensed' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'genres' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'excludedGenres' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'tags' } },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'excludedTags' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'minimumTagRank' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'sort' } },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'MediaSort' },
+            },
+          },
+          defaultValue: {
+            kind: 'ListValue',
+            values: [
+              { kind: 'EnumValue', value: 'POPULARITY_DESC' },
+              { kind: 'EnumValue', value: 'SCORE_DESC' },
+            ],
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Page' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'perPage' },
+                value: { kind: 'IntValue', value: '20' },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'perPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currentPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'lastPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'media' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'id' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'id' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'type' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'type' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'season' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'season' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'format_in' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'format' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'status' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'status' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'countryOfOrigin' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'countryOfOrigin' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'source' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'source' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'search' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'search' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'onList' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'onList' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'seasonYear' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'seasonYear' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'startDate_like' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'year' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'startDate_lesser' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'yearLesser' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'startDate_greater' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'yearGreater' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'episodes_lesser' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'episodeLesser' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'episodes_greater' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'episodeGreater' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'duration_lesser' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'durationLesser' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'duration_greater' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'durationGreater' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'chapters_lesser' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'chapterLesser' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'chapters_greater' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'chapterGreater' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'volumes_lesser' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'volumeLesser' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'volumes_greater' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'volumeGreater' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'licensedById_in' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'licensedBy' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'isLicensed' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'isLicensed' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'genre_in' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'genres' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'genre_not_in' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'excludedGenres' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'tag_in' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'tags' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'tag_not_in' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'excludedTags' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'minimumTagRank' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'minimumTagRank' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'sort' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'sort' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'isAdult' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'isAdult' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'MediaResponseFragment' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'MediaResponseFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Media' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'title' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'userPreferred' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'english' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'native' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'romaji' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coverImage' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'large' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'medium' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'startDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'endDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'bannerImage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'season' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'seasonYear' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'description' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'asHtml' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'format' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'status' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'version' },
+                value: { kind: 'IntValue', value: '2' },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'episodes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'duration' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'chapters' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'volumes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'genres' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'isAdult' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'averageScore' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'nextAiringEpisode' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'airingAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'timeUntilAiring' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'episode' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'mediaListEntry' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'score' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'progress' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'repeat' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'startedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'completedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'private' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'studios' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'isMain' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isMain' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  Search_Anime_MangaQuery,
+  Search_Anime_MangaQueryVariables
+>;
+export const Search_StaffDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'SEARCH_STAFF' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'search' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'isBirthday' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'sort' } },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'StaffSort' },
+            },
+          },
+          defaultValue: {
+            kind: 'ListValue',
+            values: [{ kind: 'EnumValue', value: 'FAVOURITES_DESC' }],
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Page' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'perPage' },
+                value: { kind: 'IntValue', value: '20' },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'perPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currentPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'lastPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'staff' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'id' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'id' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'search' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'search' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'isBirthday' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'isBirthday' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'sort' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'sort' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'name' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'userPreferred' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'description' },
+                        arguments: [
+                          {
+                            kind: 'Argument',
+                            name: { kind: 'Name', value: 'asHtml' },
+                            value: { kind: 'BooleanValue', value: true },
+                          },
+                        ],
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'image' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'large' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'medium' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<Search_StaffQuery, Search_StaffQueryVariables>;
+export const Search_CharactersDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'SEARCH_CHARACTERS' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'search' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'isBirthday' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'sort' } },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CharacterSort' },
+            },
+          },
+          defaultValue: {
+            kind: 'ListValue',
+            values: [{ kind: 'EnumValue', value: 'FAVOURITES_DESC' }],
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Page' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'perPage' },
+                value: { kind: 'IntValue', value: '20' },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'perPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currentPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'lastPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'characters' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'id' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'id' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'search' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'search' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'isBirthday' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'isBirthday' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'sort' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'sort' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'name' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'userPreferred' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'description' },
+                        arguments: [
+                          {
+                            kind: 'Argument',
+                            name: { kind: 'Name', value: 'asHtml' },
+                            value: { kind: 'BooleanValue', value: true },
+                          },
+                        ],
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'image' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'large' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'medium' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  Search_CharactersQuery,
+  Search_CharactersQueryVariables
+>;
+export const Search_StudioDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'SEARCH_STUDIO' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'search' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'sort' } },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'StudioSort' },
+            },
+          },
+          defaultValue: {
+            kind: 'ListValue',
+            values: [{ kind: 'EnumValue', value: 'SEARCH_MATCH' }],
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Page' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'perPage' },
+                value: { kind: 'IntValue', value: '20' },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'perPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currentPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'lastPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'studios' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'id' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'id' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'search' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'search' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'sort' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'sort' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<Search_StudioQuery, Search_StudioQueryVariables>;
+export const Trending_Anime_MangaDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'TRENDING_ANIME_MANGA' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'sort' } },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'MediaSort' },
+            },
+          },
+          defaultValue: {
+            kind: 'ListValue',
+            values: [{ kind: 'EnumValue', value: 'TRENDING_DESC' }],
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaType' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'isAdult' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'format' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaFormat' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'status' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaStatus' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'season' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaSeason' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'seasonYear' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Page' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'perPage' },
+                value: { kind: 'IntValue', value: '25' },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'perPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currentPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'lastPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'media' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'sort' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'sort' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'type' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'type' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'isAdult' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'isAdult' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'format' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'format' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'status' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'status' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'season' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'season' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'seasonYear' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'seasonYear' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'MediaResponseFragment' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'MediaResponseFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Media' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'title' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'userPreferred' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'english' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'native' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'romaji' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coverImage' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'large' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'medium' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'startDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'endDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'bannerImage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'season' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'seasonYear' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'description' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'asHtml' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'format' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'status' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'version' },
+                value: { kind: 'IntValue', value: '2' },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'episodes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'duration' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'chapters' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'volumes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'genres' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'isAdult' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'averageScore' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'nextAiringEpisode' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'airingAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'timeUntilAiring' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'episode' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'mediaListEntry' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'score' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'progress' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'repeat' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'startedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'completedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'private' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'studios' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'isMain' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isMain' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  Trending_Anime_MangaQuery,
+  Trending_Anime_MangaQueryVariables
+>;
+export const User_RecommendedDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'USER_RECOMMENDED' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'perPage' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '50' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userName' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaType' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Page' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'perPage' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'perPage' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'mediaList' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'userName' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'userName' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'type' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'type' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'sort' },
+                      value: {
+                        kind: 'ListValue',
+                        values: [{ kind: 'EnumValue', value: 'SCORE_DESC' }],
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'progress' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'score' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'media' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'recommendations' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'edges' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: { kind: 'Name', value: 'node' },
+                                          selectionSet: {
+                                            kind: 'SelectionSet',
+                                            selections: [
+                                              {
+                                                kind: 'Field',
+                                                name: {
+                                                  kind: 'Name',
+                                                  value: 'rating',
+                                                },
+                                              },
+                                              {
+                                                kind: 'Field',
+                                                name: {
+                                                  kind: 'Name',
+                                                  value: 'mediaRecommendation',
+                                                },
+                                                selectionSet: {
+                                                  kind: 'SelectionSet',
+                                                  selections: [
+                                                    {
+                                                      kind: 'FragmentSpread',
+                                                      name: {
+                                                        kind: 'Name',
+                                                        value:
+                                                          'MediaResponseFragment',
+                                                      },
+                                                    },
+                                                  ],
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'MediaResponseFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Media' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'title' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'userPreferred' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'english' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'native' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'romaji' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coverImage' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'large' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'medium' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'startDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'endDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'bannerImage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'season' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'seasonYear' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'description' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'asHtml' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'format' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'status' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'version' },
+                value: { kind: 'IntValue', value: '2' },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'episodes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'duration' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'chapters' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'volumes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'genres' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'isAdult' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'averageScore' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'nextAiringEpisode' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'airingAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'timeUntilAiring' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'episode' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'mediaListEntry' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'score' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'progress' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'repeat' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'startedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'completedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'private' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'studios' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'isMain' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isMain' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  User_RecommendedQuery,
+  User_RecommendedQueryVariables
+>;
+export const User_Up_NextDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'USER_UP_NEXT' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'perPage' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '50' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userName' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaType' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Page' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'perPage' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'perPage' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'mediaList' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'userName' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'userName' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'type' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'type' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'sort' },
+                      value: {
+                        kind: 'ListValue',
+                        values: [{ kind: 'EnumValue', value: 'ADDED_TIME' }],
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'status' },
+                      value: { kind: 'EnumValue', value: 'PLANNING' },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'media' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: {
+                                kind: 'Name',
+                                value: 'MediaResponseFragment',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'MediaResponseFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Media' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'title' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'userPreferred' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'english' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'native' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'romaji' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coverImage' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'large' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'medium' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'startDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'endDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'bannerImage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'season' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'seasonYear' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'description' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'asHtml' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'format' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'status' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'version' },
+                value: { kind: 'IntValue', value: '2' },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'episodes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'duration' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'chapters' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'volumes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'genres' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'isAdult' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'averageScore' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'nextAiringEpisode' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'airingAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'timeUntilAiring' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'episode' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'mediaListEntry' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'score' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'progress' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'repeat' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'startedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'completedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'private' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'studios' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'isMain' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isMain' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<User_Up_NextQuery, User_Up_NextQueryVariables>;
+export const User_ListDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'USER_LIST' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'perPage' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '50' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userName' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaType' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'status' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaListStatus' },
+          },
+          defaultValue: { kind: 'EnumValue', value: 'CURRENT' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'sort' } },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'MediaListSort' },
+            },
+          },
+          defaultValue: {
+            kind: 'ListValue',
+            values: [{ kind: 'EnumValue', value: 'UPDATED_TIME_DESC' }],
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Page' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'perPage' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'perPage' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'mediaList' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'userName' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'userName' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'type' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'type' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'sort' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'sort' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'status' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'status' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'media' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: {
+                                kind: 'Name',
+                                value: 'MediaResponseFragment',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'MediaResponseFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Media' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'title' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'userPreferred' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'english' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'native' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'romaji' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coverImage' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'large' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'medium' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'startDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'endDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'bannerImage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'season' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'seasonYear' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'description' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'asHtml' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'format' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'status' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'version' },
+                value: { kind: 'IntValue', value: '2' },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'episodes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'duration' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'chapters' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'volumes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'genres' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'isAdult' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'averageScore' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'nextAiringEpisode' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'airingAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'timeUntilAiring' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'episode' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'mediaListEntry' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'score' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'progress' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'repeat' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'startedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'completedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'private' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'studios' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'isMain' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isMain' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<User_ListQuery, User_ListQueryVariables>;
+export const SeasonalDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'SEASONAL' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'perPage' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '25' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'season' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaSeason' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'seasonYear' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'isAdult' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'Page' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'perPage' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'perPage' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'media' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'season' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'season' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'seasonYear' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'seasonYear' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'type' },
+                      value: { kind: 'EnumValue', value: 'ANIME' },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'sort' },
+                      value: {
+                        kind: 'ListValue',
+                        values: [
+                          { kind: 'EnumValue', value: 'POPULARITY_DESC' },
+                        ],
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'isAdult' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'isAdult' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'MediaResponseFragment' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'MediaResponseFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Media' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'title' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'userPreferred' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'english' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'native' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'romaji' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'coverImage' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'large' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'medium' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'startDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'endDate' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'bannerImage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'season' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'seasonYear' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'description' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'asHtml' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'format' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'status' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'version' },
+                value: { kind: 'IntValue', value: '2' },
+              },
+            ],
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'episodes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'duration' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'chapters' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'volumes' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'genres' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'isAdult' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'averageScore' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'nextAiringEpisode' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'airingAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'timeUntilAiring' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'episode' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'mediaListEntry' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'score' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'progress' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'repeat' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'startedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'completedAt' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'year' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'month' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'day' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'private' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'studios' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'isMain' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isMain' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SeasonalQuery, SeasonalQueryVariables>;
+export const Set_Media_EntryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'SET_MEDIA_ENTRY' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'mediaId' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'status' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'MediaListStatus' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'score' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'progress' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'repeat' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'startedAt' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'FuzzyDateInput' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'completedAt' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'FuzzyDateInput' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'notes' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'private' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'SaveMediaListEntry' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'mediaId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'mediaId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'status' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'status' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'score' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'score' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'progress' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'progress' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'repeat' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'repeat' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'startedAt' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'startedAt' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'completedAt' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'completedAt' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'notes' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'notes' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'private' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'private' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  Set_Media_EntryMutation,
+  Set_Media_EntryMutationVariables
+>;

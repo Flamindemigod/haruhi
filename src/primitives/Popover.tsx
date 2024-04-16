@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Transition } from "@headlessui/react";
-import * as PopoverPrimitives from "@radix-ui/react-popover";
-import cx from "classix";
-import { ReactNode, RefObject, useState } from "react";
+import { Transition } from '@headlessui/react';
+import * as PopoverPrimitives from '@radix-ui/react-popover';
+import cx from 'classix';
+import { ReactNode, RefObject, useState } from 'react';
 
 type Props = {
   modal?: boolean;
-  side?: "top" | "right" | "bottom" | "left";
+  side?: 'top' | 'right' | 'bottom' | 'left';
   sideOffset?: number;
-  align?: "start" | "center" | "end";
+  align?: 'start' | 'center' | 'end';
   alignOffset?: number;
   arrow?: boolean;
   trigger: ReactNode;
@@ -20,7 +20,7 @@ type Props = {
   contentClass?: string;
 };
 
-export default (props: Props) => {
+const Popover = (props: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <PopoverPrimitives.Root open={open} onOpenChange={setOpen}>
@@ -54,13 +54,13 @@ export default (props: Props) => {
           align={props.align}
           alignOffset={props.alignOffset}
           className={cx(
-            "rounded-lg px-1.5 py-1 shadow-md ",
-            "bg-white dark:bg-offWhite-800",
-            "z-[100] w-screen max-w-lg",
-            "relative",
-            "group/popover flex flex-row",
-            "max-h-radix-popover-content-available-height",
-            props.contentClass,
+            'rounded-lg px-1.5 py-1 shadow-md ',
+            'bg-white dark:bg-offWhite-800',
+            'z-[100] w-screen max-w-lg',
+            'relative',
+            'group/popover flex flex-row',
+            'max-h-radix-popover-content-available-height',
+            props.contentClass
           )}
         >
           {props.content}
@@ -68,7 +68,7 @@ export default (props: Props) => {
             {props.closeIcon}
           </PopoverPrimitives.Close>
           {props.arrow ? (
-            <PopoverPrimitives.Arrow className="fill-white dark:fill-offWhite-800" />
+            <PopoverPrimitives.Arrow className='fill-white dark:fill-offWhite-800' />
           ) : (
             <></>
           )}
@@ -79,3 +79,5 @@ export default (props: Props) => {
     </PopoverPrimitives.Root>
   );
 };
+
+export default Popover;

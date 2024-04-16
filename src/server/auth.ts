@@ -1,10 +1,10 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { getServerSession, type NextAuthOptions } from "next-auth";
-import { env } from "~/env";
-import { db } from "~/server/db";
-import { client } from "~/apolloClient";
-import { USER_AUTH } from "~/graphql/queries";
-import { ScoreFormat, User_AuthQuery } from "~/__generated__/graphql";
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { getServerSession, type NextAuthOptions } from 'next-auth';
+import { env } from '~/env';
+import { db } from '~/server/db';
+import { client } from '~/apolloClient';
+import { USER_AUTH } from '~/graphql/queries';
+import { ScoreFormat, User_AuthQuery } from '~/__generated__/graphql';
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -12,7 +12,7 @@ import { ScoreFormat, User_AuthQuery } from "~/__generated__/graphql";
  *
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
-declare module "next-auth" {
+declare module 'next-auth' {
   interface User {
     id: string;
     name: string;
@@ -51,36 +51,36 @@ export const authOptions: NextAuthOptions = {
     },
   },
   session: {
-    strategy: "database",
+    strategy: 'database',
   },
   adapter: PrismaAdapter(db),
-  debug: env.NODE_ENV === "development",
+  debug: env.NODE_ENV === 'development',
   providers: [
     {
       clientId: env.ANILIST_CLIENT_ID,
       clientSecret: env.ANILIST_SECRET_KEY,
-      id: "anilist",
-      name: "Anilist",
-      type: "oauth",
+      id: 'anilist',
+      name: 'Anilist',
+      type: 'oauth',
       authorization: {
-        url: "https://anilist.co/api/v2/oauth/authorize",
-        params: { scope: "", response_type: "code" },
+        url: 'https://anilist.co/api/v2/oauth/authorize',
+        params: { scope: '', response_type: 'code' },
       },
       userinfo: {
-        url: "https://graphql.anilist.co",
+        url: 'https://graphql.anilist.co',
         async request(context) {
           const { data } = await client.query<User_AuthQuery>({
             query: USER_AUTH,
             context: {
               headers: {
-                Authorization: "Bearer " + context.tokens.access_token,
+                Authorization: 'Bearer ' + context.tokens.access_token,
               },
             },
           });
           return {
-            name: data.Viewer?.name ?? "",
+            name: data.Viewer?.name ?? '',
             aniid: data.Viewer?.id ?? 0,
-            image: data.Viewer?.avatar?.medium ?? "",
+            image: data.Viewer?.avatar?.medium ?? '',
             scoreFormat:
               data.Viewer?.mediaListOptions?.scoreFormat! ??
               ScoreFormat.Point_10Decimal,
@@ -88,7 +88,7 @@ export const authOptions: NextAuthOptions = {
           };
         },
       },
-      token: "https://anilist.co/api/v2/oauth/token",
+      token: 'https://anilist.co/api/v2/oauth/token',
       profile(profile) {
         return {
           id: profile.aniid,

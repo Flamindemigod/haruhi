@@ -2355,7 +2355,7 @@ enum LikeableType {
 Likeable union type
 """
 union LikeableUnion =
-    ActivityReply
+  | ActivityReply
   | ListActivity
   | MessageActivity
   | TextActivity
@@ -5227,7 +5227,7 @@ enum NotificationType {
 Notification union type
 """
 union NotificationUnion =
-    ActivityLikeNotification
+  | ActivityLikeNotification
   | ActivityMentionNotification
   | ActivityMessageNotification
   | ActivityReplyLikeNotification

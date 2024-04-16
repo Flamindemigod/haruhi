@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { usePathname, useRouter } from "next/navigation";
-import { api } from "~/trpc/react";
-import { Category, ListSort, ListStatus } from "~/types.shared/anilist";
-import ListDesktop from "./List.Desktop";
-import ListMobile from "./List.Mobile";
-import { useMediaQuery } from "~/app/hooks/useMediaQuery";
+import { usePathname, useRouter } from 'next/navigation';
+import { api } from '~/trpc/react';
+import { Category, ListSort, ListStatus } from '~/types.shared/anilist';
+import ListDesktop from './List.Desktop';
+import ListMobile from './List.Mobile';
+import { useMediaQuery } from '~/app/hooks/useMediaQuery';
 
 type Props = {
   type: Category.Anime | Category.Manga;
@@ -28,7 +28,7 @@ const useList = (props: Props) => {
           refetchOnWindowFocus: false,
           getNextPageParam: (lastPage) => lastPage?.nextCursor,
           initialCursor: 1,
-        },
+        }
       );
 
     case Category.Manga:
@@ -44,7 +44,7 @@ const useList = (props: Props) => {
           refetchOnWindowFocus: false,
           getNextPageParam: (lastPage) => lastPage?.nextCursor,
           initialCursor: 1,
-        },
+        }
       );
   }
 };
@@ -62,14 +62,14 @@ export default (props: Props) => {
 
   const setParams = (list: ListStatus, sort: ListSort) => {
     const params = new URLSearchParams();
-    params.set("list", list as string);
-    params.set("sort", sort as string);
+    params.set('list', list as string);
+    params.set('sort', sort as string);
     push(`${pathname}?${params.toString()}`);
   };
   const matches = useMediaQuery(`(min-width: 640px)`);
   return (
     <>
-      <div className="w-full sm:hidden">
+      <div className='w-full sm:hidden'>
         {/*Mobile View*/}
         {(matches === null || !matches) && (
           <ListMobile
@@ -85,7 +85,7 @@ export default (props: Props) => {
           />
         )}
       </div>
-      <div className="hidden w-full sm:block">
+      <div className='hidden w-full sm:block'>
         {/*Desktop View*/}
         {(matches === null || matches) && (
           <ListDesktop

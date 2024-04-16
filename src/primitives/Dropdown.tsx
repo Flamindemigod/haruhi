@@ -1,6 +1,6 @@
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import cx from "classix";
-import React, { Fragment, Key } from "react";
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import cx from 'classix';
+import React, { Fragment, Key } from 'react';
 
 type Content = {
   lable?: string;
@@ -8,17 +8,17 @@ type Content = {
 };
 
 type Group = {
-  type: "Group";
+  type: 'Group';
   content: Content[];
 };
 
 type Item = {
-  type: "Item";
+  type: 'Item';
   content: Content[];
 };
 
 export interface Props {
-  align?: "start" | "center" | "end";
+  align?: 'start' | 'center' | 'end';
   sideOffset?: number;
   arrow?: boolean;
   trigger: React.ReactNode;
@@ -31,8 +31,8 @@ const renderItem = (content: Content, key?: Key) => {
       {!!content.lable ? (
         <DropdownMenu.Label
           className={cx(
-            "flex items-center rounded-md px-2 py-2 text-base outline-none",
-            "text-offWhite-900 hover:bg-offWhite-100 focus:bg-offWhite-100 dark:text-offWhite-200 dark:focus:bg-offWhite-900",
+            'flex items-center rounded-md px-2 py-2 text-base outline-none',
+            'text-offWhite-900 hover:bg-offWhite-100 focus:bg-offWhite-100 dark:text-offWhite-200 dark:focus:bg-offWhite-900'
           )}
           asChild
         >
@@ -43,8 +43,8 @@ const renderItem = (content: Content, key?: Key) => {
       )}
       <DropdownMenu.Item
         className={cx(
-          "flex cursor-pointer select-none items-center rounded-md px-2 py-2 text-base outline-none",
-          "text-offWhite-900 hover:bg-offWhite-100 focus:bg-offWhite-100 dark:text-offWhite-200 dark:focus:bg-offWhite-900",
+          'flex cursor-pointer select-none items-center rounded-md px-2 py-2 text-base outline-none',
+          'text-offWhite-900 hover:bg-offWhite-100 focus:bg-offWhite-100 dark:text-offWhite-200 dark:focus:bg-offWhite-900'
         )}
         asChild
       >
@@ -54,7 +54,7 @@ const renderItem = (content: Content, key?: Key) => {
   );
 };
 
-export default (props: Props) => (
+const DropDown = (props: Props) => (
   <DropdownMenu.Root>
     <DropdownMenu.Trigger asChild>{props.trigger}</DropdownMenu.Trigger>
 
@@ -63,18 +63,18 @@ export default (props: Props) => (
         align={props.align}
         sideOffset={props.sideOffset}
         className={cx(
-          "radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down",
-          "w-48 rounded-lg px-1.5 py-1 shadow-md md:w-36",
-          "bg-white dark:bg-offWhite-800",
+          'radix-side-bottom:animate-slide-down radix-side-top:animate-slide-up',
+          'w-48 rounded-lg px-1.5 py-1 shadow-md md:w-36',
+          'bg-white dark:bg-offWhite-800'
         )}
       >
         {props.content.map((item, idx) => {
           switch (item.type) {
-            case "Item":
+            case 'Item':
               return item.content.map((c, iidx) =>
-                renderItem(c, `${idx}--${iidx}`),
+                renderItem(c, `${idx}--${iidx}`)
               );
-            case "Group":
+            case 'Group':
               return (
                 <DropdownMenu.Group key={idx}>
                   {item.content.map((c, iidx) => renderItem(c, iidx))}
@@ -83,7 +83,7 @@ export default (props: Props) => (
           }
         })}
         {props.arrow ? (
-          <DropdownMenu.Arrow className="fill-white dark:fill-offWhite-800" />
+          <DropdownMenu.Arrow className='fill-white dark:fill-offWhite-800' />
         ) : (
           <></>
         )}
@@ -91,3 +91,5 @@ export default (props: Props) => (
     </DropdownMenu.Portal>
   </DropdownMenu.Root>
 );
+
+export default DropDown;

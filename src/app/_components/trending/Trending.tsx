@@ -1,9 +1,9 @@
-import { MediaSort } from "~/__generated__/graphql";
-import { SegmentProps, Segment } from "../CardCarosel";
-import { Category } from "~/types.shared/anilist";
-import { api } from "~/trpc/server";
+import { MediaSort } from '~/__generated__/graphql';
+import { SegmentProps, Segment } from '../CardCarosel';
+import { Category } from '~/types.shared/anilist';
+import { api } from '~/trpc/server';
 
-export default async () => {
+const Page = async () => {
   const data_seasonal_trending = await api.anilist.getTrendingAnime.query({
     seasonal: true,
     sort: MediaSort.TrendingDesc,
@@ -17,22 +17,24 @@ export default async () => {
   });
 
   return (
-    <div className="flex w-full flex-col gap-4 py-4">
+    <div className='flex w-full flex-col gap-4 py-4'>
       <Segment
-        title="Trending Anime This Season"
-        data={data_seasonal_trending?.Page.data as SegmentProps["data"]}
+        title='Trending Anime This Season'
+        data={data_seasonal_trending?.Page.data as SegmentProps['data']}
         type={Category.Anime}
       />
       <Segment
-        title="Trending Anime of All Time"
-        data={data_popularity?.Page.data as SegmentProps["data"]}
+        title='Trending Anime of All Time'
+        data={data_popularity?.Page.data as SegmentProps['data']}
         type={Category.Anime}
       />
       <Segment
-        title="Trending Manga of All Time"
-        data={data_popularity_manga?.Page.data as SegmentProps["data"]}
+        title='Trending Manga of All Time'
+        data={data_popularity_manga?.Page.data as SegmentProps['data']}
         type={Category.Manga}
       />
     </div>
   );
 };
+
+export default Page;

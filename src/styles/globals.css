@@ -50,16 +50,16 @@ body {
     scale ease-in-out 200ms 0ms,
     opacity ease-in-out 200ms 0ms;
 }
-.carosel_track:has(:where(.card[data-loading], .card[data-state="open"]))
-  > :where(.card:not([data-loading]), .card:not([data-state="open"])),
-.cardGrid:has(:where(.card[data-loading], .card[data-state="open"]))
-  > :where(.card:not([data-loading]), .card:not([data-state="open"])) {
+.carosel_track:has(:where(.card[data-loading], .card[data-state='open']))
+  > :where(.card:not([data-loading]), .card:not([data-state='open'])),
+.cardGrid:has(:where(.card[data-loading], .card[data-state='open']))
+  > :where(.card:not([data-loading]), .card:not([data-state='open'])) {
   scale: 0.95;
   opacity: 0.6;
   filter: grayscale(80%);
 }
 
-.card[data-state="open"] {
+.card[data-state='open'] {
   scale: 1.01;
   opacity: 1;
   filter: grayscale(0);
@@ -98,7 +98,7 @@ body {
 }
 .ldio-d2f969t0yu4 > div:nth-child(2) div:before,
 .ldio-d2f969t0yu4 > div:nth-child(2) div:after {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   width: 8px;
@@ -145,10 +145,10 @@ body {
   opacity: 1;
 }
 
-.swipeBlob[direction="left"] > * {
+.swipeBlob[direction='left'] > * {
   transform: rotate(-90deg);
 }
-.swipeBlob[direction="right"] > * {
+.swipeBlob[direction='right'] > * {
   transform: rotate(90deg);
 }
 

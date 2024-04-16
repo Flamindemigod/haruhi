@@ -1,34 +1,34 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
-import Dropdown, { Props as DropdownProps } from "~/primitives/Dropdown";
+import Image from 'next/image';
+import Link from 'next/link';
+import { signOut, useSession } from 'next-auth/react';
+import Dropdown, { Props as DropdownProps } from '~/primitives/Dropdown';
 
-const dropdownProps: Omit<DropdownProps, "trigger"> = {
-  align: "end",
+const dropdownProps: Omit<DropdownProps, 'trigger'> = {
+  align: 'end',
   arrow: true,
   sideOffset: 10,
   content: [
     {
-      type: "Item",
+      type: 'Item',
       content: [
         {
-          lable: "Settings",
+          lable: 'Settings',
           content: (
             <Link
-              className="flex items-center justify-center text-offWhite-700 dark:text-offWhite-100"
-              href={"/"}
+              className='flex items-center justify-center text-offWhite-700 dark:text-offWhite-100'
+              href={'/'}
             >
               Settings
             </Link>
           ),
         },
         {
-          lable: "Signout",
+          lable: 'Signout',
           content: (
             <button
-              className="flex w-full items-center justify-center text-red-700 dark:text-red-400"
+              className='flex w-full items-center justify-center text-red-700 dark:text-red-400'
               onClick={() => {
                 signOut();
               }}
@@ -49,23 +49,21 @@ const Avatar = () => {
     <Dropdown
       {...dropdownProps}
       trigger={
-        status == "loading" ? (
+        status == 'loading' ?
           <div
             className={
-              "h-14 w-14 flex-shrink-0 animate-pulse rounded-full bg-offWhite-900/50"
+              'h-14 w-14 flex-shrink-0 animate-pulse rounded-full bg-offWhite-900/50'
             }
           ></div>
-        ) : (
-          <Image
-            src={session?.user.image || ""}
+        : <Image
+            src={session?.user.image || ''}
             alt={`Avatar of ${session?.user.name}`}
             width={56}
             height={56}
             className={
-              "cursor-pointer rounded-full object-cover hover:animate-spin hover:motion-reduce:animate-none"
+              'cursor-pointer rounded-full object-cover hover:animate-spin hover:motion-reduce:animate-none'
             }
           />
-        )
       }
     />
   );

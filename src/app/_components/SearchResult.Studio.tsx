@@ -1,5 +1,5 @@
-import Marquee from "./Marquee";
-import { Studio } from "~/__generated__/graphql";
+import Marquee from './Marquee';
+import { Studio } from '~/__generated__/graphql';
 
 export type Props = {
   data: Studio;
@@ -7,9 +7,9 @@ export type Props = {
 
 export default (props: Props) => {
   return (
-    <div className="group relative grid grid-cols-4 place-content-center @md:grid-cols-5 @lg:grid-cols-6 @xl:grid-cols-8">
+    <div className='group relative grid grid-cols-4 place-content-center @md:grid-cols-5 @lg:grid-cols-6 @xl:grid-cols-8'>
       {/* Image */}
-      <div className="relative">
+      <div className='relative'>
         {/* <Image
           draggable={false}
           className="col-span-1 object-contain"
@@ -20,7 +20,7 @@ export default (props: Props) => {
         /> */}
       </div>
       {/* Content */}
-      <div className="col-span-full col-start-2 grid grid-flow-col grid-rows-[auto_1fr_auto] items-center">
+      <div className='col-span-full col-start-2 grid grid-flow-col grid-rows-[auto_1fr_auto] items-center'>
         {/* Title */}
         <Marquee href={`/studio/${props.data?.id}`}>{props.data.name}</Marquee>
         {/* Description

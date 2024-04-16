@@ -5,8 +5,8 @@ import {
   MediaSeason,
   MediaStatus,
   MediaType,
-} from "~/__generated__/graphql";
-import generateBlurhash from "./generateBlurhash";
+} from '~/__generated__/graphql';
+import generateBlurhash from './generateBlurhash';
 import {
   Category,
   FormatAnime,
@@ -15,13 +15,13 @@ import {
   Media,
   Season,
   Status,
-} from "~/types.shared/anilist";
-import convertEnum from "./convertEnum";
-import { FuzzyDate } from "./fuzzyDate";
+} from '~/types.shared/anilist';
+import convertEnum from './convertEnum';
+import { FuzzyDate } from './fuzzyDate';
 
-export default async (data: AniMedia) => {
+const mediaBuilder = async (data: AniMedia, genBlurhash?: boolean) => {
   const media_type = convertEnum(MediaType, Category, data.type);
-
+  const genBlur = genBlurhash ?? true;
   const get_format = (f: MediaFormat | null) => {
     switch (media_type) {
       case Category.Anime:
@@ -36,7 +36,9 @@ export default async (data: AniMedia) => {
     ...data,
     coverImage: {
       ...data.coverImage,
-      blurHash: await generateBlurhash(data.coverImage!.medium!),
+      blurHash: genBlur
+        ? await generateBlurhash(data.coverImage!.medium!)
+        : undefined,
     },
     type: media_type,
     format: get_format(data.format),
@@ -48,15 +50,29 @@ export default async (data: AniMedia) => {
           status: convertEnum(
             MediaListStatus,
             ListStatus,
-            data.mediaListEntry.status,
+            data.mediaListEntry.status
           ) as ListStatus,
-          startedAt: data.mediaListEntry.startedAt
-            ? new FuzzyDate().fromFuzzy(data.mediaListEntry.startedAt!).toDate()
-            : null,
-          completedAt: data.mediaListEntry.startedAt
-            ? new FuzzyDate().fromFuzzy(data.mediaListEntry.startedAt!).toDate()
-            : null,
+          startedAt:
+            !!data.mediaListEntry.startedAt &&
+            !!data.mediaListEntry.startedAt.day &&
+            !!data.mediaListEntry.startedAt.month &&
+            !!data.mediaListEntry.startedAt.year
+              ? new FuzzyDate()
+                  .fromFuzzy(data.mediaListEntry.startedAt!)
+                  .toDate()
+              : null,
+          completedAt:
+            !!data.mediaListEntry.completedAt &&
+            !!data.mediaListEntry.completedAt.day &&
+            !!data.mediaListEntry.completedAt.month &&
+            !!data.mediaListEntry.completedAt.year
+              ? new FuzzyDate()
+                  .fromFuzzy(data.mediaListEntry.completedAt!)
+                  .toDate()
+              : null,
         }
       : null,
   } as Media;
 };
+
+export default mediaBuilder;

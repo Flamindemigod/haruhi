@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
-import { ReactNode, RefObject, useState } from "react";
-import { Transition } from "@headlessui/react";
-import cx from "classix";
+import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
+import { ReactNode, RefObject, useState } from 'react';
+import { Transition } from '@headlessui/react';
+import cx from 'classix';
 
 type Props = {
   defaultOpen?: boolean;
@@ -19,19 +19,19 @@ type Props = {
   };
   content: {
     data: ReactNode;
-    side?: "top" | "right" | "bottom" | "left";
+    side?: 'top' | 'right' | 'bottom' | 'left';
     sideOffset?: number;
-    align?: "start" | "center" | "end";
+    align?: 'start' | 'center' | 'end';
     alignOffset?: number;
     collisions?: {
       avoidCollisions?: boolean;
       collisionBoundry?: Element | null | Array<Element | null>;
       collisionPadding?:
         | number
-        | Partial<Record<"top" | "right" | "bottom" | "left", number>>;
+        | Partial<Record<'top' | 'right' | 'bottom' | 'left', number>>;
     };
     hideWhenDetached?: boolean;
-    sticky?: "partial" | "always";
+    sticky?: 'partial' | 'always';
   };
   arrow?: {
     arrowPadding?: number;
@@ -41,28 +41,28 @@ type Props = {
 };
 
 const transitions: Record<
-  "top" | "right" | "bottom" | "left",
-  Record<"enterFrom" | "enterTo", string>
+  'top' | 'right' | 'bottom' | 'left',
+  Record<'enterFrom' | 'enterTo', string>
 > = {
   top: {
-    enterFrom: "",
-    enterTo: "",
+    enterFrom: '',
+    enterTo: '',
   },
   right: {
-    enterFrom: "translate-y-100",
-    enterTo: "translate-y-0",
+    enterFrom: 'translate-y-100',
+    enterTo: 'translate-y-0',
   },
   bottom: {
-    enterFrom: "translate-y-100",
-    enterTo: "translate-y-0",
+    enterFrom: 'translate-y-100',
+    enterTo: 'translate-y-0',
   },
   left: {
-    enterFrom: "translate-y-100",
-    enterTo: "translate-y-0",
+    enterFrom: 'translate-y-100',
+    enterTo: 'translate-y-0',
   },
 };
 
-export default ({ portal, ...props }: Props) => {
+const HoverCard = ({ portal, ...props }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <HoverCardPrimitive.Root
@@ -75,21 +75,19 @@ export default ({ portal, ...props }: Props) => {
       <HoverCardPrimitive.Trigger asChild>
         {props.trigger}
       </HoverCardPrimitive.Trigger>
-      <HoverCardPrimitive.Portal
-        container={portal.container?.current}
-      >
+      <HoverCardPrimitive.Portal container={portal.container?.current}>
         <Transition.Root show={props.control?.open ?? open}>
           <Transition.Child
-            className={"relative"}
-            {...transitions[props.content?.side ?? "top"]}
-            enter="ease-out duration-300"
-            leave="ease-in duration-300"
-            leaveFrom="opacity-1"
-            leaveTo="opacity-0"
+            className={'relative'}
+            {...transitions[props.content?.side ?? 'top']}
+            enter='ease-out duration-300'
+            leave='ease-in duration-300'
+            leaveFrom='opacity-1'
+            leaveTo='opacity-0'
           >
             <HoverCardPrimitive.Content
               className={cx(
-                "radix-side-bottom:animate-slide-up radix-side-left:animate-slide-right radix-side-right:animate-slide-left radix-side-top:animate-slide-down",
+                'radix-side-bottom:animate-slide-up radix-side-left:animate-slide-right radix-side-right:animate-slide-left radix-side-top:animate-slide-down'
               )}
               side={props.content?.side}
               sideOffset={props.content?.sideOffset}
@@ -111,3 +109,5 @@ export default ({ portal, ...props }: Props) => {
     </HoverCardPrimitive.Root>
   );
 };
+
+export default HoverCard;

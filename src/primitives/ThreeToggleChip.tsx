@@ -1,7 +1,7 @@
-"use client";
-import cx from "classix";
-import { useEffect, useState } from "react";
-import { TernaryState } from "~/types.shared/anilist";
+'use client';
+import cx from 'classix';
+import { useEffect, useState } from 'react';
+import { TernaryState } from '~/types.shared/anilist';
 
 type Props = {
   initState: TernaryState;
@@ -12,26 +12,26 @@ type Props = {
   onChange: (state: TernaryState) => void;
 };
 
-const ThreeToggleChip = (props: Props) => {
+const ThreeToggleChip = ({ reset, onReset, ...props }: Props) => {
   const [state, setState] = useState<TernaryState>(props.initState);
 
   useEffect(() => {
-    if (props.reset) {
-      if (!!props.onReset) {
-        props.onReset();
+    if (reset) {
+      if (!!onReset) {
+        onReset();
       }
       setState(TernaryState.none);
     }
-  }, [props.reset]);
+  }, [reset]);
 
   return (
     <button
       className={cx(
-        "rounded-md p-2",
-        state === TernaryState.true && "bg-green-500 text-white",
-        state === TernaryState.false && "bg-red-500 text-white",
+        'rounded-md p-2',
+        state === TernaryState.true && 'bg-green-500 text-white',
+        state === TernaryState.false && 'bg-red-500 text-white',
         state === TernaryState.none &&
-          "bg-offWhite-200 text-black dark:bg-offWhite-600 dark:text-white",
+          'bg-offWhite-200 text-black dark:bg-offWhite-600 dark:text-white'
       )}
       onClick={() => {
         switch (state) {

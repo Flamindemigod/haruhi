@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect } from "react";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function Error({
   error,
@@ -17,17 +17,17 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-2">
-      <div className="flex flex-wrap items-center justify-center gap-2">
+    <div className='flex h-full w-full flex-col items-center justify-center gap-2'>
+      <div className='flex flex-wrap items-center justify-center gap-2'>
         <Image
           draggable={false}
-          className="p-4"
-          src={"/haruhi-404.png"}
-          alt="Haruhi Error"
+          className='p-4'
+          src={'/haruhi-404.png'}
+          alt='Haruhi Error'
           width={400}
           height={400}
         />
-        <h2 className="text-xl">{`Something went wrong`}</h2>
+        <h2 className='text-xl'>{`Something went wrong`}</h2>
       </div>
       <button
         onClick={

@@ -1,20 +1,20 @@
-import { z } from "zod";
+import { z } from 'zod';
 import {
   Media as AniMedia,
   Staff as AniStaff,
   Character as AniCharacter,
   MediaList as AniMediaList,
   MediaCoverImage,
-} from "~/__generated__/graphql";
+} from '~/__generated__/graphql';
 
-import { SelectNonNullableFields } from "~/app/utils/typescript-utils";
+import { SelectNonNullableFields } from '~/app/utils/typescript-utils';
 
 export enum Season {
-  any = "Any",
-  Winter = "Winter",
-  Spring = "Spring",
-  Summer = "Summer",
-  Fall = "Fall",
+  any = 'Any',
+  Winter = 'Winter',
+  Spring = 'Spring',
+  Summer = 'Summer',
+  Fall = 'Fall',
 }
 
 export const getSeason = (date: Date): Exclude<Season, Season.any> => {
@@ -42,66 +42,66 @@ export const validSeasons = [
 ] as const;
 
 export enum TernaryState {
-  none = "None",
-  true = "True",
-  false = "False",
+  none = 'None',
+  true = 'True',
+  false = 'False',
 }
 
 export enum Category {
-  Anime = "Anime",
-  Manga = "Manga",
-  Character = "Character",
-  Staff = "Staff",
-  Studio = "Studio",
+  Anime = 'Anime',
+  Manga = 'Manga',
+  Character = 'Character',
+  Staff = 'Staff',
+  Studio = 'Studio',
 }
 
 export enum Status {
-  any = "Any",
-  Releasing = "Releasing",
-  Finished = "Finished",
-  NotYetReleased = "Not Yet Released",
-  Cancelled = "Cancelled",
-  Hiatus = "Hiatus",
+  any = 'Any',
+  Releasing = 'Releasing',
+  Finished = 'Finished',
+  NotYetReleased = 'Not Yet Released',
+  Cancelled = 'Cancelled',
+  Hiatus = 'Hiatus',
 }
 
 export enum FormatManga {
-  any = "Any",
-  Manga = "Manga",
-  Novel = "Novel",
-  OneShot = "One Shot",
+  any = 'Any',
+  Manga = 'Manga',
+  Novel = 'Novel',
+  OneShot = 'One Shot',
 }
 
 export enum FormatAnime {
-  any = "Any",
-  Tv = "TV",
-  TvShort = "TV Short",
-  Movie = "Movie",
-  Special = "Special",
-  Ova = "OVA",
-  Ona = "ONA",
-  Music = "Music",
+  any = 'Any',
+  Tv = 'TV',
+  TvShort = 'TV Short',
+  Movie = 'Movie',
+  Special = 'Special',
+  Ova = 'OVA',
+  Ona = 'ONA',
+  Music = 'Music',
 }
 
 export enum SearchSort {
-  SearchMatch = "Search Match",
-  TrendingDesc = "Trending",
-  PopularityDesc = "Popularity",
-  ScoreDesc = "Score",
-  StartDateDesc = "Start Date",
-  UpdatedAtDesc = "Updated At",
+  SearchMatch = 'Search Match',
+  TrendingDesc = 'Trending',
+  PopularityDesc = 'Popularity',
+  ScoreDesc = 'Score',
+  StartDateDesc = 'Start Date',
+  UpdatedAtDesc = 'Updated At',
 }
 
 export enum ListSort {
-  AddedTime = "Added Time",
-  AddedTimeDesc = "Added Time Desc",
-  FinishedOn = "Finished On",
-  FinishedOnDesc = "Finished On Desc",
-  MediaPopularity = "Popularity",
-  MediaPopularityDesc = "Popularity Desc",
-  Progress = "Progress",
-  ProgressDesc = "Progress Desc",
-  Score = "Score",
-  ScoreDesc = "Score Desc",
+  AddedTime = 'Added Time',
+  AddedTimeDesc = 'Added Time Desc',
+  FinishedOn = 'Finished On',
+  FinishedOnDesc = 'Finished On Desc',
+  MediaPopularity = 'Popularity',
+  MediaPopularityDesc = 'Popularity Desc',
+  Progress = 'Progress',
+  ProgressDesc = 'Progress Desc',
+  Score = 'Score',
+  ScoreDesc = 'Score Desc',
 }
 
 export const animeSearchFilter = z.object({
@@ -115,42 +115,42 @@ export const animeSearchFilter = z.object({
       .number()
       .min(1970)
       .max(YEAR_MAX)
-      .transform((v) => (v === 1970 ? undefined : v)),
+      .transform((v) => (v === 1970 ? undefined : v))
   ),
   maxYear: z.optional(
     z
       .number()
       .min(1970)
       .max(YEAR_MAX)
-      .transform((v) => (v === YEAR_MAX ? undefined : v)),
+      .transform((v) => (v === YEAR_MAX ? undefined : v))
   ),
   minEpisode: z.optional(
     z
       .number()
       .min(0)
       .max(150)
-      .transform((v) => (v === 0 ? undefined : v)),
+      .transform((v) => (v === 0 ? undefined : v))
   ),
   maxEpisode: z.optional(
     z
       .number()
       .min(0)
       .max(150)
-      .transform((v) => (v === 150 ? undefined : v)),
+      .transform((v) => (v === 150 ? undefined : v))
   ),
   minDuration: z.optional(
     z
       .number()
       .min(0)
       .max(200)
-      .transform((v) => (v === 0 ? undefined : v)),
+      .transform((v) => (v === 0 ? undefined : v))
   ),
   maxDuration: z.optional(
     z
       .number()
       .min(0)
       .max(200)
-      .transform((v) => (v === 200 ? undefined : v)),
+      .transform((v) => (v === 200 ? undefined : v))
   ),
   genre: z.object({
     whitelist: z.array(z.string()),
@@ -173,42 +173,42 @@ export const mangaSearchFilter = z.object({
       .number()
       .min(1970)
       .max(YEAR_MAX)
-      .transform((v) => (v === 1970 ? undefined : v)),
+      .transform((v) => (v === 1970 ? undefined : v))
   ),
   maxYear: z.optional(
     z
       .number()
       .min(1970)
       .max(YEAR_MAX)
-      .transform((v) => (v === YEAR_MAX ? undefined : v)),
+      .transform((v) => (v === YEAR_MAX ? undefined : v))
   ),
   minChapters: z.optional(
     z
       .number()
       .min(0)
       .max(500)
-      .transform((v) => (v === 0 ? undefined : v)),
+      .transform((v) => (v === 0 ? undefined : v))
   ),
   maxChapters: z.optional(
     z
       .number()
       .min(0)
       .max(500)
-      .transform((v) => (v === 500 ? undefined : v)),
+      .transform((v) => (v === 500 ? undefined : v))
   ),
   minVolumes: z.optional(
     z
       .number()
       .min(0)
       .max(50)
-      .transform((v) => (v === 0 ? undefined : v)),
+      .transform((v) => (v === 0 ? undefined : v))
   ),
   maxVolumes: z.optional(
     z
       .number()
       .min(0)
       .max(50)
-      .transform((v) => (v === 50 ? undefined : v)),
+      .transform((v) => (v === 50 ? undefined : v))
   ),
   genre: z.object({
     whitelist: z.array(z.string()),
@@ -299,7 +299,7 @@ export const defaultStudioFilter: StudioFilter = {
   category: Category.Studio,
 };
 
-export const searchFilter = z.discriminatedUnion("category", [
+export const searchFilter = z.discriminatedUnion('category', [
   animeSearchFilter,
   mangaSearchFilter,
   characterSearchFilter,
@@ -310,7 +310,7 @@ export const searchFilter = z.discriminatedUnion("category", [
 export type Filter = z.infer<typeof searchFilter>;
 
 export interface MediaList
-  extends Omit<AniMediaList, "startedAt" | "completedAt" | "status"> {
+  extends Omit<AniMediaList, 'startedAt' | 'completedAt' | 'status'> {
   status: ListStatus;
   startedAt: Date | null;
   completedAt: Date | null;
@@ -323,7 +323,7 @@ export interface CoverImage extends MediaCoverImage {
 export interface Media
   extends Omit<
     AniMedia,
-    "coverImage" | "mediaListEntry" | "type" | "format" | "status" | "season"
+    'coverImage' | 'mediaListEntry' | 'type' | 'format' | 'status' | 'season'
   > {
   mediaListEntry: MediaList | null;
   coverImage: CoverImage;
@@ -335,17 +335,17 @@ export interface Media
 
 export type SearchResultMedia = SelectNonNullableFields<
   Media,
-  | "id"
-  | "isAdult"
-  | "title"
-  | "coverImage"
-  | "status"
-  | "type"
-  | "studios"
-  | "genres"
+  | 'id'
+  | 'isAdult'
+  | 'title'
+  | 'coverImage'
+  | 'status'
+  | 'type'
+  | 'studios'
+  | 'genres'
 >;
 
-export type Staff = Omit<AniStaff, "image"> & {
+export type Staff = Omit<AniStaff, 'image'> & {
   image: {
     large?: string;
     medium?: string;
@@ -353,7 +353,7 @@ export type Staff = Omit<AniStaff, "image"> & {
   };
 };
 
-export type Character = Omit<AniCharacter, "image"> & {
+export type Character = Omit<AniCharacter, 'image'> & {
   image: {
     large?: string;
     medium?: string;
@@ -377,17 +377,17 @@ export const YearValidator = z
 /** Media list watching/reading status enum. */
 export enum ListStatus {
   /** Finished watching/reading */
-  Completed = "Completed",
+  Completed = 'Completed',
   /** Currently watching/reading */
-  Current = "Current",
+  Current = 'Current',
   /** Stopped watching/reading before completing */
-  Dropped = "Dropped",
+  Dropped = 'Dropped',
   /** Paused watching/reading */
-  Paused = "Paused",
+  Paused = 'Paused',
   /** Planning to watch/read */
-  Planning = "Planning",
+  Planning = 'Planning',
   /** Re-watching/reading */
-  Repeating = "Repeating",
+  Repeating = 'Repeating',
 }
 
 export const ListSortValidator = z

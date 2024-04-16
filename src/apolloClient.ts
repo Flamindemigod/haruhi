@@ -3,21 +3,21 @@ import {
   DefaultOptions,
   InMemoryCache,
   NormalizedCacheObject,
-} from "@apollo/client";
+} from '@apollo/client';
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
-    fetchPolicy: "no-cache",
-    errorPolicy: "ignore",
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'ignore',
   },
   query: {
-    fetchPolicy: "no-cache",
-    errorPolicy: "all",
+    fetchPolicy: 'no-cache',
+    errorPolicy: 'all',
   },
 };
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  uri: "https://graphql.anilist.co",
+  uri: 'https://graphql.anilist.co',
   cache: new InMemoryCache(),
   defaultOptions: defaultOptions,
 });

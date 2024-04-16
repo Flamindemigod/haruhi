@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { User } from "@prisma/client";
-import { useSession } from "next-auth/react";
-import { ReactNode, createContext, useContext } from "react";
-import { api } from "~/trpc/react";
+import { User } from '@prisma/client';
+import { useSession } from 'next-auth/react';
+import { ReactNode, createContext, useContext } from 'react';
+import { api } from '~/trpc/react';
 
 const UserContext = createContext<User | null>(null);
 

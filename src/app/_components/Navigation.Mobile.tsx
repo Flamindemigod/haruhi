@@ -1,54 +1,54 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { NavigationProps } from "./Navigation";
-import Search from "./Search.Mobile";
-import Link from "next/link";
-import Dropdown, { Props as DropdownProps } from "~/primitives/Dropdown";
-import cx from "classix";
-import * as Portal from "@radix-ui/react-portal";
+import { useEffect, useState } from 'react';
+import { NavigationProps } from './Navigation';
+import Search from './Search.Mobile';
+import Link from 'next/link';
+import Dropdown, { Props as DropdownProps } from '~/primitives/Dropdown';
+import cx from 'classix';
+import * as Portal from '@radix-ui/react-portal';
 
 import {
   HomeIcon,
   ListBulletIcon,
   MixIcon,
   RocketIcon,
-} from "@radix-ui/react-icons";
+} from '@radix-ui/react-icons';
 
 const DropDownProps: DropdownProps = {
-  align: "center",
+  align: 'center',
   sideOffset: 16,
   arrow: true,
   trigger: (
     <button
       className={cx(
-        "relative flex w-full flex-col items-center justify-center p-2",
-        "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
+        'relative flex w-full flex-col items-center justify-center p-2',
+        'before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25'
       )}
     >
-      <ListBulletIcon className="h-5 w-5" />
+      <ListBulletIcon className='h-5 w-5' />
       Lists
     </button>
   ),
   content: [
     {
-      type: "Item",
+      type: 'Item',
       content: [
         {
           content: (
-            <Link className="flex items-center justify-center" href={"/anime"}>
+            <Link className='flex items-center justify-center' href={'/anime'}>
               Anime
             </Link>
           ),
-          lable: "Anime List",
+          lable: 'Anime List',
         },
         {
           content: (
-            <Link className="flex items-center justify-center" href={"/manga"}>
+            <Link className='flex items-center justify-center' href={'/manga'}>
               Manga
             </Link>
           ),
-          lable: "Manga List",
+          lable: 'Manga List',
         },
       ],
     },
@@ -56,71 +56,70 @@ const DropDownProps: DropdownProps = {
 };
 
 export default (props: NavigationProps) => {
-   return (
-    <Portal.Root container={document.getElementById("bot-navigation")}>
-      <nav className="grid grid-cols-mNavContainer bg-offWhite-50 text-xs dark:bg-black">
-        {!props.isUserAuth ? (
+  return (
+    <Portal.Root container={document.getElementById('bot-navigation')}>
+      <nav className='grid grid-cols-mNavContainer bg-offWhite-50 text-xs dark:bg-black'>
+        {!props.isUserAuth ?
           <>
             <Link
               className={cx(
-                "relative col-span-2 flex w-full flex-col items-center justify-center p-2",
-                "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
+                'relative col-span-2 flex w-full flex-col items-center justify-center p-2',
+                'before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25'
               )}
-              href={"/"}
+              href={'/'}
             >
-              <RocketIcon className="h-5 w-5" />
+              <RocketIcon className='h-5 w-5' />
               Trending
             </Link>
-            <div className="col-start-[search-start] col-end-[search-end]"></div>
+            <div className='col-start-[search-start] col-end-[search-end]'></div>
             <Link
               className={cx(
-                "relative col-span-2 flex w-full flex-col items-center justify-center p-2",
-                "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
+                'relative col-span-2 flex w-full flex-col items-center justify-center p-2',
+                'before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25'
               )}
-              href={"/seasonal"}
+              href={'/seasonal'}
             >
-              <MixIcon className="h-5 w-5" />
+              <MixIcon className='h-5 w-5' />
               Seasonal
             </Link>
           </>
-        ) : (
-          <>
+        : <>
             <Link
               className={cx(
-                "relative flex w-full flex-col items-center justify-center p-2",
-                "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
+                'relative flex w-full flex-col items-center justify-center p-2',
+                'before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25'
               )}
-              href={"/"}
+              href={'/'}
             >
-              <HomeIcon className="h-5 w-5" />
+              <HomeIcon className='h-5 w-5' />
               Home
             </Link>
             <Link
               className={cx(
-                "relative flex w-full flex-col items-center justify-center p-2",
-                "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
+                'relative flex w-full flex-col items-center justify-center p-2',
+                'before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25'
               )}
-              href={"/trending"}
+              href={'/trending'}
             >
-              <RocketIcon className="h-5 w-5" />
+              <RocketIcon className='h-5 w-5' />
               Trending
             </Link>
-            <div className="col-start-[search-start] col-end-[search-end]"></div>
+            <div className='col-start-[search-start] col-end-[search-end]'></div>
             <Link
               className={cx(
-                "relative flex w-full flex-col items-center justify-center p-2",
-                "before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25",
+                'relative flex w-full flex-col items-center justify-center p-2',
+                'before:absolute before:inset-0 before:bg-gradient-to-l before:from-transparent before:via-offWhite-800/25 before:to-transparent before:blur-lg dark:before:via-offWhite-400/25'
               )}
-              href={"/seasonal"}
+              href={'/seasonal'}
             >
-              <MixIcon className="h-5 w-5" />
+              <MixIcon className='h-5 w-5' />
               Seasonal
             </Link>
             <Dropdown {...DropDownProps} />
           </>
-        )}
+        }
       </nav>
-      <Search className="absolute left-1/2 top-0 h-[3.5rem] w-[3.5rem] -translate-x-1/2 -translate-y-1/4" />
+      <Search className='absolute left-1/2 top-0 h-[3.5rem] w-[3.5rem] -translate-x-1/2 -translate-y-1/4' />
     </Portal.Root>
   );
 };

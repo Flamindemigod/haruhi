@@ -1,11 +1,11 @@
-"use client";
-import { Root as Portal } from "@radix-ui/react-portal";
-import { useRef, useEffect, RefCallback } from "react";
-import { SwipeableProps, useSwipeable } from "react-swipeable";
-import median from "../utils/median";
-import _, { zip } from "lodash";
+'use client';
+import { Root as Portal } from '@radix-ui/react-portal';
+import { useRef, useEffect, RefCallback } from 'react';
+import { SwipeableProps, useSwipeable } from 'react-swipeable';
+import median from '../utils/median';
+import _, { zip } from 'lodash';
 
-interface Props extends Exclude<SwipeableProps, "onSwipedUp" | "onSwipedDown"> {
+interface Props extends Exclude<SwipeableProps, 'onSwipedUp' | 'onSwipedDown'> {
   text?: {
     left?: string;
     right?: string;
@@ -17,14 +17,14 @@ export default (props: Props) => {
   const canvasFunctions =
     useRef<
       Record<
-        | "draw"
-        | "reset"
-        | "setMagnitude"
-        | "setRotation"
-        | "setText"
-        | "setInterval"
-        | "startFadeIn"
-        | "startFadeOut",
+        | 'draw'
+        | 'reset'
+        | 'setMagnitude'
+        | 'setRotation'
+        | 'setText'
+        | 'setInterval'
+        | 'startFadeIn'
+        | 'startFadeOut',
         (...args: any[]) => void
       >
     >();
@@ -34,34 +34,34 @@ export default (props: Props) => {
     onSwiping: (e) => {
       if (!!canvasFunctions.current) {
         switch (e.dir) {
-          case "Left":
-            canvasFunctions.current.setText(props.text?.left ?? "");
+          case 'Left':
+            canvasFunctions.current.setText(props.text?.left ?? '');
             break;
-          case "Right":
-            canvasFunctions.current.setText(props.text?.right ?? "");
+          case 'Right':
+            canvasFunctions.current.setText(props.text?.right ?? '');
             break;
-          case "Up":
-            canvasFunctions.current.setText("Canceled");
+          case 'Up':
+            canvasFunctions.current.setText('Canceled');
             break;
-          case "Down":
-            canvasFunctions.current.setText("Canceled");
+          case 'Down':
+            canvasFunctions.current.setText('Canceled');
             break;
         }
 
         canvasFunctions.current.setMagnitude(
-          (((e.absX ^ 2) + (e.absY ^ 2)) ^ (1 / 2)) / 100,
+          (((e.absX ^ 2) + (e.absY ^ 2)) ^ (1 / 2)) / 100
         );
         canvasFunctions.current.setRotation(Math.atan2(e.deltaY, e.deltaX));
       }
       if (!!props.onSwiping) props.onSwiping(e);
     },
     onSwipeStart: (e) => {
-      if (!!canvasFunctions.current && e.dir !== "Down" && e.dir !== "Up") {
+      if (!!canvasFunctions.current && e.dir !== 'Down' && e.dir !== 'Up') {
         canvasFunctions.current.setInterval(
           setInterval(() => {
             canvasFunctions.current!.reset();
             canvasFunctions.current!.draw();
-          }, 17),
+          }, 17)
         );
 
         canvasFunctions.current.startFadeIn();
@@ -87,7 +87,7 @@ export default (props: Props) => {
       ref(document);
       canvasFunctions.current = (() => {
         if (!!canvas.current) {
-          const ctx = canvas.current.getContext("2d");
+          const ctx = canvas.current.getContext('2d');
           const canvasSize = {
             width: 300,
             height: 300,
@@ -96,7 +96,7 @@ export default (props: Props) => {
             let magnitude = 1;
             const blobSize = canvasSize.width / (2 * 2);
             let rotation = 0;
-            let text = "";
+            let text = '';
             let drawInterval: NodeJS.Timeout | null = null;
             return {
               setInterval: (id: NodeJS.Timeout) => {
@@ -141,7 +141,7 @@ export default (props: Props) => {
                   canvasSize.height / 2,
                   blobSize,
                   Math.PI / 2,
-                  -Math.PI / 2,
+                  -Math.PI / 2
                 );
                 circle.ellipse(
                   canvasSize.width / 2,
@@ -150,26 +150,26 @@ export default (props: Props) => {
                   blobSize,
                   0,
                   -Math.PI / 2,
-                  Math.PI / 2,
+                  Math.PI / 2
                 );
                 ctx.save();
                 ctx.translate(canvasSize.width / 2, canvasSize.height / 2);
                 ctx.rotate(rotation);
                 ctx.translate(-canvasSize.width / 2, -canvasSize.height / 2);
-                ctx.fillStyle = "#cc006d";
+                ctx.fillStyle = '#cc006d';
 
                 ctx.fill(circle);
                 ctx.restore();
                 ctx.save();
-                ctx.textBaseline = "middle";
-                ctx.font = "22px system-ui";
+                ctx.textBaseline = 'middle';
+                ctx.font = '22px system-ui';
 
                 const text_stack = text
-                  .split("\n")
-                  .map((s) => s.replaceAll("\n", ""));
+                  .split('\n')
+                  .map((s) => s.replaceAll('\n', ''));
                 let textSize = text_stack.map((s) => ctx.measureText(s));
 
-                ctx.fillStyle = "#ffffff";
+                ctx.fillStyle = '#ffffff';
                 const padding = 4;
                 let count = 0;
                 for (const [substring, size] of zip(text_stack, textSize)) {
@@ -180,7 +180,7 @@ export default (props: Props) => {
                   ctx.fillText(
                     substring!,
                     (canvasSize.width - size!.width) / 2,
-                    canvasSize.height / 2 + (textHeight + padding) * offSet,
+                    canvasSize.height / 2 + (textHeight + padding) * offSet
                   );
                 }
                 ctx.restore();
@@ -191,12 +191,14 @@ export default (props: Props) => {
         }
       })();
     }
-    return () => ref({});
+    return () => {
+      ref({});
+    };
   }, []);
   return {
     SwipeBlob: (
       <>
-        <Portal className="pointer-events-none fixed left-0 top-0 z-[100] grid h-screen w-screen touch-none place-items-center">
+        <Portal className='pointer-events-none fixed left-0 top-0 z-[100] grid h-screen w-screen touch-none place-items-center'>
           <canvas width={300} height={300} aria-hidden ref={canvas}></canvas>
         </Portal>
       </>

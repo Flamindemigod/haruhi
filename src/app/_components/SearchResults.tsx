@@ -1,21 +1,21 @@
-import { Category, Filter } from "~/types.shared/anilist";
-import { api } from "~/trpc/react";
+import { Category, Filter } from '~/types.shared/anilist';
+import { api } from '~/trpc/react';
 import SearchResultAnime, {
   Props as SearchResultAnimeProps,
-} from "./SearchResult.Anime";
+} from './SearchResult.Anime';
 import SearchResultManga, {
   Props as SearchResultMangaProps,
-} from "./SearchResult.Manga";
+} from './SearchResult.Manga';
 import SearchResultCharacter, {
   Props as SearchResultCharacterProps,
-} from "./SearchResult.Character";
+} from './SearchResult.Character';
 import SearchResultStaff, {
   Props as SearchResultStaffProps,
-} from "./SearchResult.Staff";
+} from './SearchResult.Staff';
 import SearchResultStudio, {
   Props as SearchResultStudioProps,
-} from "./SearchResult.Studio";
-import { ThreeCircles } from "react-loader-spinner";
+} from './SearchResult.Studio';
+import { ThreeCircles } from 'react-loader-spinner';
 export type Props = {
   searchString: string;
   filter: Filter;
@@ -33,19 +33,19 @@ export default (props: Props) => {
           refetchInterval: false,
           refetchOnWindowFocus: false,
           refetchOnReconnect: false,
-        },
+        }
       );
 
       if (isFetching) {
         return (
-          <div className="h-full">
+          <div className='h-full'>
             <ThreeCircles
-              height="100"
-              width="100"
-              color="var(--clr-primary)"
-              wrapperClass="flex flex-col justify-center items-center py-10"
+              height='100'
+              width='100'
+              color='var(--clr-primary)'
+              wrapperClass='flex flex-col justify-center items-center py-10'
               visible={true}
-              ariaLabel="three-circles-rotating"
+              ariaLabel='three-circles-rotating'
             />
           </div>
         );
@@ -55,7 +55,7 @@ export default (props: Props) => {
           {data?.Page.data.map((d, idx) => (
             <SearchResultAnime
               key={idx}
-              media={d as SearchResultAnimeProps["media"]}
+              media={d as SearchResultAnimeProps['media']}
             />
           ))}
         </>
@@ -71,18 +71,18 @@ export default (props: Props) => {
           refetchInterval: false,
           refetchOnWindowFocus: false,
           refetchOnReconnect: false,
-        },
+        }
       );
       if (isFetching) {
         return (
-          <div className="h-full">
+          <div className='h-full'>
             <ThreeCircles
-              height="100"
-              width="100"
-              color="var(--clr-primary)"
-              wrapperClass="flex flex-col justify-center items-center py-10"
+              height='100'
+              width='100'
+              color='var(--clr-primary)'
+              wrapperClass='flex flex-col justify-center items-center py-10'
               visible={true}
-              ariaLabel="three-circles-rotating"
+              ariaLabel='three-circles-rotating'
             />
           </div>
         );
@@ -92,7 +92,7 @@ export default (props: Props) => {
           {data?.Page.data.map((d, idx) => (
             <SearchResultManga
               key={idx}
-              media={d as SearchResultMangaProps["media"]}
+              media={d as SearchResultMangaProps['media']}
             />
           ))}
         </>
@@ -108,18 +108,18 @@ export default (props: Props) => {
           refetchInterval: false,
           refetchOnWindowFocus: false,
           refetchOnReconnect: false,
-        },
+        }
       );
       if (isFetching) {
         return (
-          <div className="h-full">
+          <div className='h-full'>
             <ThreeCircles
-              height="100"
-              width="100"
-              color="var(--clr-primary)"
-              wrapperClass="flex flex-col justify-center items-center py-10"
+              height='100'
+              width='100'
+              color='var(--clr-primary)'
+              wrapperClass='flex flex-col justify-center items-center py-10'
               visible={true}
-              ariaLabel="three-circles-rotating"
+              ariaLabel='three-circles-rotating'
             />
           </div>
         );
@@ -129,7 +129,7 @@ export default (props: Props) => {
           {data?.Page.data.map((d, idx) => (
             <SearchResultCharacter
               key={idx}
-              data={d as SearchResultCharacterProps["data"]}
+              data={d as SearchResultCharacterProps['data']}
             />
           ))}
         </>
@@ -145,18 +145,18 @@ export default (props: Props) => {
           refetchInterval: false,
           refetchOnWindowFocus: false,
           refetchOnReconnect: false,
-        },
+        }
       );
       if (isFetching) {
         return (
-          <div className="h-full">
+          <div className='h-full'>
             <ThreeCircles
-              height="100"
-              width="100"
-              color="var(--clr-primary)"
-              wrapperClass="flex flex-col justify-center items-center py-10"
+              height='100'
+              width='100'
+              color='var(--clr-primary)'
+              wrapperClass='flex flex-col justify-center items-center py-10'
               visible={true}
-              ariaLabel="three-circles-rotating"
+              ariaLabel='three-circles-rotating'
             />
           </div>
         );
@@ -166,7 +166,7 @@ export default (props: Props) => {
           {data?.Page.data.map((d, idx) => (
             <SearchResultStaff
               key={idx}
-              data={d as SearchResultStaffProps["data"]}
+              data={d as SearchResultStaffProps['data']}
             />
           ))}
         </>
@@ -182,18 +182,18 @@ export default (props: Props) => {
           refetchInterval: false,
           refetchOnWindowFocus: false,
           refetchOnReconnect: false,
-        },
+        }
       );
       if (isFetching) {
         return (
-          <div className="h-full">
+          <div className='h-full'>
             <ThreeCircles
-              height="100"
-              width="100"
-              color="var(--clr-primary)"
-              wrapperClass="flex flex-col justify-center items-center py-10"
+              height='100'
+              width='100'
+              color='var(--clr-primary)'
+              wrapperClass='flex flex-col justify-center items-center py-10'
               visible={true}
-              ariaLabel="three-circles-rotating"
+              ariaLabel='three-circles-rotating'
             />
           </div>
         );
@@ -203,7 +203,7 @@ export default (props: Props) => {
           {data?.Page.data.map((d, idx) => (
             <SearchResultStudio
               key={idx}
-              data={d as SearchResultStudioProps["data"]}
+              data={d as SearchResultStudioProps['data']}
             />
           ))}
         </>

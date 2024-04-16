@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import React, { forwardRef, useLayoutEffect, useState } from "react";
-import { useRef } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+import React, { forwardRef, useLayoutEffect, useState } from 'react';
+import { useRef } from 'react';
 
 interface Props {
   height: number | string;
@@ -32,7 +32,7 @@ const Carosel = forwardRef<HTMLDivElement, Props>(
     }, [children]);
 
     useLayoutEffect(() => {
-      caroselTrack.current.addEventListener("scroll", () => {
+      caroselTrack.current.addEventListener('scroll', () => {
         setShowLeftButton(true);
         setShowRightButton(true);
         if (caroselTrack.current.scrollLeft === 0) {
@@ -49,7 +49,7 @@ const Carosel = forwardRef<HTMLDivElement, Props>(
         }
       });
 
-      return caroselTrack.current.removeEventListener("scroll", () => {
+      return caroselTrack.current.removeEventListener('scroll', () => {
         setShowLeftButton(true);
         setShowRightButton(true);
         if (caroselTrack.current.scrollLeft === 0) {
@@ -68,14 +68,14 @@ const Carosel = forwardRef<HTMLDivElement, Props>(
     }, []);
     return (
       <div
-        className="relative isolate flex items-center justify-center"
+        className='relative isolate flex items-center justify-center'
         ref={ref}
       >
         {showLeftButton && (
           <button
-            aria-label="Carosel Button Go Back"
+            aria-label='Carosel Button Go Back'
             onPointerUp={scrollBack}
-            className="absolute  bottom-1/2 left-4 z-20 scale-[2.5] rounded-full bg-primary-500  bg-opacity-60 hover:bg-opacity-100"
+            className='absolute  bottom-1/2 left-4 z-20 scale-[2.5] rounded-full bg-primary-500  bg-opacity-60 hover:bg-opacity-100'
           >
             <ChevronLeftIcon />
           </button>
@@ -89,16 +89,17 @@ const Carosel = forwardRef<HTMLDivElement, Props>(
         </div>
         {showRightButton && (
           <button
-            aria-label="Carosel Button Go Forward"
+            aria-label='Carosel Button Go Forward'
             onPointerUp={scrollForward}
-            className="absolute bottom-1/2 right-4 z-20 scale-[2.5] rounded-full bg-primary-500 bg-opacity-60 hover:bg-opacity-100"
+            className='absolute bottom-1/2 right-4 z-20 scale-[2.5] rounded-full bg-primary-500 bg-opacity-60 hover:bg-opacity-100'
           >
             <ChevronRightIcon />
           </button>
         )}
       </div>
     );
-  },
+  }
 );
 
+Carosel.displayName = 'Carosel';
 export default Carosel;

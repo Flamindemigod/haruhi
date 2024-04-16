@@ -1,6 +1,6 @@
 export default async (url: string) => {
   const base64str = await fetch(url).then(async (res) =>
-    Buffer.from(await res.arrayBuffer()).toString("base64"),
+    Buffer.from(await res.arrayBuffer()).toString('base64')
   );
 
   const blurSvg = `
@@ -15,9 +15,9 @@ export default async (url: string) => {
     `;
 
   const toBase64 = (str: string) =>
-    typeof window === "undefined"
-      ? Buffer.from(str).toString("base64")
-      : window.btoa(str);
+    typeof window === 'undefined' ?
+      Buffer.from(str).toString('base64')
+    : window.btoa(str);
 
   return `data:image/svg+xml;base64,${toBase64(blurSvg)}`;
 };
