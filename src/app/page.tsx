@@ -28,16 +28,19 @@ export default async function Home() {
           </button>
           <Hero />
         </div>
-        {!!sesh?.user ?
+        {!!sesh?.user ? (
           <>
             {/* User Current */}
             <Current />
             {/*User Up Next (Based On User Planning to Watching List) */}
+            {/*
             <Pending />
-            {/*User Recommendations*/}
             <Recommended />
+            */}
           </>
-        : <Trending />}
+        ) : (
+          <Trending />
+        )}
       </div>
     </>
   );

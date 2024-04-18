@@ -3,8 +3,8 @@ import { Category } from '~/types.shared/anilist';
 import CurrentClient from './Current.Client';
 
 export default async () => {
-  const data_current_anime = await api.anilist.getCurrentAnime.query();
-  const data_current_manga = await api.anilist.getCurrentManga.query();
+  const data_current_anime = await api.anilist.anime.getCurrent.query();
+  const data_current_manga = await api.anilist.manga.getCurrent.query();
   return (
     <div className='flex w-full flex-col gap-4 py-4'>
       <CurrentClient type={Category.Anime} data={data_current_anime} />

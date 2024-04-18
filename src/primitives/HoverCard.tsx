@@ -101,7 +101,9 @@ const HoverCard = ({ portal, ...props }: Props) => {
               hideWhenDetached={props.content?.hideWhenDetached}
             >
               {props.content.data}
-              {!!props.arrow ? <HoverCardPrimitive.Arrow /> : <></>}
+              {!!props.arrow ?
+                <HoverCardPrimitive.Arrow />
+              : <></>}
             </HoverCardPrimitive.Content>
           </Transition.Child>
         </Transition.Root>

@@ -15,6 +15,7 @@ import Tooltip from '~/primitives/Tooltip';
 import { useCardContext } from '../_contexts/CardContext';
 import { useSession } from 'next-auth/react';
 import CardEditor from './CardEditor';
+import { api } from '~/trpc/react';
 
 interface PropsCountdown {
   days: number;
@@ -68,7 +69,6 @@ export type CardMedia = Pick<
 >;
 
 export type Props = {
-  refetch?: () => void;
   type: Category.Anime | Category.Manga;
   fullWidth?: true;
   data: SelectNonNullableFields<
@@ -88,7 +88,7 @@ export type Props = {
 
 const Card = forwardRef<HTMLImageElement, Props>((props, ref) => {
   const { reset, onReset } = useCardContext();
-  // const user = useUser();
+  const utils = api.useUtils();
   const user = useSession().data;
   let lock = false;
   const [show, setShowInner] = useState<boolean>(false);
@@ -237,7 +237,16 @@ const Card = forwardRef<HTMLImageElement, Props>((props, ref) => {
             {!!user && (
               <CardEditor
                 show={show}
-                refetch={props.refetch ?? (() => {})}
+                refetch={() => {
+                  switch (props.type) {
+                    case Category.Anime:
+                      utils.anilist.anime.invalidate();
+                      break;
+                    case Category.Manga:
+                      utils.anilist.manga.invalidate();
+                      break;
+                  }
+                }}
                 data={props.data}
                 resetShow={() => {
                   lock = true;

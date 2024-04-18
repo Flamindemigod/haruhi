@@ -28,7 +28,7 @@ export interface Props {
 const renderItem = (content: Content, key?: Key) => {
   return (
     <Fragment key={key}>
-      {!!content.lable ? (
+      {!!content.lable ?
         <DropdownMenu.Label
           className={cx(
             'flex items-center rounded-md px-2 py-2 text-base outline-none',
@@ -38,9 +38,7 @@ const renderItem = (content: Content, key?: Key) => {
         >
           {content.lable}
         </DropdownMenu.Label>
-      ) : (
-        <></>
-      )}
+      : <></>}
       <DropdownMenu.Item
         className={cx(
           'flex cursor-pointer select-none items-center rounded-md px-2 py-2 text-base outline-none',
@@ -82,11 +80,9 @@ const DropDown = (props: Props) => (
               );
           }
         })}
-        {props.arrow ? (
+        {props.arrow ?
           <DropdownMenu.Arrow className='fill-white dark:fill-offWhite-800' />
-        ) : (
-          <></>
-        )}
+        : <></>}
       </DropdownMenu.Content>
     </DropdownMenu.Portal>
   </DropdownMenu.Root>

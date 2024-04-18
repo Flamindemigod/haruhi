@@ -13,7 +13,7 @@ import Input from '~/primitives/Input';
 
 type Props = {
   value: number | undefined;
-  setValue: (_: number) => void;
+  setValue: (_: number | undefined) => void;
 };
 
 const Rating = (props: Props) => {
@@ -144,6 +144,5 @@ const Rating = (props: Props) => {
       );
   }
 };
-
 
 export default Rating;

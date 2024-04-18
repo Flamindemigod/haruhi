@@ -397,3 +397,18 @@ export const ListSortValidator = z
 export const ListStatusValidator = z
   .nativeEnum(ListStatus)
   .catch(ListStatus.Current);
+
+export const MediaListEditValidator = z.object({
+  id: z.number().int().nullable().catch(null),
+  mediaId: z.number().int(),
+  status: ListStatusValidator.removeCatch().nullable().catch(null),
+  score: z.number().nullable(),
+  progress: z.number().catch(0),
+  repeat: z.number().catch(0),
+  startedAt: z.date().nullable(),
+  completedAt: z.date().nullable(),
+  notes: z.string().nullable(),
+  private: z.boolean().catch(false),
+});
+
+export type MediaListEdit = z.infer<typeof MediaListEditValidator>;

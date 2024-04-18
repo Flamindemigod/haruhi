@@ -5,106 +5,17 @@ import { CardMedia } from '../Card';
 import Drawer from '~/primitives/Drawer';
 import Image from 'next/image';
 import Background from '../Background';
-import Select from '~/primitives/Select';
-import { Category, ListStatus } from '~/types.shared/anilist';
-import cx from 'classix';
-import { CaretDownIcon } from '@radix-ui/react-icons';
+import { Category, ListStatus, MediaListEdit } from '~/types.shared/anilist';
 import Rating from './Rating';
-import Input from '~/primitives/Input';
-import { parseInt } from 'lodash';
 import Calender from '~/primitives/Calendar';
 import { Separator } from '@radix-ui/themes';
 import Button from '~/primitives/Button';
 import { MdDelete, MdSave } from 'react-icons/md';
-interface StatusSelectorProps {
-  value: ListStatus | null;
-  onValueChange: (val: ListStatus | null) => void;
-}
-
-const styles =
-  'text-md rounded-md p-2 text-offWhite-700 placeholder:text-offWhite-500 dark:text-offWhite-100 dark:placeholder:text-offWhite-200 border border-offWhite-400 focus-visible:border-transparent dark:border-offWhite-700 dark:bg-offWhite-700 flex gap-2 items-center justify-center w-full' as const;
-
-const StatusSelector = (props: StatusSelectorProps) => {
-  return (
-    <Select
-      {...props}
-      trigger={
-        <button className={cx(styles)}>
-          {!props.value ? 'Not on List' : props.value}
-          <CaretDownIcon />
-        </button>
-      }
-      side='bottom'
-      align='center'
-      triggerAriaLabel='Media Status Selector'
-      values={[
-        ...Object.values(ListStatus).map((v) => ({
-          value: v,
-          displayTitle: v,
-        })),
-        { displayTitle: 'Not On List', value: null },
-      ]}
-      sideOffet={5}
-      defaultValue={null}
-    />
-  );
-};
-
-type ProgressSelectorProps = {
-  data: Props['data'];
-  value: number;
-  onValueChange: (val: number) => void;
-};
-const ProgressSelector = (props: ProgressSelectorProps) => {
-  return (
-    <Input
-      value={props.value}
-      defaultValue={props.data.mediaListEntry?.progress ?? 0}
-      type='number'
-      min={0}
-      max={(() => {
-        switch (props.data.type) {
-          case Category.Anime:
-            return (
-              (!!props.data.episodes && !!props.data.nextAiringEpisode
-                ? props.data.nextAiringEpisode.episode <= props.data.episodes
-                  ? props.data.nextAiringEpisode.episode - 1
-                  : props.data.episodes
-                : !!props.data.episodes
-                  ? props.data.episodes
-                  : props.data.nextAiringEpisode.episode) ?? 0
-            );
-          case Category.Manga:
-            return !!props.data.chapters ? props.data.chapters : undefined;
-        }
-      })()}
-      id='mediaProgress'
-      inputMode='numeric'
-      onChange={(e) => {
-        props.onValueChange(parseInt(e.target.value));
-      }}
-    />
-  );
-};
-
-type RepeatSelectorProps = {
-  value: number;
-  onValueChange: (val: number) => void;
-};
-const RepeatSelector = (props: RepeatSelectorProps) => {
-  return (
-    <Input
-      value={props.value}
-      type='number'
-      min={0}
-      id='mediaRepeat'
-      inputMode='numeric'
-      onChange={(e) => {
-        props.onValueChange(parseInt(e.target.value));
-      }}
-    />
-  );
-};
+import { useReducer } from 'react';
+import { StatusSelector } from './Status';
+import { ProgressSelector } from './Progress';
+import { RepeatSelector } from './Repeat';
+import { api } from '~/trpc/react';
 
 type Props = {
   refetch: () => void;
@@ -126,9 +37,95 @@ type Props = {
   >;
 };
 
+enum StateActionKind {
+  SetStatus,
+  SetRating,
+  SetProgess,
+  SetRepeats,
+  SetStart,
+  SetEnd,
+  SetPrivate,
+  SetDelete,
+}
+
+type StateAction =
+  | {
+      type: StateActionKind.SetStatus;
+      payload: ListStatus;
+    }
+  | { type: StateActionKind.SetRating; payload: number }
+  | {
+      type: StateActionKind.SetProgess;
+      payload: number;
+    }
+  | {
+      type: StateActionKind.SetRepeats;
+      payload: number;
+    }
+  | {
+      type: StateActionKind.SetStart;
+      payload: Date | null;
+    }
+  | {
+      type: StateActionKind.SetEnd;
+      payload: Date | null;
+    }
+  | {
+      type: StateActionKind.SetPrivate;
+      payload: Boolean;
+    }
+  | {
+      type: StateActionKind.SetDelete;
+    };
+
+type State = {
+  status?: ListStatus | null;
+  rating?: number;
+  progress?: number;
+  repeats?: number;
+  startedAt?: Date | null;
+  completedAt?: Date | null;
+  private?: true;
+  delete?: true;
+};
+
 const ContentRender = (
-  props: Omit<Props, 'trigger' | 'open' | 'onOpenChange'>
+  props: Omit<Props, 'trigger' | 'open' | 'onOpenChange'> & {
+    close: () => void;
+  }
 ) => {
+  const setMutation = api.anilist.setMediaEntry.useMutation();
+  const deleteMutation = api.anilist.deleteMediaEntry.useMutation();
+  const reducer = (state: State, action: StateAction): State => {
+    switch (action.type) {
+      case StateActionKind.SetStatus:
+        return {
+          ...state,
+          status: action.payload,
+          delete: action.payload === null ? true : undefined,
+        };
+      case StateActionKind.SetRating:
+        return { ...state, rating: action.payload };
+      case StateActionKind.SetProgess:
+        return { ...state, progress: action.payload };
+      case StateActionKind.SetRepeats:
+        return { ...state, repeats: action.payload };
+      case StateActionKind.SetStart:
+        return { ...state, startedAt: action.payload };
+      case StateActionKind.SetEnd:
+        return { ...state, completedAt: action.payload };
+      case StateActionKind.SetPrivate:
+        return {
+          ...state,
+          private: action.payload === true ? true : undefined,
+        };
+      case StateActionKind.SetDelete:
+        return {
+          delete: true,
+        };
+    }
+  };
+  const [state, dispatch] = useReducer(reducer, {});
   return (
     <>
       <div className='relative isolate grid h-64 grid-cols-9 grid-rows-3 overflow-clip'>
@@ -167,7 +164,44 @@ const ContentRender = (
             remove it from your lists.
           </p>
         </div>
-        <form className='grid w-11/12 gap-2 gap-y-5 rounded-md bg-black/20 p-2 @sm:grid-cols-1 @md:grid-cols-2  @xl:grid-cols-3 @2xl:max-w-2xl'>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!!state.delete) {
+              if (!!props.data.mediaListEntry?.id) {
+                deleteMutation.mutate(
+                  { id: props.data.mediaListEntry.id },
+                  {
+                    onSettled: () => {
+                      props.refetch();
+                      props.close();
+                    },
+                  }
+                );
+              }
+            } else {
+              const input: MediaListEdit = {
+                status: state.status ?? null,
+                startedAt: state.startedAt ?? null,
+                completedAt: state.completedAt ?? null,
+                repeat: state.repeats ?? 0,
+                score: state.rating ?? 0,
+                private: state.private ?? false,
+                mediaId: props.data.id,
+                progress: state.progress ?? 0,
+                id: props.data.mediaListEntry?.id ?? null,
+                notes: null,
+              };
+              setMutation.mutate(input, {
+                onSettled: () => {
+                  props.refetch();
+                  props.close();
+                },
+              });
+            }
+          }}
+          className='grid w-11/12 gap-2 gap-y-5 rounded-md bg-black/20 p-2 @md:grid-cols-1  @xl:grid-cols-2 @2xl:max-w-2xl'
+        >
           <fieldset>
             <label
               htmlFor='Media Status Selector'
@@ -176,11 +210,17 @@ const ContentRender = (
               Status
             </label>
             <StatusSelector
-              value={props.data.mediaListEntry?.status ?? null}
+              value={
+                state.status === undefined
+                  ? props.data.mediaListEntry?.status ?? null
+                  : state.status
+              }
               onValueChange={(v) => {
-                console.error(
-                  'TODO: Add Value Change Handler for Status Selector'
-                );
+                console.log('Status', v);
+                dispatch({
+                  type: StateActionKind.SetStatus,
+                  payload: v,
+                } as StateAction);
               }}
             />
           </fieldset>
@@ -192,11 +232,16 @@ const ContentRender = (
               Rating
             </label>
             <Rating
-              value={props.data.mediaListEntry?.score ?? undefined}
+              value={
+                state.rating === undefined
+                  ? props.data.mediaListEntry?.score ?? undefined
+                  : state.rating
+              }
               setValue={(v) => {
-                console.error(
-                  'TODO: Add Value Change Handler for Status Selector'
-                );
+                dispatch({
+                  type: StateActionKind.SetRating,
+                  payload: v,
+                } as StateAction);
               }}
             />
           </fieldset>
@@ -216,11 +261,12 @@ const ContentRender = (
             </label>
             <ProgressSelector
               data={props.data}
-              value={0}
+              value={state.progress}
               onValueChange={(v) => {
-                console.error(
-                  'TODO: Add Value Change Handler for Progress Selector'
-                );
+                dispatch({
+                  type: StateActionKind.SetProgess,
+                  payload: v,
+                } as StateAction);
               }}
             />
           </fieldset>
@@ -239,11 +285,13 @@ const ContentRender = (
               })()}
             </label>
             <RepeatSelector
-              value={0}
+              value={state.progress}
+              defaultValue={props.data.mediaListEntry?.repeat ?? undefined}
               onValueChange={(v) => {
-                console.error(
-                  'TODO: Add Value Change Handler for Repeat Selector'
-                );
+                dispatch({
+                  type: StateActionKind.SetRepeats,
+                  payload: v,
+                } as StateAction);
               }}
             />
           </fieldset>
@@ -255,11 +303,20 @@ const ContentRender = (
               Start Date
             </label>
             <Calender
-              date={props.data.mediaListEntry?.startedAt}
-              setDate={() => {
-                console.error(
-                  'TODO: Add Value Change Handler for Start Date Selector'
-                );
+              date={(() => {
+                if (state.startedAt === null) {
+                  return null;
+                }
+                if (state.startedAt === undefined) {
+                  return props.data.mediaListEntry?.startedAt ?? null;
+                }
+                return state.startedAt;
+              })()}
+              setDate={(v) => {
+                dispatch({
+                  type: StateActionKind.SetStart,
+                  payload: v,
+                });
               }}
             />
           </fieldset>
@@ -271,25 +328,44 @@ const ContentRender = (
               End Date
             </label>
             <Calender
-              date={props.data.mediaListEntry?.completedAt}
-              setDate={() => {
-                console.error(
-                  'TODO: Add Value Change Handler for End Date Selector'
-                );
+              date={(() => {
+                if (state.completedAt === null) {
+                  return null;
+                }
+                if (state.completedAt === undefined) {
+                  return props.data.mediaListEntry?.completedAt ?? null;
+                }
+                return state.completedAt;
+              })()}
+              setDate={(v) => {
+                dispatch({
+                  type: StateActionKind.SetEnd,
+                  payload: v,
+                });
               }}
             />
           </fieldset>
+          <Separator
+            my='3'
+            orientation='horizontal'
+            size={'4'}
+            className='col-span-full'
+          />
+          <div className='col-span-full flex w-full flex-grow flex-row flex-wrap justify-end gap-4 p-2 '>
+            <Button className='transition-colors dark:bg-primary-600 dark:hover:bg-primary-500'>
+              <MdSave /> Save
+            </Button>
+            <Button
+              onClick={() => {
+                dispatch({ type: StateActionKind.SetDelete });
+              }}
+              className='transition-colors dark:bg-red-700 dark:hover:bg-red-600'
+            >
+              <MdDelete />
+              Delete Entry
+            </Button>
+          </div>
         </form>
-        <Separator my='3' orientation='horizontal' size={'4'} />
-        <div className='flex w-full flex-grow flex-row flex-wrap justify-end gap-4 p-2 '>
-          <Button className='transition-colors dark:bg-primary-600 dark:hover:bg-primary-500'>
-            <MdSave /> Save
-          </Button>
-          <Button className='transition-colors dark:bg-red-700 dark:hover:bg-red-600'>
-            <MdDelete />
-            Delete Entry
-          </Button>
-        </div>
       </div>
     </>
   );
@@ -319,7 +395,14 @@ const Editor = (props: Props) => {
             return 'bottom';
         }
       })()}
-      content={<ContentRender {...props} />}
+      content={
+        <ContentRender
+          close={() => {
+            props.control.onOpenChange(false);
+          }}
+          {...props}
+        />
+      }
     />
   );
 };

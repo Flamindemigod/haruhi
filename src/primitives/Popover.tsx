@@ -27,11 +27,9 @@ const Popover = (props: Props) => {
       <PopoverPrimitives.Trigger asChild>
         {props.trigger}
       </PopoverPrimitives.Trigger>
-      {!!props.anchor ? (
+      {!!props.anchor ?
         <PopoverPrimitives.Anchor></PopoverPrimitives.Anchor>
-      ) : (
-        <></>
-      )}
+      : <></>}
       <PopoverPrimitives.Portal forceMount container={props.container?.current}>
         {/* <Transition.Root show={open}>
         <Transition.Child
@@ -67,11 +65,9 @@ const Popover = (props: Props) => {
           <PopoverPrimitives.Close asChild>
             {props.closeIcon}
           </PopoverPrimitives.Close>
-          {props.arrow ? (
+          {props.arrow ?
             <PopoverPrimitives.Arrow className='fill-white dark:fill-offWhite-800' />
-          ) : (
-            <></>
-          )}
+          : <></>}
         </PopoverPrimitives.Content>
         {/* </Transition.Child>
       </Transition.Root> */}

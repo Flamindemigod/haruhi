@@ -83,13 +83,11 @@ const TextFieldH = (props: Props) => {
       className={cx('flex items-center', props.rootClasses)}
       radius={props.radius}
     >
-      {!!props.startIcon ? (
+      {!!props.startIcon ?
         <TextField.Slot color={props.startIcon.color} gap={props.startIcon.gap}>
           {props.startIcon.icon}
         </TextField.Slot>
-      ) : (
-        <></>
-      )}
+      : <></>}
       <TextField.Input
         autoFocus={true}
         placeholder={props.placeholder}
@@ -102,13 +100,11 @@ const TextFieldH = (props: Props) => {
           props.onValueChange(e.currentTarget.value);
         }}
       />
-      {!!props.endIcon ? (
+      {!!props.endIcon ?
         <TextField.Slot color={props.endIcon.color} gap={props.endIcon.gap}>
           {props.endIcon.icon}
         </TextField.Slot>
-      ) : (
-        <></>
-      )}
+      : <></>}
     </TextField.Root>
   );
 };

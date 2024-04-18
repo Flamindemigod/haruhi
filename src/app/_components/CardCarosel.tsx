@@ -31,7 +31,6 @@ type CardMedia = Pick<
 
 export interface Props {
   type: Category.Anime | Category.Manga;
-  refetch?: () => void;
   data: SelectNonNullableFields<
     CardMedia,
     keyof Omit<
@@ -75,7 +74,7 @@ const CardCarosel = (props: Props) => {
       <Carosel height={'clamp(150px, 100%, 210px)'}>
         {props.data.map((d) => (
           // <div key={d.id}>{d.title.native}</div>
-          <Card data={d} type={props.type} key={d.id} refetch={props.refetch} />
+          <Card data={d} type={props.type} key={d.id} />
         ))}
       </Carosel>
     </>
