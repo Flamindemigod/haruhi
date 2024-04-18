@@ -181,15 +181,15 @@ const ContentRender = (
               }
             } else {
               const input: MediaListEdit = {
-                status: state.status ?? null,
-                startedAt: state.startedAt ?? null,
-                completedAt: state.completedAt ?? null,
-                repeat: state.repeats ?? 0,
-                score: state.rating ?? 0,
-                private: state.private ?? false,
+                status: state.status,
+                startedAt: state.startedAt ?? undefined,
+                completedAt: state.completedAt ?? undefined,
+                repeat: state.repeats ?? undefined,
+                score: state.rating ?? undefined,
+                private: state.private ?? undefined,
                 mediaId: props.data.id,
-                progress: state.progress ?? 0,
-                id: props.data.mediaListEntry?.id ?? null,
+                progress: state.progress ?? undefined,
+                id: props.data.mediaListEntry?.id ?? undefined,
                 notes: null,
               };
               setMutation.mutate(input, {

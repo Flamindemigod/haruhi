@@ -30,7 +30,7 @@ const Seasonal = (props: Props) => {
     fetchNextPage,
     isFetching,
     hasNextPage,
-  } = api.anilist.getSeasonal.useInfiniteQuery(
+  } = api.anilist.anime.getSeasonal.useInfiniteQuery(
     {
       year: props.year,
       season: props.season,

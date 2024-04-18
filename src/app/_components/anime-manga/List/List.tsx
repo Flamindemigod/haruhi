@@ -16,7 +16,7 @@ type Props = {
 const useList = (props: Props) => {
   switch (props.type) {
     case Category.Anime:
-      return api.anilist.getAnimeList.useInfiniteQuery(
+      return api.anilist.anime.getList.useInfiniteQuery(
         {
           list: props.list,
           sort: props.sort,
@@ -32,7 +32,7 @@ const useList = (props: Props) => {
       );
 
     case Category.Manga:
-      return api.anilist.getMangaList.useInfiniteQuery(
+      return api.anilist.manga.getList.useInfiniteQuery(
         {
           list: props.list,
           sort: props.sort,

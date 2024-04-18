@@ -68,7 +68,6 @@ import {
   Character,
   Staff,
   ListStatus,
-  ListStatusValidator,
   MediaListEditValidator,
 } from '~/types.shared/anilist';
 import { animeRouter } from './anilist.anime';
@@ -446,13 +445,12 @@ export const anilistRouter = createTRPCRouter({
         ...input,
         startedAt: !!input.startedAt
           ? new FuzzyDate().fromDate(input.startedAt).toFuzzy()
-          : null,
+          : undefined,
         completedAt: !!input.completedAt
           ? new FuzzyDate().fromDate(input.completedAt).toFuzzy()
-          : null,
+          : undefined,
         status:
           convertEnum(ListStatus, MediaListStatus, input.status) ?? undefined,
-        // isAdult: !userNsfw ? false : undefined,
       } as NonNullableFields<Set_Media_EntryMutationVariables>;
       let { data, error } = await client.query<Set_Media_EntryMutation>({
         query: SET_MEDIA_ENTRY,

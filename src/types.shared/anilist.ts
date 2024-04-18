@@ -399,16 +399,19 @@ export const ListStatusValidator = z
   .catch(ListStatus.Current);
 
 export const MediaListEditValidator = z.object({
-  id: z.number().int().nullable().catch(null),
+  id: z.number().int().nullable().optional().catch(undefined),
   mediaId: z.number().int(),
-  status: ListStatusValidator.removeCatch().nullable().catch(null),
-  score: z.number().nullable(),
-  progress: z.number().catch(0),
-  repeat: z.number().catch(0),
-  startedAt: z.date().nullable(),
-  completedAt: z.date().nullable(),
-  notes: z.string().nullable(),
-  private: z.boolean().catch(false),
+  status: ListStatusValidator.removeCatch()
+    .nullable()
+    .optional()
+    .catch(undefined),
+  score: z.number().nullable().optional(),
+  progress: z.number().optional().catch(0),
+  repeat: z.number().optional().catch(0),
+  startedAt: z.date().nullable().optional(),
+  completedAt: z.date().nullable().optional(),
+  notes: z.string().nullable().optional(),
+  private: z.boolean().optional().catch(undefined),
 });
 
 export type MediaListEdit = z.infer<typeof MediaListEditValidator>;
