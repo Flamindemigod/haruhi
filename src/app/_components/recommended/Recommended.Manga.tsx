@@ -1,14 +1,10 @@
 import { api } from '~/trpc/server';
 import { Category } from '~/types.shared/anilist';
-import { SegmentProps, Segment } from '../CardCarosel';
+import RecommendedClient from './Recommended.Client';
 
 export default async () => {
-  const data_recommended_manga = await api.anilist.getRecommendedManga.query();
+  const data_recommended_manga = await api.anilist.manga.getRecommended.query();
   return (
-    <Segment
-      title='Manga You Might Like'
-      data={data_recommended_manga as SegmentProps['data']}
-      type={Category.Manga}
-    />
+    <RecommendedClient type={Category.Manga} data={data_recommended_manga} />
   );
 };

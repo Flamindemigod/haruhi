@@ -285,7 +285,7 @@ const ContentRender = (
               })()}
             </label>
             <RepeatSelector
-              value={state.progress}
+              value={state.repeats}
               defaultValue={props.data.mediaListEntry?.repeat ?? undefined}
               onValueChange={(v) => {
                 dispatch({

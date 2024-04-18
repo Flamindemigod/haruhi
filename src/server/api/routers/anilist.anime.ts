@@ -97,48 +97,33 @@ export const animeRouter = createTRPCRouter({
           MediaFormat,
           input.format
         ) as MediaFormat | null,
-        season:
-          input.seasonal ?
-            convertEnum(Season, MediaSeason, getSeason(new Date(Date.now())))
+        season: input.seasonal
+          ? convertEnum(Season, MediaSeason, getSeason(new Date(Date.now())))
           : fallback,
-        seasonYear:
-          input.seasonal ? new Date(Date.now()).getFullYear() : fallback,
+        seasonYear: input.seasonal
+          ? new Date(Date.now()).getFullYear()
+          : fallback,
       } as Trending_Anime_MangaQueryVariables;
       let { data: animeData } = await client.query<Trending_Anime_MangaQuery>({
         query: TRENDING_ANIME_MANGA,
         variables: vars,
         context: {
-          headers:
-            !!ctx.session ?
-              {
+          headers: !!ctx.session
+            ? {
                 Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
       });
+      let dAnime: Media[] = [];
       if (!!animeData.Page) {
-        let dAnime: Replace<
-          Trending_Anime_MangaQuery,
-          'Page',
-          RenameByT<
-            { media: 'data' },
-            Replace<
-              NonNullable<Trending_Anime_MangaQuery['Page']>,
-              'media',
-              Media[]
-            >
-          >
-        > = {
-          ...animeData,
-          Page: { ...animeData.Page, data: [] },
-        };
-        dAnime.Page.data = await Promise.all(
+        dAnime = await Promise.all(
           animeData.Page.media!.map(async (m) => {
-            return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
+            return (await mediaBuilder(m as AniMedia)) as Media;
           })
         );
-        return dAnime;
       }
+      return dAnime;
     }),
   getRecommended: protectedProcedure.query(async ({ ctx }) => {
     const user = await api.user.getUser.query();
@@ -170,9 +155,8 @@ export const animeRouter = createTRPCRouter({
         query: USER_RECOMMENDED,
         variables: vars,
         context: {
-          headers:
-            !!ctx.session ?
-              {
+          headers: !!ctx.session
+            ? {
                 Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
@@ -209,9 +193,8 @@ export const animeRouter = createTRPCRouter({
         query: USER_LIST,
         variables: vars,
         context: {
-          headers:
-            !!ctx.session ?
-              {
+          headers: !!ctx.session
+            ? {
                 Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
@@ -287,9 +270,8 @@ export const animeRouter = createTRPCRouter({
       query: USER_UP_NEXT,
       variables: vars,
       context: {
-        headers:
-          !!ctx.session ?
-            {
+        headers: !!ctx.session
+          ? {
               Authorization: 'Bearer ' + ctx.session.user.token,
             }
           : {},
@@ -338,9 +320,8 @@ export const animeRouter = createTRPCRouter({
         query: SEASONAL,
         variables: vars,
         context: {
-          headers:
-            !!ctx.session ?
-              {
+          headers: !!ctx.session
+            ? {
                 Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
@@ -358,8 +339,9 @@ export const animeRouter = createTRPCRouter({
       ).filter(Boolean) as Media[];
       return {
         data,
-        nextCursor:
-          !!animeData.Page?.pageInfo?.hasNextPage ? ++input.cursor : undefined,
+        nextCursor: !!animeData.Page?.pageInfo?.hasNextPage
+          ? ++input.cursor
+          : undefined,
       };
     }),
 
@@ -391,9 +373,8 @@ export const animeRouter = createTRPCRouter({
         query: USER_LIST,
         variables: vars,
         context: {
-          headers:
-            !!ctx.session ?
-              {
+          headers: !!ctx.session
+            ? {
                 Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
@@ -411,8 +392,9 @@ export const animeRouter = createTRPCRouter({
       );
       return {
         data,
-        nextCursor:
-          !!animeData.Page?.pageInfo?.hasNextPage ? ++input.cursor : undefined,
+        nextCursor: !!animeData.Page?.pageInfo?.hasNextPage
+          ? ++input.cursor
+          : undefined,
       };
     }),
 });

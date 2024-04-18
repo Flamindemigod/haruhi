@@ -92,37 +92,22 @@ export const mangaRouter = createTRPCRouter({
         query: TRENDING_ANIME_MANGA,
         variables: vars,
         context: {
-          headers:
-            !!ctx.session ?
-              {
+          headers: !!ctx.session
+            ? {
                 Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
         },
       });
+      let dManga: Media[] = [];
       if (!!mangaData.Page) {
-        let dManga: Replace<
-          Trending_Anime_MangaQuery,
-          'Page',
-          RenameByT<
-            { media: 'data' },
-            Replace<
-              NonNullable<Trending_Anime_MangaQuery['Page']>,
-              'media',
-              Media[]
-            >
-          >
-        > = {
-          ...mangaData,
-          Page: { ...mangaData.Page, data: [] },
-        };
-        dManga.Page.data = await Promise.all(
+        dManga = await Promise.all(
           mangaData.Page.media!.map(async (m) => {
-            return (await mediaBuilder(m as AniMedia)) as SearchResultMedia;
+            return (await mediaBuilder(m as AniMedia)) as Media;
           })
         );
-        return dManga;
       }
+      return dManga;
     }),
 
   getRecommended: protectedProcedure.query(async ({ ctx }) => {
@@ -155,9 +140,8 @@ export const mangaRouter = createTRPCRouter({
         query: USER_RECOMMENDED,
         variables: vars,
         context: {
-          headers:
-            !!ctx.session ?
-              {
+          headers: !!ctx.session
+            ? {
                 Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
@@ -194,9 +178,8 @@ export const mangaRouter = createTRPCRouter({
         query: USER_LIST,
         variables: vars,
         context: {
-          headers:
-            !!ctx.session ?
-              {
+          headers: !!ctx.session
+            ? {
                 Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
@@ -250,9 +233,8 @@ export const mangaRouter = createTRPCRouter({
       query: USER_UP_NEXT,
       variables: vars,
       context: {
-        headers:
-          !!ctx.session ?
-            {
+        headers: !!ctx.session
+          ? {
               Authorization: 'Bearer ' + ctx.session.user.token,
             }
           : {},
@@ -299,9 +281,8 @@ export const mangaRouter = createTRPCRouter({
         query: USER_LIST,
         variables: vars,
         context: {
-          headers:
-            !!ctx.session ?
-              {
+          headers: !!ctx.session
+            ? {
                 Authorization: 'Bearer ' + ctx.session.user.token,
               }
             : {},
@@ -319,8 +300,9 @@ export const mangaRouter = createTRPCRouter({
       );
       return {
         data,
-        nextCursor:
-          !!mangaData.Page?.pageInfo?.hasNextPage ? ++input.cursor : undefined,
+        nextCursor: !!mangaData.Page?.pageInfo?.hasNextPage
+          ? ++input.cursor
+          : undefined,
       };
     }),
 });

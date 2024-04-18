@@ -33,10 +33,9 @@ export default async function Home() {
             {/* User Current */}
             <Current />
             {/*User Up Next (Based On User Planning to Watching List) */}
-            {/*
             <Pending />
+            {/*User Recommendations*/}
             <Recommended />
-            */}
           </>
         ) : (
           <Trending />

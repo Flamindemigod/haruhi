@@ -1,22 +1,14 @@
 import { api } from '~/trpc/server';
 import { Category } from '~/types.shared/anilist';
-import { SegmentProps, Segment } from '../CardCarosel';
+import PendingClient from './Pending.Client';
 
 export default async () => {
-  const data_pending_anime = await api.anilist.getPendingAnime.query();
-  const data_pending_manga = await api.anilist.getPendingManga.query();
+  const data_pending_anime = await api.anilist.anime.getPending.query();
+  const data_pending_manga = await api.anilist.manga.getPending.query();
   return (
     <div className='flex w-full flex-col gap-4 py-4'>
-      <Segment
-        title='Pending Picks'
-        data={data_pending_anime as SegmentProps['data']}
-        type={Category.Anime}
-      />
-      <Segment
-        title='Unread Gems'
-        data={data_pending_manga as SegmentProps['data']}
-        type={Category.Manga}
-      />
+      <PendingClient type={Category.Anime} data={data_pending_anime} />
+      <PendingClient type={Category.Manga} data={data_pending_manga} />
     </div>
   );
 };

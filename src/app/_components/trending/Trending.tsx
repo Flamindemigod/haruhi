@@ -2,36 +2,29 @@ import { MediaSort } from '~/__generated__/graphql';
 import { SegmentProps, Segment } from '../CardCarosel';
 import { Category } from '~/types.shared/anilist';
 import { api } from '~/trpc/server';
+import TrendingClient from './Trending.Client';
 
 const Page = async () => {
-  const data_seasonal_trending = await api.anilist.getTrendingAnime.query({
+  const data_seasonal_trending = await api.anilist.anime.getTrending.query({
     seasonal: true,
     sort: MediaSort.TrendingDesc,
   });
-  const data_popularity = await api.anilist.getTrendingAnime.query({
+  const data_popularity = await api.anilist.anime.getTrending.query({
     seasonal: false,
     sort: MediaSort.PopularityDesc,
   });
-  const data_popularity_manga = await api.anilist.getTrendingManga.query({
+  const data_popularity_manga = await api.anilist.manga.getTrending.query({
     sort: MediaSort.PopularityDesc,
   });
 
   return (
     <div className='flex w-full flex-col gap-4 py-4'>
-      <Segment
-        title='Trending Anime This Season'
-        data={data_seasonal_trending?.Page.data as SegmentProps['data']}
-        type={Category.Anime}
-      />
-      <Segment
-        title='Trending Anime of All Time'
-        data={data_popularity?.Page.data as SegmentProps['data']}
-        type={Category.Anime}
-      />
-      <Segment
-        title='Trending Manga of All Time'
-        data={data_popularity_manga?.Page.data as SegmentProps['data']}
+      <TrendingClient type={Category.Anime} data={data_seasonal_trending} />
+      <TrendingClient type={Category.Anime} data={data_popularity} alltime />
+      <TrendingClient
         type={Category.Manga}
+        data={data_popularity_manga}
+        alltime
       />
     </div>
   );
