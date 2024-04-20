@@ -13,8 +13,8 @@
     "start": "next start",
     "generate": "graphql-codegen",
     "get-schema": "gql-gen -c codegen-schema.yml",
-    "format": "prettier --check --experimental-ternaries --ignore-path .gitignore .",
-    "format:fix": "prettier --write --experimental-ternaries --ignore-path .gitignore ."
+    "format": "prettier --check --experimental-ternaries .",
+    "format:fix": "prettier --write --experimental-ternaries ."
   },
   "dependencies": {
     "@apollo/client": "^3.9.11",
