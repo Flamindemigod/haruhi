@@ -19,6 +19,8 @@ import {
   MediaListStatus,
   MediaListSort,
   Media as AniMedia,
+  Get_MediaQueryVariables,
+  Get_MediaQuery,
 } from '~/__generated__/graphql';
 import convertEnum from '~/app/utils/convertEnum';
 import mediaBuilder from '~/app/utils/mediaBuilder';
@@ -32,6 +34,7 @@ import {
   Replace,
 } from '~/app/utils/typescript-utils';
 import {
+  GET_MEDIA,
   SEASONAL,
   TRENDING_ANIME_MANGA,
   USER_LIST,
@@ -396,5 +399,30 @@ export const animeRouter = createTRPCRouter({
           ? ++input.cursor
           : undefined,
       };
+    }),
+  getMedia: publicProcedure
+    .input(
+      z.object({
+        id: z.number().int().positive(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      let vars = {
+        id: input.id,
+      } as NonNullableFields<Get_MediaQueryVariables>;
+      let { data: animeData } = await client.query<Get_MediaQuery>({
+        query: GET_MEDIA,
+        variables: vars,
+        context: {
+          headers: !!ctx.session
+            ? {
+                Authorization: 'Bearer ' + ctx.session.user.token,
+              }
+            : {},
+        },
+      });
+
+      if (!!animeData.Media)
+        return (await mediaBuilder(animeData.Media as AniMedia)) as Media;
     }),
 });

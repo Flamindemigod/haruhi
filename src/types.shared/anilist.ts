@@ -320,7 +320,7 @@ export interface CoverImage extends MediaCoverImage {
   blurHash?: string;
 }
 
-export interface Media
+interface EntryMedia
   extends Omit<
     AniMedia,
     'coverImage' | 'mediaListEntry' | 'type' | 'format' | 'status' | 'season'
@@ -332,6 +332,30 @@ export interface Media
   format: FormatAnime | FormatManga;
   season?: Season;
 }
+export interface Media
+  extends Pick<
+    EntryMedia,
+    | 'coverImage'
+    | 'bannerImage'
+    | 'title'
+    | 'nextAiringEpisode'
+    | 'mediaListEntry'
+    | 'episodes'
+    | 'status'
+    | 'duration'
+    | 'averageScore'
+    | 'format'
+    | 'genres'
+    | 'isAdult'
+    | 'description'
+    | 'id'
+    | 'season'
+    | 'seasonYear'
+    | 'chapters'
+    | 'volumes'
+    | 'type'
+    | 'studios'
+  > {}
 
 export type SearchResultMedia = SelectNonNullableFields<
   Media,

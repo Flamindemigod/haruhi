@@ -431,6 +431,15 @@ export const SEASONAL = gql`
   ${MediaResponseFragment}
 `;
 
+export const GET_MEDIA = gql`
+  query GET_MEDIA($id: Int = 1) {
+    Media(id: $id) {
+      ...MediaResponseFragment
+    }
+  }
+  ${MediaResponseFragment}
+`;
+
 export const DELETE_MEDIA_ENTRY = gql`
   mutation DELETE_MEDIA_ENTRY($id: Int) {
     DeleteMediaListEntry(id: $id) {
