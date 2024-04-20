@@ -48,7 +48,7 @@ export default async function RootLayout({
                     radius='large'
                     scaling='90%'
                   >
-                    <div className='flex flex-col '>
+                    <div className='flex min-h-svh flex-col'>
                       <div>
                         <Header />
                       </div>
