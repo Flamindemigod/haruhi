@@ -1,4 +1,4 @@
-import { ANIME } from "@consumet/extensions";
+import { ANIME, META } from "@consumet/extensions";
 import _, { result } from "lodash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import makeQuery from "../../utils/makeQuery";
@@ -59,33 +59,40 @@ export default async function handler(
         await search(
           Object.values(aniResponse.data.Media.title as titles).filter(Boolean),
           async (e: string) => {
-            return (await gogoProvider.search(e)).results.map(
-              (l) =>
-                ({
-                  title: l.title,
-                  id: l.id,
-                  subOrDub: l.subOrDub,
-                  similarity: similarity(e, l.title as string),
-                }) as Result,
-            );
+            return (await gogoProvider.search(e)).results.map((l) => {
+              return {
+                title: l.title,
+                id: l.id,
+                subOrDub: l.subOrDub,
+                similarity: similarity(e, l.title as string),
+              } as Result;
+            });
           },
         )
       ).filter((a) => (dubbed ? a.subOrDub === "dub" : a.subOrDub === "sub"));
-
-      const episodes = (await gogoProvider.fetchAnimeInfo(results.at(0)!.id))
-        .episodes;
-      const episodesListReleventFields = (episodes ?? []).map((episode) => ({
-        id: episode.id,
-        title: episode.title,
-        number: episode.number,
-      }));
-
+      let episodesListReleventFields;
+      if (results.length === 0) {
+        const anilist = new META.Anilist(gogoProvider);
+        const res = await anilist.fetchAnimeInfo(req.query.id as string);
+        episodesListReleventFields = (res.episodes ?? []).map((episode) => ({
+          id: episode.id,
+          title: episode.title,
+          number: episode.number,
+        }));
+      } else {
+        const episodes = (await gogoProvider.fetchAnimeInfo(results.at(0)!.id))
+          .episodes;
+        episodesListReleventFields = (episodes ?? []).map((episode) => ({
+          id: episode.id,
+          title: episode.title,
+          number: episode.number,
+        }));
+      }
       res.status(200).json(episodesListReleventFields);
     } else {
       res.status(400).json({ error: "id must be specified" });
     }
   } catch (err) {
-    console.log(err);
-    res.status(200).json([]);
+    res.status(400).json({ error: err });
   }
 }
