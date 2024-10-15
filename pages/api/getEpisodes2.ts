@@ -49,6 +49,7 @@ export default async function handler(
         id: req.query.id,
       };
       const gogoProvider = new ANIME.Gogoanime();
+      const anilist = new META.Anilist(gogoProvider);
       const dubbed: boolean = req.query.format === "dub";
       let aniResponse = await makeQuery({
         query,
@@ -76,8 +77,8 @@ export default async function handler(
         episodes =
           (await gogoProvider.fetchAnimeInfo(results.at(0)!.id)).episodes ?? [];
       } else {
-        const anilist = new META.Anilist(gogoProvider);
         const res = await anilist.fetchAnimeInfo(req.query.id as string);
+        console.log(res);
         episodes = res.episodes ?? [];
       }
       console.log(episodes);
