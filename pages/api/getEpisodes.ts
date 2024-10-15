@@ -1,9 +1,9 @@
 import { ANIME, META } from "@consumet/extensions";
-import _, { result } from "lodash";
 import type { NextApiRequest, NextApiResponse } from "next";
 import makeQuery from "../../utils/makeQuery";
 import similarity from "../../utils/similarity";
-type Response = [] | {} | undefined;
+
+type Response = {};
 type Result = {
   id: string;
   title: string;

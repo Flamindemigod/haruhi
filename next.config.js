@@ -13,9 +13,6 @@ const nextConfig = {
     return config;
   },
   reactStrictMode: false,
-  experimental: {
-    appDir: true,
-  },
   images: {
     unoptimized: true,
     domains: ["storage.ko-fi.com", "s4.anilist.co"],
