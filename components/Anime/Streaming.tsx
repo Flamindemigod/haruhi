@@ -468,7 +468,7 @@ const Streaming = (props: Props) => {
     queryKey: ["episodeSubList", props.entry.id],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}`,
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes2?id=${props.entry.id}`,
       );
       return data.json();
     },
@@ -483,7 +483,7 @@ const Streaming = (props: Props) => {
     queryKey: ["episodeDubList", props.entry.id],
     queryFn: async () => {
       const data = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes?id=${props.entry.id}&format=dub`,
+        `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes2?id=${props.entry.id}&format=dub`,
       );
       return data.json();
     },
@@ -572,7 +572,9 @@ const Streaming = (props: Props) => {
       );
       // episodeRefetch();
     }
-    setEpisodeID(episodeList.filter((v)=>v.number === parseInt(`${episode}`)).at(0));
+    setEpisodeID(
+      episodeList.filter((v) => v.number === parseInt(`${episode}`)).at(0),
+    );
   }, [episode, isDubbed, isSuccessEpisodesDub, isSuccessEpisodesSub]);
 
   const updateEpisode = async (
