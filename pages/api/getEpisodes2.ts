@@ -71,28 +71,28 @@ export default async function handler(
         )
       ).filter((a) => (dubbed ? a.subOrDub === "dub" : a.subOrDub === "sub"));
       let episodesListReleventFields;
-      if (results.length === 0) {
+      let episodes;
+      if (results.at(0) !== undefined) {
+        episodes =
+          (await gogoProvider.fetchAnimeInfo(results.at(0)!.id)).episodes ?? [];
+      } else {
         const anilist = new META.Anilist(gogoProvider);
         const res = await anilist.fetchAnimeInfo(req.query.id as string);
-        episodesListReleventFields = (res.episodes ?? []).map((episode) => ({
-          id: episode.id,
-          title: episode.title,
-          number: episode.number,
-        }));
-      } else {
-        const episodes = (await gogoProvider.fetchAnimeInfo(results.at(0)!.id))
-          .episodes;
-        episodesListReleventFields = (episodes ?? []).map((episode) => ({
-          id: episode.id,
-          title: episode.title,
-          number: episode.number,
-        }));
+        episodes = res.episodes ?? [];
       }
-      res.status(200).json(episodesListReleventFields);
+      console.log(episodes);
+      episodesListReleventFields = episodes.map((episode) => ({
+        id: episode.id,
+        title: episode.title,
+        number: episode.number,
+      }));
+      if (episodes.length > 0) res.status(200).json(episodesListReleventFields);
+      res.status(400).json({ error: "no episodes found" });
     } else {
       res.status(400).json({ error: "id must be specified" });
     }
   } catch (err) {
-    res.status(400).json({ error: err });
+    console.log(err);
+    res.status(400).json({ error: JSON.stringify(err) });
   }
 }
