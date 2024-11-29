@@ -16,7 +16,7 @@ const Activity = async () => {
             ? `access_token=${nextCookies.get("access_token")?.value}`
             : "",
         },
-      }
+      },
     ).then((res) => res.json());
     return data;
   };
@@ -49,44 +49,47 @@ const Activity = async () => {
         <div>
           <h1 className="text-xl dark:text-offWhite-100">Activity</h1>
           <div className="flex flex-col gap-2 p-2 w-full h-full overflow-auto dark:text-offWhite-100">
-            {activityFeed.map((data: any) => (
-              <div
-                key={data.media.id}
-                className="flex items-center justify-start gap-4 p-4 odd:bg-offWhite-200 dark:odd:bg-offWhite-700 bg-opacity-70 isolate"
-              >
-                <Image
-                  width={80}
-                  height={128}
-                  src={data.media.coverImage.medium}
-                  className={"object-cover flex-shrink-0"}
-                  alt={data.media.title.userPreferred}
-                />
-                <div className="flex flex-col justify-center gap-4">
-                  <div className="text-md">
-                    {`${data.user.name} ${data.status} ${
-                      data.progress ? data.progress : ""
-                    } ${data.progress ? "of" : ""}`}{" "}
-                    <Link
-                      href={`/${String(data.media.type).toLowerCase()}/${
-                        data.media.id
-                      }`}
-                    >
-                      <span className="text-primary-500 hover:text-primary-300">
-                        {data.media.title.userPreferred}
-                      </span>
-                    </Link>
-                  </div>
+            {activityFeed.map((data: any) => {
+              if (!data.media) return null;
+              return (
+                <div
+                  key={data.media.id}
+                  className="flex items-center justify-start gap-4 p-4 odd:bg-offWhite-200 dark:odd:bg-offWhite-700 bg-opacity-70 isolate"
+                >
                   <Image
-                    className="rounded-full"
-                    alt={`Avatar of user ${data.user.name}`}
-                    height={32}
-                    width={32}
-                    src={data.user.avatar.medium}
+                    width={80}
+                    height={128}
+                    src={data.media.coverImage.medium ?? ""}
+                    className={"object-cover flex-shrink-0"}
+                    alt={data.media.title.userPreferred}
                   />
-                  <div className="text-sm">{timeSince(data.createdAt)}</div>
+                  <div className="flex flex-col justify-center gap-4">
+                    <div className="text-md">
+                      {`${data.user.name} ${data.status} ${
+                        data.progress ? data.progress : ""
+                      } ${data.progress ? "of" : ""}`}{" "}
+                      <Link
+                        href={`/${String(data.media.type).toLowerCase()}/${
+                          data.media.id
+                        }`}
+                      >
+                        <span className="text-primary-500 hover:text-primary-300">
+                          {data.media.title.userPreferred}
+                        </span>
+                      </Link>
+                    </div>
+                    <Image
+                      className="rounded-full"
+                      alt={`Avatar of user ${data.user.name}`}
+                      height={32}
+                      width={32}
+                      src={data.user.avatar.medium}
+                    />
+                    <div className="text-sm">{timeSince(data.createdAt)}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       }
