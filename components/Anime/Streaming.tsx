@@ -64,8 +64,8 @@ const Streaming = (props: Props) => {
   const [episodeID, setEpisodeID] = useState<{
     id: string;
     number: number;
-    title: string;
-  }>({ id: "", number: 0, title: "" });
+    epId: string;
+  }>({ id: "", number: 0, epId: "" });
   const [playerState, setPlayerState] = useState<playerProps>({
     ready: false,
     url: "",
@@ -508,14 +508,7 @@ const Streaming = (props: Props) => {
         process.env.NEXT_PUBLIC_SERVER,
       );
       queryURL.searchParams.append("id", encodeURIComponent(episodeID.id));
-      queryURL.searchParams.append(
-        "episodeNumber",
-        encodeURIComponent(episodeID.number),
-      );
-      queryURL.searchParams.append(
-        "animeId",
-        encodeURIComponent(props.entry.id),
-      );
+      queryURL.searchParams.append("epId", encodeURIComponent(episodeID.epId));
       const data = await fetch(queryURL);
       return data.json();
     },

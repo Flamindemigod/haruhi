@@ -48,42 +48,35 @@ export default async function handler(
       const variables = {
         id: req.query.id,
       };
-      const gogoProvider = new ANIME.Gogoanime();
-      const anilist = new META.Anilist(gogoProvider);
-      const dubbed: boolean = req.query.format === "dub";
+      const provider = new ANIME.Anix();
       let aniResponse = await makeQuery({
         query,
         variables,
         token: req.cookies.access_token,
       });
-      const results = (
-        await search(
-          Object.values(aniResponse.data.Media.title as titles).filter(Boolean),
-          async (e: string) => {
-            return (await gogoProvider.search(e)).results.map((l) => {
-              return {
-                title: l.title,
-                id: l.id,
-                subOrDub: l.subOrDub,
-                similarity: similarity(e, l.title as string),
-              } as Result;
-            });
-          },
-        )
-      ).filter((a) => (dubbed ? a.subOrDub === "dub" : a.subOrDub === "sub"));
+      const results = await search(
+        Object.values(aniResponse.data.Media.title as titles).filter(Boolean),
+        async (e: string) => {
+          return (await provider.search(e)).results.map((l) => {
+            return {
+              title: l.title,
+              id: l.id,
+              similarity: similarity(e, l.title as string),
+            } as Result;
+          });
+        },
+      );
       let episodesListReleventFields;
-      let episodes;
+      let episodes: any[];
       if (results.at(0) !== undefined) {
         episodes =
-          (await gogoProvider.fetchAnimeInfo(results.at(0)!.id)).episodes ?? [];
+          (await provider.fetchAnimeInfo(results.at(0)!.id)).episodes ?? [];
       } else {
-        const res = await anilist.fetchAnimeInfo(req.query.id as string);
-        console.log(res);
-        episodes = res.episodes ?? [];
+        episodes = [];
       }
-      console.log(episodes);
       episodesListReleventFields = episodes.map((episode) => ({
-        id: episode.id,
+        id: results.at(0)?.id,
+        epId: episode.id,
         title: episode.title,
         number: episode.number,
       }));
