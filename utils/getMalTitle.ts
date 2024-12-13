@@ -5,8 +5,5 @@ export default async (
   const data = await fetch(`https://api.jikan.moe/v4/${type}/${MalID}`).then(
     (data) => data.json()
   );
-  if (data.type === "Light Novel") {
-    return data.data.title;
-  }
   return data.data.title;
 };

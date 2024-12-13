@@ -2,6 +2,7 @@ import { ANIME, META } from "@consumet/extensions";
 import type { NextApiRequest, NextApiResponse } from "next";
 import makeQuery from "../../utils/makeQuery";
 import similarity from "../../utils/similarity";
+import getMalTitle from "../../utils/getMalTitle.ts"
 
 type Response = {};
 type Result = {
@@ -42,6 +43,7 @@ export default async function handler(
             romaji
             native
           }
+          idMal
         }
       }          
     `;
@@ -54,7 +56,7 @@ export default async function handler(
         variables,
         token: req.cookies.access_token,
       });
-      const results = await search(
+      let results = await search(
         Object.values(aniResponse.data.Media.title as titles).filter(Boolean),
         async (e: string) => {
           return (await provider.search(e)).results.map((l) => {
@@ -66,6 +68,19 @@ export default async function handler(
           });
         },
       );
+      if (!results.length){
+        const malTitle = await getMalTitle("anime", aniResponse.data.Media.idMal)
+        results = [
+          ...(await provider.search(malTitle)).results.map((l) => {
+            console.log(l)
+            return {
+              title: l.title,
+              id: l.id,
+              similarity: similarity(malTitle, l.title as string),
+            } as Result;
+          })
+        ]
+      }
       let episodesListReleventFields;
       let episodes: any[];
       if (results.at(0) !== undefined) {
