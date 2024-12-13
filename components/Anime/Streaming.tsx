@@ -470,7 +470,12 @@ const Streaming = (props: Props) => {
       const data = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes2?id=${props.entry.id}`,
       );
-      return data.json();
+      const dataJ = await data.json();
+      if (dataJ.error) {
+        console.log(`Hit a error: ${JSON.stringify(dataJ)}`)
+        return []
+      }
+      return dataJ;
     },
   });
 
@@ -485,7 +490,12 @@ const Streaming = (props: Props) => {
       const data = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/getEpisodes2?id=${props.entry.id}&format=dub`,
       );
-      return data.json();
+      const dataJ = await data.json();
+      if (dataJ.error) {
+        console.log(`Hit a error: ${JSON.stringify(dataJ)}`)
+        return []
+      }
+      return dataJ;
     },
   });
 
