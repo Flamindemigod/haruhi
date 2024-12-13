@@ -2,7 +2,7 @@ import { ANIME, META } from "@consumet/extensions";
 import type { NextApiRequest, NextApiResponse } from "next";
 import makeQuery from "../../utils/makeQuery";
 import similarity from "../../utils/similarity";
-import getMalTitle from "../../utils/getMalTitle.ts"
+import getMalTitle from "../../utils/getMalTitle"
 
 type Response = {};
 type Result = {
