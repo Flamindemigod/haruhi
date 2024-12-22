@@ -1,7 +1,7 @@
 "use client";
 
-import { RefObject, useContext, useMemo, useRef, useState } from "react";
-import ReactPlayer from "react-player/lazy";
+import { RefObject, useContext, useMemo, useRef, useState, useEffect } from "react";
+import Hls from "hls.js";
 import _, { toNumber } from "lodash";
 import { useMediaQuery } from "react-responsive";
 import cx from "classnames";
@@ -34,7 +34,7 @@ type Props = {
   playerState: PlayerState;
   setPlayerState: any;
   hasNextEpisode: boolean;
-  videoPlayer: RefObject<ReactPlayer>;
+  videoPlayer: RefObject<HTMLVideoElement>;
   startTime: number;
   endTime: number;
   onNextEpisode: () => void;
@@ -76,6 +76,68 @@ const VideoPlayer = (props: Props) => {
   const sliderRef = useRef<any>();
   const playerContainer = useRef<any>();
 
+
+  const updateProgress = (p: any) => {
+    const playedSeconds = (p.target as any).currentTime as number;
+    if (props.playerState.ready && props.playerState.playing) {
+      props.onProgress(playedSeconds);
+    }
+    props.setPlayerState((state: any) => ({ ...state, playedSeconds: playedSeconds, played: playedSeconds / state.duration }));
+  }
+  useEffect(() => {
+    const hls = new Hls({
+      //"debug": true
+    });
+
+    if (Hls.isSupported() && !!props.videoPlayer.current) {
+      //hls.log = true;
+      hls.loadSource(props.playerState.url);
+      hls.attachMedia(props.videoPlayer.current)
+      hls.on(Hls.Events.ERROR, (err) => {
+        console.error(err)
+      });
+
+    } else {
+    }
+  }, [props.playerState.url])
+  //FOOTGUN
+  //useEffect(()=>{}, []);
+
+  useEffect(() => {
+    if (!props.videoPlayer.current) return
+    if (props.playerState.playing) {
+      props.onPlay();
+      props.videoPlayer.current.play();
+    }
+    else {
+      props.onPause();
+      props.videoPlayer.current.pause();
+    }
+  }, [props.playerState.playing, props.playerState.ready]);
+
+  useEffect(() => {
+    if (!props.videoPlayer.current) return
+    props.videoPlayer.current.volume = props.playerState.volume;
+  }, [props.playerState.volume]);
+
+  useEffect(() => {
+    if (!props.videoPlayer.current) return
+    props.videoPlayer.current.playbackRate = props.playerState.playbackRate;
+  }, [props.playerState.playbackRate]);
+
+
+
+
+  const seekTo = (n: number, type: "seconds" | "fraction") => {
+    if (!props.videoPlayer.current) return
+    switch (type) {
+      case "seconds":
+        props.videoPlayer.current.fastSeek(n);
+        break;
+      case "fraction":
+        props.videoPlayer.current.fastSeek(n * props.videoPlayer.current.duration)
+    }
+  }
   const setTooltip = (e: any) => {
     const rect = sliderRef.current.getBoundingClientRect();
     const absoluteX = e.clientX - rect.left;
@@ -128,35 +190,18 @@ const VideoPlayer = (props: Props) => {
       onMouseMove={throttledPlayerControlHandler}
       onTouchStart={throttledPlayerControlHandler}
     >
-      <ReactPlayer
+      <video
         width="100%"
         height="100%"
-        url={props.playerState.url}
+        className="absolute inset-0 m-auto"
+        src={props.playerState.url}
         ref={props.videoPlayer}
-        playing={props.playerState.playing}
-        volume={props.playerState.volume}
-        pip={props.playerState.pip}
-        playbackRate={props.playerState.playbackRate}
-        onReady={(e) => {
-          props.onReady();
+        onProgress={updateProgress}
+        onCanPlayThrough={() => {
           props.setPlayerState((state: any) => ({ ...state, ready: true }));
         }}
-        onPlay={() => {
-          props.onPlay();
-          props.setPlayerState((state: any) => ({ ...state, playing: true }));
-        }}
-        onPause={() => {
-          props.onPause();
-          props.setPlayerState((state: any) => ({ ...state, playing: false }));
-        }}
-        onProgress={(newState) => {
-          if (props.playerState.ready && props.playerState.playing) {
-            props.onProgress(newState.playedSeconds);
-          }
-          props.setPlayerState((state: any) => ({ ...state, ...newState }));
-        }}
-        onDuration={(duration) => {
-          props.setPlayerState((state: any) => ({ ...state, duration }));
+        onDurationChange={(d) => {
+          props.setPlayerState((state: any) => ({ ...state, duration: (d.target as HTMLVideoElement).duration }));
         }}
       />
       <div
@@ -172,11 +217,11 @@ const VideoPlayer = (props: Props) => {
             className="w-full h-full"
             onDoubleClick={() => {
               props.onSeek(
-                props.videoPlayer.current?.getCurrentTime()! - 10,
+                props.videoPlayer.current?.currentTime - 10,
                 "seconds"
               );
-              props.videoPlayer.current?.seekTo(
-                props.videoPlayer.current.getCurrentTime() - 10,
+              seekTo(
+                props.videoPlayer.current?.currentTime - 10,
                 "seconds"
               );
             }}
@@ -185,11 +230,11 @@ const VideoPlayer = (props: Props) => {
             className="w-full h-full"
             onDoubleClick={() => {
               props.onSeek(
-                props.videoPlayer.current?.getCurrentTime()! + 10,
+                props.videoPlayer.current?.currentTime + 10,
                 "seconds"
               );
-              props.videoPlayer.current?.seekTo(
-                props.videoPlayer.current.getCurrentTime() + 10,
+              seekTo(
+                props.videoPlayer.current?.currentTime + 10,
                 "seconds"
               );
             }}
@@ -261,13 +306,13 @@ const VideoPlayer = (props: Props) => {
               <button
                 onClick={() => {
                   props.onSeek(
-                    props.videoPlayer.current?.getCurrentTime()! +
-                      user.userPreferenceSkipOpening!,
+                    props.videoPlayer.current?.currentTime +
+                    user.userPreferenceSkipOpening!,
                     "seconds"
                   );
-                  props.videoPlayer.current?.seekTo(
-                    props.videoPlayer.current?.getCurrentTime()! +
-                      user.userPreferenceSkipOpening!,
+                  seekTo(
+                    props.videoPlayer.current?.currentTime +
+                    user.userPreferenceSkipOpening!,
                     "seconds"
                   );
                 }}
@@ -297,7 +342,7 @@ const VideoPlayer = (props: Props) => {
               <button
                 onClick={() => {
                   props.onSeek(props.endTime, "seconds");
-                  props.videoPlayer.current?.seekTo(props.endTime, "seconds");
+                  seekTo(props.endTime, "seconds");
                 }}
                 className="flex gap-1 items-center bg-offWhite-800 hover:bg-primary-500 bg-opacity-30 hover:bg-opacity-30 p-2 text-lg rounded-md font-medium"
                 style={{
@@ -350,7 +395,7 @@ const VideoPlayer = (props: Props) => {
               step={0.0001}
               onValueChange={(value) => {
                 props.onSeek(value[0], "fraction");
-                props.videoPlayer.current?.seekTo(value[0], "fraction");
+                seekTo(value[0], "fraction");
               }}
               className="absolute inset-0 flex items-center"
             >
@@ -548,7 +593,7 @@ const VideoPlayer = (props: Props) => {
             ) : (
               <></>
             )}
-            {props.playerState.ready && props.videoPlayer.current ? (
+            {false && props.playerState.ready && props.videoPlayer.current ? (
               <Select
                 buttonNoColor
                 triggerAriaLabel="Resolution"

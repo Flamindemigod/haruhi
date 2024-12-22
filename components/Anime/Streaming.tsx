@@ -23,7 +23,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import cx from "classnames";
 import { MdClose, MdShare, MdSkipNext, MdSkipPrevious } from "react-icons/md";
-import ReactPlayer from "react-player";
 import useMediaSync from "../../utils/useMediaSync";
 import { useMachine } from "@xstate/react";
 import { createMachine, assign } from "xstate";
@@ -525,9 +524,9 @@ const Streaming = (props: Props) => {
     onSuccess(data) {
       setPlayerState((state) => ({
         ...state,
-        url: `${
-          process.env.NEXT_PUBLIC_MEDIA_PROXY
-        }/m3u8-proxy?url=${encodeURIComponent(data.source?.[0]?.url)}`,
+        url: `${process.env.NEXT_PUBLIC_MEDIA_PROXY
+          }/m3u8-proxy?url=${encodeURIComponent(data.source?.[0]?.url)}&headers=${encodeURIComponent(JSON.stringify(data.header))}
+          `,
       }));
     },
   });
@@ -802,7 +801,7 @@ const Streaming = (props: Props) => {
                   triggerAriaLabel="Episode Selector"
                   prefix="Episode "
                   value={String(episode)}
-                  onValueChange={(value: number) => {
+                  onValueChange={(value: any) => {
                     setPlayerState((state) => ({ ...state, ready: false }));
 
                     dispatchSyncChannelRef({
@@ -810,7 +809,7 @@ const Streaming = (props: Props) => {
                       episode: value,
                       animeID: props.entry.id,
                     });
-                    setEpisode(value);
+                    setEpisode(parseInt(value));
                   }}
                   values={
                     isSuccessEpisodesDub || isSuccessEpisodesSub

@@ -12,11 +12,12 @@ export default async function handler(
       const data = await provider.fetchEpisodeSources(
         String(req.query.id),
         String(req.query.epId),
+        "sub",
       );
       console.log(data);
       return res.status(200).json({
         source: data.sources.filter((el: any) => el.quality === "default"),
-        header: data.headers?.Referer,
+        header: data.headers,
       });
     } else {
       res.status(400).json({ error: "id must be specified" });
