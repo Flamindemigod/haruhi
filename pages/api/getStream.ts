@@ -13,6 +13,7 @@ export default async function handler(
         String(req.query.id),
         String(req.query.epId),
         undefined,
+        "sub"
       );
       return res.status(200).json({
         source: data.sources.filter((el: any) => el.quality === "default"),
