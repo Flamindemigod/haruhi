@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ANIME, META } from "@consumet/extensions";
+import { ANIME } from "@consumet/extensions";
 type Response = {};
 
 export default async function handler(
@@ -12,9 +12,9 @@ export default async function handler(
       const data = await provider.fetchEpisodeSources(
         String(req.query.id),
         String(req.query.epId),
-        undefined, "sub",
+        undefined,
+        "sub"
       );
-      console.log(data);
       return res.status(200).json({
         source: data.sources.filter((el: any) => el.quality === "default"),
         header: data.headers,
