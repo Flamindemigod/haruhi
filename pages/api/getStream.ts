@@ -12,7 +12,7 @@ export default async function handler(
       const data = await provider.fetchEpisodeSources(
         String(req.query.id),
         String(req.query.epId),
-        "sub",
+        undefined, "sub",
       );
       console.log(data);
       return res.status(200).json({

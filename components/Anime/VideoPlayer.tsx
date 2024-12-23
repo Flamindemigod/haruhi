@@ -218,12 +218,12 @@ const VideoPlayer = (props: Props) => {
             className="w-full h-full"
             onDoubleClick={() => {
               props.onSeek(
-                props.videoPlayer.current?.currentTime - 10,
+                (props.videoPlayer.current?.currentTime ?? 10) - 10,
                 "seconds"
               );
               seekTo(
 
-                props.videoPlayer.current, props.videoPlayer.current?.currentTime - 10,
+                props.videoPlayer.current, (props.videoPlayer.current?.currentTime ?? 10) - 10,
                 "seconds"
               );
             }}
@@ -232,12 +232,12 @@ const VideoPlayer = (props: Props) => {
             className="w-full h-full"
             onDoubleClick={() => {
               props.onSeek(
-                props.videoPlayer.current?.currentTime + 10,
+                (props.videoPlayer.current?.currentTime ?? 0) + 10,
                 "seconds"
               );
               seekTo(
 
-                props.videoPlayer.current, props.videoPlayer.current?.currentTime + 10,
+                props.videoPlayer.current, (props.videoPlayer.current?.currentTime ?? 0) + 10,
                 "seconds"
               );
             }}
@@ -309,13 +309,13 @@ const VideoPlayer = (props: Props) => {
               <button
                 onClick={() => {
                   props.onSeek(
-                    props.videoPlayer.current?.currentTime +
+                    (props.videoPlayer.current?.currentTime ?? 0) +
                     user.userPreferenceSkipOpening!,
                     "seconds"
                   );
                   seekTo(
                     props.videoPlayer.current,
-                    props.videoPlayer.current?.currentTime +
+                    (props.videoPlayer.current?.currentTime ?? 0) +
                     user.userPreferenceSkipOpening!,
                     "seconds"
                   );
@@ -597,7 +597,7 @@ const VideoPlayer = (props: Props) => {
             ) : (
               <></>
             )}
-            {false && props.playerState.ready && props.videoPlayer.current ? (
+            {/*false && props.playerState.ready && props.videoPlayer.current ? (
               <Select
                 buttonNoColor
                 triggerAriaLabel="Resolution"
@@ -637,7 +637,7 @@ const VideoPlayer = (props: Props) => {
               />
             ) : (
               <></>
-            )}
+            )*/}
 
             {document.pictureInPictureEnabled && (
               <button
