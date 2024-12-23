@@ -62,6 +62,17 @@ function pad(string: number) {
   return ("0" + string).slice(-2);
 }
 
+export const seekTo = (player: any, n: number, type: "seconds" | "fraction") => {
+  if (!player) return
+  switch (type) {
+    case "seconds":
+      player.fastSeek(n);
+      break;
+    case "fraction":
+      player.fastSeek(n * player.duration)
+  }
+}
+
 const VideoPlayer = (props: Props) => {
   let timeoutID: any;
   const user = useContext(userContext);
@@ -128,16 +139,6 @@ const VideoPlayer = (props: Props) => {
 
 
 
-  const seekTo = (n: number, type: "seconds" | "fraction") => {
-    if (!props.videoPlayer.current) return
-    switch (type) {
-      case "seconds":
-        props.videoPlayer.current.fastSeek(n);
-        break;
-      case "fraction":
-        props.videoPlayer.current.fastSeek(n * props.videoPlayer.current.duration)
-    }
-  }
   const setTooltip = (e: any) => {
     const rect = sliderRef.current.getBoundingClientRect();
     const absoluteX = e.clientX - rect.left;
@@ -221,7 +222,8 @@ const VideoPlayer = (props: Props) => {
                 "seconds"
               );
               seekTo(
-                props.videoPlayer.current?.currentTime - 10,
+
+                props.videoPlayer.current, props.videoPlayer.current?.currentTime - 10,
                 "seconds"
               );
             }}
@@ -234,7 +236,8 @@ const VideoPlayer = (props: Props) => {
                 "seconds"
               );
               seekTo(
-                props.videoPlayer.current?.currentTime + 10,
+
+                props.videoPlayer.current, props.videoPlayer.current?.currentTime + 10,
                 "seconds"
               );
             }}
@@ -311,6 +314,7 @@ const VideoPlayer = (props: Props) => {
                     "seconds"
                   );
                   seekTo(
+                    props.videoPlayer.current,
                     props.videoPlayer.current?.currentTime +
                     user.userPreferenceSkipOpening!,
                     "seconds"
@@ -342,7 +346,7 @@ const VideoPlayer = (props: Props) => {
               <button
                 onClick={() => {
                   props.onSeek(props.endTime, "seconds");
-                  seekTo(props.endTime, "seconds");
+                  seekTo(props.videoPlayer.current, props.endTime, "seconds");
                 }}
                 className="flex gap-1 items-center bg-offWhite-800 hover:bg-primary-500 bg-opacity-30 hover:bg-opacity-30 p-2 text-lg rounded-md font-medium"
                 style={{
@@ -395,7 +399,7 @@ const VideoPlayer = (props: Props) => {
               step={0.0001}
               onValueChange={(value) => {
                 props.onSeek(value[0], "fraction");
-                seekTo(value[0], "fraction");
+                seekTo(props.videoPlayer.current, value[0], "fraction");
               }}
               className="absolute inset-0 flex items-center"
             >

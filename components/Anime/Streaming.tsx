@@ -10,7 +10,7 @@ import {
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { iUser, userContext } from "../../app/UserContext";
-import VideoPlayer from "./VideoPlayer";
+import VideoPlayer, { seekTo as playerSeekTo } from "./VideoPlayer";
 import VideoPlayerSkeleton from "./VideoPlayerSkeleton";
 import _ from "lodash";
 import { median } from "../../utils/median";
@@ -18,7 +18,6 @@ import Switch from "../../primitives/Switch";
 import Select from "../../primitives/Select";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { supabase } from "../../utils/supabaseClient";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import cx from "classnames";
@@ -82,7 +81,7 @@ const Streaming = (props: Props) => {
     playbackRate: 1.0,
     loop: false,
   });
-  const videoPlayer = useRef<ReactPlayer>(null);
+  const videoPlayer = useRef<HTMLVideoElement>(null);
   const syncChannelRef = useRef<any>(null);
 
   const episodeUpdaterMachine = useMemo(
@@ -395,7 +394,7 @@ const Streaming = (props: Props) => {
   const throttleedSeek = useCallback(
     _.debounce(
       (videoPlayer, seekTo, seekType) => {
-        videoPlayer.current.seekTo(seekTo, seekType);
+        playerSeekTo(videoPlayer.current, seekTo, seekType);
       },
       5000,
       { leading: true, trailing: false },
@@ -435,7 +434,7 @@ const Streaming = (props: Props) => {
     setSyncPlayedSeconds(payload.played);
   };
   const syncSeekTo = (payload: any) => {
-    videoPlayer.current?.seekTo(payload.seekTo, payload.seekType);
+    playerSeekTo(videoPlayer.current, payload.seekTo, payload.seekType);
   };
   const syncEpisodes = (payload: any) => {
     setEpisode(parseInt(payload.episode));
