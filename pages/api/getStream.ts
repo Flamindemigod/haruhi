@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ANIME, StreamingServers } from "@consumet/extensions";
 type Response = {};
-
+export const dynamic = 'force-dynamic';
 const SERVERS: StreamingServers[] = [
   StreamingServers.BuiltIn,
   StreamingServers.VidStreaming,
