@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ANIME, StreamingServers } from "@consumet/extensions";
-import { URLSearchParams } from "url";
 type Response = {};
 export const dynamic = 'force-dynamic';
 
@@ -9,7 +8,6 @@ export default async function handler(
   res: NextApiResponse<Response>,
 ) {
   try {
-    console.log(decodeURIComponent(String(req.query.epId)))
     if (req.query.epId) {
       const provider = new ANIME.Zoro();
       const data = await provider.fetchEpisodeSources(decodeURIComponent(String(req.query.epId)))

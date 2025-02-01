@@ -1,7 +1,7 @@
 "use client";
 
-import { RefObject, useContext, useMemo, useRef, useState, useEffect } from "react";
-import Hls from "hls.js";
+import { RefObject, useContext, useMemo, useRef, useState } from "react";
+import ReactPlayer from "react-player/lazy";
 import _, { toNumber } from "lodash";
 import { useMediaQuery } from "react-responsive";
 import cx from "classnames";
@@ -35,7 +35,7 @@ type Props = {
   playerState: PlayerState;
   setPlayerState: any;
   hasNextEpisode: boolean;
-  videoPlayer: RefObject<HTMLVideoElement>;
+  videoPlayer: RefObject<ReactPlayer>;
   startTime: number;
   endTime: number;
   onNextEpisode: () => void;
@@ -88,6 +88,7 @@ const VideoPlayer = (props: Props) => {
   const sliderRef = useRef<any>();
   const playerContainer = useRef<any>();
 
+<<<<<<< HEAD
 
   const updateProgress = (p: any) => {
     const playedSeconds = (p.target as any).currentTime as number;
@@ -140,6 +141,8 @@ const VideoPlayer = (props: Props) => {
 
 
 
+=======
+>>>>>>> parent of 543ce1c (Removed React player. for some reason it was not playing nice with the streams)
   const setTooltip = (e: any) => {
     const rect = sliderRef.current.getBoundingClientRect();
     const absoluteX = e.clientX - rect.left;
@@ -192,18 +195,35 @@ const VideoPlayer = (props: Props) => {
       onMouseMove={throttledPlayerControlHandler}
       onTouchStart={throttledPlayerControlHandler}
     >
-      <video
+      <ReactPlayer
         width="100%"
         height="100%"
-        className="absolute inset-0 m-auto"
-        src={props.playerState.url}
+        url={props.playerState.url}
         ref={props.videoPlayer}
-        onProgress={updateProgress}
-        onCanPlayThrough={() => {
+        playing={props.playerState.playing}
+        volume={props.playerState.volume}
+        pip={props.playerState.pip}
+        playbackRate={props.playerState.playbackRate}
+        onReady={(e) => {
+          props.onReady();
           props.setPlayerState((state: any) => ({ ...state, ready: true }));
         }}
-        onDurationChange={(d) => {
-          props.setPlayerState((state: any) => ({ ...state, duration: (d.target as HTMLVideoElement).duration }));
+        onPlay={() => {
+          props.onPlay();
+          props.setPlayerState((state: any) => ({ ...state, playing: true }));
+        }}
+        onPause={() => {
+          props.onPause();
+          props.setPlayerState((state: any) => ({ ...state, playing: false }));
+        }}
+        onProgress={(newState) => {
+          if (props.playerState.ready && props.playerState.playing) {
+            props.onProgress(newState.playedSeconds);
+          }
+          props.setPlayerState((state: any) => ({ ...state, ...newState }));
+        }}
+        onDuration={(duration) => {
+          props.setPlayerState((state: any) => ({ ...state, duration }));
         }}
       />
       <div
@@ -219,12 +239,20 @@ const VideoPlayer = (props: Props) => {
             className="w-full h-full"
             onDoubleClick={() => {
               props.onSeek(
+<<<<<<< HEAD
                 (props.videoPlayer.current?.currentTime ?? 10) - 10,
                 "seconds"
               );
               seekTo(
 
                 props.videoPlayer.current, (props.videoPlayer.current?.currentTime ?? 10) - 10,
+=======
+                props.videoPlayer.current?.getCurrentTime()! - 10,
+                "seconds"
+              );
+              props.videoPlayer.current?.seekTo(
+                props.videoPlayer.current.getCurrentTime() - 10,
+>>>>>>> parent of 543ce1c (Removed React player. for some reason it was not playing nice with the streams)
                 "seconds"
               );
             }}
@@ -233,12 +261,20 @@ const VideoPlayer = (props: Props) => {
             className="w-full h-full"
             onDoubleClick={() => {
               props.onSeek(
+<<<<<<< HEAD
                 (props.videoPlayer.current?.currentTime ?? 0) + 10,
                 "seconds"
               );
               seekTo(
 
                 props.videoPlayer.current, (props.videoPlayer.current?.currentTime ?? 0) + 10,
+=======
+                props.videoPlayer.current?.getCurrentTime()! + 10,
+                "seconds"
+              );
+              props.videoPlayer.current?.seekTo(
+                props.videoPlayer.current.getCurrentTime() + 10,
+>>>>>>> parent of 543ce1c (Removed React player. for some reason it was not playing nice with the streams)
                 "seconds"
               );
             }}
@@ -310,6 +346,7 @@ const VideoPlayer = (props: Props) => {
               <button
                 onClick={() => {
                   props.onSeek(
+<<<<<<< HEAD
                     (props.videoPlayer.current?.currentTime ?? 0) +
                     user.userPreferenceSkipOpening!,
                     "seconds"
@@ -318,6 +355,15 @@ const VideoPlayer = (props: Props) => {
                     props.videoPlayer.current,
                     (props.videoPlayer.current?.currentTime ?? 0) +
                     user.userPreferenceSkipOpening!,
+=======
+                    props.videoPlayer.current?.getCurrentTime()! +
+                      user.userPreferenceSkipOpening!,
+                    "seconds"
+                  );
+                  props.videoPlayer.current?.seekTo(
+                    props.videoPlayer.current?.getCurrentTime()! +
+                      user.userPreferenceSkipOpening!,
+>>>>>>> parent of 543ce1c (Removed React player. for some reason it was not playing nice with the streams)
                     "seconds"
                   );
                 }}
@@ -347,7 +393,11 @@ const VideoPlayer = (props: Props) => {
               <button
                 onClick={() => {
                   props.onSeek(props.endTime, "seconds");
+<<<<<<< HEAD
                   seekTo(props.videoPlayer.current, props.endTime, "seconds");
+=======
+                  props.videoPlayer.current?.seekTo(props.endTime, "seconds");
+>>>>>>> parent of 543ce1c (Removed React player. for some reason it was not playing nice with the streams)
                 }}
                 className="flex gap-1 items-center bg-offWhite-800 hover:bg-primary-500 bg-opacity-30 hover:bg-opacity-30 p-2 text-lg rounded-md font-medium"
                 style={{
@@ -400,7 +450,11 @@ const VideoPlayer = (props: Props) => {
               step={0.0001}
               onValueChange={(value) => {
                 props.onSeek(value[0], "fraction");
+<<<<<<< HEAD
                 seekTo(props.videoPlayer.current, value[0], "fraction");
+=======
+                props.videoPlayer.current?.seekTo(value[0], "fraction");
+>>>>>>> parent of 543ce1c (Removed React player. for some reason it was not playing nice with the streams)
               }}
               className="absolute inset-0 flex items-center"
             >
@@ -598,7 +652,11 @@ const VideoPlayer = (props: Props) => {
             ) : (
               <></>
             )}
+<<<<<<< HEAD
             {/*false && props.playerState.ready && props.videoPlayer.current ? (
+=======
+            {props.playerState.ready && props.videoPlayer.current ? (
+>>>>>>> parent of 543ce1c (Removed React player. for some reason it was not playing nice with the streams)
               <Select
                 buttonNoColor
                 triggerAriaLabel="Resolution"
