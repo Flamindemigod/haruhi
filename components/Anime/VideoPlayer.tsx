@@ -14,6 +14,7 @@ import Select from "../../primitives/Select";
 import isBetween from "../../utils/isBetween";
 type PlayerState = {
   ready: boolean;
+  subtitle: string;
   url: string;
   pip: boolean;
   playing: boolean;

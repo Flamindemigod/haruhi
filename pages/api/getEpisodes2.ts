@@ -36,61 +36,11 @@ export default async function handler(
 ) {
   try {
     if (req.query.id !== undefined) {
-      const query = `query getNames($id: Int = 1) {
-        Media(id: $id) {
-          title {
-            english
-            romaji
-            native
-          }
-          idMal
-        }
-      }          
-    `;
-      const variables = {
-        id: req.query.id,
-      };
-      const provider = new ANIME.Anix();
-      let aniResponse = await makeQuery({
-        query,
-        variables,
-        token: req.cookies.access_token,
-      });
-      let results = await search(
-        Object.values(aniResponse.data.Media.title as titles).filter(Boolean),
-        async (e: string) => {
-          return (await provider.search(e)).results.map((l) => {
-            return {
-              title: l.title,
-              id: l.id,
-              similarity: similarity(e, l.title as string),
-            } as Result;
-          });
-        },
-      );
-      if (!results.length){
-        const malTitle = await getMalTitle("anime", aniResponse.data.Media.idMal)
-        results = [
-          ...(await provider.search(malTitle)).results.map((l) => {
-            console.log(l)
-            return {
-              title: l.title,
-              id: l.id,
-              similarity: similarity(malTitle, l.title as string),
-            } as Result;
-          })
-        ]
-      }
-      let episodesListReleventFields;
-      let episodes: any[];
-      if (results.at(0) !== undefined) {
-        episodes =
-          (await provider.fetchAnimeInfo(results.at(0)!.id)).episodes ?? [];
-      } else {
-        episodes = [];
-      }
-      episodesListReleventFields = episodes.map((episode) => ({
-        id: results.at(0)?.id,
+      const provider = new ANIME.Zoro();
+      const meta = new META.Anilist(provider);
+
+      const episodes = await meta.fetchEpisodesListById(String(req.query.id));
+      const episodesListReleventFields = episodes.map((episode) => ({
         epId: episode.id,
         title: episode.title,
         number: episode.number,
@@ -102,6 +52,6 @@ export default async function handler(
     }
   } catch (err) {
     console.log(err);
-    res.status(400).json({ error: JSON.stringify(err) });
+    res.status(500).json({ error: JSON.stringify(err) });
   }
 }
