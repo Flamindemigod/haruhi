@@ -144,5 +144,10 @@ main > * {
   bottom: 0;
   content: "Read Less";
 }
+
+  video::cue {
+    background-color: transparent;
+    text-shadow: #000 1px 1px 3px;
+}
 @tailwind components;
 @tailwind utilities;

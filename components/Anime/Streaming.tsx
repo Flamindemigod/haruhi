@@ -527,7 +527,8 @@ const Streaming = (props: Props) => {
     onSuccess(data) {
       setPlayerState((state) => ({
         ...state,
-        subtitle: data.subtitle.url,
+        subtitle: `${process.env.NEXT_PUBLIC_MEDIA_PROXY
+          }/vtt-proxy?url=${encodeURIComponent(data.subtitle.url)}`,
         url: `${process.env.NEXT_PUBLIC_MEDIA_PROXY
           }/m3u8-proxy?url=${encodeURIComponent(data.source?.url)}&headers=${encodeURIComponent(JSON.stringify(data.header))}
           `,

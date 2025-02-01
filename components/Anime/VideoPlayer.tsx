@@ -67,10 +67,10 @@ export const seekTo = (player: any, n: number, type: "seconds" | "fraction") => 
   if (!player) return
   switch (type) {
     case "seconds":
-      player.fastSeek(n);
+      player.currentTime = n;
       break;
     case "fraction":
-      player.fastSeek(n * player.duration)
+      player.currentTime = n * player.duration;
   }
 }
 
@@ -87,6 +87,7 @@ const VideoPlayer = (props: Props) => {
   });
   const sliderRef = useRef<any>();
   const playerContainer = useRef<any>();
+  const hlsRef = useRef<Hls>();
 
 
   const updateProgress = (p: any) => {
@@ -97,23 +98,41 @@ const VideoPlayer = (props: Props) => {
     props.setPlayerState((state: any) => ({ ...state, playedSeconds: playedSeconds, played: playedSeconds / state.duration }));
   }
   useEffect(() => {
-    const hls = new Hls({
+    hlsRef.current = new Hls({
       //"debug": true
     });
 
     if (Hls.isSupported() && !!props.videoPlayer.current) {
       //hls.log = true;
-      hls.loadSource(props.playerState.url);
-      hls.attachMedia(props.videoPlayer.current)
-      hls.on(Hls.Events.ERROR, (err) => {
+      hlsRef.current.loadSource(props.playerState.url);
+      hlsRef.current.attachMedia(props.videoPlayer.current)
+      hlsRef.current.on(Hls.Events.ERROR, (err: any) => {
         console.error(err)
       });
-
     } else {
     }
   }, [props.playerState.url])
   //FOOTGUN
-  //useEffect(()=>{}, []);
+  useEffect(() => {
+    let track: HTMLTrackElement;
+    if (!!props.videoPlayer.current) {
+      track = document.createElement('track');
+      track.kind = 'subtitles';
+      track.label = 'English';
+      track.srclang = 'en';
+      track.src = props.playerState.subtitle;
+      track.default = true; // Makes it visible by default
+      props.videoPlayer.current.appendChild(track);
+      const vtrack = props.videoPlayer.current.textTracks[0];
+      if (vtrack) {
+        vtrack.mode = "showing";
+      }
+    } return () => {
+      props.videoPlayer.current?.removeChild(track)
+    }
+  }, [
+    props.playerState.subtitle
+  ]);
 
   useEffect(() => {
     if (!props.videoPlayer.current) return
@@ -193,6 +212,7 @@ const VideoPlayer = (props: Props) => {
       onTouchStart={throttledPlayerControlHandler}
     >
       <video
+        crossOrigin="anonymous"
         width="100%"
         height="100%"
         className="absolute inset-0 m-auto"
@@ -598,47 +618,41 @@ const VideoPlayer = (props: Props) => {
             ) : (
               <></>
             )}
-            {/*false && props.playerState.ready && props.videoPlayer.current ? (
+            {props.playerState.ready && props.videoPlayer.current ? (
               <Select
                 buttonNoColor
                 triggerAriaLabel="Resolution"
                 onValueChange={(value: string) => {
-                  if (value === "Auto") {
-                    return (props.videoPlayer.current!.getInternalPlayer(
-                      "hls"
-                    ).currentLevel = -1);
-                  }
-                  props.videoPlayer.current!.getInternalPlayer(
-                    "hls"
-                  ).currentLevel = props.videoPlayer
-                    .current!.getInternalPlayer("hls")
-                    .levels.findIndex(
+                  if (!!hlsRef.current) {
+                    if (value === "Auto") {
+                      return (hlsRef.current.currentLevel = -1);
+                    }
+                    hlsRef.current.currentLevel = hlsRef.current.levels.findIndex(
                       (level: any) => `${level.height}p` === value
                     );
+                  }
                 }}
                 defaultValue={"auto"}
                 value={
-                  props.videoPlayer.current.getInternalPlayer("hls")
-                    .currentLevel === -1
-                    ? "Auto"
-                    : `${
-                        props.videoPlayer.current.getInternalPlayer("hls")
-                          .levels[
-                          props.videoPlayer.current.getInternalPlayer("hls")
-                            .currentLevel
-                        ].height
-                      }p`
+                  !!hlsRef.current ?
+                    hlsRef.current
+                      .currentLevel === -1
+                      ? "Auto"
+                      : `${hlsRef.current
+                        .levels[
+                        hlsRef.current
+                          .currentLevel
+                      ].height
+                      }p` : "Auto"
                 }
                 values={[
                   "Auto",
-                  ...props.videoPlayer.current
-                    .getInternalPlayer("hls")
-                    .levels.map((level: any) => `${level.height}p`),
+                  ...hlsRef.current?.levels.map((level: any) => `${level.height}p`) ?? [],
                 ]}
               />
             ) : (
               <></>
-            )*/}
+            )}
 
             {document.pictureInPictureEnabled && (
               <button
