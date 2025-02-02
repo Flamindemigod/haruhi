@@ -39,19 +39,24 @@ export default async function handler(
       const provider = new ANIME.Zoro();
       const meta = new META.Anilist(provider);
 
-      const episodes = await meta.fetchEpisodesListById(String(req.query.id));
-      const episodesListReleventFields = episodes.map((episode) => ({
-        epId: episode.id,
-        title: episode.title,
-        number: episode.number,
-      }));
-      if (episodes.length > 0) res.status(200).json(episodesListReleventFields);
-      res.status(400).json({ error: "no episodes found" });
+
+      const id = (await provider.fetchIdFromAnilistId(String(req.query.id))).id
+      const episodes = (await provider.fetchAnimeInfo(id)).episodes;
+      if (!!episodes) {
+        const episodesListReleventFields = episodes.map((episode) => ({
+          epId: episode.id,
+          title: episode.title,
+          number: episode.number,
+        }));
+        if (episodes.length > 0) return res.status(200).json(episodesListReleventFields);
+      }
+      return res.status(400).json({ error: "no episodes found" });
+
     } else {
-      res.status(400).json({ error: "id must be specified" });
+      return res.status(400).json({ error: "id must be specified" });
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: JSON.stringify(err) });
+    return res.status(500).json({ error: JSON.stringify(err) });
   }
 }
