@@ -58,6 +58,8 @@ const Streaming = (props: Props) => {
   const [episode, setEpisode] = useState(0);
   const [syncCode, setSyncCode] = useState<string>(props.syncCode || uuidv4());
   const [syncPlayedSeconds, setSyncPlayedSeconds] = useState<number>(0);
+  const [intro, setIntro] = useState<{ start: number, end: number }>({ start: 0, end: 0 });
+  const [outro, setOutro] = useState<{ start: number, end: number }>({ start: 0, end: 0 });
   const [videoEnd, setVideoEnd] = useState<boolean>(false);
   const [openToast, setOpenToast] = useState<boolean>(false);
   const [episodeID, setEpisodeID] = useState<{
@@ -525,6 +527,8 @@ const Streaming = (props: Props) => {
       return data.json();
     },
     onSuccess(data) {
+      setIntro(data.intro);
+      setOutro(data.outro);
       setPlayerState((state) => ({
         ...state,
         subtitle: `${process.env.NEXT_PUBLIC_MEDIA_PROXY
@@ -536,17 +540,6 @@ const Streaming = (props: Props) => {
     },
   });
 
-  const { data: skipTo } = useQuery({
-    refetchOnWindowFocus: false,
-    enabled: !!playerState.url,
-    queryKey: ["SkipTiming", props.entry.idMal, episode, playerState.duration],
-    queryFn: async () => {
-      const data = await fetch(
-        `https://api.aniskip.com/v2/skip-times/${props.entry.idMal}/${episode}?types[]=op&episodeLength=${playerState.duration}`,
-      );
-      return data.json();
-    },
-  });
   useEffect(() => {
     if (episodesListDub?.length === 0) {
       setIsDubbed(false);
@@ -665,24 +658,24 @@ const Streaming = (props: Props) => {
   return (
     <>
       {isFetchingEpisodesSub ||
-      isFetchingEpisodesDub ||
-      episodesListDub.length ||
-      episodesListSub.length ? (
+        isFetchingEpisodesDub ||
+        episodesListDub.length ||
+        episodesListSub.length ? (
         <div>
           <ToastPrimitive.Provider>
             <div className="p-2 text-2xl text-offWhite-900 dark:text-offWhite-100">
               Streaming
             </div>
             {(isFetchingEpisodesSub || isFetchingEpisodesDub) &&
-            !playerState.ready ? (
+              !playerState.ready ? (
               <VideoPlayerSkeleton />
             ) : (
               <VideoPlayer
                 playerState={playerState}
                 setPlayerState={setPlayerState}
                 videoPlayer={videoPlayer}
-                startTime={skipTo?.results?.[0]?.interval.startTime ?? 0}
-                endTime={skipTo?.results?.[0]?.interval.endTime ?? 0}
+                intro={intro}
+                outro={outro}
                 hasNextEpisode={
                   (isDubbed ? episodesListDub?.length : episodesListSub?.length) >
                   episode

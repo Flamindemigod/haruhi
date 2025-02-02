@@ -36,11 +36,10 @@ type Props = {
   setPlayerState: any;
   hasNextEpisode: boolean;
   videoPlayer: RefObject<HTMLVideoElement>;
-  startTime: number;
-  endTime: number;
+  intro: { start: number, end: number };
+  outro: { start: number, end: number };
   onNextEpisode: () => void;
   onReady: () => void;
-
   onPlay: () => void;
   onPause: () => void;
   onSeek: (seekTo: number, seekType: string) => void;
@@ -92,10 +91,19 @@ const VideoPlayer = (props: Props) => {
 
   const updateProgress = (p: any) => {
     const playedSeconds = (p.target as any).currentTime as number;
+    const bufferedPercent = (
+      (p.target as any).duration > 0 && (p.target as any).buffered.length > 0 ?
+        (p.target as any).buffered.end(0) / (p.target as any).duration * 100 :
+        0) / 100;
+
     if (props.playerState.ready && props.playerState.playing) {
       props.onProgress(playedSeconds);
     }
-    props.setPlayerState((state: any) => ({ ...state, playedSeconds: playedSeconds, played: playedSeconds / state.duration }));
+    props.setPlayerState((state: any) => ({
+      ...state,
+      loaded: bufferedPercent, loadedSeconds: bufferedPercent * state.duration,
+      playedSeconds: playedSeconds, played: playedSeconds / state.duration
+    }));
   }
   useEffect(() => {
     hlsRef.current = new Hls({
@@ -215,7 +223,7 @@ const VideoPlayer = (props: Props) => {
         crossOrigin="anonymous"
         width="100%"
         height="100%"
-        className="absolute inset-0 m-auto"
+        className="absolute w-full h-full inset-0 m-auto"
         src={props.playerState.url}
         ref={props.videoPlayer}
         onProgress={updateProgress}
@@ -318,15 +326,15 @@ const VideoPlayer = (props: Props) => {
 
         {/* Opening Skip Button */}
         {user.userPreferenceSkipOpening &&
-        (props.startTime === props.endTime
-          ? true
-          : isBetween(
-              props.startTime,
-              props.endTime,
+          (props.intro.start === props.intro.end
+            ? true
+            : isBetween(
+              props.intro.start,
+              props.intro.end,
               props.playerState.playedSeconds
             )) ? (
           <div className="absolute bottom-2/4 sm:bottom-1/4 right-10 ">
-            {props.startTime === props.endTime ? (
+            {props.intro.start === props.intro.end ? (
               <button
                 onClick={() => {
                   props.onSeek(
@@ -366,8 +374,8 @@ const VideoPlayer = (props: Props) => {
             ) : (
               <button
                 onClick={() => {
-                  props.onSeek(props.endTime, "seconds");
-                  seekTo(props.videoPlayer.current, props.endTime, "seconds");
+                  props.onSeek(props.intro.end, "seconds");
+                  seekTo(props.videoPlayer.current, props.intro.end, "seconds");
                 }}
                 className="flex gap-1 items-center bg-offWhite-800 hover:bg-primary-500 bg-opacity-30 hover:bg-opacity-30 p-2 text-lg rounded-md font-medium"
                 style={{
