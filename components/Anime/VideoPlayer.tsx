@@ -88,23 +88,22 @@ const VideoPlayer = (props: Props) => {
   const playerContainer = useRef<any>();
   const hlsRef = useRef<Hls>();
 
+  useEffect(() => {
+    const player = props.videoPlayer.current;
+    const interval = setInterval(() => {
+      if (!!player && player.buffered.length > 0) {
+        const loaded = player.buffered.end(0) / player.duration;
+        //TODO: Watch together shouldnt really care about whether the player is paused or not
+        if (!player.paused) {
+          props.onProgress(player.currentTime);
+        }
 
-  const updateProgress = (p: any) => {
-    const playedSeconds = (p.target as any).currentTime as number;
-    const bufferedPercent = (
-      (p.target as any).duration > 0 && (p.target as any).buffered.length > 0 ?
-        (p.target as any).buffered.end(0) / (p.target as any).duration * 100 :
-        0) / 100;
+        props.setPlayerState((s: any) => ({ ...s, loaded: loaded, loadedSeconds: (loaded * player.duration), played: (player.currentTime / player.duration), playedSeconds: player.currentTime }))
+      }
+    }, 500)
+    return () => { clearInterval(interval) }
+  }, [props.playerState.url]);
 
-    if (props.playerState.ready && props.playerState.playing) {
-      props.onProgress(playedSeconds);
-    }
-    props.setPlayerState((state: any) => ({
-      ...state,
-      loaded: bufferedPercent, loadedSeconds: bufferedPercent * state.duration,
-      playedSeconds: playedSeconds, played: playedSeconds / state.duration
-    }));
-  }
   useEffect(() => {
     hlsRef.current = new Hls({
       //"debug": true
@@ -226,7 +225,6 @@ const VideoPlayer = (props: Props) => {
         className="absolute w-full h-full inset-0 m-auto"
         src={props.playerState.url}
         ref={props.videoPlayer}
-        onProgress={updateProgress}
         onCanPlayThrough={() => {
           props.setPlayerState((state: any) => ({ ...state, ready: true }));
         }}
