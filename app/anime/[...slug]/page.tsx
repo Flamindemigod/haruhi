@@ -92,7 +92,9 @@ const Page = async ({ params }: { params: Params }) => {
           >
             <Characters characters={entryData.characters.edges} />
             <Relations relations={entryData.relations.edges} />
+			{/*
             <Streaming entry={entryData} syncCode={params.slug[1]} />
+			*/}
             <Recommended recommended={entryData.recommendations.edges} />
           </div>
         </div>
